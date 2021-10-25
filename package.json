@@ -1,0 +1,66 @@
+{
+  "name": "@frsource/cypress-plugin-visual-regression-diff",
+  "description": "Perform visual regression test with a nice GUI as help. 💅 Only for Cypress!",
+  "version": "0.0.1",
+  "author": "Jakub Freisler <jakub.freisler@frsource.org>",
+  "repository": "https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff.git",
+  "sideEffects": false,
+  "license": "MIT",
+  "scripts": {
+    "build": "del-cli dist && microbundle src/*.ts -f cjs,esm",
+    "lint": "eslint '**/*.ts' --ignore-pattern '**/*.d.ts'",
+    "lint.fix": "yarn lint --fix",
+    "lint.ci": "yarn lint --max-warnings 0",
+    "prettify": "prettier --write src",
+    "prepack": "yarn build",
+    "release": "semantic-release",
+    "release:ci": "yarn release --yes",
+    "release:test": "yarn release --no-git-tag-version --no-push --skip-npm"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "packageManager": "yarn@3.1.0-rc.13",
+  "peerDependencies": {
+    "cypress": ">=4.5.0"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.0",
+    "@semantic-release/commit-analyzer": "^9.0.1",
+    "@semantic-release/git": "^10.0.0",
+    "@semantic-release/npm": "^8.0.2",
+    "@semantic-release/release-notes-generator": "^10.0.2",
+    "@types/pixelmatch": "^5.2.4",
+    "@types/pngjs": "^6.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
+    "cypress": "^8.6.0",
+    "del-cli": "^4.0.1",
+    "eslint": "^8.1.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "microbundle": "^0.14.1",
+    "prettier": "^2.4.1",
+    "semantic-release": "^18.0.0",
+    "typescript": "^4.4.4"
+  },
+  "keywords": [
+    "Cypress",
+    "Cypress plugin",
+    "visual regression testing",
+    "visual diff",
+    "image diff",
+    "visual comparison",
+    "image comparison",
+    "Cypress visual regression",
+    "regression testing",
+    "visual snapshot",
+    "image snapshot",
+    "Cypress image snapshot"
+  ],
+  "dependencies": {
+    "pixelmatch": "^5.2.1",
+    "pngjs": "^6.0.0"
+  }
+}
