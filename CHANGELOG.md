@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.0.1...v1.1.0) (2021-10-25)
+
+
+### Features
+
+* add queue flushing in after block ([70f828f](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/70f828ff68c4de276dd10c64ab61fece573d305f))
+
 ## [1.0.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.0.0...v1.0.1) (2021-10-25)
 
 
