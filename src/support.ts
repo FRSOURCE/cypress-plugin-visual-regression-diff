@@ -1,4 +1,4 @@
-import './commands';
+import "./commands";
 import { FILE_SUFFIX, LINK_PREFIX, OVERLAY_CLASS, TASK } from "./constants";
 
 function generateOverlayTemplate(

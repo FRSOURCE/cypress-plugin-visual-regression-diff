@@ -16,7 +16,10 @@ declare global {
        * @memberof Cypress.Chainable
        * @example cy.get('.my-element').matchImage();
        */
-      matchImage<T extends Chainable<unknown>>(this: T, options?: Cypress.MatchImageOptions): T;
+      matchImage<T extends Chainable<unknown>>(
+        this: T,
+        options?: Cypress.MatchImageOptions
+      ): T;
     }
   }
 }
@@ -26,10 +29,7 @@ const nameCacheCounter: Record<string, number> = {};
 Cypress.Commands.add(
   "matchImage",
   { prevSubject: "optional" },
-  (
-    subject?: JQuery<HTMLElement>,
-    options: Cypress.MatchImageOptions = {}
-  ) => {
+  (subject?: JQuery<HTMLElement>, options: Cypress.MatchImageOptions = {}) => {
     let title = Cypress.currentTest.titlePath.join(" ");
     if (typeof nameCacheCounter[title] === "undefined")
       nameCacheCounter[title] = -1;
