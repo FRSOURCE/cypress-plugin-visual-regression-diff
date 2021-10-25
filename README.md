@@ -7,7 +7,7 @@
   <a href="https://github.com/semantic-release/semantic-release">
     <img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="semantic-relase badge">
   </a>
-  <a href="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/master/LICENSE">
+  <a href="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/FRSOURCE/cypress-plugin-visual-regression-diff" alt="license MIT badge">
   </a>
 </p>
@@ -37,7 +37,7 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/master/src/assets/logo.svg" alt="Cypress Plugin Visual Regression Diff logo" height="120px"/>
+  <img src="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/src/assets/logo.svg" alt="Cypress Plugin Visual Regression Diff logo" height="120px"/>
   <br>
   <a href="https://www.npmjs.com/package/@frsource/cypress-plugin-visual-regression-diff"><strong>@frsource/cypress-plugin-visual-regression-diff</strong></a>
   <br>
@@ -56,7 +56,7 @@ Don’t hesitate to ask a question directly on the [discussions board](https://g
 
 ## Changelog
 
-Changes for every release are documented in the [release notes](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/releases) and [CHANGELOG files of every package](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/tree/master/packages).
+Changes for every release are documented in the [release notes](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/releases) and [CHANGELOG files of every package](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/tree/main/packages).
 
 ## License
 
