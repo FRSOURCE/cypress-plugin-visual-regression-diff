@@ -66,5 +66,12 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "files": [
+    "src",
+    "dist",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ]
 }
