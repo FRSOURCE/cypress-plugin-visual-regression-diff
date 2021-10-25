@@ -10,6 +10,11 @@
   </a>
 </p>
 
+<p align="center">
+  <img src="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/src/assets/logo.svg" alt="Cypress Plugin Visual Regression Diff logo" height="120px"/>
+  <br>
+</p>
+
 <h1 align="center">Cypress Plugin Visual Regresion Diff</h1>
 <p align="center">Perform visual regression test with a nice GUI as help. 💅 <i>Only&nbsp;for&nbsp;Cypress!</i></p>
 
@@ -33,14 +38,6 @@
     <br>Published as treeshakeable bundles, separate for JS ES5 or modern bundlers thanks to <a href="https://www.npmjs.com/package/microbundle">microbundle</a>.
     <br>Working with every bundler (tested on webpack, vite, rollup),
     <br>Provides proper typings as is written completely in <a href="https://www.typescriptlang.org">typescript</a>.</i>
-  <br>
-  <br>
-</p>
-
-<p align="center">
-  <img src="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/src/assets/logo.svg" alt="Cypress Plugin Visual Regression Diff logo" height="120px"/>
-  <br>
-  <a href="https://www.npmjs.com/package/@frsource/cypress-plugin-visual-regression-diff"><strong>@frsource/cypress-plugin-visual-regression-diff</strong></a>
   <br>
   <br>
 </p>
