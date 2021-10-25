@@ -69,10 +69,22 @@ require('@frsource/cypress-plugin-visual-regression-diff/dist/support');
 - seconds time, in your plugins file (located by default in `cypress/plugins/index.js`):
 ```ts
 // typescript
-import '@frsource/cypress-plugin-visual-regression-diff/src/plugins';
+import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/src/plugins';
+
+export default function (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) {
+  initPlugin(on, config);
+
+  return config;
+};
 
 // javascript
-require('@frsource/cypress-plugin-visual-regression-diff/dist/plugins');
+const { initPlugin } = require('@frsource/cypress-plugin-visual-regression-diff/dist/plugins');
+
+module.exports = function (on, config) {
+  initPlugin(on, config);
+
+  return config;
+}
 ```
 
 That's it - now let's see how to use the library in [usage section](#usage).
