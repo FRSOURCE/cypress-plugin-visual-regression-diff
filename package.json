@@ -7,7 +7,7 @@
   "sideEffects": false,
   "license": "MIT",
   "scripts": {
-    "build": "del-cli dist && microbundle src/*.ts -f cjs,esm",
+    "build": "del-cli dist && microbundle src/{constants,plugin,support}.ts -f cjs,esm",
     "lint": "eslint '**/*.ts' --ignore-pattern '**/*.d.ts'",
     "lint.fix": "yarn lint --fix",
     "lint.ci": "yarn lint --max-warnings 0",

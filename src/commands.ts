@@ -1,6 +1,26 @@
 import { FILE_SUFFIX, LINK_PREFIX, TASK } from "./constants";
 import type pixelmatch from "pixelmatch";
 
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Cypress {
+    type MatchImageOptions = {
+      suffix?: string;
+      screenshotConfig?: Partial<Cypress.ScreenshotDefaultsOptions>;
+      diffConfig?: Parameters<typeof pixelmatch>[5];
+    };
+
+    interface Chainable {
+      /**
+       * Command to create and compare image snapshots.
+       * @memberof Cypress.Chainable
+       * @example cy.get('.my-element').matchImage();
+       */
+      matchImage<T extends Chainable<unknown>>(this: T, options?: Cypress.MatchImageOptions): T;
+    }
+  }
+}
+
 const nameCacheCounter: Record<string, number> = {};
 
 Cypress.Commands.add(
@@ -8,11 +28,7 @@ Cypress.Commands.add(
   { prevSubject: "optional" },
   (
     subject?: JQuery<HTMLElement>,
-    options: {
-      suffix?: string;
-      screenshotConfig?: Partial<Cypress.ScreenshotDefaultsOptions>;
-      diffConfig?: Parameters<typeof pixelmatch>[5];
-    } = {}
+    options: Cypress.MatchImageOptions = {}
   ) => {
     let title = Cypress.currentTest.titlePath.join(" ");
     if (typeof nameCacheCounter[title] === "undefined")
@@ -31,8 +47,10 @@ Cypress.Commands.add(
         let imgPath: string;
         return (subject ? cy.wrap(subject) : cy)
           .screenshot(screenshotPath as string, {
-            onAfterScreenshot(_el, props) {
+            ...options.screenshotConfig,
+            onAfterScreenshot(el, props) {
               imgPath = props.path;
+              options.screenshotConfig?.onAfterScreenshot?.(el, props);
             },
           })
           .then(() => imgPath);
