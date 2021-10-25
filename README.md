@@ -57,19 +57,19 @@ npm install --save-dev @frsource/cypress-plugin-visual-regression-diff
 
 Next, you need to import the library:
 
-- once, in your support file (located by default in `cypress/support/index.js`):
+- first, in your support file (located by default in `cypress/support/index.js`):
 ```ts
 // typescript
-import '@frsource/cypress-plugin-visual-regression-diff/src/support';
+import '@frsource/cypress-plugin-visual-regression-diff/dist/support';
 
 // javascript
 require('@frsource/cypress-plugin-visual-regression-diff/dist/support');
 ```
 
-- seconds time, in your plugins file (located by default in `cypress/plugins/index.js`):
+- secondly, in your plugins file (located by default in `cypress/plugins/index.js`):
 ```ts
 // typescript
-import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/src/plugins';
+import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/dist/plugins';
 
 export default function (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) {
   initPlugin(on, config);
