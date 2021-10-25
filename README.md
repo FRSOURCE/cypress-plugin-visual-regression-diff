@@ -1,5 +1,3 @@
-# cypress-plugin-visual-regression-diff
-
 <p align="center">
   <a href="https://www.npmjs.com/package/@frsource/cypress-plugin-visual-regression-diff">
     <img src="https://img.shields.io/npm/v/@frsource/cypress-plugin-visual-regression-diff" alt="NPM version badge">
@@ -12,7 +10,8 @@
   </a>
 </p>
 
-<h1 align="center">Cypress Plugin Visual Regresion Diff - perform visual regression test with a nice GUI as help. 💅 Only for Cypress!</h1>
+<h1 align="center">Cypress Plugin Visual Regresion Diff</h1>
+<p align="center">Perform visual regression test with a nice GUI as help. 💅 <i>Only&nbsp;for&nbsp;Cypress!</i></p>
 
 <p align="center">
   <a href="#getting-started">Getting Started</a>
@@ -29,8 +28,10 @@
   <br>
   <i>Plugin for visual regression testing that provides smooth experience:
     <br>Specify threshold below which the test will fail.
-    <br>Quickly preview old/new screenshots and a visual diff between the two directly in the Cypress UI.
-    <br>Published as treeshakeable bundles, separate for JS ES5 or modern browsers thanks to <a href="https://www.npmjs.com/package/microbundle">microbundle</a>.
+    <br>Quickly preview old &amp; new screenshot directly in the Cypress UI.
+    <br>Find visual changes using images diff.
+    <br>Published as treeshakeable bundles, separate for JS ES5 or modern bundlers thanks to <a href="https://www.npmjs.com/package/microbundle">microbundle</a>.
+    <br>Working with every bundler (tested on webpack, vite, rollup),
     <br>Provides proper typings as is written completely in <a href="https://www.typescriptlang.org">typescript</a>.</i>
   <br>
   <br>
