@@ -1,6 +1,19 @@
 import "./commands";
 import { FILE_SUFFIX, LINK_PREFIX, OVERLAY_CLASS, TASK } from "./constants";
 
+function queueClear() {
+  (cy as unknown as { queue: { clear: () => void } }).queue.clear();
+  (cy as unknown as { state: (k: string, value: unknown) => void }).state(
+    "index",
+    0
+  );
+}
+
+function queueRun() {
+  // needed to run a task outside of the test processing flow
+  (cy as unknown as { queue: { run: () => void } }).queue.run();
+}
+
 function generateOverlayTemplate(
   title: string,
   imgNewBase64: string,
@@ -73,6 +86,7 @@ after(() => {
       const { title, imgPath } = JSON.parse(
         atob(e.currentTarget.getAttribute("href").substring(LINK_PREFIX.length))
       );
+      queueClear();
 
       cachedReadFile(imageCache, imgPath, "base64")
         .then((imgNew) =>
@@ -90,6 +104,7 @@ after(() => {
         )
         .then(([imgNewBase64, imgOldBase64, imgDiffBase64]) => {
           if (!top) return false;
+          queueClear();
 
           Cypress.$(
             generateOverlayTemplate(
@@ -112,10 +127,11 @@ after(() => {
               wrapper.remove()
             );
 
-            // needed to run a task outside of the test processing flow
-            (cy as unknown as { queue: { run: () => void } }).queue.run();
+            queueRun();
           });
         });
+
+      queueRun();
 
       return false;
     }

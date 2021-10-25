@@ -7,7 +7,7 @@
   "sideEffects": false,
   "license": "MIT",
   "scripts": {
-    "build": "del-cli dist && microbundle src/{constants,plugins,support}.ts -f cjs,esm",
+    "build": "del-cli dist && microbundle src/{constants,plugins,support}.ts -f cjs",
     "lint": "eslint '**/*.ts' --ignore-pattern '**/*.d.ts'",
     "lint:fix": "yarn lint --fix",
     "lint:ci": "yarn lint --max-warnings 0",
@@ -68,7 +68,6 @@
     "access": "public"
   },
   "files": [
-    "src",
     "dist",
     "package.json",
     "README.md",
