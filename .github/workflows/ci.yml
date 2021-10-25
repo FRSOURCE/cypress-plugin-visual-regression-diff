@@ -80,8 +80,6 @@ jobs:
         run: |
           git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
           git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
-      - name: Pull git tags (needed for lerna / semantic release to correctly version)
-        run: git fetch --prune --unshallow --tags
       - uses: actions/setup-node@v2
         with:
           node-version: '16.x'
@@ -99,7 +97,7 @@ jobs:
         run: yarn --immutable
       - name: Authenticate with Registry
         run: |
-          yarn logout
+          yarn npm logout
           echo "registry=http://registry.npmjs.org/" >> .npmrc
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
           npm whoami
@@ -110,5 +108,6 @@ jobs:
         run: yarn release:ci
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

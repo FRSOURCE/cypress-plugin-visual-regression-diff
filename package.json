@@ -63,5 +63,8 @@
   "dependencies": {
     "pixelmatch": "^5.2.1",
     "pngjs": "^6.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
