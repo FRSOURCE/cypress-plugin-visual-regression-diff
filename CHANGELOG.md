@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.0.0...v1.0.1) (2021-10-25)
+
+
+### Bug Fixes
+
+* proper readme info ([dd87e19](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/dd87e19429fe232bd9027737ff7e218c52d8eb06))
+
 # 1.0.0 (2021-10-25)
 
 
