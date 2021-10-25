@@ -62,9 +62,9 @@ jobs:
       - name: Install dependencies
         run: yarn --immutable
       - name: Lint
-        run: yarn lint.ci
+        run: yarn lint:ci
       - name: Prettify
-        run: yarn prettify && git diff-index --quiet HEAD
+        run: yarn prettify:ci
 
   build-and-release:
     name: build and release

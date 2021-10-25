@@ -99,7 +99,7 @@ This plugin can be configured either:
 
 - via global env configuration,
 
-- directly, on a matcher level - by passing in plugin options as an argument to `matchImage` command,
+- directly, on a matcher level - by passing in plugin options as an argument to `matchImage` command.
 
 ## Questions
 

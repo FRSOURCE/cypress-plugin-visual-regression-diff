@@ -9,9 +9,10 @@
   "scripts": {
     "build": "del-cli dist && microbundle src/{constants,plugins,support}.ts -f cjs,esm",
     "lint": "eslint '**/*.ts' --ignore-pattern '**/*.d.ts'",
-    "lint.fix": "yarn lint --fix",
-    "lint.ci": "yarn lint --max-warnings 0",
+    "lint:fix": "yarn lint --fix",
+    "lint:ci": "yarn lint --max-warnings 0",
     "prettify": "prettier --write src",
+    "prettify:ci": "prettier --check src",
     "prepack": "yarn build",
     "release": "semantic-release",
     "release:ci": "yarn release --yes",
