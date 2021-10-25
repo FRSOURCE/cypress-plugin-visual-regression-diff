@@ -12,16 +12,15 @@
 
 <p align="center">
   <img src="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/src/assets/logo.svg" alt="Cypress Plugin Visual Regression Diff logo" height="120px"/>
-  <br>
 </p>
 
-<h1 align="center">Cypress Plugin Visual Regresion Diff</h1>
+<h1 align="center">Plugin for Cypress - Visual Regression Diff</h1>
 <p align="center">Perform visual regression test with a nice GUI as help. 💅 <i>Only&nbsp;for&nbsp;Cypress!</i></p>
 
 <p align="center">
   <a href="#getting-started">Getting Started</a>
   ·
-  <a href="#documentation">Documentation</a>
+  <a href="#usage">Usage</a>
   ·
   <a href="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues">File an Issue</a>
   ·
@@ -44,9 +43,63 @@
 
 ## Getting started
 
+### Installation
 
-## Documentation
+You can install this library using your favorite package manager:
 
+```bash
+# yarn
+yarn add -D @frsource/cypress-plugin-visual-regression-diff
+
+# npm
+npm install --save-dev @frsource/cypress-plugin-visual-regression-diff
+```
+
+Next, you need to import the library:
+
+- once, in your support file (located by default in `cypress/support/index.js`):
+```ts
+// typescript
+import '@frsource/cypress-plugin-visual-regression-diff/src/support';
+
+// javascript
+require('@frsource/cypress-plugin-visual-regression-diff/dist/support');
+```
+
+- seconds time, in your plugins file (located by default in `cypress/plugins/index.js`):
+```ts
+// typescript
+import '@frsource/cypress-plugin-visual-regression-diff/src/plugins';
+
+// javascript
+require('@frsource/cypress-plugin-visual-regression-diff/dist/plugins');
+```
+
+That's it - now let's see how to use the library in [usage section](#usage).
+
+## Usage
+
+Once installed, the library might be used by writing in your test:
+
+```ts
+cy.get('.an-element-of-your-choice').matchImage();
+```
+
+Or, if you would like to make a screenshot of whole document:
+
+```ts
+cy.matchImage();
+```
+
+`matchImage` command will do a screenshot and compare it with image from a previous run. In case of regression the test will fail and you'll get a "Compare images" button to see what's a root of a problem.
+
+## Configuration
+
+This plugin can be configured either:
+
+- via global env configuration,
+
+- directly, on a matcher level - by passing in plugin options as an argument to `matchImage` command,
 
 ## Questions
 
