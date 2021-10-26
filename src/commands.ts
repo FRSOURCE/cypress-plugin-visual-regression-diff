@@ -36,12 +36,15 @@ Cypress.Commands.add(
     title += ` #${++nameCacheCounter[title]}`;
 
     return cy
-      .log("visual regression diff")
       .then(() =>
-        cy.task(TASK.getScreenshotPath, {
-          title,
-          specPath: Cypress.spec.relative,
-        })
+        cy.task(
+          TASK.getScreenshotPath,
+          {
+            title,
+            specPath: Cypress.spec.relative,
+          },
+          { log: false }
+        )
       )
       .then((screenshotPath) => {
         let imgPath: string;
@@ -52,16 +55,21 @@ Cypress.Commands.add(
               imgPath = props.path;
               options.screenshotConfig?.onAfterScreenshot?.(el, props);
             },
+            log: false,
           })
           .then(() => imgPath);
       })
       .then((imgPath) =>
         cy
-          .task(TASK.compareImages, {
-            imgNew: imgPath,
-            imgOld: imgPath.replace(FILE_SUFFIX.actual, ""),
-            ...(options.diffConfig || {}),
-          })
+          .task(
+            TASK.compareImages,
+            {
+              imgNew: imgPath,
+              imgOld: imgPath.replace(FILE_SUFFIX.actual, ""),
+              ...(options.diffConfig || {}),
+            },
+            { log: false }
+          )
           .then((res) => ({
             res: res as null | {
               error?: boolean;
