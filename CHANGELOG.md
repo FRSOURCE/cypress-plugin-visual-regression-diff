@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.1.0...v1.2.0) (2021-10-26)
+
+
+### Features
+
+* stop logging all of the tasks ([573e728](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/573e7282799c802b0f6e9ecbe66501d043745ac3))
+
 # [1.1.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.0.1...v1.1.0) (2021-10-25)
 
 
