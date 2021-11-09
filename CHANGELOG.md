@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.2.0...v1.3.0) (2021-11-09)
+
+
+### Bug Fixes
+
+* text overflowing when image is small ([3b04f8e](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/3b04f8e1782754c4c48e946ebdb2f43ccfec9461))
+
+
+### Features
+
+* externalize important APIs ([9f94086](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/9f9408657e7970bdad5dfc7a599943a34a779ab7))
+
 # [1.2.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.1.0...v1.2.0) (2021-10-26)
 
 
