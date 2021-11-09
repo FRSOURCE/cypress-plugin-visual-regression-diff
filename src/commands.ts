@@ -5,9 +5,10 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     type MatchImageOptions = {
-      suffix?: string;
       screenshotConfig?: Partial<Cypress.ScreenshotDefaultsOptions>;
       diffConfig?: Parameters<typeof pixelmatch>[5];
+      updateImages?: boolean;
+      maxDiffThreshold?: number;
     };
 
     interface Chainable {
@@ -35,6 +36,31 @@ Cypress.Commands.add(
       nameCacheCounter[title] = -1;
     title += ` #${++nameCacheCounter[title]}`;
 
+    const updateImages =
+      options.updateImages ||
+      (Cypress.env("pluginVisualRegressionUpdateImages") as
+        | boolean
+        | undefined) ||
+      false;
+    const maxDiffThreshold =
+      options.maxDiffThreshold ||
+      (Cypress.env("pluginVisualRegressionMaxDiffThreshold") as
+        | number
+        | undefined) ||
+      0.01;
+    const diffConfig =
+      options.diffConfig ||
+      (Cypress.env("pluginVisualRegressionDiffConfig") as
+        | Parameters<typeof pixelmatch>[5]
+        | undefined) ||
+      {};
+    const screenshotConfig =
+      options.screenshotConfig ||
+      (Cypress.env("pluginVisualRegressionScreenshotConfig") as
+        | Partial<Cypress.ScreenshotDefaultsOptions>
+        | undefined) ||
+      {};
+
     return cy
       .then(() =>
         cy.task(
@@ -50,10 +76,10 @@ Cypress.Commands.add(
         let imgPath: string;
         return (subject ? cy.wrap(subject) : cy)
           .screenshot(screenshotPath as string, {
-            ...options.screenshotConfig,
+            ...screenshotConfig,
             onAfterScreenshot(el, props) {
               imgPath = props.path;
-              options.screenshotConfig?.onAfterScreenshot?.(el, props);
+              screenshotConfig.onAfterScreenshot?.(el, props);
             },
             log: false,
           })
@@ -66,7 +92,9 @@ Cypress.Commands.add(
             {
               imgNew: imgPath,
               imgOld: imgPath.replace(FILE_SUFFIX.actual, ""),
-              ...(options.diffConfig || {}),
+              updateImages,
+              maxDiffThreshold,
+              diffConfig,
             },
             { log: false }
           )

@@ -87,13 +87,15 @@ export const initPlugin = (
         title: string;
         imgNew: string;
         imgOld: string;
+        updateImages: boolean;
+        maxDiffThreshold: number;
+        diffConfig: Parameters<typeof pixelmatch>[5];
       } & Parameters<typeof pixelmatch>[5]
     ) {
-      const maxDiffThreshold = 0.01;
       let imgDiff: number | undefined;
       let errorMsg: string | undefined;
 
-      if (fs.existsSync(cfg.imgOld)) {
+      if (fs.existsSync(cfg.imgOld) && !cfg.updateImages) {
         const rawImgNew = PNG.sync.read(fs.readFileSync(cfg.imgNew));
         const rawImgOld = PNG.sync.read(fs.readFileSync(cfg.imgOld));
         const isImgSizeDifferent =
@@ -106,10 +108,7 @@ export const initPlugin = (
 
         const { width, height } = imgNew;
         const diff = new PNG({ width, height });
-        const diffOptions = Object.assign(
-          { threshold: 0.01, includeAA: true },
-          cfg
-        );
+        const diffConfig = Object.assign({ includeAA: true }, cfg.diffConfig);
 
         const diffPixels = pixelmatch(
           imgNew.data,
@@ -117,15 +116,15 @@ export const initPlugin = (
           diff.data,
           width,
           height,
-          diffOptions
+          diffConfig
         );
         imgDiff = (diffPixels / width) * height;
 
         if (isImgSizeDifferent) {
           errorMsg = `Images size mismatch - new screenshot is ${rawImgNew.width}px by ${rawImgNew.height}px while old one is ${rawImgOld.width}px by ${rawImgOld.height} (width x height).`;
-        } else if (imgDiff > maxDiffThreshold) {
+        } else if (imgDiff > cfg.maxDiffThreshold) {
           const roundedImgDiff = Math.ceil(imgDiff * 1000) / 1000;
-          errorMsg = `Image diff factor (${roundedImgDiff}) is bigger than maximum threshold option ${maxDiffThreshold}`;
+          errorMsg = `Image diff factor (${roundedImgDiff}) is bigger than maximum threshold option ${cfg.maxDiffThreshold}`;
         }
 
         if (errorMsg) {
@@ -137,13 +136,13 @@ export const initPlugin = (
             error: true,
             message: errorMsg,
             imgDiff,
-            maxDiffThreshold,
+            maxDiffThreshold: cfg.maxDiffThreshold,
           };
         }
 
         fs.unlinkSync(cfg.imgOld);
       } else {
-        // there is no "old screenshot"
+        // there is no "old screenshot" or screenshots should be immediately updated
         imgDiff = 0;
       }
 
@@ -152,9 +151,9 @@ export const initPlugin = (
       if (typeof imgDiff !== "undefined") {
         const roundedImgDiff = Math.ceil(imgDiff * 1000) / 1000;
         return {
-          message: `Image diff (${roundedImgDiff}%) is within boundaries of maximum threshold option ${maxDiffThreshold}`,
+          message: `Image diff (${roundedImgDiff}%) is within boundaries of maximum threshold option ${cfg.maxDiffThreshold}`,
           imgDiff,
-          maxDiffThreshold,
+          maxDiffThreshold: cfg.maxDiffThreshold,
         };
       }
 

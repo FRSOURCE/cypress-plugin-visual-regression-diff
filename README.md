@@ -109,9 +109,34 @@ cy.matchImage();
 
 This plugin can be configured either:
 
-- via global env configuration,
+- directly, on a matcher level - by passing in plugin options as an argument to `matchImage` command, e.g.:
 
-- directly, on a matcher level - by passing in plugin options as an argument to `matchImage` command.
+```ts
+cy.matchImage({
+  // screenshot configuration, passed directly to the the Cypress screenshot method: https://docs.cypress.io/api/cypress-api/screenshot-api#Arguments
+  // default: { }
+  screenshotConfig: {
+    blackout: ['.element-to-be-blackouted']
+  },
+  // pixelmatch options, see: https://www.npmjs.com/package/pixelmatch#pixelmatchimg1-img2-output-width-height-options
+  // default: { includeAA: true }
+  diffConfig: {
+    threshold: '0.01',
+  },
+  // whether to update images automatically, without making a diff - useful for CI
+  // default: false
+  updateImages: true,
+  // maximum threshold above which the test should fail
+  // default: 0.01
+  maxDiffThreshold: 0.1
+})
+```
+
+- via [global env configuration](https://docs.cypress.io/guides/guides/environment-variables#Setting). All of the environment variable names are the same as keys of the configuration options passed to `matchImage` method, but with added `pluginVisualRegression` prefix, e.g.:
+
+```bash
+npx cypress run --env "pluginVisualRegressionUpdateImages=true" --env 'pluginVisualRegressionDiffConfig={"threshold":"0.01"}'
+```
 
 ## Questions
 
