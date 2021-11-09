@@ -37,15 +37,15 @@ function generateOverlayTemplate(
       onmouseleave="this.querySelector('div').style.opacity=1,this.querySelector('img').style.opacity=0"
     >
       <h3>New screenshot:</h3>
-      <img style="width:100%;opacity:0" src="data:image/png;base64,${imgNewBase64}" />
+      <img style="min-width:300px;width:100%;opacity:0" src="data:image/png;base64,${imgNewBase64}" />
       <div style="position:absolute;top:0;left:0;background:#fff">
         <h3>Old screenshot (hover over to see the new one):</h3>
-        <img style="width:100%" src="data:image/png;base64,${imgOldBase64}" />
+        <img style="min-width:300px;width:100%" src="data:image/png;base64,${imgOldBase64}" />
       </div>
     </div>
     <div style="background:#fff;border:solid 15px #fff">
       <h3>Diff between new and old screenshot</h3>
-      <img style="width:100%" src="data:image/png;base64,${imgDiffBase64}" />
+      <img style="min-width:300px;width:100%" src="data:image/png;base64,${imgDiffBase64}" />
       </div>
     </div>
   </div>`;
