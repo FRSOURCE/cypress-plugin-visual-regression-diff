@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.3.0...v1.3.1) (2021-11-23)
+
+
+### Bug Fixes
+
+* create missing dirs when renaming screenshot files ([38e5ff5](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/38e5ff5d5f7c2a8d9b971deb13af821773815f66))
+
 # [1.3.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.2.0...v1.3.0) (2021-11-09)
 
 
