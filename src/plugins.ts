@@ -3,6 +3,7 @@ import pixelmatch from "pixelmatch";
 import fs from "fs";
 import { PNG } from "pngjs";
 import { FILE_SUFFIX, IMAGE_SNAPSHOT_PREFIX, TASK } from "./constants";
+import moveFile from "move-file";
 
 type NotFalsy<T> = T extends false | null | undefined ? never : T;
 
@@ -78,7 +79,7 @@ export const initPlugin = (
       const diffImg = img.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff);
       if (fs.existsSync(diffImg)) fs.unlinkSync(diffImg);
 
-      fs.renameSync(img, oldImg);
+      moveFile.sync(img, oldImg);
 
       return null;
     },
@@ -146,7 +147,7 @@ export const initPlugin = (
         imgDiff = 0;
       }
 
-      fs.renameSync(cfg.imgNew, cfg.imgOld);
+      moveFile.sync(cfg.imgNew, cfg.imgOld);
 
       if (typeof imgDiff !== "undefined") {
         const roundedImgDiff = Math.ceil(imgDiff * 1000) / 1000;
@@ -177,19 +178,19 @@ export const initPlugin = (
         path.join(config.projectRoot, newRelativePath)
       );
 
-      fs.rename(details.path, newAbsolutePath, (err) => {
-        if (err) return reject(err);
+      void moveFile(details.path, newAbsolutePath)
+        .then(() => {
+          fs.rm(
+            path.join(screenshotsFolder, IMAGE_SNAPSHOT_PREFIX),
+            { recursive: true, force: true },
+            (err) => {
+              if (err) return reject(err);
 
-        fs.rm(
-          path.join(screenshotsFolder, IMAGE_SNAPSHOT_PREFIX),
-          { recursive: true, force: true },
-          (err) => {
-            if (err) return reject(err);
-
-            resolve({ path: newAbsolutePath });
-          }
-        );
-      });
+              resolve({ path: newAbsolutePath });
+            }
+          );
+        })
+        .catch(reject);
     });
   });
 };

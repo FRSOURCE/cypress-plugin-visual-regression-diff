@@ -1414,6 +1414,7 @@ __metadata:
     eslint-plugin-cypress: ^2.12.1
     eslint-plugin-eslint-comments: ^3.2.0
     microbundle: ^0.14.1
+    move-file: ^2.1.0
     pixelmatch: ^5.2.1
     pngjs: ^6.0.0
     prettier: ^2.4.1
@@ -6393,6 +6394,15 @@ fsevents@~2.3.2:
   version: 1.0.1
   resolution: "modify-values@npm:1.0.1"
   checksum: 8296610c608bc97b03c2cf889c6cdf4517e32fa2d836440096374c2209f6b7b3e256c209493a0b32584b9cb32d528e99d0dd19dcd9a14d2d915a312d391cc7e9
+  languageName: node
+  linkType: hard
+
+"move-file@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "move-file@npm:2.1.0"
+  dependencies:
+    path-exists: ^4.0.0
+  checksum: 2b92bbe047a302b593fcb2c0bf1131bb090ec80b3264569fc80d782c8ff829eecc13573943fa4d804c9747dec612ef2d1e84a5cfcf29cbc64a69ffcbb7ea09b3
   languageName: node
   linkType: hard
 
