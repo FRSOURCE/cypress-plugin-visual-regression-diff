@@ -121,7 +121,7 @@ cy.matchImage({
   // pixelmatch options, see: https://www.npmjs.com/package/pixelmatch#pixelmatchimg1-img2-output-width-height-options
   // default: { includeAA: true }
   diffConfig: {
-    threshold: '0.01',
+    threshold: 0.01,
   },
   // whether to update images automatically, without making a diff - useful for CI
   // default: false
@@ -135,8 +135,28 @@ cy.matchImage({
 - via [global env configuration](https://docs.cypress.io/guides/guides/environment-variables#Setting). All of the environment variable names are the same as keys of the configuration options passed to `matchImage` method, but with added `pluginVisualRegression` prefix, e.g.:
 
 ```bash
-npx cypress run --env "pluginVisualRegressionUpdateImages=true" --env 'pluginVisualRegressionDiffConfig={"threshold":"0.01"}'
+npx cypress run --env "pluginVisualRegressionUpdateImages=true" --env 'pluginVisualRegressionDiffConfig={"threshold":0.01}'
 ```
+
+```json
+// cypress.json
+{
+  "env": {
+    "pluginVisualRegressionUpdateImages": true,
+    "pluginVisualRegressionDiffConfig": { "threshold": 0.01 }
+  }
+}
+```
+
+```json
+// cypress.env.json (https://docs.cypress.io/guides/guides/environment-variables#Option-2-cypress-env-json)
+{
+  "pluginVisualRegressionUpdateImages": true,
+  "pluginVisualRegressionDiffConfig": { "threshold": 0.01 }
+}
+```
+
+For more ways of setting environment variables [take a look here](https://docs.cypress.io/guides/guides/environment-variables#Setting).
 
 ## Questions
 
