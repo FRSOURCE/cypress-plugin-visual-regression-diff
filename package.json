@@ -35,7 +35,7 @@
     "@types/pngjs": "^6.0.1",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
-    "cypress": "^8.6.0",
+    "cypress": "^9.2.0",
     "del-cli": "^4.0.1",
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
