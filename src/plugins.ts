@@ -64,13 +64,16 @@ export const initPlugin = (
   config: Cypress.PluginConfigOptions
 ) => {
   on("task", {
-    [TASK.getScreenshotPath]({ title, specPath }) {
+    [TASK.getScreenshotPath]({ title, imagesDir, specPath }) {
       return path.join(
         IMAGE_SNAPSHOT_PREFIX,
         path.dirname(specPath),
-        "__image_snapshots__",
+        ...imagesDir.split("/"),
         `${title}${FILE_SUFFIX.actual}.png`
       );
+    },
+    [TASK.doesFileExist]({ path }) {
+      return fs.existsSync(path);
     },
     [TASK.approveImage]({ img }) {
       const oldImg = img.replace(FILE_SUFFIX.actual, "");
@@ -79,7 +82,7 @@ export const initPlugin = (
       const diffImg = img.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff);
       if (fs.existsSync(diffImg)) fs.unlinkSync(diffImg);
 
-      moveFile.sync(img, oldImg);
+      if (fs.existsSync(img)) moveFile.sync(img, oldImg);
 
       return null;
     },
@@ -163,7 +166,7 @@ export const initPlugin = (
   });
 
   on("after:screenshot", (details) => {
-    if (details.name.indexOf(IMAGE_SNAPSHOT_PREFIX) !== 0) return;
+    if (details.name?.indexOf(IMAGE_SNAPSHOT_PREFIX) !== 0) return;
 
     return new Promise((resolve, reject) => {
       const screenshotsFolder = getConfigVariableOrThrow(

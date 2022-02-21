@@ -12,4 +12,5 @@ export const TASK = {
   getScreenshotPath: `${PLUGIN_NAME}-getScreenshotPath`,
   compareImages: `${PLUGIN_NAME}-compareImages`,
   approveImage: `${PLUGIN_NAME}-approveImage`,
+  doesFileExist: `${PLUGIN_NAME}-doesFileExist`,
 };

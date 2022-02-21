@@ -8,6 +8,7 @@ declare global {
       screenshotConfig?: Partial<Cypress.ScreenshotDefaultsOptions>;
       diffConfig?: Parameters<typeof pixelmatch>[5];
       updateImages?: boolean;
+      imagesDir?: string;
       maxDiffThreshold?: number;
     };
 
@@ -42,6 +43,11 @@ Cypress.Commands.add(
         | boolean
         | undefined) ||
       false;
+    const imagesDir =
+      options.imagesDir ||
+      (Cypress.env("pluginVisualRegressionImagesDir") as string | undefined) ||
+      "__image_snapshots__";
+
     const maxDiffThreshold =
       options.maxDiffThreshold ||
       (Cypress.env("pluginVisualRegressionMaxDiffThreshold") as
@@ -67,6 +73,7 @@ Cypress.Commands.add(
           TASK.getScreenshotPath,
           {
             title,
+            imagesDir,
             specPath: Cypress.spec.relative,
           },
           { log: false }

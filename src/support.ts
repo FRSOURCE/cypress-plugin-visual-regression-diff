@@ -18,14 +18,19 @@ function generateOverlayTemplate(
   title: string,
   imgNewBase64: string,
   imgOldBase64: string,
-  imgDiffBase64: string
+  imgDiffBase64: string,
+  wasImageNotUpdatedYet: boolean
 ) {
   return `<div class="${OVERLAY_CLASS} runner" style="position:fixed;z-index:10;top:0;bottom:0;left:0;right:0">
   <header style="position:static">
   <nav style="display:flex;width:100%;align-items:center;justify-content:space-between;padding:10px 15px;">
     <h2>${title} - screenshot diff</h2>
     <form>
-      <button type="submit"><i class="fa fa-check"></i> Update screenshot</button>
+      ${
+        wasImageNotUpdatedYet
+          ? `<button type="submit"><i class="fa fa-check"></i> Update screenshot</button>`
+          : "Image was already updated, rerun test to see new comparison"
+      }
       <button type="button" data-type="close"><i class="fa fa-times"></i> Close</button>
     <form>
   </nav>
@@ -99,37 +104,57 @@ after(() => {
               imageCache,
               imgPath.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
               "base64"
-            ).then((imgDiff) => [imgNew, imgOld, imgDiff])
+            ).then((imgDiff) =>
+              cy
+                .task(TASK.doesFileExist, { path: imgPath }, { log: false })
+                .then(
+                  (wasImageNotUpdatedYet) =>
+                    [
+                      imgNew,
+                      imgOld,
+                      imgDiff,
+                      wasImageNotUpdatedYet as boolean,
+                    ] as const
+                )
+            )
           )
         )
-        .then(([imgNewBase64, imgOldBase64, imgDiffBase64]) => {
-          if (!top) return false;
-          queueClear();
+        .then(
+          ([
+            imgNewBase64,
+            imgOldBase64,
+            imgDiffBase64,
+            wasImageNotUpdatedYet,
+          ]) => {
+            if (!top) return false;
+            queueClear();
 
-          Cypress.$(
-            generateOverlayTemplate(
-              title,
-              imgNewBase64,
-              imgOldBase64,
-              imgDiffBase64
-            )
-          ).appendTo(top.document.body);
+            Cypress.$(
+              generateOverlayTemplate(
+                title,
+                imgNewBase64,
+                imgOldBase64,
+                imgDiffBase64,
+                wasImageNotUpdatedYet
+              )
+            ).appendTo(top.document.body);
 
-          const wrapper = Cypress.$(`.${OVERLAY_CLASS}`, top.document.body);
-          wrapper.on("click", 'button[data-type="close"]', function () {
-            wrapper.remove();
-          });
+            const wrapper = Cypress.$(`.${OVERLAY_CLASS}`, top.document.body);
+            wrapper.on("click", 'button[data-type="close"]', function () {
+              wrapper.remove();
+            });
 
-          wrapper.on("submit", "form", function (e) {
-            e.preventDefault();
+            wrapper.on("submit", "form", function (e) {
+              e.preventDefault();
 
-            cy.task(TASK.approveImage, { img: imgPath }).then(() =>
-              wrapper.remove()
-            );
+              cy.task(TASK.approveImage, { img: imgPath }).then(() =>
+                wrapper.remove()
+              );
 
-            queueRun();
-          });
-        });
+              queueRun();
+            });
+          }
+        );
 
       queueRun();
 

@@ -128,6 +128,10 @@ cy.matchImage({
   // whether to update images automatically, without making a diff - useful for CI
   // default: false
   updateImages: true,
+  // directory path in which screenshot images will be stored
+  // image visualiser will normalise path separators depending on OS it's being run within, so always use / for nested paths
+  // default: '__image_snapshots__'
+  imagesDir: 'this-might-be-your-custom/maybe-nested-directory',
   // maximum threshold above which the test should fail
   // default: 0.01
   maxDiffThreshold: 0.1
