@@ -34,6 +34,9 @@ jobs:
       - name: Install dependencies
         if: ${{ github.actor != 'dependabot[bot]' || github.ref == 'refs/heads/main' }}
         run: yarn --immutable
+      - name: Reset yarn.lock (due to dependabot incompatibility with yarn 3)
+        if: ${{ github.actor == 'dependabot[bot]' && github.ref != 'refs/heads/main' }}
+        run: "git checkout HEAD~1 yarn.lock"
       - name: Install dependencies & update yarn.lock (dependabot)
         if: ${{ github.actor == 'dependabot[bot]' && github.ref != 'refs/heads/main' }}
         run: "yarn install && git stage yarn.lock && git commit -m 'chore: update yarn.lock' && git push"
