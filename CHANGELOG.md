@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.3.1...v1.4.0) (2022-02-21)
+
+
+### Features
+
+* add possibility to change images dirname ([b831e94](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/b831e94677df906f0cbd889f7ce0994e1e8a7783))
+
 ## [1.3.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.3.0...v1.3.1) (2021-11-23)
 
 
