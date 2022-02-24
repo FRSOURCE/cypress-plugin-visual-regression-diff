@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.4.0...v1.5.0) (2022-02-24)
+
+
+### Features
+
+* add forceDeviceFactor option ([8d69632](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/8d6963222f924d73fc0aed08adecdb361104c2dc))
+
 # [1.4.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.3.1...v1.4.0) (2022-02-21)
 
 
