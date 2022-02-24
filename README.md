@@ -134,7 +134,11 @@ cy.matchImage({
   imagesDir: 'this-might-be-your-custom/maybe-nested-directory',
   // maximum threshold above which the test should fail
   // default: 0.01
-  maxDiffThreshold: 0.1
+  maxDiffThreshold: 0.1,
+  // forces scale factor to be set as value "1" 
+  // helps with screenshots being scaled 2x on high-density screens like Mac Retina
+  // default: true
+  forceDeviceScaleFactor: false,
 })
 ```
 

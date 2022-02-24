@@ -1,9 +1,10 @@
 import path from "path";
 import pixelmatch from "pixelmatch";
 import fs from "fs";
-import { PNG } from "pngjs";
+import { PNG, PNGWithMetadata } from "pngjs";
 import { FILE_SUFFIX, IMAGE_SNAPSHOT_PREFIX, TASK } from "./constants";
 import moveFile from "move-file";
+import sharp from "sharp";
 
 type NotFalsy<T> = T extends false | null | undefined ? never : T;
 
@@ -29,7 +30,25 @@ const fillSizeDifference = (width: number, height: number) => (image: PNG) => {
   return image;
 };
 
-const alignImagesToSameSize = (firstImage: PNG, secondImage: PNG) => {
+const importAndScaleImage = async (cfg: {
+  scaleFactor: number;
+  path: string;
+}) => {
+  const imgBuffer = fs.readFileSync(cfg.path);
+  const rawImgNew = PNG.sync.read(imgBuffer);
+  if (cfg.scaleFactor === 1) return rawImgNew;
+
+  const newImageWidth = Math.ceil(rawImgNew.width * cfg.scaleFactor);
+  const newImageHeight = Math.ceil(rawImgNew.height * cfg.scaleFactor);
+  await sharp(imgBuffer).resize(newImageWidth, newImageHeight).toFile(cfg.path);
+
+  return PNG.sync.read(fs.readFileSync(cfg.path));
+};
+
+const alignImagesToSameSize = (
+  firstImage: PNGWithMetadata,
+  secondImage: PNGWithMetadata
+) => {
   const firstImageWidth = firstImage.width;
   const firstImageHeight = firstImage.height;
   const secondImageWidth = secondImage.width;
@@ -63,6 +82,21 @@ export const initPlugin = (
   on: Cypress.PluginEvents,
   config: Cypress.PluginConfigOptions
 ) => {
+  if (config.env["pluginVisualRegressionForceDeviceScaleFactor"] !== false) {
+    // based on https://github.com/cypress-io/cypress/issues/2102#issuecomment-521299946
+    on("before:browser:launch", (browser, launchOptions) => {
+      if (browser.name === "chrome" || browser.name === "chromium") {
+        launchOptions.args.push("--force-device-scale-factor=1");
+        launchOptions.args.push("--high-dpi-support=1");
+      } else if (browser.name === "electron" && browser.isHeaded) {
+        // eslint-disable-next-line no-console
+        console.log(
+          "There isn't currently a way of setting the device scale factor in Cypress when running headed electron so we disable the image regression commands."
+        );
+      }
+    });
+  }
+
   on("task", {
     [TASK.getScreenshotPath]({ title, imagesDir, specPath }) {
       return path.join(
@@ -86,8 +120,9 @@ export const initPlugin = (
 
       return null;
     },
-    [TASK.compareImages](
+    async [TASK.compareImages](
       cfg: {
+        scaleFactor: number;
         title: string;
         imgNew: string;
         imgOld: string;
@@ -100,7 +135,10 @@ export const initPlugin = (
       let errorMsg: string | undefined;
 
       if (fs.existsSync(cfg.imgOld) && !cfg.updateImages) {
-        const rawImgNew = PNG.sync.read(fs.readFileSync(cfg.imgNew));
+        const rawImgNew = await importAndScaleImage({
+          scaleFactor: cfg.scaleFactor,
+          path: cfg.imgNew,
+        });
         const rawImgOld = PNG.sync.read(fs.readFileSync(cfg.imgOld));
         const isImgSizeDifferent =
           rawImgNew.height !== rawImgOld.height ||

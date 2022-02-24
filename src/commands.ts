@@ -37,6 +37,11 @@ Cypress.Commands.add(
       nameCacheCounter[title] = -1;
     title += ` #${++nameCacheCounter[title]}`;
 
+    const scaleFactor =
+      Cypress.env("pluginVisualRegressionForceDeviceScaleFactor") === false
+        ? 1
+        : 1 / window.devicePixelRatio;
+
     const updateImages =
       options.updateImages ||
       (Cypress.env("pluginVisualRegressionUpdateImages") as
@@ -97,6 +102,7 @@ Cypress.Commands.add(
           .task(
             TASK.compareImages,
             {
+              scaleFactor,
               imgNew: imgPath,
               imgOld: imgPath.replace(FILE_SUFFIX.actual, ""),
               updateImages,

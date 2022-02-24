@@ -33,6 +33,7 @@
     "@semantic-release/release-notes-generator": "^10.0.2",
     "@types/pixelmatch": "^5.2.4",
     "@types/pngjs": "^6.0.1",
+    "@types/sharp": "^0.29.5",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
     "cypress": "^8.6.0",
@@ -63,7 +64,8 @@
   "dependencies": {
     "move-file": "^2.1.0",
     "pixelmatch": "^5.2.1",
-    "pngjs": "^6.0.0"
+    "pngjs": "^6.0.0",
+    "sharp": "^0.30.1"
   },
   "publishConfig": {
     "access": "public"
