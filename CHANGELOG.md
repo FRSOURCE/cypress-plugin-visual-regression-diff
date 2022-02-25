@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.5.0...v1.6.0) (2022-02-25)
+
+
+### Features
+
+* show scrollbar for overflowing images ([de994b9](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/de994b98ad3dea233aee70b0142992a309476e38))
+
 # [1.5.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.4.0...v1.5.0) (2022-02-24)
 
 
