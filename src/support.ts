@@ -21,7 +21,7 @@ function generateOverlayTemplate(
   imgDiffBase64: string,
   wasImageNotUpdatedYet: boolean
 ) {
-  return `<div class="${OVERLAY_CLASS} runner" style="position:fixed;z-index:10;top:0;bottom:0;left:0;right:0">
+  return `<div class="${OVERLAY_CLASS} runner" style="position:fixed;z-index:10;top:0;bottom:0;left:0;right:0;display:flex;flex-flow:column">
   <header style="position:static">
   <nav style="display:flex;width:100%;align-items:center;justify-content:space-between;padding:10px 15px;">
     <h2>${title} - screenshot diff</h2>
@@ -35,22 +35,24 @@ function generateOverlayTemplate(
     <form>
   </nav>
   </header>
-  <div style="margin:15px;display:flex;justify-content:space-evenly;align-items: flex-end">
-    <div
-      style="position:relative;background:#fff;border:solid 15px #fff"
-      onmouseover="this.querySelector('div').style.opacity=0,this.querySelector('img').style.opacity=1"
-      onmouseleave="this.querySelector('div').style.opacity=1,this.querySelector('img').style.opacity=0"
-    >
-      <h3>New screenshot:</h3>
-      <img style="min-width:300px;width:100%;opacity:0" src="data:image/png;base64,${imgNewBase64}" />
-      <div style="position:absolute;top:0;left:0;background:#fff">
-        <h3>Old screenshot (hover over to see the new one):</h3>
-        <img style="min-width:300px;width:100%" src="data:image/png;base64,${imgOldBase64}" />
+  <div style="padding:15px;overflow:auto">
+    <div style="display:flex;justify-content:space-evenly;align-items:flex-end">
+      <div
+        style="position:relative;background:#fff;border:solid 15px #fff"
+        onmouseover="this.querySelector('div').style.opacity=0,this.querySelector('img').style.opacity=1"
+        onmouseleave="this.querySelector('div').style.opacity=1,this.querySelector('img').style.opacity=0"
+      >
+        <h3>New screenshot:</h3>
+        <img style="min-width:300px;width:100%;opacity:0" src="data:image/png;base64,${imgNewBase64}" />
+        <div style="position:absolute;top:0;left:0;background:#fff">
+          <h3>Old screenshot (hover over to see the new one):</h3>
+          <img style="min-width:300px;width:100%" src="data:image/png;base64,${imgOldBase64}" />
+        </div>
       </div>
-    </div>
-    <div style="background:#fff;border:solid 15px #fff">
-      <h3>Diff between new and old screenshot</h3>
-      <img style="min-width:300px;width:100%" src="data:image/png;base64,${imgDiffBase64}" />
+      <div style="background:#fff;border:solid 15px #fff">
+        <h3>Diff between new and old screenshot</h3>
+        <img style="min-width:300px;width:100%" src="data:image/png;base64,${imgDiffBase64}" />
+        </div>
       </div>
     </div>
   </div>`;
