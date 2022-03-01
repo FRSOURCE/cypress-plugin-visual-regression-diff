@@ -180,15 +180,15 @@ export const initPlugin = (
             imgDiff,
             maxDiffThreshold: cfg.maxDiffThreshold,
           };
+        } else {
+          // don't overwrite file if it's the same (imgDiff < cfg.maxDiffThreshold && !isImgSizeDifferent)
+          fs.unlinkSync(cfg.imgNew);
         }
-
-        fs.unlinkSync(cfg.imgOld);
       } else {
         // there is no "old screenshot" or screenshots should be immediately updated
         imgDiff = 0;
+        moveFile.sync(cfg.imgNew, cfg.imgOld);
       }
-
-      moveFile.sync(cfg.imgNew, cfg.imgOld);
 
       if (typeof imgDiff !== "undefined") {
         const roundedImgDiff = Math.ceil(imgDiff * 1000) / 1000;
