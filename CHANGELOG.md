@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.6.0...v1.7.0) (2022-03-01)
+
+
+### Features
+
+* don't override screenshots if not needed ([9066017](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/90660179d05f4de1c803888fb66f8e1c240f7c37))
+
 # [1.6.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.5.0...v1.6.0) (2022-02-25)
 
 
