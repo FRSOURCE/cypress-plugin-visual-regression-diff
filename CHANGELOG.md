@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.7.0...v1.7.1) (2022-03-15)
+
+
+### Bug Fixes
+
+* sanitize screenshot filenames ([fc57380](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/fc57380d40e72eec51d5fdf2615226a358efa070))
+
 # [1.7.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.6.0...v1.7.0) (2022-03-01)
 
 
