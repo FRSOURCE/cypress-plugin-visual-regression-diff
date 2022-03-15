@@ -5,6 +5,7 @@ import { PNG, PNGWithMetadata } from "pngjs";
 import { FILE_SUFFIX, IMAGE_SNAPSHOT_PREFIX, TASK } from "./constants";
 import moveFile from "move-file";
 import sharp from "sharp";
+import sanitize from "sanitize-filename";
 
 type NotFalsy<T> = T extends false | null | undefined ? never : T;
 
@@ -103,7 +104,7 @@ export const initPlugin = (
         IMAGE_SNAPSHOT_PREFIX,
         path.dirname(specPath),
         ...imagesDir.split("/"),
-        `${title}${FILE_SUFFIX.actual}.png`
+        `${sanitize(title)}${FILE_SUFFIX.actual}.png`
       );
     },
     [TASK.doesFileExist]({ path }) {
