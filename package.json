@@ -21,7 +21,7 @@
   "engines": {
     "node": ">=10"
   },
-  "packageManager": "yarn@3.1.0-rc.13",
+  "packageManager": "yarn@3.2.1",
   "peerDependencies": {
     "cypress": ">=4.5.0"
   },
