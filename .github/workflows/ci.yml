@@ -24,7 +24,7 @@ jobs:
         id: yarn-cache-key
         run: echo "::set-output name=key::${{ runner.os }}-yarn-ci-cache-v3-${{ hashFiles('./yarn.lock') }}-${{ hashFiles('**/yarn.lock') }}"
       - name: Configure Yarn cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ steps.yarn-cache-key.outputs.key }}
           path: |
@@ -55,7 +55,7 @@ jobs:
       - name: remove git auth
         run: git config --unset http.https://github.com/.extraheader
       - name: Configure Yarn cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ needs.cache.outputs.yarn-cache-key }}
           path: |
@@ -89,7 +89,7 @@ jobs:
       - name: remove git auth
         run: git config --unset http.https://github.com/.extraheader
       - name: Configure Yarn cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ needs.cache.outputs.yarn-cache-key }}
           path: |
