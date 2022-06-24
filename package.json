@@ -42,7 +42,7 @@
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-cypress": "2.12.1",
     "eslint-plugin-eslint-comments": "3.2.0",
-    "microbundle": "0.14.2",
+    "microbundle": "0.15.0",
     "prettier": "2.5.1",
     "sanitize-filename": "1.6.3",
     "semantic-release": "^18.0.0",
