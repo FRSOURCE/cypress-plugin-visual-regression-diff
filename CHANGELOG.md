@@ -1,3 +1,10 @@
+## [1.7.6](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.7.5...v1.7.6) (2022-06-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency pixelmatch to v5.3.0 ([#55](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/55)) ([ca5d278](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/ca5d2784a5fffb60bebe7643f8beced6ad9979bd))
+
 ## [1.7.5](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.7.4...v1.7.5) (2022-06-24)
 
 ## [1.7.4](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.7.3...v1.7.4) (2022-06-24)
