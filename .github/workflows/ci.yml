@@ -15,7 +15,7 @@ jobs:
       yarn-cache-key: ${{ steps.yarn-cache-key.outputs.key }}
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
       - name: Remove git auth
@@ -49,7 +49,7 @@ jobs:
     needs: cache
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
       - name: remove git auth
@@ -83,7 +83,7 @@ jobs:
         run: |
           git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
           git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
       - name: remove git auth
