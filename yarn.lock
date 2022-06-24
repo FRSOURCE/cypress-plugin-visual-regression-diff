@@ -1447,7 +1447,7 @@ __metadata:
     eslint-plugin-cypress: 2.12.1
     eslint-plugin-eslint-comments: 3.2.0
     microbundle: 0.15.0
-    move-file: 2.1.0
+    move-file: 3.0.0
     pixelmatch: 5.3.0
     pngjs: 6.0.0
     prettier: 2.7.1
@@ -7294,12 +7294,12 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"move-file@npm:2.1.0":
-  version: 2.1.0
-  resolution: "move-file@npm:2.1.0"
+"move-file@npm:3.0.0":
+  version: 3.0.0
+  resolution: "move-file@npm:3.0.0"
   dependencies:
-    path-exists: ^4.0.0
-  checksum: 2b92bbe047a302b593fcb2c0bf1131bb090ec80b3264569fc80d782c8ff829eecc13573943fa4d804c9747dec612ef2d1e84a5cfcf29cbc64a69ffcbb7ea09b3
+    path-exists: ^5.0.0
+  checksum: 18b0a542b4ae7615748435ac9433166a935f7dad94a9e116a36a24941916b1421b8685ebf0b98ed9bba551aa09a1aa2959da6519cf4830b079d603f6a390c831
   languageName: node
   linkType: hard
 
@@ -8320,6 +8320,13 @@ fsevents@~2.3.2:
   version: 4.0.0
   resolution: "path-exists@npm:4.0.0"
   checksum: 505807199dfb7c50737b057dd8d351b82c033029ab94cb10a657609e00c1bc53b951cfdbccab8de04c5584d5eff31128ce6afd3db79281874a5ef2adbba55ed1
+  languageName: node
+  linkType: hard
+
+"path-exists@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "path-exists@npm:5.0.0"
+  checksum: 8ca842868cab09423994596eb2c5ec2a971c17d1a3cb36dbf060592c730c725cd524b9067d7d2a1e031fef9ba7bd2ac6dc5ec9fb92aa693265f7be3987045254
   languageName: node
   linkType: hard
 
