@@ -14,7 +14,7 @@ jobs:
     outputs:
       yarn-cache-key: ${{ steps.yarn-cache-key.outputs.key }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: cache
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
@@ -75,7 +75,7 @@ jobs:
     needs: [cache, lint]
     if: ${{ github.actor != 'dependabot[bot]' }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           # pulls all commits (needed for lerna / semantic release to correctly version)
           fetch-depth: "0"
