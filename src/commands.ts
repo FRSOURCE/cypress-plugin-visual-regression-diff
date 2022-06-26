@@ -12,16 +12,15 @@ declare global {
       maxDiffThreshold?: number;
     };
 
-    interface Chainable {
+    interface Chainable<Subject> {
       /**
        * Command to create and compare image snapshots.
        * @memberof Cypress.Chainable
        * @example cy.get('.my-element').matchImage();
        */
-      matchImage<T extends Chainable<unknown>>(
-        this: T,
+      matchImage(
         options?: Cypress.MatchImageOptions
-      ): T;
+      ): Chainable<Subject>;
     }
   }
 }
@@ -30,8 +29,9 @@ const nameCacheCounter: Record<string, number> = {};
 
 Cypress.Commands.add(
   "matchImage",
-  { prevSubject: "optional" },
-  (subject?: JQuery<HTMLElement>, options: Cypress.MatchImageOptions = {}) => {
+  { prevSubject: 'optional' },
+  (subject, options = {}) => {
+    const $el = subject as JQuery<HTMLElement> | undefined;
     let title = Cypress.currentTest.titlePath.join(" ");
     if (typeof nameCacheCounter[title] === "undefined")
       nameCacheCounter[title] = -1;
@@ -41,7 +41,6 @@ Cypress.Commands.add(
       Cypress.env("pluginVisualRegressionForceDeviceScaleFactor") === false
         ? 1
         : 1 / window.devicePixelRatio;
-
     const updateImages =
       options.updateImages ||
       (Cypress.env("pluginVisualRegressionUpdateImages") as
@@ -52,7 +51,6 @@ Cypress.Commands.add(
       options.imagesDir ||
       (Cypress.env("pluginVisualRegressionImagesDir") as string | undefined) ||
       "__image_snapshots__";
-
     const maxDiffThreshold =
       options.maxDiffThreshold ||
       (Cypress.env("pluginVisualRegressionMaxDiffThreshold") as
@@ -86,7 +84,7 @@ Cypress.Commands.add(
       )
       .then((screenshotPath) => {
         let imgPath: string;
-        return (subject ? cy.wrap(subject) : cy)
+        return ($el ? cy.wrap($el) : cy)
           .screenshot(screenshotPath as string, {
             ...screenshotConfig,
             onAfterScreenshot(el, props) {
@@ -125,7 +123,7 @@ Cypress.Commands.add(
         const log = Cypress.log({
           name: "log",
           displayName: "Match image",
-          $el: subject,
+          $el,
         });
 
         if (!res) {

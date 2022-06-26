@@ -68,7 +68,24 @@ import '@frsource/cypress-plugin-visual-regression-diff/dist/support';
 require('@frsource/cypress-plugin-visual-regression-diff/dist/support');
 ```
 
-- secondly, in your plugins file (located by default in `cypress/plugins/index.js`):
+- secondly:
+  - (for Cypress 10.0+) in `cypress.config.js` (or `cypress.config.ts`):
+```ts
+// typescript
+import { defineConfig } from 'cypress';
+import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/dist/plugins';
+
+export default defineConfig({
+  // setupNodeEvents can be defined in either
+  // the e2e or component configuration
+  e2e: {
+    setupNodeEvents(on, config) {
+      initPlugin(on, config);
+    }
+  }
+});
+```
+  - (for Cypress >10.0) in your plugins file (located by default in `cypress/plugins/index.js`):
 ```ts
 // typescript
 import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/dist/plugins';
@@ -148,13 +165,18 @@ cy.matchImage({
 npx cypress run --env "pluginVisualRegressionUpdateImages=true" --env 'pluginVisualRegressionDiffConfig={"threshold":0.01}'
 ```
 
-```json
-// cypress.json
-{
-  "env": {
-    "pluginVisualRegressionUpdateImages": true,
-    "pluginVisualRegressionDiffConfig": { "threshold": 0.01 }
+```ts
+// cypress.config.ts
+import { defineConfig } from 'cypress';
+
+export default defineConfig({
+  env: {
+    pluginVisualRegressionUpdateImages: true,
+    pluginVisualRegressionDiffConfig: { threshold: 0.01 }
   }
+})
+{
+  
 }
 ```
 
