@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:open": "vue-cli-service test:e2e --env \"pluginVisualRegressionImagesDir=__image_snapshots_local__\"",
-    "test:run": "vue-cli-service test:e2e",
+    "test:run": "vue-cli-service test:e2e --env \"pluginVisualRegressionUpdateImages=true\"",
     "test:ct": "yarn test:open --component",
     "test:ct:ci": "yarn test:run --component --headless",
     "test:e2e": "yarn test:open --e2e",
