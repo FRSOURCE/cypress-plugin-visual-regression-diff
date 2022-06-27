@@ -1,3 +1,16 @@
+# [1.8.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.7.8...v1.8.0) (2022-06-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency move-file to v3 ([#62](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/62)) ([4f6eaf6](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/4f6eaf64a0f3db6e54190ef7532059a451ad384f))
+
+
+### Features
+
+* make library cypress 10 compatible ([b26beb3](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/b26beb391cf440d2d4b01261271b7acffa6f600e))
+* make plugin Cypress 10 compatible ([a03a17d](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/a03a17d7295dd811969c10ad562dda26795fd8f2))
+
 ## [1.7.8](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.7.7...v1.7.8) (2022-06-24)
 
 ## [1.7.7](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.7.6...v1.7.7) (2022-06-24)
