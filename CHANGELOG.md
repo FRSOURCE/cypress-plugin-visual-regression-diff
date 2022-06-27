@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.8.0...v1.8.1) (2022-06-27)
+
+
+### Bug Fixes
+
+* remove automated screenshots update ([acb3ef0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/acb3ef08fb8ec5129bee9883431361dd804d23f3))
+
 # [1.8.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.7.8...v1.8.0) (2022-06-27)
 
 
