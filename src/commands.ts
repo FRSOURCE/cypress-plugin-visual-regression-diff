@@ -18,9 +18,7 @@ declare global {
        * @memberof Cypress.Chainable
        * @example cy.get('.my-element').matchImage();
        */
-      matchImage(
-        options?: Cypress.MatchImageOptions
-      ): Chainable<Subject>;
+      matchImage(options?: Cypress.MatchImageOptions): Chainable<Subject>;
     }
   }
 }
@@ -29,7 +27,7 @@ const nameCacheCounter: Record<string, number> = {};
 
 Cypress.Commands.add(
   "matchImage",
-  { prevSubject: 'optional' },
+  { prevSubject: "optional" },
   (subject, options = {}) => {
     const $el = subject as JQuery<HTMLElement> | undefined;
     let title = Cypress.currentTest.titlePath.join(" ");

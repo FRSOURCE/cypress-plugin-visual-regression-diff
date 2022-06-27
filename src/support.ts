@@ -36,13 +36,13 @@ function generateOverlayTemplate(
   </nav>
   </header>
   <div style="padding:15px;overflow:auto">
-    <div style="display:flex;justify-content:space-evenly;align-items:flex-end">
+    <div style="display:flex;justify-content:space-evenly;align-items:flex-start;gap:15px">
       <div
         style="position:relative;background:#fff;border:solid 15px #fff"
         onmouseover="this.querySelector('div').style.opacity=0,this.querySelector('img').style.opacity=1"
         onmouseleave="this.querySelector('div').style.opacity=1,this.querySelector('img').style.opacity=0"
       >
-        <h3>New screenshot:</h3>
+        <h3>New screenshot (hover mouse away too see the old one):</h3>
         <img style="min-width:300px;width:100%;opacity:0" src="data:image/png;base64,${imgNewBase64}" />
         <div style="position:absolute;top:0;left:0;background:#fff">
           <h3>Old screenshot (hover over to see the new one):</h3>

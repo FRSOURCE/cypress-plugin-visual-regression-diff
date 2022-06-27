@@ -15,7 +15,7 @@
 </p>
 
 <h1 align="center">Plugin for Cypress - Visual Regression Diff</h1>
-<p align="center">Perform visual regression test with a nice GUI as help. 💅 <i>Only&nbsp;for&nbsp;Cypress!</i></p>
+<p align="center">Perform visual regression test with a nice GUI as help. 💅 <i>Only&nbsp;for&nbsp;Cypress!</i> Both e2e and component-testing compatible 💪</p>
 
 <p align="center">
   <a href="#getting-started">Getting Started</a>
@@ -61,7 +61,7 @@ Next, you need to import the library:
 
 - first, in your support file (located by default in `cypress/support/index.js`):
 ```ts
-// typescript
+// typescript / ES6
 import '@frsource/cypress-plugin-visual-regression-diff/dist/support';
 
 // javascript
@@ -71,7 +71,7 @@ require('@frsource/cypress-plugin-visual-regression-diff/dist/support');
 - secondly:
   - (for Cypress 10.0+) in `cypress.config.js` (or `cypress.config.ts`):
 ```ts
-// typescript
+// typescript / ES6
 import { defineConfig } from 'cypress';
 import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/dist/plugins';
 
@@ -85,9 +85,9 @@ export default defineConfig({
   }
 });
 ```
-  - (for Cypress >10.0) in your plugins file (located by default in `cypress/plugins/index.js`):
+  - (for Cypress <10.0) in your plugins file (located by default in `cypress/plugins/index.js`):
 ```ts
-// typescript
+// typescript / ES6
 import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/dist/plugins';
 
 export default function (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) {
@@ -123,6 +123,10 @@ cy.matchImage();
 ```
 
 `matchImage` command will do a screenshot and compare it with image from a previous run. In case of regression the test will fail and you'll get a "Compare images" button to see what's a root of a problem.
+
+## Example
+
+Still got troubles with installation? Have a look at [example directory of this repo](./example) to see how this plugin can be used in e2e or component-testing Cypress within your project.
 
 ## Configuration
 

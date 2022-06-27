@@ -4,10 +4,12 @@
   "version": "1.7.8",
   "author": "Jakub Freisler <jakub.freisler@frsource.org>",
   "repository": "https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff.git",
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/**"
+  ],
   "license": "MIT",
   "scripts": {
-    "build": "del-cli dist && microbundle src/{constants,plugins,support}.ts -f cjs",
+    "build": "del-cli dist && microbundle src/{constants,plugins,support}.ts --target node -f cjs,es",
     "lint": "eslint '**/*.ts' --ignore-pattern '**/*.d.ts'",
     "lint:fix": "yarn lint --fix",
     "lint:ci": "yarn lint --max-warnings 0",
@@ -16,7 +18,13 @@
     "prepack": "yarn build",
     "release": "semantic-release",
     "release:ci": "yarn release --yes",
-    "release:test": "yarn release --no-git-tag-version --no-push --skip-npm"
+    "release:test": "yarn release --no-git-tag-version --no-push --skip-npm",
+    "cypress:ct": "cypress open-ct",
+    "cypress:ct:headless": "cypress run-ct --browser chrome --headless",
+    "test:ct": "cd example && yarn test:ct",
+    "test:ct:ci": "cd example && yarn test:ct:ci",
+    "test:e2e": "cd example && yarn test:e2e",
+    "test:e2e:ci": "cd example && yarn test:e2e:ci"
   },
   "engines": {
     "node": ">=10"
@@ -63,7 +71,7 @@
     "Cypress image snapshot"
   ],
   "dependencies": {
-    "move-file": "3.0.0",
+    "move-file": "2.1.0",
     "pixelmatch": "5.3.0",
     "pngjs": "6.0.0",
     "sharp": "^0.30.1"

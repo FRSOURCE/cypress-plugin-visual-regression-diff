@@ -3,7 +3,7 @@ import pixelmatch from "pixelmatch";
 import fs from "fs";
 import { PNG, PNGWithMetadata } from "pngjs";
 import { FILE_SUFFIX, IMAGE_SNAPSHOT_PREFIX, TASK } from "./constants";
-import { moveFileSync, moveFile } from "move-file";
+import moveFile from "move-file";
 import sharp from "sharp";
 import sanitize from "sanitize-filename";
 
@@ -117,7 +117,7 @@ export const initPlugin = (
       const diffImg = img.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff);
       if (fs.existsSync(diffImg)) fs.unlinkSync(diffImg);
 
-      if (fs.existsSync(img)) moveFileSync(img, oldImg);
+      if (fs.existsSync(img)) moveFile.sync(img, oldImg);
 
       return null;
     },
@@ -188,7 +188,7 @@ export const initPlugin = (
       } else {
         // there is no "old screenshot" or screenshots should be immediately updated
         imgDiff = 0;
-        moveFileSync(cfg.imgNew, cfg.imgOld);
+        moveFile.sync(cfg.imgNew, cfg.imgOld);
       }
 
       if (typeof imgDiff !== "undefined") {
