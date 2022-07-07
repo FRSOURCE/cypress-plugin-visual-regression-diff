@@ -2880,7 +2880,7 @@ __metadata:
     "@vue/cli-plugin-e2e-cypress": 5.0.8
     "@vue/cli-service": 5.0.8
     cypress: 10.3.0
-    vue: ^3.2.13
+    vue: 3.2.37
   languageName: unknown
   linkType: soft
 
@@ -7186,7 +7186,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue@npm:^3.2.13":
+"vue@npm:3.2.37":
   version: 3.2.37
   resolution: "vue@npm:3.2.37"
   dependencies:
