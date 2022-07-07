@@ -590,58 +590,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/cli-overlay@npm:^5.0.6":
-  version: 5.0.6
-  resolution: "@vue/cli-overlay@npm:5.0.6"
-  checksum: 676191aca4ad2e944ab0dfd43e64389b597f198ae4afc4ab3e3a9c7cd185c845e322fdba59f52aad54f6f0b3663989ca26f027785868b5e468d9d1b5cb08a5b0
+"@vue/cli-overlay@npm:^5.0.8":
+  version: 5.0.8
+  resolution: "@vue/cli-overlay@npm:5.0.8"
+  checksum: b76412ff811d0c1d60371c522ee689d310f10d1311199580ba484fef0189ba0748a07c1de933752975218858e569b6f0586056a0644df359047a1335cd7d1f73
   languageName: node
   linkType: hard
 
-"@vue/cli-plugin-e2e-cypress@npm:~5.0.0":
-  version: 5.0.6
-  resolution: "@vue/cli-plugin-e2e-cypress@npm:5.0.6"
+"@vue/cli-plugin-e2e-cypress@npm:5.0.8":
+  version: 5.0.8
+  resolution: "@vue/cli-plugin-e2e-cypress@npm:5.0.8"
   dependencies:
-    "@vue/cli-shared-utils": ^5.0.6
+    "@vue/cli-shared-utils": ^5.0.8
     eslint-plugin-cypress: ^2.11.2
   peerDependencies:
     "@vue/cli-service": ^3.0.0 || ^4.0.0 || ^5.0.0-0
     cypress: "*"
-  checksum: 643e0810b75923f6a0f5ce408680a9309b350c290e3a1cb3020f93eed074e4069a5f141f286caf498bcfe2ed4c085f6e38861feb1707d906434a89c9d6768852
+  checksum: c68e6aaa31ab9fea8624ef31f8e8fc600d18654b49226c85a0df061d597f9d9a4dff0c4f8c1951baebc4480783f7d5fe24710005f32433847837d2decd5a00a3
   languageName: node
   linkType: hard
 
-"@vue/cli-plugin-router@npm:^5.0.6":
-  version: 5.0.6
-  resolution: "@vue/cli-plugin-router@npm:5.0.6"
+"@vue/cli-plugin-router@npm:^5.0.8":
+  version: 5.0.8
+  resolution: "@vue/cli-plugin-router@npm:5.0.8"
   dependencies:
-    "@vue/cli-shared-utils": ^5.0.6
+    "@vue/cli-shared-utils": ^5.0.8
   peerDependencies:
     "@vue/cli-service": ^3.0.0 || ^4.0.0 || ^5.0.0-0
-  checksum: eae9a0e6c56db64ff83bab1196c6ef74b5e1d9a036e7246671016517231cdcea703e68a7410caebf5a9fa3627e93131eaa484389c37cdaf1844e7b073249d291
+  checksum: 7bd2a6b9c45955a11e4495a591f8fa05ac5f824ef5c320642c3b39b8ffc1009e1415a39612038f664a7af896f80f43522f2fb5f6dbc22996b435c25b1bf3300f
   languageName: node
   linkType: hard
 
-"@vue/cli-plugin-vuex@npm:^5.0.6":
-  version: 5.0.6
-  resolution: "@vue/cli-plugin-vuex@npm:5.0.6"
+"@vue/cli-plugin-vuex@npm:^5.0.8":
+  version: 5.0.8
+  resolution: "@vue/cli-plugin-vuex@npm:5.0.8"
   peerDependencies:
     "@vue/cli-service": ^3.0.0 || ^4.0.0 || ^5.0.0-0
-  checksum: 86ca5161f514bc32f228506707a60e286f1141dd215e52d6d81d7646f354bcfb9a39bda55c75445200228ee76d16584a7a58ceb556a849af946014d6c2a99293
+  checksum: 0a01dd490f9558e0beb2af132c05fd76288cd9b728f9b118bd0815b3bc6457510a824d9fd3469c2a99498a07d1a785d01d08a8ff8ecfc4e809efc2bf2ccf4ce4
   languageName: node
   linkType: hard
 
-"@vue/cli-service@npm:~5.0.0":
-  version: 5.0.6
-  resolution: "@vue/cli-service@npm:5.0.6"
+"@vue/cli-service@npm:5.0.8":
+  version: 5.0.8
+  resolution: "@vue/cli-service@npm:5.0.8"
   dependencies:
     "@babel/helper-compilation-targets": ^7.12.16
     "@soda/friendly-errors-webpack-plugin": ^1.8.0
     "@soda/get-current-script": ^1.0.2
     "@types/minimist": ^1.2.0
-    "@vue/cli-overlay": ^5.0.6
-    "@vue/cli-plugin-router": ^5.0.6
-    "@vue/cli-plugin-vuex": ^5.0.6
-    "@vue/cli-shared-utils": ^5.0.6
+    "@vue/cli-overlay": ^5.0.8
+    "@vue/cli-plugin-router": ^5.0.8
+    "@vue/cli-plugin-vuex": ^5.0.8
+    "@vue/cli-shared-utils": ^5.0.8
     "@vue/component-compiler-utils": ^3.3.0
     "@vue/vue-loader-v15": "npm:vue-loader@^15.9.7"
     "@vue/web-component-wrapper": ^1.3.0
@@ -711,13 +711,13 @@ __metadata:
       optional: true
   bin:
     vue-cli-service: bin/vue-cli-service.js
-  checksum: cb91ec993b0d09802aa54e166aa30bcf4a01af83f94ee292c611f185b38a214e0a61a3499635d56f1b5cbcda4ab3baee2be3ed147756b3103746c6ae69ae357c
+  checksum: 94269479a7d9095a6e5ddaad82b357503fe605ff3aa3ffa0bed0efcc3cb7896455920a1d15244abc88b362722a7fbe5d246014faeb214fdc13f9afe9a5aa7f3f
   languageName: node
   linkType: hard
 
-"@vue/cli-shared-utils@npm:^5.0.6":
-  version: 5.0.6
-  resolution: "@vue/cli-shared-utils@npm:5.0.6"
+"@vue/cli-shared-utils@npm:^5.0.8":
+  version: 5.0.8
+  resolution: "@vue/cli-shared-utils@npm:5.0.8"
   dependencies:
     "@achrinza/node-ipc": ^9.2.5
     chalk: ^4.1.2
@@ -731,7 +731,7 @@ __metadata:
     read-pkg: ^5.1.1
     semver: ^7.3.4
     strip-ansi: ^6.0.0
-  checksum: 65896199d0a8315f68c990cf5d13f14aa93dc851162aeec9930d012739b6b1d2208b41322f0c650f7ade25766ae21fe8174f4bb3c712aa465d62222199ef92bf
+  checksum: 20c0c9e6411b861ac7c25427cf84081c09c113ab09c602480850af6974fcf5c5ef18197ed4fa62093cea3f6631975bfe69fb42e99d19c8ed1884de0c4e6d555d
   languageName: node
   linkType: hard
 
@@ -2877,8 +2877,8 @@ __metadata:
   resolution: "example@workspace:."
   dependencies:
     "@frsource/cypress-plugin-visual-regression-diff": "portal:.."
-    "@vue/cli-plugin-e2e-cypress": ~5.0.0
-    "@vue/cli-service": ~5.0.0
+    "@vue/cli-plugin-e2e-cypress": 5.0.8
+    "@vue/cli-service": 5.0.8
     cypress: 10.3.0
     vue: ^3.2.13
   languageName: unknown
