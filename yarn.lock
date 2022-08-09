@@ -1437,7 +1437,7 @@ __metadata:
     "@semantic-release/release-notes-generator": 10.0.3
     "@types/pixelmatch": 5.2.4
     "@types/pngjs": 6.0.1
-    "@types/sharp": 0.30.4
+    "@types/sharp": 0.30.5
     "@typescript-eslint/eslint-plugin": 5.33.0
     "@typescript-eslint/parser": 5.33.0
     cypress: 10.3.0
@@ -2217,12 +2217,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sharp@npm:0.30.4":
-  version: 0.30.4
-  resolution: "@types/sharp@npm:0.30.4"
+"@types/sharp@npm:0.30.5":
+  version: 0.30.5
+  resolution: "@types/sharp@npm:0.30.5"
   dependencies:
     "@types/node": "*"
-  checksum: 3ebeaf55aa5ed2826a5bb4f13982a64b35691b6f38c4fd9d536ee7aed4d7e6b39529ae290f19343c5d8334419d69e147a28c214ca61adaed35ebf3ceea7cdf17
+  checksum: 8aa458d4c4187ae9a69894904832ecfe7533e0c405d1a7971a9984b0996eb6eb2ced103854b71199cf8df1350540bb4d3625c671a1946bd417b2bf4405c7292a
   languageName: node
   linkType: hard
 
