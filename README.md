@@ -160,6 +160,9 @@ cy.matchImage({
   // helps with screenshots being scaled 2x on high-density screens like Mac Retina
   // default: true
   forceDeviceScaleFactor: false,
+  // image title
+  // default: Cypress.currentTest.titlePath (your test title)
+  title: `${Cypress.currentTest.titlePath.join(' ')} (${Cypress.browser.displayName})`
 })
 ```
 
