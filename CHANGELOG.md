@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.8.10...v1.9.0) (2022-08-09)
+
+
+### Features
+
+* add title option to matchImage command ([#81](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/81)) ([4d03866](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/4d03866f7f171473b16b4a7c869fbca02d5f46d1))
+
 ## [1.8.10](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.8.9...v1.8.10) (2022-08-02)
 
 ## [1.8.9](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.8.8...v1.8.9) (2022-08-01)
