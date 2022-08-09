@@ -10,6 +10,7 @@ declare global {
       updateImages?: boolean;
       imagesDir?: string;
       maxDiffThreshold?: number;
+      title?: string;
     };
 
     interface Chainable<Subject> {
@@ -30,7 +31,7 @@ Cypress.Commands.add(
   { prevSubject: "optional" },
   (subject, options = {}) => {
     const $el = subject as JQuery<HTMLElement> | undefined;
-    let title = Cypress.currentTest.titlePath.join(" ");
+    let title = options.title || Cypress.currentTest.titlePath.join(" ");
     if (typeof nameCacheCounter[title] === "undefined")
       nameCacheCounter[title] = -1;
     title += ` #${++nameCacheCounter[title]}`;
