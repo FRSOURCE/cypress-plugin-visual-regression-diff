@@ -2332,9 +2332,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:10.3.0":
-  version: 10.3.0
-  resolution: "cypress@npm:10.3.0"
+"cypress@npm:10.4.0":
+  version: 10.4.0
+  resolution: "cypress@npm:10.4.0"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -2380,7 +2380,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 9cc6d8cd087d7c79f07ad83b8ef9b183f44cf816499bba53e1cee2b6f987d0a6893be209fcd47660cdd0e8456bd132813abe8a6bd15f446d9c96e0129be2de29
+  checksum: 3f7385e076ac936683d1d1d104a7183f2e61ad0f4c901aff07146ae2e10197e8314019dcdfb6c188312fbf1be05484291f1cf8d49c4c37cf6485103c4ac5303e
   languageName: node
   linkType: hard
 
@@ -2879,7 +2879,7 @@ __metadata:
     "@frsource/cypress-plugin-visual-regression-diff": "portal:.."
     "@vue/cli-plugin-e2e-cypress": 5.0.8
     "@vue/cli-service": 5.0.8
-    cypress: 10.3.0
+    cypress: 10.4.0
     vue: 3.2.37
   languageName: unknown
   linkType: soft
