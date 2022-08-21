@@ -44,7 +44,7 @@
     "@types/sharp": "0.30.5",
     "@typescript-eslint/eslint-plugin": "5.33.1",
     "@typescript-eslint/parser": "5.33.1",
-    "cypress": "10.4.0",
+    "cypress": "10.6.0",
     "del-cli": "4.0.1",
     "eslint": "8.22.0",
     "eslint-config-prettier": "8.5.0",
