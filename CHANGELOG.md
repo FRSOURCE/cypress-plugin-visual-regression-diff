@@ -1,3 +1,10 @@
+## [1.9.13](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.9.12...v1.9.13) (2022-08-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency vue to v3.2.38 ([#101](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/101)) ([e2d3c82](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/e2d3c823822ecb6738202599500435cf59f2f6d1))
+
 ## [1.9.12](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.9.11...v1.9.12) (2022-08-30)
 
 ## [1.9.11](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.9.10...v1.9.11) (2022-08-30)
