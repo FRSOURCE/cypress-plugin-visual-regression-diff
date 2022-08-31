@@ -22,6 +22,8 @@
   ·
   <a href="#usage">Usage</a>
   ·
+  <a href="#faq">FAQ</a>
+  ·
   <a href="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues">File an Issue</a>
   ·
   <a href="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/discussions">Have a question or an idea?</a>
@@ -196,6 +198,17 @@ export default defineConfig({
 ```
 
 For more ways of setting environment variables [take a look here](https://docs.cypress.io/guides/guides/environment-variables#Setting).
+
+## FAQ
+
+<details><summary>Why screenshots doesn't conform to the `viewport` set in my Cypress configuration?</summary>
+
+Screenshots in Cypress do not scale to the viewport size by default. You can change this behavior:
+
+* globally, by changing default screenshot configuration: <code>Cypress.Screenshot.defaults({ capture: 'viewport' });</code>
+* locally, by passing screenshot configuration directly to the <code>.matchImage</code> command: <code>cy.matchImage({ screenshotConfig: { capture: 'viewport' } });</code>
+
+</details>
 
 ## Questions
 
