@@ -161,7 +161,7 @@ export const initPlugin = (
           height,
           diffConfig
         );
-        imgDiff = (diffPixels / width) * height;
+        imgDiff = diffPixels / (width * height);
 
         if (isImgSizeDifferent) {
           errorMsg = `Images size mismatch - new screenshot is ${rawImgNew.width}px by ${rawImgNew.height}px while old one is ${rawImgOld.width}px by ${rawImgOld.height} (width x height).`;
