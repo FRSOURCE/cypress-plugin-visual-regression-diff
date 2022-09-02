@@ -1,3 +1,10 @@
+## [1.9.14](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.9.13...v1.9.14) (2022-09-02)
+
+
+### Bug Fixes
+
+* image diff calculation ([529cb22](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/529cb22a22200af234bdbc1399b6f97880001d12)), closes [#107](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/107)
+
 ## [1.9.13](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.9.12...v1.9.13) (2022-08-31)
 
 
