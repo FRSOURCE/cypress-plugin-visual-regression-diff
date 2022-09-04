@@ -133,14 +133,12 @@ export const initPlugin = (
         maxDiffThreshold: number;
         diffConfig: Parameters<typeof pixelmatch>[5];
       } & Parameters<typeof pixelmatch>[5]
-    ): Promise<
-      null | {
-        error?: boolean;
-        message?: string;
-        imgDiff?: number;
-        maxDiffThreshold?: number;
-      }
-    > {
+    ): Promise<null | {
+      error?: boolean;
+      message?: string;
+      imgDiff?: number;
+      maxDiffThreshold?: number;
+    }> {
       const messages = [] as string[];
       let imgDiff: number | undefined;
       let error = false;
@@ -174,11 +172,19 @@ export const initPlugin = (
         imgDiff = diffPixels / (width * height);
 
         if (isImgSizeDifferent) {
-          messages.push(`Warning: Images size mismatch - new screenshot is ${rawImgNew.width}px by ${rawImgNew.height}px while old one is ${rawImgOld.width}px by ${rawImgOld.height} (width x height).`);
+          messages.push(
+            `Warning: Images size mismatch - new screenshot is ${rawImgNew.width}px by ${rawImgNew.height}px while old one is ${rawImgOld.width}px by ${rawImgOld.height} (width x height).`
+          );
         }
-        
+
         if (imgDiff > cfg.maxDiffThreshold) {
-          messages.unshift(`Image diff factor (${round(imgDiff)}) is bigger than maximum threshold option ${cfg.maxDiffThreshold}.`);
+          messages.unshift(
+            `Image diff factor (${round(
+              imgDiff
+            )}) is bigger than maximum threshold option ${
+              cfg.maxDiffThreshold
+            }.`
+          );
           error = true;
         }
 
@@ -189,7 +195,7 @@ export const initPlugin = (
           );
           return {
             error,
-            message: messages.join('\n'),
+            message: messages.join("\n"),
             imgDiff,
             maxDiffThreshold: cfg.maxDiffThreshold,
           };
@@ -204,9 +210,15 @@ export const initPlugin = (
       }
 
       if (typeof imgDiff !== "undefined") {
-        messages.unshift(`Image diff (${round(imgDiff)}%) is within boundaries of maximum threshold option ${cfg.maxDiffThreshold}.`);
+        messages.unshift(
+          `Image diff (${round(
+            imgDiff
+          )}%) is within boundaries of maximum threshold option ${
+            cfg.maxDiffThreshold
+          }.`
+        );
         return {
-          message: messages.join('\n'),
+          message: messages.join("\n"),
           imgDiff,
           maxDiffThreshold: cfg.maxDiffThreshold,
         };
