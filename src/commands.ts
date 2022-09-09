@@ -139,9 +139,10 @@ Cypress.Commands.add(
         if (res.error) {
           log.set(
             "message",
-            `${res.message}\n[See comparison](${LINK_PREFIX}${btoa(
-              JSON.stringify({ title, imgPath })
-            )})`
+            `${res.message}\n[See comparison](${LINK_PREFIX}${btoa(unescape(encodeURIComponent(JSON.stringify({
+              title,
+              imgPath
+            }))))})`
           );
           log.set("consoleProps", () => res);
           const err = new Error(res.message);

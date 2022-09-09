@@ -91,7 +91,7 @@ after(() => {
       if (!top) return false;
 
       const { title, imgPath } = JSON.parse(
-        atob(e.currentTarget.getAttribute("href").substring(LINK_PREFIX.length))
+        decodeURIComponent(escape(atob(e.currentTarget.getAttribute("href").substring(LINK_PREFIX.length))))
       );
       queueClear();
 
