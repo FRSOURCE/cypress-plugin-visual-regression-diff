@@ -9,8 +9,8 @@ describe('HelloWorld.cy.js', () => {
     })
       .then(() => {
         cy.contains('h1', msg);
-        cy.matchImage();
-        cy.get('[data-testid="description"]').matchImage();
+        cy.screenshot('test-file#0')
+        cy.get('[data-testid="description"]').screenshot('test-file#1');
       })
   })
 })

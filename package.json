@@ -1,88 +1,24 @@
 {
-  "name": "@frsource/cypress-plugin-visual-regression-diff",
-  "description": "Perform visual regression test with a nice GUI as help. 💅 Only for Cypress!",
-  "version": "1.9.18",
-  "author": "Jakub Freisler <jakub.freisler@frsource.org>",
-  "repository": "https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff.git",
-  "sideEffects": [
-    "./dist/**"
-  ],
-  "license": "MIT",
+  "name": "example",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "build": "del-cli dist && microbundle src/{constants,plugins,support}.ts --target node -f cjs,es",
-    "lint": "eslint '**/*.ts' --ignore-pattern '**/*.d.ts'",
-    "lint:fix": "yarn lint --fix",
-    "lint:ci": "yarn lint --max-warnings 0",
-    "prettify": "prettier --write src",
-    "prettify:ci": "prettier --check src",
-    "prepack": "yarn build",
-    "release": "semantic-release",
-    "release:ci": "yarn release --yes",
-    "release:test": "yarn release --no-git-tag-version --no-push --skip-npm",
-    "cypress:ct": "cypress open-ct",
-    "cypress:ct:headless": "cypress run-ct --browser chrome --headless",
-    "test:ct": "cd example && yarn test:ct",
-    "test:ct:ci": "cd example && yarn test:ct:ci",
-    "test:e2e": "cd example && yarn test:e2e",
-    "test:e2e:ci": "cd example && yarn test:e2e:ci"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test:open": "vue-cli-service test:e2e --env \"pluginVisualRegressionImagesDir=__image_snapshots_local__\"",
+    "test:run": "vue-cli-service test:e2e",
+    "test:ct": "yarn test:open --component",
+    "test:ct:ci": "yarn test:run --component --headless",
+    "test:e2e": "yarn test:open --e2e",
+    "test:e2e:ci": "yarn test:run --e2e --headless"
   },
-  "engines": {
-    "node": ">=10"
-  },
-  "packageManager": "yarn@3.2.3",
-  "peerDependencies": {
-    "cypress": ">=4.5.0"
+  "dependencies": {
+    "cypress-mochawesome-reporter": "^3.2.2",
+    "vue": "3.2.39"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "6.0.1",
-    "@semantic-release/commit-analyzer": "9.0.2",
-    "@semantic-release/git": "10.0.1",
-    "@semantic-release/npm": "9.0.1",
-    "@semantic-release/release-notes-generator": "10.0.3",
-    "@types/pixelmatch": "5.2.4",
-    "@types/pngjs": "6.0.1",
-    "@types/sharp": "0.30.5",
-    "@typescript-eslint/eslint-plugin": "5.36.2",
-    "@typescript-eslint/parser": "5.36.2",
-    "cypress": "10.7.0",
-    "del-cli": "4.0.1",
-    "eslint": "8.23.0",
-    "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-cypress": "2.12.1",
-    "eslint-plugin-eslint-comments": "3.2.0",
-    "microbundle": "0.15.1",
-    "prettier": "2.7.1",
-    "sanitize-filename": "1.6.3",
-    "semantic-release": "19.0.5",
-    "typescript": "4.8.3"
-  },
-  "keywords": [
-    "Cypress",
-    "Cypress plugin",
-    "visual regression testing",
-    "visual diff",
-    "image diff",
-    "visual comparison",
-    "image comparison",
-    "Cypress visual regression",
-    "regression testing",
-    "visual snapshot",
-    "image snapshot",
-    "Cypress image snapshot"
-  ],
-  "dependencies": {
-    "move-file": "2.1.0",
-    "pixelmatch": "5.3.0",
-    "pngjs": "6.0.0",
-    "sharp": "^0.30.1"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "dist",
-    "package.json",
-    "README.md",
-    "LICENSE"
-  ]
+    "@vue/cli-plugin-e2e-cypress": "5.0.8",
+    "@vue/cli-service": "5.0.8",
+    "cypress": "10.7.0"
+  }
 }
