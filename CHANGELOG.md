@@ -1,3 +1,5 @@
+## [1.9.19](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.9.18...v1.9.19) (2022-09-12)
+
 ## [1.9.18](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.9.17...v1.9.18) (2022-09-09)
 
 ## [1.9.17](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.9.16...v1.9.17) (2022-09-08)
