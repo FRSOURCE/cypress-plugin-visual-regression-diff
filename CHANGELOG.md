@@ -1,3 +1,10 @@
+## [1.9.21](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.9.20...v1.9.21) (2022-09-14)
+
+
+### Bug Fixes
+
+* btoa utf8 encoding/decoding error ([#114](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/114)) ([0137014](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/01370148094f3152a374f4e612e75ef5fd2bc3d8))
+
 ## [1.9.20](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.9.19...v1.9.20) (2022-09-13)
 
 ## [1.9.19](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.9.18...v1.9.19) (2022-09-12)
