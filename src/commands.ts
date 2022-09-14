@@ -1,5 +1,6 @@
 import { FILE_SUFFIX, LINK_PREFIX, TASK } from "./constants";
 import type pixelmatch from "pixelmatch";
+import { Base64 } from "./Base64";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -139,8 +140,13 @@ Cypress.Commands.add(
         if (res.error) {
           log.set(
             "message",
-            `${res.message}\n[See comparison](${LINK_PREFIX}${btoa(
-              JSON.stringify({ title, imgPath })
+            `${res.message}\n[See comparison](${LINK_PREFIX}${Base64.encode(
+              encodeURIComponent(
+                JSON.stringify({
+                  title,
+                  imgPath,
+                })
+              )
             )})`
           );
           log.set("consoleProps", () => res);

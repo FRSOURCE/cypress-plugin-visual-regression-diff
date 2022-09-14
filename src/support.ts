@@ -1,3 +1,4 @@
+import { Base64 } from "./Base64";
 import "./commands";
 import { FILE_SUFFIX, LINK_PREFIX, OVERLAY_CLASS, TASK } from "./constants";
 
@@ -91,7 +92,11 @@ after(() => {
       if (!top) return false;
 
       const { title, imgPath } = JSON.parse(
-        atob(e.currentTarget.getAttribute("href").substring(LINK_PREFIX.length))
+        decodeURIComponent(
+          Base64.decode(
+            e.currentTarget.getAttribute("href").substring(LINK_PREFIX.length)
+          )
+        )
       );
       queueClear();
 
