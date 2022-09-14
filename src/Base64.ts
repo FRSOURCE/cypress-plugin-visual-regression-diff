@@ -1,7 +1,7 @@
 /**
  *
  *  Base64 encode / decode
- *  http://www.webtoolkit.info
+ *  http://www.webtoolkit.info/javascript_base64.html
  *
  **/
 export const Base64 = {
