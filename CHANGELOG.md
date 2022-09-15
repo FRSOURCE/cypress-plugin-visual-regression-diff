@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.9.21...v2.0.0) (2022-09-15)
+
+
+### Features
+
+* img diff when resolution differs ([#108](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/108)) ([c8a5044](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/c8a504480d09f6ffd34321163bf14b1a2f0e7bb0)), closes [#94](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/94)
+
+
+### BREAKING CHANGES
+
+* different resolution doesn't fail test immediately - img diff is being done
+
 ## [1.9.21](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v1.9.20...v1.9.21) (2022-09-14)
 
 
