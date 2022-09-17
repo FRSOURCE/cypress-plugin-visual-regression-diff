@@ -41,7 +41,7 @@
     "@semantic-release/release-notes-generator": "10.0.3",
     "@types/pixelmatch": "5.2.4",
     "@types/pngjs": "6.0.1",
-    "@types/sharp": "0.30.5",
+    "@types/sharp": "0.31.0",
     "@typescript-eslint/eslint-plugin": "5.37.0",
     "@typescript-eslint/parser": "5.37.0",
     "cypress": "10.8.0",
