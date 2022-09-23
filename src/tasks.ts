@@ -30,15 +30,20 @@ const initGetScreenshotPathTask: () => Cypress.Tasks = () => ({
   },
 });
 
+const unlinkSyncSafe = (path: string) =>
+  fs.existsSync(path) && fs.unlinkSync(path);
+const moveSyncSafe = (pathFrom: string, pathTo: string) =>
+  fs.existsSync(pathFrom) && moveFile.sync(pathFrom, pathTo);
+
 const initApproveImageTask: () => Cypress.Tasks = () => ({
   [TASK.approveImage]({ img }) {
     const oldImg = img.replace(FILE_SUFFIX.actual, "");
-    if (fs.existsSync(oldImg)) fs.unlinkSync(oldImg);
+    unlinkSyncSafe(oldImg);
 
     const diffImg = img.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff);
-    if (fs.existsSync(diffImg)) fs.unlinkSync(diffImg);
+    unlinkSyncSafe(diffImg);
 
-    if (fs.existsSync(img)) moveFile.sync(img, oldImg);
+    moveSyncSafe(img, oldImg);
 
     return null;
   },
