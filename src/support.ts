@@ -1,4 +1,4 @@
-import { Base64 } from "./Base64";
+import * as Base64 from "@frsource/base64";
 import "./commands";
 import { FILE_SUFFIX, LINK_PREFIX, OVERLAY_CLASS, TASK } from "./constants";
 

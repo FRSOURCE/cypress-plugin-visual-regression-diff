@@ -133,10 +133,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@frsource/base64@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@frsource/base64@npm:1.0.1"
+  checksum: ea1b772d0cf384c861bdbaa2be49f3bab172906434255669632fdfbf36c67d2a4ed83b0adb6ca670c6664ee2a163551dde784820951aff55fa0020ece171c7ed
+  languageName: node
+  linkType: hard
+
 "@frsource/cypress-plugin-visual-regression-diff@portal:..::locator=example%40workspace%3A.":
   version: 0.0.0-use.local
   resolution: "@frsource/cypress-plugin-visual-regression-diff@portal:..::locator=example%40workspace%3A."
   dependencies:
+    "@frsource/base64": ^1.0.1
     move-file: 2.1.0
     pixelmatch: 5.3.0
     pngjs: 6.0.0

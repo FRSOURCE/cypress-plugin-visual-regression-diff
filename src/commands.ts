@@ -1,6 +1,6 @@
 import { FILE_SUFFIX, LINK_PREFIX, TASK } from "./constants";
 import type pixelmatch from "pixelmatch";
-import { Base64 } from "./Base64";
+import * as Base64 from "@frsource/base64";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
