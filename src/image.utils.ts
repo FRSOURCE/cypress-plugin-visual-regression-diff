@@ -5,21 +5,24 @@ import sharp from "sharp";
 const inArea = (x: number, y: number, height: number, width: number) =>
   y > height || x > width;
 
-export const fillSizeDifference =
-  (width: number, height: number) => (image: PNG) => {
-    for (let y = 0; y < image.height; y++) {
-      for (let x = 0; x < image.width; x++) {
-        if (inArea(x, y, height, width)) {
-          const idx = (image.width * y + x) << 2;
-          image.data[idx] = 0;
-          image.data[idx + 1] = 0;
-          image.data[idx + 2] = 0;
-          image.data[idx + 3] = 64;
-        }
+export const fillSizeDifference = (
+  image: PNG,
+  width: number,
+  height: number
+) => {
+  for (let y = 0; y < image.height; y++) {
+    for (let x = 0; x < image.width; x++) {
+      if (inArea(x, y, height, width)) {
+        const idx = (image.width * y + x) << 2;
+        image.data[idx] = 0;
+        image.data[idx + 1] = 0;
+        image.data[idx + 2] = 0;
+        image.data[idx + 3] = 64;
       }
     }
-    return image;
-  };
+  }
+  return image;
+};
 
 export const createImageResizer =
   (width: number, height: number) => (source: PNG) => {
@@ -61,7 +64,7 @@ export const alignImagesToSameSize = (
   const resizedSecond = resizeToSameSize(secondImage);
 
   return [
-    fillSizeDifference(firstImageWidth, firstImageHeight)(resizedFirst),
-    fillSizeDifference(secondImageWidth, secondImageHeight)(resizedSecond),
+    fillSizeDifference(resizedFirst, firstImageWidth, firstImageHeight),
+    fillSizeDifference(resizedSecond, secondImageWidth, secondImageHeight),
   ];
 };

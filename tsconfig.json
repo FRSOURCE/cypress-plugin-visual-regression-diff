@@ -4,7 +4,12 @@
     "lib": ["es5", "dom"],
     "types": ["cypress"],
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@fixtures/*": ["src/__tests__/partials/*"]
+    }
   },
   "include": ["src/*.ts"]
 }

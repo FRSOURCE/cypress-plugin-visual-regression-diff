@@ -1,8 +1,8 @@
 import path from "path";
 import fs from "fs";
-import { IMAGE_SNAPSHOT_PREFIX } from "./constants";
 import moveFile from "move-file";
-import { initTaskHooks } from "./tasks";
+import { IMAGE_SNAPSHOT_PREFIX } from "@/constants";
+import { initTasks } from "@/tasks";
 
 type NotFalsy<T> = T extends false | null | undefined ? never : T;
 
@@ -47,11 +47,16 @@ const removeScreenshotsDirectory = (
   );
 };
 
-const initAfterScreenshotHook = (
-  on: Cypress.PluginEvents,
-  config: Cypress.PluginConfigOptions
-) => {
-  on("after:screenshot", (details) => {
+const initAfterScreenshotHook =
+  (
+    config: Cypress.PluginConfigOptions
+  ): ((
+    details: Cypress.ScreenshotDetails
+  ) =>
+    | void
+    | Cypress.AfterScreenshotReturnObject
+    | Promise<Cypress.AfterScreenshotReturnObject>) =>
+  (details) => {
     if (details.name?.indexOf(IMAGE_SNAPSHOT_PREFIX) !== 0) return;
 
     return new Promise((resolve, reject) => {
@@ -77,8 +82,7 @@ const initAfterScreenshotHook = (
         )
         .catch(reject);
     });
-  });
-};
+  };
 
 export const initPlugin = (
   on: Cypress.PluginEvents,
@@ -88,6 +92,6 @@ export const initPlugin = (
     initForceDeviceScaleFactor(on);
   }
 
-  initTaskHooks(on);
-  initAfterScreenshotHook(on, config);
+  on("task", initTasks());
+  on("after:screenshot", initAfterScreenshotHook(config));
 };
