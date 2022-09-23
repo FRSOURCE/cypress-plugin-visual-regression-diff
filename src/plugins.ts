@@ -9,6 +9,16 @@ import sanitize from "sanitize-filename";
 
 type NotFalsy<T> = T extends false | null | undefined ? never : T;
 
+type CompareImagesCfg = {
+  scaleFactor: number;
+  title: string;
+  imgNew: string;
+  imgOld: string;
+  updateImages: boolean;
+  maxDiffThreshold: number;
+  diffConfig: Parameters<typeof pixelmatch>[5];
+} & Parameters<typeof pixelmatch>[5];
+
 const round = (n: number) => Math.ceil(n * 1000) / 1000;
 
 const createImageResizer = (width: number, height: number) => (source: PNG) => {
@@ -17,11 +27,13 @@ const createImageResizer = (width: number, height: number) => (source: PNG) => {
   return resized;
 };
 
+const inArea = (x: number, y: number, height: number, width: number) =>
+  y > height || x > width;
+
 const fillSizeDifference = (width: number, height: number) => (image: PNG) => {
-  const inArea = (x: number, y: number) => y > height || x > width;
   for (let y = 0; y < image.height; y++) {
     for (let x = 0; x < image.width; x++) {
-      if (inArea(x, y)) {
+      if (inArea(x, y, height, width)) {
         const idx = (image.width * y + x) << 2;
         image.data[idx] = 0;
         image.data[idx + 1] = 0;
@@ -81,25 +93,22 @@ const getConfigVariableOrThrow = <K extends keyof Cypress.PluginConfigOptions>(
   throw `[Image snapshot] CypressConfig.${name} cannot be missing or \`false\`!`;
 };
 
-export const initPlugin = (
-  on: Cypress.PluginEvents,
-  config: Cypress.PluginConfigOptions
-) => {
-  if (config.env["pluginVisualRegressionForceDeviceScaleFactor"] !== false) {
-    // based on https://github.com/cypress-io/cypress/issues/2102#issuecomment-521299946
-    on("before:browser:launch", (browser, launchOptions) => {
-      if (browser.name === "chrome" || browser.name === "chromium") {
-        launchOptions.args.push("--force-device-scale-factor=1");
-        launchOptions.args.push("--high-dpi-support=1");
-      } else if (browser.name === "electron" && browser.isHeaded) {
-        // eslint-disable-next-line no-console
-        console.log(
-          "There isn't currently a way of setting the device scale factor in Cypress when running headed electron so we disable the image regression commands."
-        );
-      }
-    });
-  }
+const initForceDeviceScaleFactor = (on: Cypress.PluginEvents) => {
+  // based on https://github.com/cypress-io/cypress/issues/2102#issuecomment-521299946
+  on("before:browser:launch", (browser, launchOptions) => {
+    if (browser.name === "chrome" || browser.name === "chromium") {
+      launchOptions.args.push("--force-device-scale-factor=1");
+      launchOptions.args.push("--high-dpi-support=1");
+    } else if (browser.name === "electron" && browser.isHeaded) {
+      // eslint-disable-next-line no-console
+      console.log(
+        "There isn't currently a way of setting the device scale factor in Cypress when running headed electron so we disable the image regression commands."
+      );
+    }
+  });
+};
 
+const initTaskHooks = (on: Cypress.PluginEvents) => {
   on("task", {
     [TASK.getScreenshotPath]({ title, imagesDir, specPath }) {
       return path.join(
@@ -123,17 +132,7 @@ export const initPlugin = (
 
       return null;
     },
-    async [TASK.compareImages](
-      cfg: {
-        scaleFactor: number;
-        title: string;
-        imgNew: string;
-        imgOld: string;
-        updateImages: boolean;
-        maxDiffThreshold: number;
-        diffConfig: Parameters<typeof pixelmatch>[5];
-      } & Parameters<typeof pixelmatch>[5]
-    ): Promise<null | {
+    async [TASK.compareImages](cfg: CompareImagesCfg): Promise<null | {
       error?: boolean;
       message?: string;
       imgDiff?: number;
@@ -227,7 +226,12 @@ export const initPlugin = (
       return null;
     },
   });
+};
 
+const initAfterScreenshotHook = (
+  on: Cypress.PluginEvents,
+  config: Cypress.PluginConfigOptions
+) => {
   on("after:screenshot", (details) => {
     if (details.name?.indexOf(IMAGE_SNAPSHOT_PREFIX) !== 0) return;
 
@@ -259,4 +263,16 @@ export const initPlugin = (
         .catch(reject);
     });
   });
+};
+
+export const initPlugin = (
+  on: Cypress.PluginEvents,
+  config: Cypress.PluginConfigOptions
+) => {
+  if (config.env["pluginVisualRegressionForceDeviceScaleFactor"] !== false) {
+    initForceDeviceScaleFactor(on);
+  }
+
+  initTaskHooks(on);
+  initAfterScreenshotHook(on, config);
 };

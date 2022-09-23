@@ -15,14 +15,19 @@ function queueRun() {
   (cy as unknown as { queue: { run: () => void } }).queue.run();
 }
 
-function generateOverlayTemplate(
-  title: string,
-  imgNewBase64: string,
-  imgOldBase64: string,
-  imgDiffBase64: string,
-  wasImageNotUpdatedYet: boolean
-) {
-  return `<div class="${OVERLAY_CLASS} runner" style="position:fixed;z-index:10;top:0;bottom:0;left:0;right:0;display:flex;flex-flow:column">
+const generateOverlayTemplate = ({
+  title,
+  imgNewBase64,
+  imgOldBase64,
+  imgDiffBase64,
+  wasImageNotUpdatedYet,
+}: {
+  title: string;
+  imgNewBase64: string;
+  imgOldBase64: string;
+  imgDiffBase64: string;
+  wasImageNotUpdatedYet: boolean;
+}) => `<div class="${OVERLAY_CLASS} runner" style="position:fixed;z-index:10;top:0;bottom:0;left:0;right:0;display:flex;flex-flow:column">
   <header style="position:static">
   <nav style="display:flex;width:100%;align-items:center;justify-content:space-between;padding:10px 15px;">
     <h2>${title} - screenshot diff</h2>
@@ -53,11 +58,10 @@ function generateOverlayTemplate(
       <div style="background:#fff;border:solid 15px #fff">
         <h3>Diff between new and old screenshot</h3>
         <img style="min-width:300px;width:100%" src="data:image/png;base64,${imgDiffBase64}" />
-        </div>
       </div>
     </div>
-  </div>`;
-}
+  </div>
+</div>`;
 
 function cachedReadFile(
   imageCache: Record<string, string>,
@@ -137,13 +141,13 @@ after(() => {
             queueClear();
 
             Cypress.$(
-              generateOverlayTemplate(
+              generateOverlayTemplate({
                 title,
                 imgNewBase64,
                 imgOldBase64,
                 imgDiffBase64,
-                wasImageNotUpdatedYet
-              )
+                wasImageNotUpdatedYet,
+              })
             ).appendTo(top.document.body);
 
             const wrapper = Cypress.$(`.${OVERLAY_CLASS}`, top.document.body);

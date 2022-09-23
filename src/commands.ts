@@ -27,6 +27,14 @@ declare global {
 
 const nameCacheCounter: Record<string, number> = {};
 
+const constructCypressError = (log: Cypress.Log, err: Error) => {
+  // only way to throw & log the message properly in Cypress
+  // https://github.com/cypress-io/cypress/blob/5f94cad3cb4126e0567290b957050c33e3a78e3c/packages/driver/src/cypress/error_utils.ts#L214-L216
+  (err as unknown as { onFail: (e: Error) => void }).onFail = (err: Error) =>
+    log.error(err);
+  return err;
+};
+
 Cypress.Commands.add(
   "matchImage",
   { prevSubject: "optional" },
@@ -128,13 +136,7 @@ Cypress.Commands.add(
 
         if (!res) {
           log.set("message", "Unexpected error!");
-          const err = new Error("Unexpected error!");
-          // only way to throw & log the message properly in Cypress
-          // https://github.com/cypress-io/cypress/blob/5f94cad3cb4126e0567290b957050c33e3a78e3c/packages/driver/src/cypress/error_utils.ts#L214-L216
-          (err as unknown as { onFail: (e: Error) => void }).onFail = (
-            err: Error
-          ) => log.error(err);
-          throw err;
+          throw constructCypressError(log, new Error("Unexpected error!"));
         }
 
         if (res.error) {
@@ -150,13 +152,7 @@ Cypress.Commands.add(
             )})`
           );
           log.set("consoleProps", () => res);
-          const err = new Error(res.message);
-          // only way to throw & log the message properly in Cypress
-          // https://github.com/cypress-io/cypress/blob/5f94cad3cb4126e0567290b957050c33e3a78e3c/packages/driver/src/cypress/error_utils.ts#L214-L216
-          (err as unknown as { onFail: (e: Error) => void }).onFail = (
-            err: Error
-          ) => log.error(err);
-          throw err;
+          throw constructCypressError(log, new Error(res.message));
         } else {
           log.set("message", res.message);
         }
