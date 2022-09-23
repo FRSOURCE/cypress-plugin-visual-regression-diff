@@ -1,12 +1,15 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/@frsource/cypress-plugin-visual-regression-diff">
-    <img src="https://img.shields.io/npm/v/@frsource/cypress-plugin-visual-regression-diff" alt="NPM version badge">
+    <img src="https://img.shields.io/npm/v/@frsource/cypress-plugin-visual-regression-diff.svg" alt="NPM version badge">
+  </a>
+  <a href="https://www.npmjs.com/package/@frsource/cypress-plugin-visual-regression-diff">
+    <img src="https://img.shields.io/npm/dt/@frsource/cypress-plugin-visual-regression-diff.svg" alt="NPM total downloads badge">
   </a>
   <a href="https://github.com/semantic-release/semantic-release">
     <img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="semantic-relase badge">
   </a>
   <a href="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/FRSOURCE/cypress-plugin-visual-regression-diff" alt="license MIT badge">
+    <img src="https://img.shields.io/github/license/FRSOURCE/cypress-plugin-visual-regression-diff.svg" alt="license MIT badge">
   </a>
 </p>
 
