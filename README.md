@@ -70,10 +70,10 @@ Next, you need to import the library:
 - first, in your support file (located by default in `cypress/support/index.js`):
 ```ts
 // typescript / ES6
-import '@frsource/cypress-plugin-visual-regression-diff/dist/support';
+import '@frsource/cypress-plugin-visual-regression-diff';
 
 // javascript
-require('@frsource/cypress-plugin-visual-regression-diff/dist/support');
+require('@frsource/cypress-plugin-visual-regression-diff');
 ```
 
 - secondly:
@@ -81,7 +81,7 @@ require('@frsource/cypress-plugin-visual-regression-diff/dist/support');
 ```ts
 // typescript / ES6
 import { defineConfig } from 'cypress';
-import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/dist/plugins';
+import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/plugins';
 
 export default defineConfig({
   // setupNodeEvents can be defined in either
@@ -96,7 +96,7 @@ export default defineConfig({
   - (for Cypress <10.0) in your plugins file (located by default in `cypress/plugins/index.js`):
 ```ts
 // typescript / ES6
-import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/dist/plugins';
+import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/plugins';
 
 export default function (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) {
   initPlugin(on, config);
@@ -105,7 +105,7 @@ export default function (on: Cypress.PluginEvents, config: Cypress.PluginConfigO
 };
 
 // javascript
-const { initPlugin } = require('@frsource/cypress-plugin-visual-regression-diff/dist/plugins');
+const { initPlugin } = require('@frsource/cypress-plugin-visual-regression-diff/plugins');
 
 module.exports = function (on, config) {
   initPlugin(on, config);

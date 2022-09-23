@@ -7,9 +7,34 @@
   "sideEffects": [
     "./dist/**"
   ],
+  "main": "dist/support.js",
+  "types": "dist/support.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/support.d.ts",
+      "import": "./dist/support.mjs",
+      "default": "./dist/support.js"
+    },
+    "./support": {
+      "types": "./dist/support.d.ts",
+      "import": "./dist/support.mjs",
+      "default": "./dist/support.js"
+    },
+    "./plugins": {
+      "types": "./dist/plugins.d.ts",
+      "import": "./dist/plugins.mjs",
+      "default": "./dist/plugins.js"
+    },
+    "./constants": {
+      "types": "./dist/constants.d.ts",
+      "import": "./dist/constants.mjs",
+      "default": "./dist/constants.js"
+    },
+    "./*": "./*.js"
+  },
   "license": "MIT",
   "scripts": {
-    "build": "del-cli dist && microbundle src/{constants,plugins,support}.ts --target node -f cjs,es",
+    "build": "del-cli dist && microbundle src/{constants,plugins,support}.ts --target node -f cjs,modern",
     "lint": "eslint '**/*.ts' --ignore-pattern '**/*.d.ts'",
     "lint:fix": "yarn lint --fix",
     "lint:ci": "yarn lint --max-warnings 0",
