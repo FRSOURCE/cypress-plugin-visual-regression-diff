@@ -46,7 +46,7 @@
   <br>
 </p>
 
-https://user-images.githubusercontent.com/10456649/148709744-a23bc072-590a-4997-8ab8-252dc1b21791.mp4
+![frsource-visual-testing-example](https://user-images.githubusercontent.com/10456649/191988386-2be2ea14-7b7a-4048-a14e-0cad8d21e214.gif)
 
 ## Getting started
 
