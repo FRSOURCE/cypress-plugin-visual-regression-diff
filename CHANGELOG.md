@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v2.1.0...v2.2.0) (2022-09-23)
+
+
+### Features
+
+* migrate to @frsource/base64 package ([e4f3a14](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/e4f3a14575648b76d4f41eeb5984b853b968c974))
+
 # [2.1.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v2.0.3...v2.1.0) (2022-09-23)
 
 
