@@ -180,7 +180,7 @@ cy.matchImage({
 - via [global env configuration](https://docs.cypress.io/guides/guides/environment-variables#Setting). All of the environment variable names are the same as keys of the configuration options passed to `matchImage` method, but with added `pluginVisualRegression` prefix, e.g.:
 
 ```bash
-npx cypress run --env "pluginVisualRegressionUpdateImages=true" --env 'pluginVisualRegressionDiffConfig={"threshold":0.01}'
+npx cypress run --env "pluginVisualRegressionUpdateImages=true,pluginVisualRegressionDiffConfig={\"threshold\":0.01}"
 ```
 
 ```ts
