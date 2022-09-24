@@ -21,8 +21,8 @@ export default defineConfig({
       statements: 90,
     },
     alias: {
-      '@fixtures/*': path.resolve(__dirname, 'src', '__tests__', 'partials'),
-      '@mocks/*': path.resolve(__dirname, 'src', '__tests__', 'mocks'),
+      '@fixtures/*': path.resolve(__dirname, '__tests__', 'partials'),
+      '@mocks/*': path.resolve(__dirname, '__tests__', 'mocks'),
       '@/*': path.resolve(__dirname, 'src')
     }
   },

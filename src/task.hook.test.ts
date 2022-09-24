@@ -12,7 +12,7 @@ import { file, setGracefulCleanup, withFile } from "tmp-promise";
 
 setGracefulCleanup();
 
-const fixturesPath = path.resolve(__dirname, "__tests__", "fixtures");
+const fixturesPath = path.resolve(__dirname, "..", "__tests__", "fixtures");
 const newFileContent = "new file content";
 
 const writeTmpFixture = async (pathToWriteTo: string, fixtureName: string) =>
