@@ -8,6 +8,9 @@
   <a href="https://codeclimate.com/github/FRSOURCE/cypress-plugin-visual-regression-diff/maintainability">
     <img src="https://api.codeclimate.com/v1/badges/b4f9a6e7b071771dd82f/maintainability.svg" alt="CodeClimate maintainability badge">
   </a>
+  <a href="https://codeclimate.com/github/FRSOURCE/cypress-plugin-visual-regression-diff/test_coverage">
+    <img src="https://api.codeclimate.com/v1/badges/b4f9a6e7b071771dd82f/test_coverage" />
+  </a>
   <a href="https://github.com/semantic-release/semantic-release">
     <img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="semantic-relase badge">
   </a>
