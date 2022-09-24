@@ -46,7 +46,10 @@
     "release:test": "yarn release --no-git-tag-version --no-push --skip-npm",
     "cypress:ct": "cypress open-ct",
     "cypress:ct:headless": "cypress run-ct --browser chrome --headless",
-    "test": "cd example && yarn test:ct:ci && yarn test:e2e:ci",
+    "test": "cd example && yarn test:ct:ci && yarn test:e2e:ci && yarn test:integration:ci",
+    "test:integration": "vitest",
+    "test:integration:coverage": "vitest --coverage",
+    "test:integration:ci": "CI=true vitest run --coverage",
     "test:ct": "cd example && yarn test:ct",
     "test:ct:ci": "cd example && yarn test:ct:ci",
     "test:e2e": "cd example && yarn test:e2e",
@@ -68,8 +71,10 @@
     "@types/pixelmatch": "5.2.4",
     "@types/pngjs": "6.0.1",
     "@types/sharp": "0.31.0",
+    "@types/tmp": "^0.2.3",
     "@typescript-eslint/eslint-plugin": "5.38.0",
     "@typescript-eslint/parser": "5.38.0",
+    "@vitest/coverage-c8": "^0.23.4",
     "cypress": "10.8.0",
     "del-cli": "5.0.0",
     "eslint": "8.24.0",
@@ -80,7 +85,10 @@
     "prettier": "2.7.1",
     "sanitize-filename": "1.6.3",
     "semantic-release": "19.0.5",
-    "typescript": "4.8.3"
+    "tmp-promise": "^3.0.3",
+    "typescript": "4.8.3",
+    "vite-tsconfig-paths": "^3.5.0",
+    "vitest": "^0.23.4"
   },
   "keywords": [
     "Cypress",
@@ -97,7 +105,7 @@
     "Cypress image snapshot"
   ],
   "dependencies": {
-    "@frsource/base64": "^1.0.1",
+    "@frsource/base64": "1.0.2",
     "move-file": "2.1.0",
     "pixelmatch": "5.3.0",
     "pngjs": "6.0.0",

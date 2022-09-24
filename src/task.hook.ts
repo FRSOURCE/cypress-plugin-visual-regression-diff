@@ -7,7 +7,7 @@ import sanitize from "sanitize-filename";
 import { FILE_SUFFIX, IMAGE_SNAPSHOT_PREFIX, TASK } from "@/constants";
 import { alignImagesToSameSize, importAndScaleImage } from "@/image.utils";
 
-type CompareImagesCfg = {
+export type CompareImagesCfg = {
   scaleFactor: number;
   title: string;
   imgNew: string;
@@ -24,10 +24,14 @@ const unlinkSyncSafe = (path: string) =>
 const moveSyncSafe = (pathFrom: string, pathTo: string) =>
   fs.existsSync(pathFrom) && moveFile.sync(pathFrom, pathTo);
 
-export const getScreenshotPathTask: Cypress.Task = ({
+export const getScreenshotPathTask = ({
   title,
   imagesDir,
   specPath,
+}: {
+  title: string;
+  imagesDir: string;
+  specPath: string;
 }) =>
   path.join(
     IMAGE_SNAPSHOT_PREFIX,
@@ -98,7 +102,7 @@ export const compareImagesTask = async (
       messages.unshift(
         `Image diff factor (${round(
           imgDiff
-        )}) is bigger than maximum threshold option ${cfg.maxDiffThreshold}.`
+        )}%) is bigger than maximum threshold option ${cfg.maxDiffThreshold}.`
       );
       error = true;
     }
@@ -126,7 +130,7 @@ export const compareImagesTask = async (
 
   if (typeof imgDiff !== "undefined") {
     messages.unshift(
-      `Image diff (${round(
+      `Image diff factor (${round(
         imgDiff
       )}%) is within boundaries of maximum threshold option ${
         cfg.maxDiffThreshold
@@ -139,15 +143,18 @@ export const compareImagesTask = async (
     };
   }
 
+  /* c8 ignore next */
   return null;
 };
 
-export const doesFileExistTask: Cypress.Task = ({ path }) =>
+export const doesFileExistTask = ({ path }: { path: string }) =>
   fs.existsSync(path);
 
-export const initTasks = () => ({
+/* c8 ignore start */
+export const initTaskHook = () => ({
   [TASK.getScreenshotPath]: getScreenshotPathTask,
   [TASK.doesFileExist]: doesFileExistTask,
   [TASK.approveImage]: approveImageTask,
   [TASK.compareImages]: compareImagesTask,
 });
+/* c8 ignore stop */

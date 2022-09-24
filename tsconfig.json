@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["es5", "dom"],
+    "target": "es6",
+    "lib": ["es6", "dom"],
     "types": ["cypress"],
     "strict": true,
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@fixtures/*": ["src/__tests__/partials/*"]
+      "@fixtures/*": ["src/__tests__/partials/*"],
+      "@mocks/*": ["src/__tests__/mocks/*"]
     }
   },
-  "include": ["src/*.ts"]
+  "include": ["src/*.ts", "vitest.config.ts"]
 }

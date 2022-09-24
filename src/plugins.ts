@@ -1,21 +1,7 @@
-import path from "path";
-import fs from "fs";
-import moveFile from "move-file";
-import { IMAGE_SNAPSHOT_PREFIX } from "@/constants";
-import { initTasks } from "@/tasks";
+import { initTaskHook } from "@/task.hook";
+import { initAfterScreenshotHook } from "@/afterScreenshot.hook";
 
-type NotFalsy<T> = T extends false | null | undefined ? never : T;
-
-const getConfigVariableOrThrow = <K extends keyof Cypress.PluginConfigOptions>(
-  config: Cypress.PluginConfigOptions,
-  name: K
-) => {
-  if (config[name])
-    return config[name] as NotFalsy<Cypress.PluginConfigOptions[K]>;
-
-  throw `[Image snapshot] CypressConfig.${name} cannot be missing or \`false\`!`;
-};
-
+/* c8 ignore start */
 const initForceDeviceScaleFactor = (on: Cypress.PluginEvents) => {
   // based on https://github.com/cypress-io/cypress/issues/2102#issuecomment-521299946
   on("before:browser:launch", (browser, launchOptions) => {
@@ -30,68 +16,17 @@ const initForceDeviceScaleFactor = (on: Cypress.PluginEvents) => {
     }
   });
 };
-
-const removeScreenshotsDirectory = (
-  screenshotsFolder: string,
-  onSuccess: () => void,
-  onError: (e: Error) => void
-) => {
-  fs.rm(
-    path.join(screenshotsFolder, IMAGE_SNAPSHOT_PREFIX),
-    { recursive: true, force: true },
-    (err) => {
-      if (err) return onError(err);
-
-      onSuccess();
-    }
-  );
-};
-
-const initAfterScreenshotHook =
-  (
-    config: Cypress.PluginConfigOptions
-  ): ((
-    details: Cypress.ScreenshotDetails
-  ) =>
-    | void
-    | Cypress.AfterScreenshotReturnObject
-    | Promise<Cypress.AfterScreenshotReturnObject>) =>
-  (details) => {
-    if (details.name?.indexOf(IMAGE_SNAPSHOT_PREFIX) !== 0) return;
-
-    return new Promise((resolve, reject) => {
-      const screenshotsFolder = getConfigVariableOrThrow(
-        config,
-        "screenshotsFolder"
-      );
-
-      const newRelativePath = details.name.substring(
-        IMAGE_SNAPSHOT_PREFIX.length + path.sep.length
-      );
-      const newAbsolutePath = path.normalize(
-        path.join(config.projectRoot, newRelativePath)
-      );
-
-      void moveFile(details.path, newAbsolutePath)
-        .then(() =>
-          removeScreenshotsDirectory(
-            screenshotsFolder,
-            () => resolve({ path: newAbsolutePath }),
-            reject
-          )
-        )
-        .catch(reject);
-    });
-  };
+/* c8 ignore stop */
 
 export const initPlugin = (
   on: Cypress.PluginEvents,
   config: Cypress.PluginConfigOptions
 ) => {
+  /* c8 ignore start */
   if (config.env["pluginVisualRegressionForceDeviceScaleFactor"] !== false) {
     initForceDeviceScaleFactor(on);
   }
-
-  on("task", initTasks());
+  /* c8 ignore stop */
+  on("task", initTaskHook());
   on("after:screenshot", initAfterScreenshotHook(config));
 };

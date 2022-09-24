@@ -2,6 +2,7 @@ import * as Base64 from "@frsource/base64";
 import "@/commands";
 import { FILE_SUFFIX, LINK_PREFIX, OVERLAY_CLASS, TASK } from "@/constants";
 
+/* c8 ignore start */
 function queueClear() {
   (cy as unknown as { queue: { clear: () => void } }).queue.clear();
   (cy as unknown as { state: (k: string, value: unknown) => void }).state(
@@ -14,8 +15,8 @@ function queueRun() {
   // needed to run a task outside of the test processing flow
   (cy as unknown as { queue: { run: () => void } }).queue.run();
 }
-
-const generateOverlayTemplate = ({
+/* c8 ignore stop */
+export const generateOverlayTemplate = ({
   title,
   imgNewBase64,
   imgOldBase64,
@@ -63,7 +64,7 @@ const generateOverlayTemplate = ({
   </div>
 </div>`;
 
-function cachedReadFile(
+export function cachedReadFile(
   imageCache: Record<string, string>,
   path: string,
   encoding: Cypress.Encodings
@@ -78,6 +79,7 @@ function cachedReadFile(
     .then((file) => (imageCache[path] = file));
 }
 
+/* c8 ignore start */
 before(() => {
   if (!top) return null;
   Cypress.$(`.${OVERLAY_CLASS}`, top.document.body).remove();
@@ -173,3 +175,4 @@ after(() => {
     }
   );
 });
+/* c8 ignore stop */

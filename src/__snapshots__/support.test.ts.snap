@@ -1,0 +1,69 @@
+// Vitest Snapshot v1
+
+exports[`generateOverlayTemplate > generates proper template 1`] = `
+"<div class=\\"cp-visual-regression-diff-overlay runner\\" style=\\"position:fixed;z-index:10;top:0;bottom:0;left:0;right:0;display:flex;flex-flow:column\\">
+  <header style=\\"position:static\\">
+  <nav style=\\"display:flex;width:100%;align-items:center;justify-content:space-between;padding:10px 15px;\\">
+    <h2>some title - screenshot diff</h2>
+    <form>
+      <button type=\\"submit\\"><i class=\\"fa fa-check\\"></i> Update screenshot</button>
+      <button type=\\"button\\" data-type=\\"close\\"><i class=\\"fa fa-times\\"></i> Close</button>
+    <form>
+  </nav>
+  </header>
+  <div style=\\"padding:15px;overflow:auto\\">
+    <div style=\\"display:flex;justify-content:space-evenly;align-items:flex-start;gap:15px\\">
+      <div
+        style=\\"position:relative;background:#fff;border:solid 15px #fff\\"
+        onmouseover=\\"this.querySelector('div').style.opacity=0,this.querySelector('img').style.opacity=1\\"
+        onmouseleave=\\"this.querySelector('div').style.opacity=1,this.querySelector('img').style.opacity=0\\"
+      >
+        <h3>New screenshot (hover mouse away too see the old one):</h3>
+        <img style=\\"min-width:300px;width:100%;opacity:0\\" src=\\"data:image/png;base64,img-new-base64\\" />
+        <div style=\\"position:absolute;top:0;left:0;background:#fff\\">
+          <h3>Old screenshot (hover over to see the new one):</h3>
+          <img style=\\"min-width:300px;width:100%\\" src=\\"data:image/png;base64,img-old-base64\\" />
+        </div>
+      </div>
+      <div style=\\"background:#fff;border:solid 15px #fff\\">
+        <h3>Diff between new and old screenshot</h3>
+        <img style=\\"min-width:300px;width:100%\\" src=\\"data:image/png;base64,img-diff-base64\\" />
+      </div>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`generateOverlayTemplate > generates proper template 2`] = `
+"<div class=\\"cp-visual-regression-diff-overlay runner\\" style=\\"position:fixed;z-index:10;top:0;bottom:0;left:0;right:0;display:flex;flex-flow:column\\">
+  <header style=\\"position:static\\">
+  <nav style=\\"display:flex;width:100%;align-items:center;justify-content:space-between;padding:10px 15px;\\">
+    <h2>some title - screenshot diff</h2>
+    <form>
+      Image was already updated, rerun test to see new comparison
+      <button type=\\"button\\" data-type=\\"close\\"><i class=\\"fa fa-times\\"></i> Close</button>
+    <form>
+  </nav>
+  </header>
+  <div style=\\"padding:15px;overflow:auto\\">
+    <div style=\\"display:flex;justify-content:space-evenly;align-items:flex-start;gap:15px\\">
+      <div
+        style=\\"position:relative;background:#fff;border:solid 15px #fff\\"
+        onmouseover=\\"this.querySelector('div').style.opacity=0,this.querySelector('img').style.opacity=1\\"
+        onmouseleave=\\"this.querySelector('div').style.opacity=1,this.querySelector('img').style.opacity=0\\"
+      >
+        <h3>New screenshot (hover mouse away too see the old one):</h3>
+        <img style=\\"min-width:300px;width:100%;opacity:0\\" src=\\"data:image/png;base64,img-new-base64\\" />
+        <div style=\\"position:absolute;top:0;left:0;background:#fff\\">
+          <h3>Old screenshot (hover over to see the new one):</h3>
+          <img style=\\"min-width:300px;width:100%\\" src=\\"data:image/png;base64,img-old-base64\\" />
+        </div>
+      </div>
+      <div style=\\"background:#fff;border:solid 15px #fff\\">
+        <h3>Diff between new and old screenshot</h3>
+        <img style=\\"min-width:300px;width:100%\\" src=\\"data:image/png;base64,img-diff-base64\\" />
+      </div>
+    </div>
+  </div>
+</div>"
+`;

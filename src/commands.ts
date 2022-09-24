@@ -35,6 +35,41 @@ const constructCypressError = (log: Cypress.Log, err: Error) => {
   return err;
 };
 
+export const getConfig = (options: Cypress.MatchImageOptions) => ({
+  scaleFactor:
+    Cypress.env("pluginVisualRegressionForceDeviceScaleFactor") === false
+      ? 1
+      : 1 / window.devicePixelRatio,
+  updateImages:
+    options.updateImages ||
+    (Cypress.env("pluginVisualRegressionUpdateImages") as
+      | boolean
+      | undefined) ||
+    false,
+  imagesDir:
+    options.imagesDir ||
+    (Cypress.env("pluginVisualRegressionImagesDir") as string | undefined) ||
+    "__image_snapshots__",
+  maxDiffThreshold:
+    options.maxDiffThreshold ||
+    (Cypress.env("pluginVisualRegressionMaxDiffThreshold") as
+      | number
+      | undefined) ||
+    0.01,
+  diffConfig:
+    options.diffConfig ||
+    (Cypress.env("pluginVisualRegressionDiffConfig") as
+      | Parameters<typeof pixelmatch>[5]
+      | undefined) ||
+    {},
+  screenshotConfig:
+    options.screenshotConfig ||
+    (Cypress.env("pluginVisualRegressionScreenshotConfig") as
+      | Partial<Cypress.ScreenshotDefaultsOptions>
+      | undefined) ||
+    {},
+});
+
 Cypress.Commands.add(
   "matchImage",
   { prevSubject: "optional" },
@@ -45,38 +80,14 @@ Cypress.Commands.add(
       nameCacheCounter[title] = -1;
     title += ` #${++nameCacheCounter[title]}`;
 
-    const scaleFactor =
-      Cypress.env("pluginVisualRegressionForceDeviceScaleFactor") === false
-        ? 1
-        : 1 / window.devicePixelRatio;
-    const updateImages =
-      options.updateImages ||
-      (Cypress.env("pluginVisualRegressionUpdateImages") as
-        | boolean
-        | undefined) ||
-      false;
-    const imagesDir =
-      options.imagesDir ||
-      (Cypress.env("pluginVisualRegressionImagesDir") as string | undefined) ||
-      "__image_snapshots__";
-    const maxDiffThreshold =
-      options.maxDiffThreshold ||
-      (Cypress.env("pluginVisualRegressionMaxDiffThreshold") as
-        | number
-        | undefined) ||
-      0.01;
-    const diffConfig =
-      options.diffConfig ||
-      (Cypress.env("pluginVisualRegressionDiffConfig") as
-        | Parameters<typeof pixelmatch>[5]
-        | undefined) ||
-      {};
-    const screenshotConfig =
-      options.screenshotConfig ||
-      (Cypress.env("pluginVisualRegressionScreenshotConfig") as
-        | Partial<Cypress.ScreenshotDefaultsOptions>
-        | undefined) ||
-      {};
+    const {
+      scaleFactor,
+      updateImages,
+      imagesDir,
+      maxDiffThreshold,
+      diffConfig,
+      screenshotConfig,
+    } = getConfig(options);
 
     return cy
       .then(() =>
