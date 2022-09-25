@@ -1,3 +1,10 @@
+## [2.2.6](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v2.2.5...v2.2.6) (2022-09-25)
+
+
+### Bug Fixes
+
+* remove alias leftovers from dist bundles ([407ce79](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/407ce79c6a6e00b509fd504f4cf615b3e3c504c3))
+
 ## [2.2.5](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v2.2.4...v2.2.5) (2022-09-24)
 
 ## [2.2.4](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v2.2.3...v2.2.4) (2022-09-24)
