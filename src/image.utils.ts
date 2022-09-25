@@ -9,11 +9,13 @@ import { wasScreenshotUsed } from "./screenshotPath.utils";
 import { METADATA_KEY } from "./constants";
 
 export const addPNGMetadata = (png: Buffer) =>
-  addMetadata(png, METADATA_KEY, version);
-export const getPNGMetadata = (png: Buffer) => getMetadata(png, METADATA_KEY);
+  addMetadata(png, METADATA_KEY, version /* c8 ignore next */);
+export const getPNGMetadata = (png: Buffer) =>
+  getMetadata(png, METADATA_KEY /* c8 ignore next */);
 export const isImageCurrentVersion = (png: Buffer) =>
   getPNGMetadata(png) === version;
-export const isImageGeneratedByPlugin = (png: Buffer) => !!getPNGMetadata(png);
+export const isImageGeneratedByPlugin = (png: Buffer) =>
+  !!getPNGMetadata(png /* c8 ignore next */);
 
 export const writePNG = (name: string, png: PNG | Buffer) =>
   fs.writeFileSync(
