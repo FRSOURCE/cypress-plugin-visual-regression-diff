@@ -1,11 +1,17 @@
 import fs from "fs";
-import path from "path";
 import { PNG } from "pngjs";
 import pixelmatch, { PixelmatchOptions } from "pixelmatch";
 import moveFile from "move-file";
-import sanitize from "sanitize-filename";
+import path from "path";
 import { FILE_SUFFIX, IMAGE_SNAPSHOT_PREFIX, TASK } from "./constants";
-import { alignImagesToSameSize, importAndScaleImage } from "./image.utils";
+import {
+  cleanupUnused,
+  alignImagesToSameSize,
+  scaleImageAndWrite,
+  isImageCurrentVersion,
+  writePNG,
+} from "./image.utils";
+import { generateScreenshotPath } from "./screenshotPath.utils";
 import type { CompareImagesTaskReturn } from "./types";
 
 export type CompareImagesCfg = {
@@ -25,21 +31,23 @@ const unlinkSyncSafe = (path: string) =>
 const moveSyncSafe = (pathFrom: string, pathTo: string) =>
   fs.existsSync(pathFrom) && moveFile.sync(pathFrom, pathTo);
 
-export const getScreenshotPathTask = ({
-  title,
-  imagesDir,
-  specPath,
-}: {
-  title: string;
+export const getScreenshotPathInfoTask = (cfg: {
+  titleFromOptions: string;
   imagesDir: string;
   specPath: string;
-}) =>
-  path.join(
-    IMAGE_SNAPSHOT_PREFIX,
-    path.dirname(specPath),
-    ...imagesDir.split("/"),
-    `${sanitize(title)}${FILE_SUFFIX.actual}.png`
-  );
+}) => {
+  const screenshotPath = generateScreenshotPath(cfg);
+
+  return { screenshotPath, title: path.basename(screenshotPath, ".png") };
+};
+
+export const cleanupImagesTask = (config: Cypress.PluginConfigOptions) => {
+  if (config.env["pluginVisualRegressionCleanupUnusedImages"]) {
+    cleanupUnused(config.projectRoot);
+  }
+
+  return null;
+};
 
 export const approveImageTask = ({ img }: { img: string }) => {
   const oldImg = img.replace(FILE_SUFFIX.actual, "");
@@ -62,11 +70,13 @@ export const compareImagesTask = async (
   let error = false;
 
   if (fs.existsSync(cfg.imgOld) && !cfg.updateImages) {
-    const rawImgNew = await importAndScaleImage({
+    const rawImgNewBuffer = await scaleImageAndWrite({
       scaleFactor: cfg.scaleFactor,
       path: cfg.imgNew,
     });
-    const rawImgOld = PNG.sync.read(fs.readFileSync(cfg.imgOld));
+    const rawImgNew = PNG.sync.read(rawImgNewBuffer);
+    const rawImgOldBuffer = fs.readFileSync(cfg.imgOld);
+    const rawImgOld = PNG.sync.read(rawImgOldBuffer);
     const isImgSizeDifferent =
       rawImgNew.height !== rawImgOld.height ||
       rawImgNew.width !== rawImgOld.width;
@@ -110,7 +120,7 @@ export const compareImagesTask = async (
     imgOldBase64 = PNG.sync.write(imgOld).toString("base64");
 
     if (error) {
-      fs.writeFileSync(
+      writePNG(
         cfg.imgNew.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
         diffBuffer
       );
@@ -124,8 +134,13 @@ export const compareImagesTask = async (
         maxDiffThreshold: cfg.maxDiffThreshold,
       };
     } else {
-      // don't overwrite file if it's the same (imgDiff < cfg.maxDiffThreshold && !isImgSizeDifferent)
-      fs.unlinkSync(cfg.imgNew);
+      if (rawImgOld && !isImageCurrentVersion(rawImgOldBuffer)) {
+        writePNG(cfg.imgNew, rawImgNewBuffer);
+        moveFile.sync(cfg.imgNew, cfg.imgOld);
+      } else {
+        // don't overwrite file if it's the same (imgDiff < cfg.maxDiffThreshold && !isImgSizeDifferent)
+        fs.unlinkSync(cfg.imgNew);
+      }
     }
   } else {
     // there is no "old screenshot" or screenshots should be immediately updated
@@ -133,6 +148,8 @@ export const compareImagesTask = async (
     imgNewBase64 = "";
     imgDiffBase64 = "";
     imgOldBase64 = "";
+    const imgBuffer = fs.readFileSync(cfg.imgNew);
+    writePNG(cfg.imgNew, imgBuffer);
     moveFile.sync(cfg.imgNew, cfg.imgOld);
   }
 
@@ -162,8 +179,9 @@ export const doesFileExistTask = ({ path }: { path: string }) =>
   fs.existsSync(path);
 
 /* c8 ignore start */
-export const initTaskHook = () => ({
-  [TASK.getScreenshotPath]: getScreenshotPathTask,
+export const initTaskHook = (config: Cypress.PluginConfigOptions) => ({
+  [TASK.getScreenshotPathInfo]: getScreenshotPathInfoTask,
+  [TASK.cleanupImages]: cleanupImagesTask.bind(undefined, config),
   [TASK.doesFileExist]: doesFileExistTask,
   [TASK.approveImage]: approveImageTask,
   [TASK.compareImages]: compareImagesTask,
