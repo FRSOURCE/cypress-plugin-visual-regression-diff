@@ -9,8 +9,11 @@ export enum FILE_SUFFIX {
 }
 
 export const TASK = {
-  getScreenshotPath: `${PLUGIN_NAME}-getScreenshotPath`,
+  getScreenshotPathInfo: `${PLUGIN_NAME}-getScreenshotPathInfo`,
   compareImages: `${PLUGIN_NAME}-compareImages`,
   approveImage: `${PLUGIN_NAME}-approveImage`,
+  cleanupImages: `${PLUGIN_NAME}-cleanupImages`,
   doesFileExist: `${PLUGIN_NAME}-doesFileExist`,
 };
+
+export const METADATA_KEY = "FRSOURCE_CPVRD_V";

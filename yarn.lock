@@ -1471,6 +1471,7 @@ __metadata:
     "@semantic-release/git": 10.0.1
     "@semantic-release/npm": 9.0.1
     "@semantic-release/release-notes-generator": 10.0.3
+    "@types/glob": ^8.0.0
     "@types/pixelmatch": 5.2.4
     "@types/pngjs": 6.0.1
     "@types/sharp": 0.31.0
@@ -1484,6 +1485,8 @@ __metadata:
     eslint-config-prettier: 8.5.0
     eslint-plugin-cypress: 2.12.1
     eslint-plugin-eslint-comments: 3.2.0
+    glob: ^8.0.3
+    meta-png: ^1.0.3
     microbundle: 0.15.1
     move-file: 2.1.0
     pixelmatch: 5.3.0
@@ -2246,6 +2249,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/glob@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@types/glob@npm:8.0.0"
+  dependencies:
+    "@types/minimatch": "*"
+    "@types/node": "*"
+  checksum: 1817b05f5a8aed851d102a65b5e926d5c777bef927ea62b36d635860eef5364f2046bb5a692d135b6f2b28f34e4a9d44ade9396122c0845bcc7636d35f624747
+  languageName: node
+  linkType: hard
+
 "@types/istanbul-lib-coverage@npm:^2.0.1":
   version: 2.0.4
   resolution: "@types/istanbul-lib-coverage@npm:2.0.4"
@@ -2257,6 +2270,13 @@ __metadata:
   version: 7.0.9
   resolution: "@types/json-schema@npm:7.0.9"
   checksum: 259d0e25f11a21ba5c708f7ea47196bd396e379fddb79c76f9f4f62c945879dc21657904914313ec2754e443c5018ea8372362f323f30e0792897fdb2098a705
+  languageName: node
+  linkType: hard
+
+"@types/minimatch@npm:*":
+  version: 5.1.2
+  resolution: "@types/minimatch@npm:5.1.2"
+  checksum: 0391a282860c7cb6fe262c12b99564732401bdaa5e395bee9ca323c312c1a0f45efbf34dce974682036e857db59a5c9b1da522f3d6055aeead7097264c8705a8
   languageName: node
   linkType: hard
 
@@ -5472,7 +5492,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"glob@npm:^8.0.1":
+"glob@npm:^8.0.1, glob@npm:^8.0.3":
   version: 8.0.3
   resolution: "glob@npm:8.0.3"
   dependencies:
@@ -7135,6 +7155,13 @@ fsevents@~2.3.2:
   version: 1.4.1
   resolution: "merge2@npm:1.4.1"
   checksum: 7268db63ed5169466540b6fb947aec313200bcf6d40c5ab722c22e242f651994619bcd85601602972d3c85bd2cc45a358a4c61937e9f11a061919a1da569b0c2
+  languageName: node
+  linkType: hard
+
+"meta-png@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "meta-png@npm:1.0.3"
+  checksum: cc7e1e0950b149273eb127622d8079725855ca14fb5e0175a4f1a7946d7f4a1c92e78de9f44eb1b9fa339c60f43b099c5135dc06b218cf77879fbd0a7f6ecddb
   languageName: node
   linkType: hard
 

@@ -90,6 +90,8 @@ after(() => {
 
   if (!top) return null;
 
+  cy.task(TASK.cleanupImages, { log: false });
+
   Cypress.$(top.document.body).on(
     "click",
     `a[href^="${LINK_PREFIX}"]`,

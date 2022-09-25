@@ -27,6 +27,6 @@ export const initPlugin = (
     initForceDeviceScaleFactor(on);
   }
   /* c8 ignore stop */
-  on("task", initTaskHook());
+  on("task", initTaskHook(config));
   on("after:screenshot", initAfterScreenshotHook(config));
 };

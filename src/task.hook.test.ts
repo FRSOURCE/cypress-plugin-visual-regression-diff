@@ -1,37 +1,104 @@
 import { it, expect, describe, beforeEach, afterEach } from "vitest";
 import path from "path";
 import { promises as fs, existsSync } from "fs";
+import { dir, file, setGracefulCleanup, withFile } from "tmp-promise";
 import {
   approveImageTask,
   compareImagesTask,
   doesFileExistTask,
-  getScreenshotPathTask,
+  getScreenshotPathInfoTask,
   CompareImagesCfg,
+  cleanupImagesTask,
 } from "./task.hook";
-import { file, setGracefulCleanup, withFile } from "tmp-promise";
+import { generateScreenshotPath } from "./screenshotPath.utils";
+import { IMAGE_SNAPSHOT_PREFIX } from "./constants";
 
 setGracefulCleanup();
 
 const fixturesPath = path.resolve(__dirname, "..", "__tests__", "fixtures");
+const oldImgFixture = "screenshot.png";
+const newImgFixture = "screenshot.actual.png";
 const newFileContent = "new file content";
 
-const writeTmpFixture = async (pathToWriteTo: string, fixtureName: string) =>
-  fs.writeFile(
+const generateConfig = async (cfg: Partial<CompareImagesCfg>) => ({
+  updateImages: false,
+  scaleFactor: 1,
+  title: "some title",
+  imgNew: await writeTmpFixture((await file()).path, newImgFixture),
+  imgOld: await writeTmpFixture((await file()).path, oldImgFixture),
+  maxDiffThreshold: 0.5,
+  diffConfig: {},
+  ...cfg,
+});
+const writeTmpFixture = async (pathToWriteTo: string, fixtureName: string) => {
+  await fs.writeFile(
     pathToWriteTo,
     await fs.readFile(path.join(fixturesPath, fixtureName))
   );
+  return pathToWriteTo;
+};
 
-describe("getScreenshotPathTask", () => {
-  it("returns sanitized path", () => {
+describe("getScreenshotPathInfoTask", () => {
+  it("returns sanitized path and title", () => {
     expect(
-      getScreenshotPathTask({
-        title: "some-title-withśpęćiał人物",
+      getScreenshotPathInfoTask({
+        titleFromOptions: "some-title-withśpęćiał人物",
         imagesDir: "nested/images/dir",
         specPath: "some/nested/spec-path/spec.ts",
       })
-    ).toBe(
-      "__cp-visual-regression-diff_snapshots__/some/nested/spec-path/nested/images/dir/some-title-withśpęćiał人物.actual.png"
-    );
+    ).toEqual({
+      screenshotPath:
+        "__cp-visual-regression-diff_snapshots__/some/nested/spec-path/nested/images/dir/some-title-withśpęćiał人物 #0.actual.png",
+      title: "some-title-withśpęćiał人物 #0.actual",
+    });
+  });
+});
+
+describe("cleanupImagesTask", () => {
+  describe("when env is set", () => {
+    const generateUsedScreenshot = async (projectRoot: string) => {
+      const screenshotPathWithPrefix = generateScreenshotPath({
+        titleFromOptions: "some-file",
+        imagesDir: "images",
+        specPath: "some/spec/path",
+      });
+      const screenshotPath = path.join(
+        projectRoot,
+        screenshotPathWithPrefix.substring(
+          IMAGE_SNAPSHOT_PREFIX.length + path.sep.length
+        )
+      );
+      await fs.mkdir(path.dirname(screenshotPath), { recursive: true });
+      return await writeTmpFixture(screenshotPath, "screenshot.png");
+    };
+    const generateUnusedScreenshot = async (projectRoot: string) => {
+      const screenshotPath = path.join(projectRoot, "some-file-2 #0.png");
+      return await writeTmpFixture(screenshotPath, "screenshot.png");
+    };
+
+    it("does not remove used screenshot", async () => {
+      const { path: projectRoot } = await dir();
+      const screenshotPath = await generateUsedScreenshot(projectRoot);
+
+      cleanupImagesTask({
+        projectRoot,
+        env: { pluginVisualRegressionCleanupUnusedImages: true },
+      } as unknown as Cypress.PluginConfigOptions);
+
+      expect(existsSync(screenshotPath)).toBe(true);
+    });
+
+    it("removes unused screenshot", async () => {
+      const { path: projectRoot } = await dir();
+      const screenshotPath = await generateUnusedScreenshot(projectRoot);
+
+      cleanupImagesTask({
+        projectRoot,
+        env: { pluginVisualRegressionCleanupUnusedImages: true },
+      } as unknown as Cypress.PluginConfigOptions);
+
+      expect(existsSync(screenshotPath)).toBe(false);
+    });
   });
 });
 
@@ -64,18 +131,6 @@ describe("approveImageTask", () => {
 });
 
 describe("compareImagesTask", () => {
-  const title = "some title";
-  const generateConfig = async (cfg: Partial<CompareImagesCfg>) => ({
-    updateImages: false,
-    scaleFactor: 1,
-    title,
-    imgNew: (await file()).path,
-    imgOld: (await file()).path,
-    maxDiffThreshold: 0.5,
-    diffConfig: {},
-    ...cfg,
-  });
-
   describe("when images should be updated", () => {
     describe("when old screenshot exists", () => {
       it("resolves with a success message", async () =>
@@ -109,8 +164,6 @@ describe("compareImagesTask", () => {
       describe("when new image has different resolution", () => {
         it("resolves with a error message", async () => {
           const cfg = await generateConfig({ updateImages: false });
-          await writeTmpFixture(cfg.imgOld, "screenshot.png");
-          await writeTmpFixture(cfg.imgNew, "screenshot.actual.png");
 
           await expect(compareImagesTask(cfg)).resolves.toEqual({
             error: true,
@@ -125,8 +178,7 @@ Warning: Images size mismatch - new screenshot is 1000px by 725px while old one 
       describe("when new image is exactly the same as old one", () => {
         it("resolves with a success message", async () => {
           const cfg = await generateConfig({ updateImages: false });
-          await writeTmpFixture(cfg.imgOld, "screenshot.png");
-          await writeTmpFixture(cfg.imgNew, "screenshot.png");
+          await writeTmpFixture(cfg.imgNew, oldImgFixture);
 
           await expect(compareImagesTask(cfg)).resolves.toEqual({
             message:
@@ -144,7 +196,7 @@ describe("doesFileExistsTask", () => {
   it("checks whether file exists", () => {
     expect(doesFileExistTask({ path: "some/random/path" })).toBe(false);
     expect(
-      doesFileExistTask({ path: path.join(fixturesPath, "screenshot.png") })
+      doesFileExistTask({ path: path.join(fixturesPath, oldImgFixture) })
     ).toBe(true);
   });
 });

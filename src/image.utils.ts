@@ -1,6 +1,25 @@
+import path from "path";
 import fs from "fs";
 import { PNG, PNGWithMetadata } from "pngjs";
 import sharp from "sharp";
+import { addMetadata, getMetadata } from "meta-png";
+import glob from "glob";
+import { version } from "../package.json";
+import { wasScreenshotUsed } from "./screenshotPath.utils";
+import { METADATA_KEY } from "./constants";
+
+export const addPNGMetadata = (png: Buffer) =>
+  addMetadata(png, METADATA_KEY, version);
+export const getPNGMetadata = (png: Buffer) => getMetadata(png, METADATA_KEY);
+export const isImageCurrentVersion = (png: Buffer) =>
+  getPNGMetadata(png) === version;
+export const isImageGeneratedByPlugin = (png: Buffer) => !!getPNGMetadata(png);
+
+export const writePNG = (name: string, png: PNG | Buffer) =>
+  fs.writeFileSync(
+    name,
+    addPNGMetadata(png instanceof PNG ? PNG.sync.write(png) : png)
+  );
 
 const inArea = (x: number, y: number, height: number, width: number) =>
   y > height || x > width;
@@ -31,19 +50,22 @@ export const createImageResizer =
     return resized;
   };
 
-export const importAndScaleImage = async (cfg: {
+export const scaleImageAndWrite = async ({
+  scaleFactor,
+  path,
+}: {
   scaleFactor: number;
   path: string;
 }) => {
-  const imgBuffer = fs.readFileSync(cfg.path);
+  const imgBuffer = fs.readFileSync(path);
+  if (scaleFactor === 1) return imgBuffer;
+
   const rawImgNew = PNG.sync.read(imgBuffer);
-  if (cfg.scaleFactor === 1) return rawImgNew;
+  const newImageWidth = Math.ceil(rawImgNew.width * scaleFactor);
+  const newImageHeight = Math.ceil(rawImgNew.height * scaleFactor);
+  await sharp(imgBuffer).resize(newImageWidth, newImageHeight).toFile(path);
 
-  const newImageWidth = Math.ceil(rawImgNew.width * cfg.scaleFactor);
-  const newImageHeight = Math.ceil(rawImgNew.height * cfg.scaleFactor);
-  await sharp(imgBuffer).resize(newImageWidth, newImageHeight).toFile(cfg.path);
-
-  return PNG.sync.read(fs.readFileSync(cfg.path));
+  return fs.readFileSync(path);
 };
 
 export const alignImagesToSameSize = (
@@ -67,4 +89,21 @@ export const alignImagesToSameSize = (
     fillSizeDifference(resizedFirst, firstImageWidth, firstImageHeight),
     fillSizeDifference(resizedSecond, secondImageWidth, secondImageHeight),
   ];
+};
+
+export const cleanupUnused = (rootPath: string) => {
+  glob
+    .sync("**/*.png", {
+      cwd: rootPath,
+      ignore: "node_modules/**/*",
+    })
+    .forEach((pngPath) => {
+      const absolutePath = path.join(rootPath, pngPath);
+      if (
+        !wasScreenshotUsed(pngPath) &&
+        isImageGeneratedByPlugin(fs.readFileSync(absolutePath))
+      ) {
+        fs.unlinkSync(absolutePath);
+      }
+    });
 };
