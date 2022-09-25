@@ -1,9 +1,9 @@
 import { it, expect, describe } from "vitest";
 import path from "path";
 import { promises as fs, existsSync } from "fs";
-import { initAfterScreenshotHook } from "@/afterScreenshot.hook";
+import { initAfterScreenshotHook } from "./afterScreenshot.hook";
 import { dir, file, setGracefulCleanup } from "tmp-promise";
-import { IMAGE_SNAPSHOT_PREFIX } from "@/constants";
+import { IMAGE_SNAPSHOT_PREFIX } from "./constants";
 
 setGracefulCleanup();
 

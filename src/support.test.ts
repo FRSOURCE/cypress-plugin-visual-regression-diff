@@ -2,11 +2,11 @@ import { it, expect, describe, vi } from "vitest";
 import { setGracefulCleanup, withFile } from "tmp-promise";
 import { promises as fs } from "fs";
 import { cy } from "@mocks/cypress.mock";
-import { cachedReadFile, generateOverlayTemplate } from "@/support";
+import { cachedReadFile, generateOverlayTemplate } from "./support";
 
 setGracefulCleanup();
 
-vi.mock("@/commands.ts", () => ({}));
+vi.mock("./commands.ts", () => ({}));
 
 const fileContent = "file content";
 

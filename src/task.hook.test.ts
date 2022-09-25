@@ -7,7 +7,7 @@ import {
   doesFileExistTask,
   getScreenshotPathTask,
   CompareImagesCfg,
-} from "@/task.hook";
+} from "./task.hook";
 import { file, setGracefulCleanup, withFile } from "tmp-promise";
 
 setGracefulCleanup();

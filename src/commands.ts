@@ -1,4 +1,4 @@
-import { FILE_SUFFIX, LINK_PREFIX, TASK } from "@/constants";
+import { FILE_SUFFIX, LINK_PREFIX, TASK } from "./constants";
 import type pixelmatch from "pixelmatch";
 import * as Base64 from "@frsource/base64";
 

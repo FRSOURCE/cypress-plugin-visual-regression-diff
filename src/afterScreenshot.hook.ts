@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import moveFile from "move-file";
-import { IMAGE_SNAPSHOT_PREFIX } from "@/constants";
+import { IMAGE_SNAPSHOT_PREFIX } from "./constants";
 
 type NotFalsy<T> = T extends false | null | undefined ? never : T;
 

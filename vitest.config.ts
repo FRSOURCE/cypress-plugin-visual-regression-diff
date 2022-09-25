@@ -22,8 +22,7 @@ export default defineConfig({
     },
     alias: {
       '@fixtures/*': path.resolve(__dirname, '__tests__', 'partials'),
-      '@mocks/*': path.resolve(__dirname, '__tests__', 'mocks'),
-      '@/*': path.resolve(__dirname, 'src')
+      '@mocks/*': path.resolve(__dirname, '__tests__', 'mocks')
     }
   },
 });

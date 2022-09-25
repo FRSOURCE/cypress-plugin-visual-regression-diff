@@ -1,5 +1,5 @@
-import { initTaskHook } from "@/task.hook";
-import { initAfterScreenshotHook } from "@/afterScreenshot.hook";
+import { initTaskHook } from "./task.hook";
+import { initAfterScreenshotHook } from "./afterScreenshot.hook";
 
 /* c8 ignore start */
 const initForceDeviceScaleFactor = (on: Cypress.PluginEvents) => {

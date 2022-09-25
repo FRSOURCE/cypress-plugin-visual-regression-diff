@@ -4,8 +4,8 @@ import { PNG } from "pngjs";
 import pixelmatch, { PixelmatchOptions } from "pixelmatch";
 import moveFile from "move-file";
 import sanitize from "sanitize-filename";
-import { FILE_SUFFIX, IMAGE_SNAPSHOT_PREFIX, TASK } from "@/constants";
-import { alignImagesToSameSize, importAndScaleImage } from "@/image.utils";
+import { FILE_SUFFIX, IMAGE_SNAPSHOT_PREFIX, TASK } from "./constants";
+import { alignImagesToSameSize, importAndScaleImage } from "./image.utils";
 
 export type CompareImagesCfg = {
   scaleFactor: number;

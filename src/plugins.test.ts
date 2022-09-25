@@ -1,12 +1,12 @@
 import { it, expect, describe, vi } from "vitest";
-import { initTaskHook } from "@/task.hook";
-import { initAfterScreenshotHook } from "@/afterScreenshot.hook";
-import { initPlugin } from "@/plugins";
+import { initTaskHook } from "./task.hook";
+import { initAfterScreenshotHook } from "./afterScreenshot.hook";
+import { initPlugin } from "./plugins";
 
-vi.mock("@/task.hook.ts", () => ({
+vi.mock("./task.hook.ts", () => ({
   initTaskHook: vi.fn().mockReturnValue("task"),
 }));
-vi.mock("@/afterScreenshot.hook.ts", () => ({
+vi.mock("./afterScreenshot.hook.ts", () => ({
   initAfterScreenshotHook: vi.fn().mockReturnValue("after:screenshot"),
 }));
 
