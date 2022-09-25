@@ -4,6 +4,7 @@ const { defineConfig } = require("cypress");
 const { initPlugin } = require("@frsource/cypress-plugin-visual-regression-diff/dist/plugins");
 
 module.exports = defineConfig({
+  video: false,
   e2e: {
     setupNodeEvents(on, config) {
       initPlugin(on, config);
