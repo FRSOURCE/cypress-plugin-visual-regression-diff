@@ -141,9 +141,9 @@ Still got troubles with installation? Have a look at [example directory of this 
 
 ## Configuration
 
-This plugin can be configured either:
+Configure the plugin:
 
-- directly, on a matcher level - by passing in plugin options as an argument to `matchImage` command, e.g.:
+- by passing in configuration as an argument to `matchImage` command:
 
 ```ts
 cy.matchImage({
@@ -177,7 +177,7 @@ cy.matchImage({
 })
 ```
 
-- via [global env configuration](https://docs.cypress.io/guides/guides/environment-variables#Setting). All of the environment variable names are the same as keys of the configuration options passed to `matchImage` method, but with added `pluginVisualRegression` prefix, e.g.:
+- via [global env configuration](https://docs.cypress.io/guides/guides/environment-variables#Setting). Environment variable names are the same as keys of the configuration object above, but with added `pluginVisualRegression` prefix, e.g.:
 
 ```bash
 npx cypress run --env "pluginVisualRegressionUpdateImages=true,pluginVisualRegressionDiffConfig={\"threshold\":0.01}"

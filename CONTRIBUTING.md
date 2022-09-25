@@ -73,8 +73,11 @@ $ yarn test:ct
 # requires plugin to be built first via `yarn build`
 $ yarn test:e2e
 
-# run tests and collect coverage
+# run integration tests once and collect coverage
 $ yarn test:integration:coverage
+
+# run integration tests in watch mode
+$ yarn test:integration:watch
 
 # lint & try to autofix linting errors
 $ yarn fix:lint && yarn prettify
