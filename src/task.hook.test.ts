@@ -31,6 +31,7 @@ const generateConfig = async (cfg: Partial<CompareImagesCfg>) => ({
   ...cfg,
 });
 const writeTmpFixture = async (pathToWriteTo: string, fixtureName: string) => {
+  await fs.mkdir(path.dirname(pathToWriteTo), { recursive: true });
   await fs.writeFile(
     pathToWriteTo,
     await fs.readFile(path.join(fixturesPath, fixtureName))
@@ -56,29 +57,26 @@ describe("getScreenshotPathInfoTask", () => {
 
 describe("cleanupImagesTask", () => {
   describe("when env is set", () => {
-    const generateUsedScreenshot = async (projectRoot: string) => {
+    const generateUsedScreenshotPath = async (projectRoot: string) => {
       const screenshotPathWithPrefix = generateScreenshotPath({
         titleFromOptions: "some-file",
         imagesDir: "images",
         specPath: "some/spec/path",
       });
-      const screenshotPath = path.join(
+      return path.join(
         projectRoot,
         screenshotPathWithPrefix.substring(
           IMAGE_SNAPSHOT_PREFIX.length + path.sep.length
         )
       );
-      await fs.mkdir(path.dirname(screenshotPath), { recursive: true });
-      return await writeTmpFixture(screenshotPath, "screenshot.png");
-    };
-    const generateUnusedScreenshot = async (projectRoot: string) => {
-      const screenshotPath = path.join(projectRoot, "some-file-2 #0.png");
-      return await writeTmpFixture(screenshotPath, "screenshot.png");
     };
 
     it("does not remove used screenshot", async () => {
       const { path: projectRoot } = await dir();
-      const screenshotPath = await generateUsedScreenshot(projectRoot);
+      const screenshotPath = await writeTmpFixture(
+        await generateUsedScreenshotPath(projectRoot),
+        oldImgFixture
+      );
 
       cleanupImagesTask({
         projectRoot,
@@ -90,7 +88,10 @@ describe("cleanupImagesTask", () => {
 
     it("removes unused screenshot", async () => {
       const { path: projectRoot } = await dir();
-      const screenshotPath = await generateUnusedScreenshot(projectRoot);
+      const screenshotPath = await writeTmpFixture(
+        path.join(projectRoot, "some-file-2 #0.png"),
+        oldImgFixture
+      );
 
       cleanupImagesTask({
         projectRoot,
