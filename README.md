@@ -87,9 +87,13 @@ import { defineConfig } from 'cypress';
 import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/plugins';
 
 export default defineConfig({
-  // setupNodeEvents can be defined in either
-  // the e2e or component configuration
+  // initPlugin must be called in the section where it is used: e2e or component
   e2e: {
+    setupNodeEvents(on, config) {
+      initPlugin(on, config);
+    }
+  },
+  component: {
     setupNodeEvents(on, config) {
       initPlugin(on, config);
     }
