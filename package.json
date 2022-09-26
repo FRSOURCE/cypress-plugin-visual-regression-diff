@@ -73,7 +73,7 @@
     "@types/sharp": "0.31.0",
     "@types/tmp": "0.2.3",
     "@typescript-eslint/eslint-plugin": "5.38.0",
-    "@typescript-eslint/parser": "5.38.0",
+    "@typescript-eslint/parser": "5.38.1",
     "@vitest/coverage-c8": "0.23.4",
     "cypress": "10.8.0",
     "del-cli": "5.0.0",
