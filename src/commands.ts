@@ -1,6 +1,7 @@
 import { FILE_SUFFIX, LINK_PREFIX, TASK } from "./constants";
 import type pixelmatch from "pixelmatch";
 import * as Base64 from "@frsource/base64";
+import type { CompareImagesTaskReturn } from "./types";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -116,7 +117,7 @@ Cypress.Commands.add(
       })
       .then((imgPath) =>
         cy
-          .task(
+          .task<CompareImagesTaskReturn>(
             TASK.compareImages,
             {
               scaleFactor,
@@ -129,15 +130,7 @@ Cypress.Commands.add(
             { log: false }
           )
           .then((res) => ({
-            res: res as null | {
-              error?: boolean;
-              message?: string;
-              imgDiff?: number;
-              imgDiffBase64?: string;
-              imgNewBase64?: string;
-              imgOldBase64?: string;
-              maxDiffThreshold?: number;
-            },
+            res,
             imgPath,
           }))
       )

@@ -6,6 +6,7 @@ import moveFile from "move-file";
 import sanitize from "sanitize-filename";
 import { FILE_SUFFIX, IMAGE_SNAPSHOT_PREFIX, TASK } from "./constants";
 import { alignImagesToSameSize, importAndScaleImage } from "./image.utils";
+import type { CompareImagesTaskReturn } from "./types";
 
 export type CompareImagesCfg = {
   scaleFactor: number;
@@ -54,15 +55,7 @@ export const approveImageTask = ({ img }: { img: string }) => {
 
 export const compareImagesTask = async (
   cfg: CompareImagesCfg
-): Promise<null | {
-  error?: boolean;
-  message?: string;
-  imgDiff?: number;
-  imgNewBase64?: string;
-  imgDiffBase64?: string;
-  imgOldBase64?: string;
-  maxDiffThreshold?: number;
-}> => {
+): Promise<CompareImagesTaskReturn> => {
   const messages = [] as string[];
   let imgDiff: number | undefined;
   let imgNewBase64: string, imgOldBase64: string, imgDiffBase64: string;
