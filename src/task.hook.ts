@@ -105,9 +105,9 @@ export const compareImagesTask = async (
     }
 
     const diffBuffer = PNG.sync.write(diff);
-    imgNewBase64 = PNG.sync.write(imgNew).toString('base64');
-    imgDiffBase64 = diffBuffer.toString('base64');
-    imgOldBase64 = PNG.sync.write(imgOld).toString('base64');
+    imgNewBase64 = PNG.sync.write(imgNew).toString("base64");
+    imgDiffBase64 = diffBuffer.toString("base64");
+    imgOldBase64 = PNG.sync.write(imgOld).toString("base64");
 
     if (error) {
       fs.writeFileSync(
@@ -130,9 +130,9 @@ export const compareImagesTask = async (
   } else {
     // there is no "old screenshot" or screenshots should be immediately updated
     imgDiff = 0;
-    imgNewBase64 = '';
-    imgDiffBase64 = '';
-    imgOldBase64 = '';
+    imgNewBase64 = "";
+    imgDiffBase64 = "";
+    imgOldBase64 = "";
     moveFile.sync(cfg.imgNew, cfg.imgOld);
   }
 

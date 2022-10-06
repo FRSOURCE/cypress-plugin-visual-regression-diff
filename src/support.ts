@@ -1,6 +1,6 @@
 import * as Base64 from "@frsource/base64";
 import "./commands";
-import { FILE_SUFFIX, LINK_PREFIX, OVERLAY_CLASS, TASK } from "./constants";
+import { LINK_PREFIX, OVERLAY_CLASS, TASK } from "./constants";
 
 /* c8 ignore start */
 function queueClear() {
@@ -29,7 +29,7 @@ export const generateOverlayTemplate = ({
   imgOldBase64: string;
   imgDiffBase64: string;
   wasImageNotUpdatedYet: boolean;
-  error: boolean
+  error: boolean;
 }) => `<div class="${OVERLAY_CLASS} runner" style="position:fixed;z-index:10;top:0;bottom:0;left:0;right:0;display:flex;flex-flow:column">
   <header style="position:static">
   <nav style="display:flex;width:100%;align-items:center;justify-content:space-between;padding:10px 15px;">
@@ -38,7 +38,9 @@ export const generateOverlayTemplate = ({
       ${
         wasImageNotUpdatedYet
           ? `<button type="submit"><i class="fa fa-check"></i> Update screenshot</button>`
-          : error ? "Image was already updated, rerun test to see new comparison" : ""
+          : error
+          ? "Image was already updated, rerun test to see new comparison"
+          : ""
       }
       <button type="button" data-type="close"><i class="fa fa-times"></i> Close</button>
     <form>
@@ -82,7 +84,14 @@ after(() => {
       e.preventDefault();
       if (!top) return false;
 
-      const { title, imgPath, imgDiffBase64, imgNewBase64, imgOldBase64, error } = JSON.parse(
+      const {
+        title,
+        imgPath,
+        imgDiffBase64,
+        imgNewBase64,
+        imgOldBase64,
+        error,
+      } = JSON.parse(
         decodeURIComponent(
           Base64.decode(
             e.currentTarget.getAttribute("href").substring(LINK_PREFIX.length)
@@ -91,40 +100,40 @@ after(() => {
       );
       queueClear();
 
-      cy
-        .task<boolean>(TASK.doesFileExist, { path: imgPath }, { log: false })
-        .then(
-          (wasImageNotUpdatedYet) => {
-            if (!top) return false;
-            queueClear();
+      cy.task<boolean>(
+        TASK.doesFileExist,
+        { path: imgPath },
+        { log: false }
+      ).then((wasImageNotUpdatedYet) => {
+        if (!top) return false;
+        queueClear();
 
-            Cypress.$(
-              generateOverlayTemplate({
-                title,
-                imgNewBase64,
-                imgOldBase64,
-                imgDiffBase64,
-                error,
-                wasImageNotUpdatedYet,
-              })
-            ).appendTo(top.document.body);
+        Cypress.$(
+          generateOverlayTemplate({
+            title,
+            imgNewBase64,
+            imgOldBase64,
+            imgDiffBase64,
+            error,
+            wasImageNotUpdatedYet,
+          })
+        ).appendTo(top.document.body);
 
-            const wrapper = Cypress.$(`.${OVERLAY_CLASS}`, top.document.body);
-            wrapper.on("click", 'button[data-type="close"]', function () {
-              wrapper.remove();
-            });
+        const wrapper = Cypress.$(`.${OVERLAY_CLASS}`, top.document.body);
+        wrapper.on("click", 'button[data-type="close"]', function () {
+          wrapper.remove();
+        });
 
-            wrapper.on("submit", "form", function (e) {
-              e.preventDefault();
+        wrapper.on("submit", "form", function (e) {
+          e.preventDefault();
 
-              cy.task(TASK.approveImage, { img: imgPath }).then(() =>
-                wrapper.remove()
-              );
+          cy.task(TASK.approveImage, { img: imgPath }).then(() =>
+            wrapper.remove()
+          );
 
-              queueRun();
-            });
-          }
-        );
+          queueRun();
+        });
+      });
 
       queueRun();
 

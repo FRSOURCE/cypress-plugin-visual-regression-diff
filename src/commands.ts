@@ -151,18 +151,18 @@ Cypress.Commands.add(
           `${res.message}${
             res.imgDiffBase64 && res.imgNewBase64 && res.imgOldBase64
               ? `\n[See comparison](${LINK_PREFIX}${Base64.encode(
-                encodeURIComponent(
-                  JSON.stringify({
-                    title,
-                    imgPath,
-                    imgDiffBase64: res.imgDiffBase64,
-                    imgNewBase64: res.imgNewBase64,
-                    imgOldBase64: res.imgOldBase64,
-                    error: res.error
-                  })
-                )
-              )})`
-              : ''
+                  encodeURIComponent(
+                    JSON.stringify({
+                      title,
+                      imgPath,
+                      imgDiffBase64: res.imgDiffBase64,
+                      imgNewBase64: res.imgNewBase64,
+                      imgOldBase64: res.imgOldBase64,
+                      error: res.error,
+                    })
+                  )
+                )})`
+              : ""
           }`
         );
 
