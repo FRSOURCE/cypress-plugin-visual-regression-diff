@@ -133,6 +133,9 @@ Cypress.Commands.add(
               error?: boolean;
               message?: string;
               imgDiff?: number;
+              imgDiffBase64?: string;
+              imgNewBase64?: string;
+              imgOldBase64?: string;
               maxDiffThreshold?: number;
             },
             imgPath,
@@ -150,22 +153,29 @@ Cypress.Commands.add(
           throw constructCypressError(log, new Error("Unexpected error!"));
         }
 
+        log.set(
+          "message",
+          `${res.message}${
+            res.imgDiffBase64 && res.imgNewBase64 && res.imgOldBase64
+              ? `\n[See comparison](${LINK_PREFIX}${Base64.encode(
+                encodeURIComponent(
+                  JSON.stringify({
+                    title,
+                    imgPath,
+                    imgDiffBase64: res.imgDiffBase64,
+                    imgNewBase64: res.imgNewBase64,
+                    imgOldBase64: res.imgOldBase64,
+                    error: res.error
+                  })
+                )
+              )})`
+              : ''
+          }`
+        );
+
         if (res.error) {
-          log.set(
-            "message",
-            `${res.message}\n[See comparison](${LINK_PREFIX}${Base64.encode(
-              encodeURIComponent(
-                JSON.stringify({
-                  title,
-                  imgPath,
-                })
-              )
-            )})`
-          );
           log.set("consoleProps", () => res);
           throw constructCypressError(log, new Error(res.message));
-        } else {
-          log.set("message", res.message);
         }
       });
   }

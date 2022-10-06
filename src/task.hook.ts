@@ -58,10 +58,14 @@ export const compareImagesTask = async (
   error?: boolean;
   message?: string;
   imgDiff?: number;
+  imgNewBase64?: string;
+  imgDiffBase64?: string;
+  imgOldBase64?: string;
   maxDiffThreshold?: number;
 }> => {
   const messages = [] as string[];
   let imgDiff: number | undefined;
+  let imgNewBase64: string, imgOldBase64: string, imgDiffBase64: string;
   let error = false;
 
   if (fs.existsSync(cfg.imgOld) && !cfg.updateImages) {
@@ -107,15 +111,23 @@ export const compareImagesTask = async (
       error = true;
     }
 
+    const diffBuffer = PNG.sync.write(diff);
+    imgNewBase64 = PNG.sync.write(imgNew).toString('base64');
+    imgDiffBase64 = diffBuffer.toString('base64');
+    imgOldBase64 = PNG.sync.write(imgOld).toString('base64');
+
     if (error) {
       fs.writeFileSync(
         cfg.imgNew.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
-        PNG.sync.write(diff)
+        diffBuffer
       );
       return {
         error,
         message: messages.join("\n"),
         imgDiff,
+        imgNewBase64,
+        imgDiffBase64,
+        imgOldBase64,
         maxDiffThreshold: cfg.maxDiffThreshold,
       };
     } else {
@@ -125,6 +137,9 @@ export const compareImagesTask = async (
   } else {
     // there is no "old screenshot" or screenshots should be immediately updated
     imgDiff = 0;
+    imgNewBase64 = '';
+    imgDiffBase64 = '';
+    imgOldBase64 = '';
     moveFile.sync(cfg.imgNew, cfg.imgOld);
   }
 
@@ -139,6 +154,9 @@ export const compareImagesTask = async (
     return {
       message: messages.join("\n"),
       imgDiff,
+      imgNewBase64,
+      imgDiffBase64,
+      imgOldBase64,
       maxDiffThreshold: cfg.maxDiffThreshold,
     };
   }
