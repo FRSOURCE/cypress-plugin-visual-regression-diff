@@ -1,3 +1,10 @@
+## [2.3.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v2.3.0...v2.3.1) (2022-10-06)
+
+
+### Bug Fixes
+
+* security vulnerabilities ([d0bda44](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/d0bda44d3055cd578381406a06607bfba48ff447))
+
 # [2.3.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v2.2.12...v2.3.0) (2022-10-06)
 
 
