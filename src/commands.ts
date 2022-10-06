@@ -1,6 +1,7 @@
 import { FILE_SUFFIX, LINK_PREFIX, TASK } from "./constants";
 import type pixelmatch from "pixelmatch";
 import * as Base64 from "@frsource/base64";
+import type { CompareImagesTaskReturn } from "./types";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -116,7 +117,7 @@ Cypress.Commands.add(
       })
       .then((imgPath) =>
         cy
-          .task(
+          .task<CompareImagesTaskReturn>(
             TASK.compareImages,
             {
               scaleFactor,
@@ -129,12 +130,7 @@ Cypress.Commands.add(
             { log: false }
           )
           .then((res) => ({
-            res: res as null | {
-              error?: boolean;
-              message?: string;
-              imgDiff?: number;
-              maxDiffThreshold?: number;
-            },
+            res,
             imgPath,
           }))
       )
@@ -150,22 +146,29 @@ Cypress.Commands.add(
           throw constructCypressError(log, new Error("Unexpected error!"));
         }
 
+        log.set(
+          "message",
+          `${res.message}${
+            res.imgDiffBase64 && res.imgNewBase64 && res.imgOldBase64
+              ? `\n[See comparison](${LINK_PREFIX}${Base64.encode(
+                encodeURIComponent(
+                  JSON.stringify({
+                    title,
+                    imgPath,
+                    imgDiffBase64: res.imgDiffBase64,
+                    imgNewBase64: res.imgNewBase64,
+                    imgOldBase64: res.imgOldBase64,
+                    error: res.error
+                  })
+                )
+              )})`
+              : ''
+          }`
+        );
+
         if (res.error) {
-          log.set(
-            "message",
-            `${res.message}\n[See comparison](${LINK_PREFIX}${Base64.encode(
-              encodeURIComponent(
-                JSON.stringify({
-                  title,
-                  imgPath,
-                })
-              )
-            )})`
-          );
           log.set("consoleProps", () => res);
           throw constructCypressError(log, new Error(res.message));
-        } else {
-          log.set("message", res.message);
         }
       });
   }

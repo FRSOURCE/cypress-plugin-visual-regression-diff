@@ -22,21 +22,23 @@ export const generateOverlayTemplate = ({
   imgOldBase64,
   imgDiffBase64,
   wasImageNotUpdatedYet,
+  error,
 }: {
   title: string;
   imgNewBase64: string;
   imgOldBase64: string;
   imgDiffBase64: string;
   wasImageNotUpdatedYet: boolean;
+  error: boolean
 }) => `<div class="${OVERLAY_CLASS} runner" style="position:fixed;z-index:10;top:0;bottom:0;left:0;right:0;display:flex;flex-flow:column">
   <header style="position:static">
   <nav style="display:flex;width:100%;align-items:center;justify-content:space-between;padding:10px 15px;">
     <h2>${title} - screenshot diff</h2>
-    <form>
+    <form style="display:flex;align-items:center;gap:5px;text-align:right">
       ${
         wasImageNotUpdatedYet
           ? `<button type="submit"><i class="fa fa-check"></i> Update screenshot</button>`
-          : "Image was already updated, rerun test to see new comparison"
+          : error ? "Image was already updated, rerun test to see new comparison" : ""
       }
       <button type="button" data-type="close"><i class="fa fa-times"></i> Close</button>
     <form>
@@ -64,21 +66,6 @@ export const generateOverlayTemplate = ({
   </div>
 </div>`;
 
-export function cachedReadFile(
-  imageCache: Record<string, string>,
-  path: string,
-  encoding: Cypress.Encodings
-): Cypress.Chainable<string> {
-  if (imageCache[path])
-    return Cypress.Promise.resolve(
-      imageCache[path]
-    ) as unknown as Cypress.Chainable<string>;
-
-  return cy
-    .readFile(path, encoding, { log: false })
-    .then((file) => (imageCache[path] = file));
-}
-
 /* c8 ignore start */
 before(() => {
   if (!top) return null;
@@ -86,8 +73,6 @@ before(() => {
 });
 
 after(() => {
-  const imageCache: Record<string, string> = {};
-
   if (!top) return null;
 
   Cypress.$(top.document.body).on(
@@ -97,7 +82,7 @@ after(() => {
       e.preventDefault();
       if (!top) return false;
 
-      const { title, imgPath } = JSON.parse(
+      const { title, imgPath, imgDiffBase64, imgNewBase64, imgOldBase64, error } = JSON.parse(
         decodeURIComponent(
           Base64.decode(
             e.currentTarget.getAttribute("href").substring(LINK_PREFIX.length)
@@ -106,39 +91,10 @@ after(() => {
       );
       queueClear();
 
-      cachedReadFile(imageCache, imgPath, "base64")
-        .then((imgNew) =>
-          cachedReadFile(
-            imageCache,
-            imgPath.replace(FILE_SUFFIX.actual, ""),
-            "base64"
-          ).then((imgOld) =>
-            cachedReadFile(
-              imageCache,
-              imgPath.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
-              "base64"
-            ).then((imgDiff) =>
-              cy
-                .task(TASK.doesFileExist, { path: imgPath }, { log: false })
-                .then(
-                  (wasImageNotUpdatedYet) =>
-                    [
-                      imgNew,
-                      imgOld,
-                      imgDiff,
-                      wasImageNotUpdatedYet as boolean,
-                    ] as const
-                )
-            )
-          )
-        )
+      cy
+        .task<boolean>(TASK.doesFileExist, { path: imgPath }, { log: false })
         .then(
-          ([
-            imgNewBase64,
-            imgOldBase64,
-            imgDiffBase64,
-            wasImageNotUpdatedYet,
-          ]) => {
+          (wasImageNotUpdatedYet) => {
             if (!top) return false;
             queueClear();
 
@@ -148,6 +104,7 @@ after(() => {
                 imgNewBase64,
                 imgOldBase64,
                 imgDiffBase64,
+                error,
                 wasImageNotUpdatedYet,
               })
             ).appendTo(top.document.body);
