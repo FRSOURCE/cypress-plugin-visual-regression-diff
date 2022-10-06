@@ -1491,7 +1491,7 @@ __metadata:
     prettier: 2.7.1
     sanitize-filename: 1.6.3
     semantic-release: 19.0.5
-    sharp: 0.31.0
+    sharp: 0.31.1
     tmp-promise: 3.0.3
     typescript: 4.8.4
     vite-tsconfig-paths: 3.5.1
@@ -9700,9 +9700,9 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sharp@npm:0.31.0":
-  version: 0.31.0
-  resolution: "sharp@npm:0.31.0"
+"sharp@npm:0.31.1":
+  version: 0.31.1
+  resolution: "sharp@npm:0.31.1"
   dependencies:
     color: ^4.2.3
     detect-libc: ^2.0.1
@@ -9713,7 +9713,7 @@ fsevents@~2.3.2:
     simple-get: ^4.0.1
     tar-fs: ^2.1.1
     tunnel-agent: ^0.6.0
-  checksum: 1ab73fea3a506f0bf290eb9dff6e7bab7947813e69bf8ca3eebcbe96498cb23dd6c8d8d02d67575fd8e9b555b01d9529d140c5a66e3a774855ba758455a90f3e
+  checksum: 42d00c9c6c61e5cf752c29583253782b3d821ee15fc2648c1f59892b94e9bc170a47ee9d138aa0a61c1c2ee9b7573ee54444c857fff887908701c4208710480d
   languageName: node
   linkType: hard
 
