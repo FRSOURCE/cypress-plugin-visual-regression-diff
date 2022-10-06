@@ -22,6 +22,7 @@ export const fillSizeDifference = (
     }
   }
   return image;
+  /* c8 ignore next */
 };
 
 export const createImageResizer =
@@ -29,6 +30,7 @@ export const createImageResizer =
     const resized = new PNG({ width, height, fill: true });
     PNG.bitblt(source, resized, 0, 0, source.width, source.height, 0, 0);
     return resized;
+    /* c8 ignore next */
   };
 
 export const importAndScaleImage = async (cfg: {

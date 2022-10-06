@@ -13,4 +13,5 @@ export const TASK = {
   compareImages: `${PLUGIN_NAME}-compareImages`,
   approveImage: `${PLUGIN_NAME}-approveImage`,
   doesFileExist: `${PLUGIN_NAME}-doesFileExist`,
+  /* c8 ignore next */
 };

@@ -85,6 +85,9 @@ describe("compareImagesTask", () => {
           message:
             "Image diff factor (0%) is within boundaries of maximum threshold option 0.5.",
           imgDiff: 0,
+          imgDiffBase64: "",
+          imgNewBase64: "",
+          imgOldBase64: "",
           maxDiffThreshold: 0.5,
         }));
     });
@@ -100,6 +103,9 @@ describe("compareImagesTask", () => {
           message:
             "Image diff factor (0%) is within boundaries of maximum threshold option 0.5.",
           imgDiff: 0,
+          imgDiffBase64: "",
+          imgNewBase64: "",
+          imgOldBase64: "",
           maxDiffThreshold: 0.5,
         });
       });
@@ -107,18 +113,12 @@ describe("compareImagesTask", () => {
 
     describe("when old screenshot exists", () => {
       describe("when new image has different resolution", () => {
-        it("resolves with a error message", async () => {
+        it("resolves with an error message", async () => {
           const cfg = await generateConfig({ updateImages: false });
           await writeTmpFixture(cfg.imgOld, "screenshot.png");
           await writeTmpFixture(cfg.imgNew, "screenshot.actual.png");
 
-          await expect(compareImagesTask(cfg)).resolves.toEqual({
-            error: true,
-            message: `Image diff factor (0.685%) is bigger than maximum threshold option 0.5.
-Warning: Images size mismatch - new screenshot is 1000px by 725px while old one is 500px by 500 (width x height).`,
-            imgDiff: 0.6849241379310345,
-            maxDiffThreshold: 0.5,
-          });
+          await expect(compareImagesTask(cfg)).resolves.toMatchSnapshot();
         });
       });
 
@@ -128,12 +128,7 @@ Warning: Images size mismatch - new screenshot is 1000px by 725px while old one 
           await writeTmpFixture(cfg.imgOld, "screenshot.png");
           await writeTmpFixture(cfg.imgNew, "screenshot.png");
 
-          await expect(compareImagesTask(cfg)).resolves.toEqual({
-            message:
-              "Image diff factor (0%) is within boundaries of maximum threshold option 0.5.",
-            imgDiff: 0,
-            maxDiffThreshold: 0.5,
-          });
+          await expect(compareImagesTask(cfg)).resolves.toMatchSnapshot();
         });
       });
     });
