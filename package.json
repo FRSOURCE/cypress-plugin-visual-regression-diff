@@ -88,7 +88,7 @@
     "tmp-promise": "3.0.3",
     "typescript": "4.8.4",
     "vite-tsconfig-paths": "3.5.1",
-    "vitest": "0.24.0"
+    "vitest": "0.24.1"
   },
   "keywords": [
     "Cypress",
