@@ -74,7 +74,7 @@
     "@types/tmp": "0.2.3",
     "@typescript-eslint/eslint-plugin": "5.39.0",
     "@typescript-eslint/parser": "5.39.0",
-    "@vitest/coverage-c8": "0.24.0",
+    "@vitest/coverage-c8": "0.24.1",
     "cypress": "10.9.0",
     "del-cli": "5.0.0",
     "eslint": "8.24.0",
