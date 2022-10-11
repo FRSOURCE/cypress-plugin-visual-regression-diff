@@ -133,10 +133,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@frsource/base64@npm:1.0.2":
-  version: 1.0.2
-  resolution: "@frsource/base64@npm:1.0.2"
-  checksum: b979a6af4b0e9e205690a991c34c6d34afcdfa2f3de82ce5943b44987d51f2493b6ea47848dae3ad29679ef40f1065a226161b4fd8832c9cb4c8cd6046af361e
+"@frsource/base64@npm:1.0.3":
+  version: 1.0.3
+  resolution: "@frsource/base64@npm:1.0.3"
+  checksum: f73e649443045d3b757bd900c57e552b4d415924734622ca6cf1c9ac6819dea6dcaeed4bce1a6bf6fe17c4a08f38ee98e16991dc6e56679338039fb1485be73f
   languageName: node
   linkType: hard
 
@@ -144,7 +144,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@frsource/cypress-plugin-visual-regression-diff@portal:..::locator=example%40workspace%3A."
   dependencies:
-    "@frsource/base64": 1.0.2
+    "@frsource/base64": 1.0.3
     move-file: 2.1.0
     pixelmatch: 5.3.0
     pngjs: 6.0.0
