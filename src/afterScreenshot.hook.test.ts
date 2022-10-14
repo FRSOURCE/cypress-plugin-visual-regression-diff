@@ -1,9 +1,9 @@
 import { it, expect, describe } from "vitest";
 import path from "path";
 import { promises as fs, existsSync } from "fs";
-import { initAfterScreenshotHook } from "./afterScreenshot.hook";
+import { initAfterScreenshotHook, parseAbsolutePath } from "./afterScreenshot.hook";
 import { dir, file, setGracefulCleanup } from "tmp-promise";
-import { IMAGE_SNAPSHOT_PREFIX } from "./constants";
+import { IMAGE_SNAPSHOT_PREFIX, PATH_VARIABLES } from "./constants";
 
 setGracefulCleanup();
 
@@ -29,5 +29,25 @@ describe("initAfterScreenshotHook", () => {
     expect(existsSync(expectedNewPath)).toBe(true);
 
     await fs.unlink(expectedNewPath);
+  });
+});
+
+describe('parseAbsolutePath', () => {
+  const projectRoot = '/its/project/root';
+
+  it('resolves relative paths against project root', () => {
+    expect(parseAbsolutePath({ screenshotPath: 'some/path.png', projectRoot }))
+      .toBe('/its/project/root/some/path.png');
+  });
+
+  it('builds proper win paths when found', () => {
+    expect(parseAbsolutePath({ screenshotPath: `${PATH_VARIABLES.winSystemRootPath}/D/some/path.png`, projectRoot }))
+    // that's expected output accorind to https://stackoverflow.com/a/64135721/8805801
+    .toBe('D:\\/some/path.png');
+  });
+
+  it('resolves relative paths against project root', () => {
+    expect(parseAbsolutePath({ screenshotPath: `${PATH_VARIABLES.unixSystemRootPath}/some/path.png`, projectRoot }))
+      .toBe('/some/path.png');
   });
 });

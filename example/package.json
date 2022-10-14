@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:open": "vue-cli-service test:e2e --env \"pluginVisualRegressionImagesPath={spec_path}/__image_snapshots_locals__\"",
+    "test:open": "vue-cli-service test:e2e --env \"pluginVisualRegressionImagesPath={spec_path}/__image_snapshots_local__\"",
     "test:run": "vue-cli-service test:e2e",
     "test:ct": "yarn test:open --component",
     "test:ct:ci": "yarn test:run --component --headless",

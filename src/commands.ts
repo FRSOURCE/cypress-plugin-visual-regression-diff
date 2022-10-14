@@ -30,8 +30,6 @@ declare global {
   }
 }
 
-const nameCacheCounter: Record<string, number> = {};
-
 const constructCypressError = (log: Cypress.Log, err: Error) => {
   // only way to throw & log the message properly in Cypress
   // https://github.com/cypress-io/cypress/blob/5f94cad3cb4126e0567290b957050c33e3a78e3c/packages/driver/src/cypress/error_utils.ts#L214-L216
@@ -100,10 +98,7 @@ Cypress.Commands.add(
   { prevSubject: "optional" },
   (subject, options = {}) => {
     const $el = subject as JQuery<HTMLElement> | undefined;
-    let title = options.title || Cypress.currentTest.titlePath.join(" ");
-    if (typeof nameCacheCounter[title] === "undefined")
-      nameCacheCounter[title] = -1;
-    title += ` #${++nameCacheCounter[title]}`;
+    let title: string;
 
     const {
       scaleFactor,
@@ -116,17 +111,19 @@ Cypress.Commands.add(
 
     return cy
       .then(() =>
-        cy.task<string>(
-          TASK.getScreenshotPath,
+        cy.task<{ screenshotPath: string; title: string }>(
+          TASK.getScreenshotPathInfo,
           {
-            title,
+            titleFromOptions:
+              options.title || Cypress.currentTest.titlePath.join(" "),
             imagesPath,
             specPath: Cypress.spec.relative,
           },
           { log: false }
         )
       )
-      .then((screenshotPath) => {
+      .then(({ screenshotPath, title: titleFromTask }) => {
+        title = titleFromTask;
         let imgPath: string;
         return ($el ? cy.wrap($el) : cy)
           .screenshot(screenshotPath, {
