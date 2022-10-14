@@ -10,7 +10,11 @@ declare global {
       screenshotConfig?: Partial<Cypress.ScreenshotDefaultsOptions>;
       diffConfig?: Parameters<typeof pixelmatch>[5];
       updateImages?: boolean;
+      /**
+       * @deprecated since version 3.0, use imagesPath instead
+       */
       imagesDir?: string;
+      imagesPath?: string;
       maxDiffThreshold?: number;
       title?: string;
     };
@@ -36,40 +40,60 @@ const constructCypressError = (log: Cypress.Log, err: Error) => {
   return err;
 };
 
-export const getConfig = (options: Cypress.MatchImageOptions) => ({
-  scaleFactor:
-    Cypress.env("pluginVisualRegressionForceDeviceScaleFactor") === false
-      ? 1
-      : 1 / window.devicePixelRatio,
-  updateImages:
-    options.updateImages ||
-    (Cypress.env("pluginVisualRegressionUpdateImages") as
-      | boolean
-      | undefined) ||
-    false,
-  imagesDir:
+const getImagesDir = (options: Cypress.MatchImageOptions) => {
+  const imagesDir =
     options.imagesDir ||
-    (Cypress.env("pluginVisualRegressionImagesDir") as string | undefined) ||
-    "__image_snapshots__",
-  maxDiffThreshold:
-    options.maxDiffThreshold ||
-    (Cypress.env("pluginVisualRegressionMaxDiffThreshold") as
-      | number
-      | undefined) ||
-    0.01,
-  diffConfig:
-    options.diffConfig ||
-    (Cypress.env("pluginVisualRegressionDiffConfig") as
-      | Parameters<typeof pixelmatch>[5]
-      | undefined) ||
-    {},
-  screenshotConfig:
-    options.screenshotConfig ||
-    (Cypress.env("pluginVisualRegressionScreenshotConfig") as
-      | Partial<Cypress.ScreenshotDefaultsOptions>
-      | undefined) ||
-    {},
-});
+    (Cypress.env("pluginVisualRegressionImagesDir") as string | undefined);
+
+  // TODO: remove in 4.0.0
+  if (imagesDir) {
+    console.warn(
+      "@frsource/cypress-plugin-visual-regression-diff] `imagesDir` option is deprecated, use `imagesPath` instead (https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff#configuration)"
+    );
+  }
+
+  return imagesDir;
+};
+
+export const getConfig = (options: Cypress.MatchImageOptions) => {
+  const imagesDir = getImagesDir(options);
+
+  return {
+    scaleFactor:
+      Cypress.env("pluginVisualRegressionForceDeviceScaleFactor") === false
+        ? 1
+        : 1 / window.devicePixelRatio,
+    updateImages:
+      options.updateImages ||
+      (Cypress.env("pluginVisualRegressionUpdateImages") as
+        | boolean
+        | undefined) ||
+      false,
+    imagesPath:
+      (imagesDir && `{spec_path}/${imagesDir}`) ||
+      options.imagesPath ||
+      (Cypress.env("pluginVisualRegressionImagesPath") as string | undefined) ||
+      "{spec_path}/__image_snapshots__",
+    maxDiffThreshold:
+      options.maxDiffThreshold ||
+      (Cypress.env("pluginVisualRegressionMaxDiffThreshold") as
+        | number
+        | undefined) ||
+      0.01,
+    diffConfig:
+      options.diffConfig ||
+      (Cypress.env("pluginVisualRegressionDiffConfig") as
+        | Parameters<typeof pixelmatch>[5]
+        | undefined) ||
+      {},
+    screenshotConfig:
+      options.screenshotConfig ||
+      (Cypress.env("pluginVisualRegressionScreenshotConfig") as
+        | Partial<Cypress.ScreenshotDefaultsOptions>
+        | undefined) ||
+      {},
+  };
+};
 
 Cypress.Commands.add(
   "matchImage",
@@ -84,7 +108,7 @@ Cypress.Commands.add(
     const {
       scaleFactor,
       updateImages,
-      imagesDir,
+      imagesPath,
       maxDiffThreshold,
       diffConfig,
       screenshotConfig,
@@ -92,11 +116,11 @@ Cypress.Commands.add(
 
     return cy
       .then(() =>
-        cy.task(
+        cy.task<string>(
           TASK.getScreenshotPath,
           {
             title,
-            imagesDir,
+            imagesPath,
             specPath: Cypress.spec.relative,
           },
           { log: false }
@@ -105,7 +129,7 @@ Cypress.Commands.add(
       .then((screenshotPath) => {
         let imgPath: string;
         return ($el ? cy.wrap($el) : cy)
-          .screenshot(screenshotPath as string, {
+          .screenshot(screenshotPath, {
             ...screenshotConfig,
             onAfterScreenshot(el, props) {
               imgPath = props.path;

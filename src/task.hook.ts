@@ -4,7 +4,13 @@ import { PNG } from "pngjs";
 import pixelmatch, { PixelmatchOptions } from "pixelmatch";
 import moveFile from "move-file";
 import sanitize from "sanitize-filename";
-import { FILE_SUFFIX, IMAGE_SNAPSHOT_PREFIX, TASK } from "./constants";
+import {
+  FILE_SUFFIX,
+  IMAGE_SNAPSHOT_PREFIX,
+  TASK,
+  PATH_VARIABLES,
+  WINDOWS_LIKE_DRIVE_REGEX,
+} from "./constants";
 import { alignImagesToSameSize, importAndScaleImage } from "./image.utils";
 import type { CompareImagesTaskReturn } from "./types";
 
@@ -27,19 +33,33 @@ const moveSyncSafe = (pathFrom: string, pathTo: string) =>
 
 export const getScreenshotPathTask = ({
   title,
-  imagesDir,
+  imagesPath,
   specPath,
 }: {
   title: string;
-  imagesDir: string;
+  imagesPath: string;
   specPath: string;
-}) =>
-  path.join(
+}) => {
+  const parsePathPartVariables = (pathPart: string, i: number) => {
+    if (pathPart === PATH_VARIABLES.specPath) {
+      return path.dirname(specPath);
+    } else if (i === 0 && !pathPart) {
+      // when unix-like absolute path
+      return PATH_VARIABLES.unixSystemRootPath;
+    } else if (i === 0 && WINDOWS_LIKE_DRIVE_REGEX.test(pathPart)) {
+      // when win-like absolute path
+      return path.join(PATH_VARIABLES.winSystemRootPath, pathPart[0]);
+    }
+
+    return pathPart;
+  };
+
+  return path.join(
     IMAGE_SNAPSHOT_PREFIX,
-    path.dirname(specPath),
-    ...imagesDir.split("/"),
+    ...imagesPath.split("/").map(parsePathPartVariables),
     `${sanitize(title)}${FILE_SUFFIX.actual}.png`
   );
+};
 
 export const approveImageTask = ({ img }: { img: string }) => {
   const oldImg = img.replace(FILE_SUFFIX.actual, "");

@@ -15,3 +15,11 @@ export const TASK = {
   doesFileExist: `${PLUGIN_NAME}-doesFileExist`,
   /* c8 ignore next */
 };
+
+export const PATH_VARIABLES = {
+  specPath: "{spec_path}",
+  unixSystemRootPath: "{unix_system_root_path}",
+  winSystemRootPath: "{win_system_root_path}",
+};
+
+export const WINDOWS_LIKE_DRIVE_REGEX = /^[A-Z]:$/;
