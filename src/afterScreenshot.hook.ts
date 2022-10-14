@@ -25,7 +25,7 @@ const getConfigVariableOrThrow = <K extends keyof Cypress.PluginConfigOptions>(
 };
 /* c8 ignore stop */
 
-const parseAbsolutePath = ({
+export const parseAbsolutePath = ({
   screenshotPath,
   projectRoot,
 }: {

@@ -22,16 +22,47 @@ const writeTmpFixture = async (pathToWriteTo: string, fixtureName: string) =>
   );
 
 describe("getScreenshotPathTask", () => {
+  const specPath = "some/nested/spec-path/spec.ts";
   it("returns sanitized path", () => {
     expect(
       getScreenshotPathTask({
         title: "some-title-withśpęćiał人物",
-        imagesDir: "nested/images/dir",
-        specPath: "some/nested/spec-path/spec.ts",
+        imagesPath: "nested/images/dir",
+        specPath,
       })
     ).toBe(
-      "__cp-visual-regression-diff_snapshots__/some/nested/spec-path/nested/images/dir/some-title-withśpęćiał人物.actual.png"
+      "__cp-visual-regression-diff_snapshots__/nested/images/dir/some-title-withśpęćiał人物.actual.png"
     );
+  });
+
+  it("supports {spec_path} variable", () => {
+    expect(
+      getScreenshotPathTask({
+        title: "some-title",
+        imagesPath: "{spec_path}/images/dir",
+        specPath,
+      })
+    ).toBe(
+      "__cp-visual-regression-diff_snapshots__/some/nested/spec-path/images/dir/some-title.actual.png"
+    );
+  });
+
+  it("supports OS-specific absolute paths", () => {
+    expect(
+      getScreenshotPathTask({
+        title: "some-title",
+        imagesPath: "/images/dir",
+        specPath,
+      })
+    ).toBe("__cp-visual-regression-diff_snapshots__/{unix_system_root_path}/images/dir/some-title.actual.png");
+
+    expect(
+      getScreenshotPathTask({
+        title: "some-title",
+        imagesPath: "C:/images/dir",
+        specPath,
+      })
+    ).toBe("__cp-visual-regression-diff_snapshots__/{win_system_root_path}/C/images/dir/some-title.actual.png");
   });
 });
 
