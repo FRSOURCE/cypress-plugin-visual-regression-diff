@@ -1,9 +1,16 @@
 import path from "path";
-import fs from "fs";
+import { promises as fs } from "fs";
 import moveFile from "move-file";
-import { IMAGE_SNAPSHOT_PREFIX } from "./constants";
+import { IMAGE_SNAPSHOT_PREFIX, PATH_VARIABLES } from "./constants";
 
 type NotFalsy<T> = T extends false | null | undefined ? never : T;
+
+const MIMIC_ROOT_WIN_REGEX = new RegExp(
+  `^${PATH_VARIABLES.winSystemRootPath}\\${path.sep}([A-Z])\\${path.sep}`
+);
+const MIMIC_ROOT_UNIX_REGEX = new RegExp(
+  `^${PATH_VARIABLES.unixSystemRootPath}\\${path.sep}`
+);
 
 const getConfigVariableOrThrow = <K extends keyof Cypress.PluginConfigOptions>(
   config: Cypress.PluginConfigOptions,
@@ -14,25 +21,33 @@ const getConfigVariableOrThrow = <K extends keyof Cypress.PluginConfigOptions>(
   }
 
   /* c8 ignore start */
-  throw `[Image snapshot] CypressConfig.${name} cannot be missing or \`false\`!`;
+  throw `[@frsource/cypress-plugin-visual-regression-diff] CypressConfig.${name} cannot be missing or \`false\`!`;
 };
 /* c8 ignore stop */
 
-const removeScreenshotsDirectory = (
-  screenshotsFolder: string,
-  onSuccess: () => void,
-  onError: (e: Error) => void
-) => {
-  fs.rm(
-    path.join(screenshotsFolder, IMAGE_SNAPSHOT_PREFIX),
-    { recursive: true, force: true },
-    (err) => {
-      /* c8 ignore start */
-      if (err) return onError(err);
-      /* c8 ignore stop */
-      onSuccess();
-    }
-  );
+const parseAbsolutePath = ({
+  screenshotPath,
+  projectRoot,
+}: {
+  screenshotPath: string;
+  projectRoot: string;
+}) => {
+  let newAbsolutePath: string;
+  const matchedMimicingWinRoot = screenshotPath.match(MIMIC_ROOT_WIN_REGEX);
+  const matchedMimicingUnixRoot = screenshotPath.match(MIMIC_ROOT_UNIX_REGEX);
+  if (matchedMimicingWinRoot && matchedMimicingWinRoot[1]) {
+    const driveLetter = matchedMimicingWinRoot[1];
+    newAbsolutePath = path.join(
+      `${driveLetter}:\\`,
+      screenshotPath.substring(matchedMimicingWinRoot[0].length)
+    );
+  } else if (matchedMimicingUnixRoot) {
+    newAbsolutePath =
+      path.sep + screenshotPath.substring(matchedMimicingUnixRoot[0].length);
+  } else {
+    newAbsolutePath = path.join(projectRoot, screenshotPath);
+  }
+  return path.normalize(newAbsolutePath);
 };
 
 export const initAfterScreenshotHook =
@@ -47,27 +62,25 @@ export const initAfterScreenshotHook =
     /* c8 ignore start */
     if (details.name?.indexOf(IMAGE_SNAPSHOT_PREFIX) !== 0) return;
     /* c8 ignore stop */
-    return new Promise((resolve, reject) => {
-      const screenshotsFolder = getConfigVariableOrThrow(
-        config,
-        "screenshotsFolder"
-      );
-
-      const newRelativePath = details.name.substring(
-        IMAGE_SNAPSHOT_PREFIX.length + path.sep.length
-      );
-      const newAbsolutePath = path.normalize(
-        path.join(config.projectRoot, newRelativePath)
-      );
-
-      void moveFile(details.path, newAbsolutePath)
-        .then(() =>
-          removeScreenshotsDirectory(
-            screenshotsFolder,
-            () => resolve({ path: newAbsolutePath }),
-            reject
-          )
-        )
-        .catch(reject);
+    const screenshotsFolder = getConfigVariableOrThrow(
+      config,
+      "screenshotsFolder"
+    );
+    const screenshotPath = details.name.substring(
+      IMAGE_SNAPSHOT_PREFIX.length + path.sep.length
+    );
+    const newAbsolutePath = parseAbsolutePath({
+      screenshotPath,
+      projectRoot: config.projectRoot,
     });
+
+    return (async () => {
+      await moveFile(details.path, newAbsolutePath);
+      await fs.rm(path.join(screenshotsFolder, IMAGE_SNAPSHOT_PREFIX), {
+        recursive: true,
+        force: true,
+      });
+
+      return { path: newAbsolutePath };
+    })();
   };

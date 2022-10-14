@@ -10,25 +10,13 @@ declare global {
       screenshotConfig?: Partial<Cypress.ScreenshotDefaultsOptions>;
       diffConfig?: Parameters<typeof pixelmatch>[5];
       updateImages?: boolean;
+      /**
+       * @deprecated since version 3.0, use imagesPath instead
+       */
       imagesDir?: string;
+      imagesPath?: string;
       maxDiffThreshold?: number;
       title?: string;
-      matchAgainstPath?: string;
-      // IDEA: to be implemented if support for files NOT from filesystem needed
-      // matchAgainst?: string | Buffer;
-    };
-
-    type MatchImageReturn = {
-      diffValue: number | undefined;
-      imgNewPath: string;
-      imgPath: string;
-      imgDiffPath: string;
-      imgNewBase64: string | undefined;
-      imgBase64: string | undefined;
-      imgDiffBase64: string | undefined;
-      imgNew: InstanceType<Cypress['Buffer']> | undefined;
-      img: InstanceType<Cypress['Buffer']> | undefined;
-      imgDiff: InstanceType<Cypress['Buffer']> | undefined;
     };
 
     interface Chainable<Subject> {
@@ -37,10 +25,12 @@ declare global {
        * @memberof Cypress.Chainable
        * @example cy.get('.my-element').matchImage();
        */
-      matchImage(options?: Cypress.MatchImageOptions): Chainable<MatchImageReturn>;
+      matchImage(options?: Cypress.MatchImageOptions): Chainable<Subject>;
     }
   }
 }
+
+const nameCacheCounter: Record<string, number> = {};
 
 const constructCypressError = (log: Cypress.Log, err: Error) => {
   // only way to throw & log the message properly in Cypress
@@ -50,77 +40,96 @@ const constructCypressError = (log: Cypress.Log, err: Error) => {
   return err;
 };
 
-export const getConfig = (options: Cypress.MatchImageOptions) => ({
-  scaleFactor:
-    Cypress.env("pluginVisualRegressionForceDeviceScaleFactor") === false
-      ? 1
-      : 1 / window.devicePixelRatio,
-  updateImages:
-    options.updateImages ||
-    (Cypress.env("pluginVisualRegressionUpdateImages") as
-      | boolean
-      | undefined) ||
-    false,
-  imagesDir:
+const getImagesDir = (options: Cypress.MatchImageOptions) => {
+  const imagesDir =
     options.imagesDir ||
-    (Cypress.env("pluginVisualRegressionImagesDir") as string | undefined) ||
-    "__image_snapshots__",
-  maxDiffThreshold:
-    options.maxDiffThreshold ||
-    (Cypress.env("pluginVisualRegressionMaxDiffThreshold") as
-      | number
-      | undefined) ||
-    0.01,
-  diffConfig:
-    options.diffConfig ||
-    (Cypress.env("pluginVisualRegressionDiffConfig") as
-      | Parameters<typeof pixelmatch>[5]
-      | undefined) ||
-    {},
-  screenshotConfig:
-    options.screenshotConfig ||
-    (Cypress.env("pluginVisualRegressionScreenshotConfig") as
-      | Partial<Cypress.ScreenshotDefaultsOptions>
-      | undefined) ||
-    {},
-  matchAgainstPath: options.matchAgainstPath ||  undefined,
-});
+    (Cypress.env("pluginVisualRegressionImagesDir") as string | undefined);
+
+  // TODO: remove in 4.0.0
+  if (imagesDir) {
+    console.warn(
+      "@frsource/cypress-plugin-visual-regression-diff] `imagesDir` option is deprecated, use `imagesPath` instead (https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff#configuration)"
+    );
+  }
+
+  return imagesDir;
+};
+
+export const getConfig = (options: Cypress.MatchImageOptions) => {
+  const imagesDir = getImagesDir(options);
+
+  return {
+    scaleFactor:
+      Cypress.env("pluginVisualRegressionForceDeviceScaleFactor") === false
+        ? 1
+        : 1 / window.devicePixelRatio,
+    updateImages:
+      options.updateImages ||
+      (Cypress.env("pluginVisualRegressionUpdateImages") as
+        | boolean
+        | undefined) ||
+      false,
+    imagesPath:
+      (imagesDir && `{spec_path}/${imagesDir}`) ||
+      options.imagesPath ||
+      (Cypress.env("pluginVisualRegressionImagesPath") as string | undefined) ||
+      "{spec_path}/__image_snapshots__",
+    maxDiffThreshold:
+      options.maxDiffThreshold ||
+      (Cypress.env("pluginVisualRegressionMaxDiffThreshold") as
+        | number
+        | undefined) ||
+      0.01,
+    diffConfig:
+      options.diffConfig ||
+      (Cypress.env("pluginVisualRegressionDiffConfig") as
+        | Parameters<typeof pixelmatch>[5]
+        | undefined) ||
+      {},
+    screenshotConfig:
+      options.screenshotConfig ||
+      (Cypress.env("pluginVisualRegressionScreenshotConfig") as
+        | Partial<Cypress.ScreenshotDefaultsOptions>
+        | undefined) ||
+      {},
+  };
+};
 
 Cypress.Commands.add(
   "matchImage",
   { prevSubject: "optional" },
   (subject, options = {}) => {
     const $el = subject as JQuery<HTMLElement> | undefined;
-    let title: string;
+    let title = options.title || Cypress.currentTest.titlePath.join(" ");
+    if (typeof nameCacheCounter[title] === "undefined")
+      nameCacheCounter[title] = -1;
+    title += ` #${++nameCacheCounter[title]}`;
 
     const {
       scaleFactor,
       updateImages,
-      imagesDir,
+      imagesPath,
       maxDiffThreshold,
       diffConfig,
       screenshotConfig,
-      matchAgainstPath,
     } = getConfig(options);
 
     return cy
       .then(() =>
-        cy.task<{ screenshotPath: string; title: string }>(
-          TASK.getScreenshotPathInfo,
+        cy.task<string>(
+          TASK.getScreenshotPath,
           {
-            titleFromOptions:
-              options.title || Cypress.currentTest.titlePath.join(" "),
-            imagesDir,
+            title,
+            imagesPath,
             specPath: Cypress.spec.relative,
           },
           { log: false }
         )
       )
-      .then(({ screenshotPath, title: titleFromTask }) => {
-        title = titleFromTask;
+      .then((screenshotPath) => {
         let imgPath: string;
         return ($el ? cy.wrap($el) : cy)
-          .screenshot(screenshotPath as string, {
+          .screenshot(screenshotPath, {
             ...screenshotConfig,
             onAfterScreenshot(el, props) {
               imgPath = props.path;
@@ -130,14 +139,14 @@ Cypress.Commands.add(
           })
           .then(() => imgPath);
       })
-      .then((imgPath) => {
-        return cy
+      .then((imgPath) =>
+        cy
           .task<CompareImagesTaskReturn>(
             TASK.compareImages,
             {
               scaleFactor,
               imgNew: imgPath,
-              imgOld: matchAgainstPath || imgPath.replace(FILE_SUFFIX.actual, ""),
+              imgOld: imgPath.replace(FILE_SUFFIX.actual, ""),
               updateImages,
               maxDiffThreshold,
               diffConfig,
@@ -148,7 +157,7 @@ Cypress.Commands.add(
             res,
             imgPath,
           }))
-      })
+      )
       .then(({ res, imgPath }) => {
         const log = Cypress.log({
           name: "log",
@@ -184,19 +193,6 @@ Cypress.Commands.add(
         if (res.error) {
           log.set("consoleProps", () => res);
           throw constructCypressError(log, new Error(res.message));
-        }
-
-        return {
-          diffValue: res.imgDiff,
-          imgNewPath: imgPath,
-          imgPath: imgPath.replace(FILE_SUFFIX.actual, ""),
-          imgDiffPath: imgPath.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
-          imgNewBase64: res.imgNewBase64,
-          imgBase64: res.imgOldBase64,
-          imgDiffBase64: res.imgDiffBase64,
-          imgNew: typeof res.imgNewBase64 === 'string' ? Cypress.Buffer.from(res.imgNewBase64, 'base64') : undefined,
-          img: typeof res.imgOldBase64 === 'string' ? Cypress.Buffer.from(res.imgOldBase64, 'base64') : undefined,
-          imgDiff: typeof res.imgDiffBase64 === 'string' ? Cypress.Buffer.from(res.imgDiffBase64, 'base64') : undefined,
         }
       });
   }

@@ -174,9 +174,13 @@ cy.matchImage({
   // default: false
   updateImages: true,
   // directory path in which screenshot images will be stored
-  // image visualiser will normalise path separators depending on OS it's being run within, so always use / for nested paths
-  // default: '__image_snapshots__'
-  imagesDir: 'this-might-be-your-custom/maybe-nested-directory',
+  // relative path are resolved against project root
+  // absolute paths (both on unix and windows OS) supported
+  // path separators will be normalised by the plugin depending on OS, you should always use / as path separator, e.g.: C:/my-directory/nested for windows-like drive notation
+  // There are one special variable available to be used in the path:
+  // - {spec_path} - relative path leading from project root to the current spec file directory (e.g. `/src/components/my-tested-component`)
+  // default: '{spec_path}/__image_snapshots__'
+  imagesPath: 'this-might-be-your-custom/maybe-nested-directory',
   // maximum threshold above which the test should fail
   // default: 0.01
   maxDiffThreshold: 0.1,

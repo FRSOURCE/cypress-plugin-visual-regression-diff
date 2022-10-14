@@ -1,17 +1,17 @@
 import fs from "fs";
+import path from "path";
 import { PNG } from "pngjs";
 import pixelmatch, { PixelmatchOptions } from "pixelmatch";
 import moveFile from "move-file";
-import path from "path";
-import { FILE_SUFFIX, IMAGE_SNAPSHOT_PREFIX, TASK } from "./constants";
+import sanitize from "sanitize-filename";
 import {
-  cleanupUnused,
-  alignImagesToSameSize,
-  scaleImageAndWrite,
-  isImageCurrentVersion,
-  writePNG,
-} from "./image.utils";
-import { generateScreenshotPath } from "./screenshotPath.utils";
+  FILE_SUFFIX,
+  IMAGE_SNAPSHOT_PREFIX,
+  TASK,
+  PATH_VARIABLES,
+  WINDOWS_LIKE_DRIVE_REGEX,
+} from "./constants";
+import { alignImagesToSameSize, importAndScaleImage } from "./image.utils";
 import type { CompareImagesTaskReturn } from "./types";
 
 export type CompareImagesCfg = {
@@ -31,22 +31,34 @@ const unlinkSyncSafe = (path: string) =>
 const moveSyncSafe = (pathFrom: string, pathTo: string) =>
   fs.existsSync(pathFrom) && moveFile.sync(pathFrom, pathTo);
 
-export const getScreenshotPathInfoTask = (cfg: {
-  titleFromOptions: string;
-  imagesDir: string;
+export const getScreenshotPathTask = ({
+  title,
+  imagesPath,
+  specPath,
+}: {
+  title: string;
+  imagesPath: string;
   specPath: string;
 }) => {
-  const screenshotPath = generateScreenshotPath(cfg);
+  const parsePathPartVariables = (pathPart: string, i: number) => {
+    if (pathPart === PATH_VARIABLES.specPath) {
+      return path.dirname(specPath);
+    } else if (i === 0 && !pathPart) {
+      // when unix-like absolute path
+      return PATH_VARIABLES.unixSystemRootPath;
+    } else if (i === 0 && WINDOWS_LIKE_DRIVE_REGEX.test(pathPart)) {
+      // when win-like absolute path
+      return path.join(PATH_VARIABLES.winSystemRootPath, pathPart[0]);
+    }
 
-  return { screenshotPath, title: path.basename(screenshotPath, ".png") };
-};
+    return pathPart;
+  };
 
-export const cleanupImagesTask = (config: Cypress.PluginConfigOptions) => {
-  if (config.env["pluginVisualRegressionCleanupUnusedImages"]) {
-    cleanupUnused(config.projectRoot);
-  }
-
-  return null;
+  return path.join(
+    IMAGE_SNAPSHOT_PREFIX,
+    ...imagesPath.split("/").map(parsePathPartVariables),
+    `${sanitize(title)}${FILE_SUFFIX.actual}.png`
+  );
 };
 
 export const approveImageTask = ({ img }: { img: string }) => {
@@ -70,13 +82,11 @@ export const compareImagesTask = async (
   let error = false;
 
   if (fs.existsSync(cfg.imgOld) && !cfg.updateImages) {
-    const rawImgNewBuffer = await scaleImageAndWrite({
+    const rawImgNew = await importAndScaleImage({
       scaleFactor: cfg.scaleFactor,
       path: cfg.imgNew,
     });
-    const rawImgNew = PNG.sync.read(rawImgNewBuffer);
-    const rawImgOldBuffer = fs.readFileSync(cfg.imgOld);
-    const rawImgOld = PNG.sync.read(rawImgOldBuffer);
+    const rawImgOld = PNG.sync.read(fs.readFileSync(cfg.imgOld));
     const isImgSizeDifferent =
       rawImgNew.height !== rawImgOld.height ||
       rawImgNew.width !== rawImgOld.width;
@@ -120,7 +130,7 @@ export const compareImagesTask = async (
     imgOldBase64 = PNG.sync.write(imgOld).toString("base64");
 
     if (error) {
-      writePNG(
+      fs.writeFileSync(
         cfg.imgNew.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
         diffBuffer
       );
@@ -134,13 +144,8 @@ export const compareImagesTask = async (
         maxDiffThreshold: cfg.maxDiffThreshold,
       };
     } else {
-      if (rawImgOld && !isImageCurrentVersion(rawImgOldBuffer)) {
-        writePNG(cfg.imgNew, rawImgNewBuffer);
-        moveFile.sync(cfg.imgNew, cfg.imgOld);
-      } else {
-        // don't overwrite file if it's the same (imgDiff < cfg.maxDiffThreshold && !isImgSizeDifferent)
-        fs.unlinkSync(cfg.imgNew);
-      }
+      // don't overwrite file if it's the same (imgDiff < cfg.maxDiffThreshold && !isImgSizeDifferent)
+      fs.unlinkSync(cfg.imgNew);
     }
   } else {
     // there is no "old screenshot" or screenshots should be immediately updated
@@ -148,8 +153,6 @@ export const compareImagesTask = async (
     imgNewBase64 = "";
     imgDiffBase64 = "";
     imgOldBase64 = "";
-    const imgBuffer = fs.readFileSync(cfg.imgNew);
-    writePNG(cfg.imgNew, imgBuffer);
     moveFile.sync(cfg.imgNew, cfg.imgOld);
   }
 
@@ -179,9 +182,8 @@ export const doesFileExistTask = ({ path }: { path: string }) =>
   fs.existsSync(path);
 
 /* c8 ignore start */
-export const initTaskHook = (config: Cypress.PluginConfigOptions) => ({
-  [TASK.getScreenshotPathInfo]: getScreenshotPathInfoTask,
-  [TASK.cleanupImages]: cleanupImagesTask.bind(undefined, config),
+export const initTaskHook = () => ({
+  [TASK.getScreenshotPath]: getScreenshotPathTask,
   [TASK.doesFileExist]: doesFileExistTask,
   [TASK.approveImage]: approveImageTask,
   [TASK.compareImages]: compareImagesTask,
