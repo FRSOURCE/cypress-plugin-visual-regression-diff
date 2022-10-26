@@ -10,7 +10,8 @@
     "paths": {
       "@fixtures/*": ["__tests__/partials/*"],
       "@mocks/*": ["__tests__/mocks/*"]
-    }
+    },
+    "resolveJsonModule": true
   },
   "include": ["src/*.ts", "vitest.config.ts"]
 }
