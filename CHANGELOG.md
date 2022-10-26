@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.0.0...v3.0.1) (2022-10-26)
+
+
+### Bug Fixes
+
+* reset name cache after tests run ([bfbf138](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/bfbf138fa52de06072db32a0181821b56ca5230f))
+
 # [3.0.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v2.3.12...v3.0.0) (2022-10-26)
 
 
