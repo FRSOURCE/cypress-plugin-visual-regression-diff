@@ -1,4 +1,3 @@
-/* c8 ignore start */
 const PLUGIN_NAME = "cp-visual-regression-diff";
 export const LINK_PREFIX = `#${PLUGIN_NAME}-`;
 export const OVERLAY_CLASS = `${PLUGIN_NAME}-overlay`;
@@ -18,5 +17,12 @@ export const TASK = {
   /* c8 ignore next */
 };
 
+export const PATH_VARIABLES = {
+  specPath: "{spec_path}",
+  unixSystemRootPath: "{unix_system_root_path}",
+  winSystemRootPath: "{win_system_root_path}",
+} as const;
+
+export const WINDOWS_LIKE_DRIVE_REGEX = /^[A-Z]:$/;
+
 export const METADATA_KEY = "FRSOURCE_CPVRD_V";
-/* c8 ignore stop */

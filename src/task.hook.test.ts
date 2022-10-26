@@ -40,17 +40,59 @@ const writeTmpFixture = async (pathToWriteTo: string, fixtureName: string) => {
 };
 
 describe("getScreenshotPathInfoTask", () => {
+  const specPath = "some/nested/spec-path/spec.ts";
+
   it("returns sanitized path and title", () => {
     expect(
       getScreenshotPathInfoTask({
         titleFromOptions: "some-title-withśpęćiał人物",
-        imagesDir: "nested/images/dir",
-        specPath: "some/nested/spec-path/spec.ts",
+        imagesPath: "nested/images/dir",
+        specPath,
       })
     ).toEqual({
       screenshotPath:
-        "__cp-visual-regression-diff_snapshots__/some/nested/spec-path/nested/images/dir/some-title-withśpęćiał人物 #0.actual.png",
+        "__cp-visual-regression-diff_snapshots__/nested/images/dir/some-title-withśpęćiał人物 #0.actual.png",
       title: "some-title-withśpęćiał人物 #0.actual",
+    });
+  });
+
+  it("supports {spec_path} variable", () => {
+    expect(
+      getScreenshotPathInfoTask({
+        titleFromOptions: "some-title",
+        imagesPath: "{spec_path}/images/dir",
+        specPath,
+      })
+    ).toEqual({
+      screenshotPath:
+        "__cp-visual-regression-diff_snapshots__/some/nested/spec-path/images/dir/some-title #0.actual.png",
+      title: "some-title #0.actual",
+    });
+  });
+
+  it("supports OS-specific absolute paths", () => {
+    expect(
+      getScreenshotPathInfoTask({
+        titleFromOptions: "some-title",
+        imagesPath: "/images/dir",
+        specPath,
+      })
+    ).toEqual({
+      screenshotPath:
+        "__cp-visual-regression-diff_snapshots__/{unix_system_root_path}/images/dir/some-title #0.actual.png",
+      title: "some-title #0.actual",
+    });
+
+    expect(
+      getScreenshotPathInfoTask({
+        titleFromOptions: "some-title",
+        imagesPath: "C:/images/dir",
+        specPath,
+      })
+    ).toEqual({
+      screenshotPath:
+        "__cp-visual-regression-diff_snapshots__/{win_system_root_path}/C/images/dir/some-title #0.actual.png",
+      title: "some-title #0.actual",
     });
   });
 });
@@ -60,7 +102,7 @@ describe("cleanupImagesTask", () => {
     const generateUsedScreenshotPath = async (projectRoot: string) => {
       const screenshotPathWithPrefix = generateScreenshotPath({
         titleFromOptions: "some-file",
-        imagesDir: "images",
+        imagesPath: "images",
         specPath: "some/spec/path",
       });
       return path.join(

@@ -3,7 +3,7 @@ import { PNG } from "pngjs";
 import pixelmatch, { PixelmatchOptions } from "pixelmatch";
 import moveFile from "move-file";
 import path from "path";
-import { FILE_SUFFIX, IMAGE_SNAPSHOT_PREFIX, TASK } from "./constants";
+import { FILE_SUFFIX, TASK } from "./constants";
 import {
   cleanupUnused,
   alignImagesToSameSize,
@@ -33,7 +33,7 @@ const moveSyncSafe = (pathFrom: string, pathTo: string) =>
 
 export const getScreenshotPathInfoTask = (cfg: {
   titleFromOptions: string;
-  imagesDir: string;
+  imagesPath: string;
   specPath: string;
 }) => {
   const screenshotPath = generateScreenshotPath(cfg);
@@ -65,15 +65,15 @@ export const compareImagesTask = async (
   cfg: CompareImagesCfg
 ): Promise<CompareImagesTaskReturn> => {
   const messages = [] as string[];
+  const rawImgNewBuffer = await scaleImageAndWrite({
+    scaleFactor: cfg.scaleFactor,
+    path: cfg.imgNew,
+  });
   let imgDiff: number | undefined;
   let imgNewBase64: string, imgOldBase64: string, imgDiffBase64: string;
   let error = false;
 
   if (fs.existsSync(cfg.imgOld) && !cfg.updateImages) {
-    const rawImgNewBuffer = await scaleImageAndWrite({
-      scaleFactor: cfg.scaleFactor,
-      path: cfg.imgNew,
-    });
     const rawImgNew = PNG.sync.read(rawImgNewBuffer);
     const rawImgOldBuffer = fs.readFileSync(cfg.imgOld);
     const rawImgOld = PNG.sync.read(rawImgOldBuffer);
@@ -148,8 +148,7 @@ export const compareImagesTask = async (
     imgNewBase64 = "";
     imgDiffBase64 = "";
     imgOldBase64 = "";
-    const imgBuffer = fs.readFileSync(cfg.imgNew);
-    writePNG(cfg.imgNew, imgBuffer);
+    writePNG(cfg.imgNew, rawImgNewBuffer);
     moveFile.sync(cfg.imgNew, cfg.imgOld);
   }
 
