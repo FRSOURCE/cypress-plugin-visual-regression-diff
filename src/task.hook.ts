@@ -11,7 +11,10 @@ import {
   isImageCurrentVersion,
   writePNG,
 } from "./image.utils";
-import { generateScreenshotPath } from "./screenshotPath.utils";
+import {
+  generateScreenshotPath,
+  resetScreenshotNameCache,
+} from "./screenshotPath.utils";
 import type { CompareImagesTaskReturn } from "./types";
 
 export type CompareImagesCfg = {
@@ -45,6 +48,8 @@ export const cleanupImagesTask = (config: Cypress.PluginConfigOptions) => {
   if (config.env["pluginVisualRegressionCleanupUnusedImages"]) {
     cleanupUnused(config.projectRoot);
   }
+
+  resetScreenshotNameCache();
 
   return null;
 };

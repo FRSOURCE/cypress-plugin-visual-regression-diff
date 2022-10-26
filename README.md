@@ -137,7 +137,7 @@ Or, if you would like to make a screenshot of whole document:
 cy.matchImage();
 ```
 
-`matchImage` command will do a screenshot and compare it with image from a previous run. In case of regression the test will fail and you'll get a "Compare images" button to see what's a root of a problem.
+`matchImage` command will do a screenshot and compare it with image from a previous run. In case of regression the test will fail and you'll get a "See comparison" button to see what's a root of a problem.
 
 ## Example
 

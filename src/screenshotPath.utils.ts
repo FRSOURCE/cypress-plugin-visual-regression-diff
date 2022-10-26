@@ -62,3 +62,7 @@ export const wasScreenshotUsed = (imagePath: string) => {
     num <= nameCacheCounter[screenshotPath]
   );
 };
+
+export const resetScreenshotNameCache = () => {
+  Object.keys(nameCacheCounter).forEach((k) => delete nameCacheCounter[k]);
+};
