@@ -1,3 +1,24 @@
+# [3.0.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v2.3.12...v3.0.0) (2022-10-26)
+
+
+### Bug Fixes
+
+* security vulnerability ([d6f849c](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/d6f849cb017e452d9f121866a6429d4bee4b5f18))
+
+
+### Features
+
+* add matchAgainstPath option ([#146](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/146)) ([7a5e3a8](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/7a5e3a8ec5aa766e38ee372e11a6d1c155105126)), closes [#88](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/88)
+* auto clean unused files ([#124](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/124)) ([38679a7](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/38679a730edc4083b4bc751b19bc161bbb72d159)), closes [#118](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/118)
+* introduce imagesPath option ([#152](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/152)) ([961e137](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/961e137099ba22aa9f0b6d36e6e73d495196a764)), closes [#147](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/147)
+
+
+### BREAKING CHANGES
+
+* deprecate imagesDir option in favor of imagesPath - see docs for additional information
+* To use autocleanup feature you need to update all of the screenshots, best do it by running your test suite with cypress env 'pluginVisualRegressionUpdateImages' set to true.
+* matchImage returns object containing comparison details from now on (previously was returning subject element from a chain)
+
 ## [2.3.12](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v2.3.11...v2.3.12) (2022-10-22)
 
 ## [2.3.11](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v2.3.10...v2.3.11) (2022-10-19)
