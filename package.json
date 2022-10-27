@@ -74,10 +74,10 @@
     "@types/pngjs": "6.0.1",
     "@types/sharp": "0.31.0",
     "@types/tmp": "0.2.3",
-    "@typescript-eslint/eslint-plugin": "5.40.1",
-    "@typescript-eslint/parser": "5.40.1",
+    "@typescript-eslint/eslint-plugin": "5.41.0",
+    "@typescript-eslint/parser": "5.41.0",
     "@vitest/coverage-c8": "0.24.3",
-    "cypress": "10.10.0",
+    "cypress": "10.11.0",
     "del-cli": "5.0.0",
     "eslint": "8.26.0",
     "eslint-config-prettier": "8.5.0",
@@ -107,7 +107,7 @@
     "Cypress image snapshot"
   ],
   "dependencies": {
-    "@frsource/base64": "1.0.3",
+    "@frsource/base64": "1.0.4",
     "glob": "8.0.3",
     "meta-png": "1.0.3",
     "move-file": "2.1.0",
