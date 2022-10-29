@@ -125,7 +125,7 @@ jobs:
       - name: Install dependencies
         run: yarn --immutable
       - name: Test integration (with coverage)
-        uses: paambaati/codeclimate-action@93c6213edc13fcb74a684a39a32956ebf417dd1c
+        uses: paambaati/codeclimate-action@d0cd1d0602aae3e0634e39980ab4cdb2307848c7
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
