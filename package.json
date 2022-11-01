@@ -74,9 +74,9 @@
     "@types/pngjs": "6.0.1",
     "@types/sharp": "0.31.0",
     "@types/tmp": "0.2.3",
-    "@typescript-eslint/eslint-plugin": "5.41.0",
-    "@typescript-eslint/parser": "5.41.0",
-    "@vitest/coverage-c8": "0.24.3",
+    "@typescript-eslint/eslint-plugin": "5.42.0",
+    "@typescript-eslint/parser": "5.42.0",
+    "@vitest/coverage-c8": "0.24.5",
     "cpy-cli": "^4.2.0",
     "cypress": "10.11.0",
     "del-cli": "5.0.0",
@@ -91,7 +91,7 @@
     "tmp-promise": "3.0.3",
     "typescript": "4.8.4",
     "vite-tsconfig-paths": "3.5.2",
-    "vitest": "0.24.3"
+    "vitest": "0.24.5"
   },
   "keywords": [
     "Cypress",
