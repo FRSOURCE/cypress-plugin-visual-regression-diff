@@ -1,3 +1,10 @@
+## [3.0.3](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.0.2...v3.0.3) (2022-11-01)
+
+
+### Bug Fixes
+
+* ts declaration generation ([1a1e0cc](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/1a1e0ccd4c442d3e4d45f4d899139a08963e0c85))
+
 ## [3.0.2](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.0.1...v3.0.2) (2022-10-27)
 
 
