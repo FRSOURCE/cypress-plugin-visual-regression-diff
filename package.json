@@ -35,7 +35,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "del-cli dist && microbundle src/{support,plugins,constants}.ts --target node --tsconfig tsconfig.build.json -f cjs,modern && del-cli dist/src \"dist/*.{hook,utils}.d.ts\"",
+    "build": "del-cli dist && microbundle src/{support,plugins,constants}.ts --target node --tsconfig tsconfig.build.json -f cjs,modern && cpy 'dist/src/*' dist && del-cli dist/src \"dist/*.{hook,utils}.d.ts\"",
     "lint": "eslint '**/*.ts' --ignore-pattern '**/*.d.ts'",
     "lint:fix": "yarn lint --fix",
     "lint:ci": "yarn lint --max-warnings 0",
@@ -77,6 +77,7 @@
     "@typescript-eslint/eslint-plugin": "5.41.0",
     "@typescript-eslint/parser": "5.41.0",
     "@vitest/coverage-c8": "0.24.3",
+    "cpy-cli": "^4.2.0",
     "cypress": "10.11.0",
     "del-cli": "5.0.0",
     "eslint": "8.26.0",
