@@ -71,54 +71,63 @@ npm install --save-dev @frsource/cypress-plugin-visual-regression-diff
 Next, you need to import the library:
 
 - first, in your support file (located by default in `cypress/support/index.js`):
+
 ```ts
 // typescript / ES6
-import '@frsource/cypress-plugin-visual-regression-diff';
+import "@frsource/cypress-plugin-visual-regression-diff";
 
 // javascript
-require('@frsource/cypress-plugin-visual-regression-diff');
+require("@frsource/cypress-plugin-visual-regression-diff");
 ```
 
 - secondly:
   - (for Cypress 10.0+) in `cypress.config.js` (or `cypress.config.ts`):
+
 ```ts
 // typescript / ES6
-import { defineConfig } from 'cypress';
-import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/plugins';
+import { defineConfig } from "cypress";
+import { initPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
 
 export default defineConfig({
   // initPlugin must be called in the section where it is used: e2e or component
   e2e: {
     setupNodeEvents(on, config) {
       initPlugin(on, config);
-    }
+    },
   },
   component: {
     setupNodeEvents(on, config) {
       initPlugin(on, config);
-    }
-  }
+    },
+  },
 });
 ```
-  - (for Cypress <10.0) in your plugins file (located by default in `cypress/plugins/index.js`):
+
+- (for Cypress <10.0) in your plugins file (located by default in `cypress/plugins/index.js`):
+
 ```ts
 // typescript / ES6
-import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/plugins';
+import { initPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
 
-export default function (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) {
+export default function (
+  on: Cypress.PluginEvents,
+  config: Cypress.PluginConfigOptions
+) {
   initPlugin(on, config);
 
   return config;
-};
+}
 
 // javascript
-const { initPlugin } = require('@frsource/cypress-plugin-visual-regression-diff/plugins');
+const {
+  initPlugin,
+} = require("@frsource/cypress-plugin-visual-regression-diff/plugins");
 
 module.exports = function (on, config) {
   initPlugin(on, config);
 
   return config;
-}
+};
 ```
 
 That's it - now let's see how to use the library in [usage section](#usage).
@@ -128,7 +137,7 @@ That's it - now let's see how to use the library in [usage section](#usage).
 Once installed, the library might be used by writing in your test:
 
 ```ts
-cy.get('.an-element-of-your-choice').matchImage();
+cy.get(".an-element-of-your-choice").matchImage();
 ```
 
 Or, if you would like to make a screenshot of whole document:
@@ -184,7 +193,7 @@ cy.matchImage({
   // maximum threshold above which the test should fail
   // default: 0.01
   maxDiffThreshold: 0.1,
-  // forces scale factor to be set as value "1" 
+  // forces scale factor to be set as value "1"
   // helps with screenshots being scaled 2x on high-density screens like Mac Retina
   // default: true
   forceDeviceScaleFactor: false,
@@ -206,16 +215,15 @@ npx cypress run --env "pluginVisualRegressionUpdateImages=true,pluginVisualRegre
 
 ```ts
 // cypress.config.ts
-import { defineConfig } from 'cypress';
+import { defineConfig } from "cypress";
 
 export default defineConfig({
   env: {
     pluginVisualRegressionUpdateImages: true,
-    pluginVisualRegressionDiffConfig: { threshold: 0.01 }
-  }
-})
+    pluginVisualRegressionDiffConfig: { threshold: 0.01 },
+  },
+});
 {
-  
 }
 ```
 
@@ -235,8 +243,8 @@ For more ways of setting environment variables [take a look here](https://docs.c
 
 Screenshots in Cypress do not scale to the viewport size by default. You can change this behavior:
 
-* globally, by changing default screenshot configuration: <code>Cypress.Screenshot.defaults({ capture: 'viewport' });</code>
-* locally, by passing screenshot configuration directly to the <code>.matchImage</code> command: <code>cy.matchImage({ screenshotConfig: { capture: 'viewport' } });</code>
+- globally, by changing default screenshot configuration: <code>Cypress.Screenshot.defaults({ capture: 'viewport' });</code>
+- locally, by passing screenshot configuration directly to the <code>.matchImage</code> command: <code>cy.matchImage({ screenshotConfig: { capture: 'viewport' } });</code>
 
 </details>
 
