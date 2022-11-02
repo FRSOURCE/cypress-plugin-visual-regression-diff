@@ -17,15 +17,34 @@ declare global {
       imagesPath?: string;
       maxDiffThreshold?: number;
       title?: string;
+      matchAgainstPath?: string;
+      // IDEA: to be implemented if support for files NOT from filesystem needed
+      // matchAgainst?: string | Buffer;
     };
 
+    type MatchImageReturn = {
+      diffValue: number | undefined;
+      imgNewPath: string;
+      imgPath: string;
+      imgDiffPath: string;
+      imgNewBase64: string | undefined;
+      imgBase64: string | undefined;
+      imgDiffBase64: string | undefined;
+      imgNew: InstanceType<Cypress["Buffer"]> | undefined;
+      img: InstanceType<Cypress["Buffer"]> | undefined;
+      imgDiff: InstanceType<Cypress["Buffer"]> | undefined;
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Chainable<Subject> {
       /**
        * Command to create and compare image snapshots.
        * @memberof Cypress.Chainable
        * @example cy.get('.my-element').matchImage();
        */
-      matchImage(options?: Cypress.MatchImageOptions): Chainable<Subject>;
+      matchImage(
+        options?: Cypress.MatchImageOptions
+      ): Chainable<MatchImageReturn>;
     }
   }
 }
@@ -90,6 +109,7 @@ export const getConfig = (options: Cypress.MatchImageOptions) => {
         | Partial<Cypress.ScreenshotDefaultsOptions>
         | undefined) ||
       {},
+    matchAgainstPath: options.matchAgainstPath || undefined,
   };
 };
 
@@ -107,6 +127,7 @@ Cypress.Commands.add(
       maxDiffThreshold,
       diffConfig,
       screenshotConfig,
+      matchAgainstPath,
     } = getConfig(options);
 
     return cy
@@ -143,7 +164,8 @@ Cypress.Commands.add(
             {
               scaleFactor,
               imgNew: imgPath,
-              imgOld: imgPath.replace(FILE_SUFFIX.actual, ""),
+              imgOld:
+                matchAgainstPath || imgPath.replace(FILE_SUFFIX.actual, ""),
               updateImages,
               maxDiffThreshold,
               diffConfig,
@@ -191,6 +213,28 @@ Cypress.Commands.add(
           log.set("consoleProps", () => res);
           throw constructCypressError(log, new Error(res.message));
         }
+
+        return {
+          diffValue: res.imgDiff,
+          imgNewPath: imgPath,
+          imgPath: imgPath.replace(FILE_SUFFIX.actual, ""),
+          imgDiffPath: imgPath.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
+          imgNewBase64: res.imgNewBase64,
+          imgBase64: res.imgOldBase64,
+          imgDiffBase64: res.imgDiffBase64,
+          imgNew:
+            typeof res.imgNewBase64 === "string"
+              ? Cypress.Buffer.from(res.imgNewBase64, "base64")
+              : undefined,
+          img:
+            typeof res.imgOldBase64 === "string"
+              ? Cypress.Buffer.from(res.imgOldBase64, "base64")
+              : undefined,
+          imgDiff:
+            typeof res.imgDiffBase64 === "string"
+              ? Cypress.Buffer.from(res.imgDiffBase64, "base64")
+              : undefined,
+        };
       });
   }
 );

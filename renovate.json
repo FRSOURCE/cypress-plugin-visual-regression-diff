@@ -1,9 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "timezone": "Europe/Warsaw",
-  "extends": [
-    "config:base"
-  ],
+  "extends": ["config:base"],
   "packageRules": [
     {
       "extends": "packages:linters",
@@ -23,27 +21,17 @@
     },
     {
       "groupName": "definitelyTyped",
-      "matchPackagePrefixes": [
-        "@types/"
-      ],
+      "matchPackagePrefixes": ["@types/"],
       "automerge": true,
       "automergeType": "branch"
     },
     {
       "groupName": "vitest",
-      "matchPackagePrefixes": [
-        "@vitest/",
-        "vitest"
-      ]
+      "matchPackagePrefixes": ["@vitest/", "vitest"]
     },
     {
-      "matchPackagePatterns": [
-        "*"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
+      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": ["minor", "patch"],
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
       "automerge": true,

@@ -29,6 +29,7 @@ Don’t hesitate to ask a question directly on the [discussions board](https://g
 - We have no preference about number of commits on the PR - they will be all squashed by GitHub while merging
 
 - When creating a new feature/plugin/integration:
+
   - Make sure the feature is covered by tests
   - Provide a meaningful description. In most cases it would make sens to first open a issue with a suggestion, discuss about it and have it approved before working on it
 
@@ -40,12 +41,14 @@ Don’t hesitate to ask a question directly on the [discussions board](https://g
 ## Development Setup
 
 <!-- textlint-disable spelling -->
+
 You will need [Node.js](https://nodejs.org/en/) **version 16+** and [yarn](https://yarnpkg.com/getting-started/install).
+
 <!-- textlint-enable -->
 
 After cloning the repository, run:
 
-``` bash
+```bash
 yarn i # installs the project dependencies
 cd example && yarn i # install dependencies for example project (useful for testing)
 ```
@@ -58,7 +61,7 @@ Commit messages should follow the [conventional commits v1.0.0](https://www.conv
 
 When fired in the project root they will run corresponding actions in every nested package at once.
 
-``` bash
+```bash
 # build the project for NPM and example usage
 $ yarn build
 

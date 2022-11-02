@@ -33,14 +33,27 @@
     },
     "./*": "./*.js"
   },
+  "typesVersions": {
+    "*": {
+      "support": [
+        "dist/support.d.ts"
+      ],
+      "plugins": [
+        "dist/plugins.d.ts"
+      ],
+      "constants": [
+        "dist/constants.d.ts"
+      ]
+    }
+  },
   "license": "MIT",
   "scripts": {
     "build": "del-cli dist && microbundle src/{support,plugins,constants}.ts --target node --tsconfig tsconfig.build.json -f cjs,modern && cpy 'dist/src/*' dist && del-cli dist/src \"dist/*.{hook,utils}.d.ts\"",
     "lint": "eslint '**/*.ts' --ignore-pattern '**/*.d.ts'",
     "lint:fix": "yarn lint --fix",
     "lint:ci": "yarn lint --max-warnings 0",
-    "prettify": "prettier --write src",
-    "prettify:ci": "prettier --check src",
+    "prettify": "prettier --write .",
+    "prettify:ci": "prettier --check .",
     "prepack": "yarn build",
     "release": "semantic-release",
     "release:ci": "yarn release --yes",
