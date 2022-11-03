@@ -1,3 +1,10 @@
+## [3.0.4](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.0.3...v3.0.4) (2022-11-03)
+
+
+### Bug Fixes
+
+* typings for older typescript ([#170](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/170)) ([96499ec](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/96499ecc2959bab8c39b599ba7eb87fbd79ceec3)), closes [#167](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/167)
+
 ## [3.0.3](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.0.2...v3.0.3) (2022-11-01)
 
 
