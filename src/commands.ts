@@ -130,6 +130,12 @@ Cypress.Commands.add(
       matchAgainstPath,
     } = getConfig(options);
 
+    const currentRetryNumber = (
+      cy as unknown as { state: (s: string) => { currentRetry: () => number } }
+    )
+      .state("test")
+      .currentRetry();
+
     return cy
       .then(() =>
         cy.task<{ screenshotPath: string; title: string }>(
@@ -139,6 +145,7 @@ Cypress.Commands.add(
               options.title || Cypress.currentTest.titlePath.join(" "),
             imagesPath,
             specPath: Cypress.spec.relative,
+            currentRetryNumber,
           },
           { log: false }
         )
