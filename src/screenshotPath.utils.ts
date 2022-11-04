@@ -8,6 +8,12 @@ import {
 import sanitize from "sanitize-filename";
 
 const nameCacheCounter: Record<string, number> = {};
+const lastRetryNameCacheCounter: Record<string, number> = {};
+let lastRetryNumber = 0;
+
+const resetMap = (map: Record<string, unknown>) => {
+  for (const key in map) delete map[key];
+};
 
 export const generateScreenshotPath = ({
   titleFromOptions,
@@ -43,15 +49,24 @@ export const generateScreenshotPath = ({
     nameCacheCounter[screenshotPath] = -1;
   }
 
-  // it's a retry of the same image, so let's decrease the counter
-  if (currentRetryNumber > 0) {
-    --nameCacheCounter[screenshotPath];
+  // it's a retry of last test, so let's reset the counter to value before last retry
+  if (currentRetryNumber > lastRetryNumber) {
+    // +1 because we index screenshots starting at 0
+    for (const screenshotPath in lastRetryNameCacheCounter)
+      nameCacheCounter[screenshotPath] -=
+        lastRetryNameCacheCounter[screenshotPath] + 1;
   }
+
+  resetMap(lastRetryNameCacheCounter);
+
+  lastRetryNumber = currentRetryNumber;
+  lastRetryNameCacheCounter[screenshotPath] = ++nameCacheCounter[
+    screenshotPath
+  ];
+
   return path.join(
     IMAGE_SNAPSHOT_PREFIX,
-    `${screenshotPath} #${++nameCacheCounter[screenshotPath]}${
-      FILE_SUFFIX.actual
-    }.png`
+    `${screenshotPath} #${nameCacheCounter[screenshotPath]}${FILE_SUFFIX.actual}.png`
   );
 };
 
@@ -71,5 +86,7 @@ export const wasScreenshotUsed = (imagePath: string) => {
 };
 
 export const resetScreenshotNameCache = () => {
-  Object.keys(nameCacheCounter).forEach((k) => delete nameCacheCounter[k]);
+  lastRetryNumber = 0;
+  resetMap(nameCacheCounter);
+  resetMap(lastRetryNameCacheCounter);
 };
