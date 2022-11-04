@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.1.0...v3.1.1) (2022-11-04)
+
+
+### Bug Fixes
+
+* new image prefix starts at -1 ([#172](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/172)) ([8279208](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/8279208c2ec6dbbbf7dd846463f684f19dfe0df6))
+
 # [3.1.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.0.4...v3.1.0) (2022-11-03)
 
 
