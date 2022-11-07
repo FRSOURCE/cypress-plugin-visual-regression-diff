@@ -1,3 +1,10 @@
+## [3.1.2](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.1.1...v3.1.2) (2022-11-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency sharp to v0.31.2 ([#174](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/174)) ([c2bce9d](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/c2bce9dda3a70635270375f99c17d458f4cf39b8))
+
 ## [3.1.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.1.0...v3.1.1) (2022-11-04)
 
 
