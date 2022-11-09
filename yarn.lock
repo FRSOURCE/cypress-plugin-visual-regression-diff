@@ -1481,7 +1481,7 @@ __metadata:
     "@typescript-eslint/parser": 5.42.0
     "@vitest/coverage-c8": 0.24.5
     cpy-cli: ^4.2.0
-    cypress: 10.11.0
+    cypress: 11.0.0
     del-cli: 5.0.0
     eslint: 8.26.0
     eslint-config-prettier: 8.5.0
@@ -4132,9 +4132,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:10.11.0":
-  version: 10.11.0
-  resolution: "cypress@npm:10.11.0"
+"cypress@npm:11.0.0":
+  version: 11.0.0
+  resolution: "cypress@npm:11.0.0"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -4180,7 +4180,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 938cc6a20f7eeace5c8e850d234904ee1651cbb36d94666fe600cf17ce964e73d4f7d8d944aab677491702a57364e6aceeb4fe8bcbd96147ff5e2b575a956fb2
+  checksum: 279cb2b8e6bd85f1250552abaa45aed72a9e9208a8e51d467c0741fb7feb9db258a186c33f921f4ea19e90a7632ad19385f41eaf7650b5f113c31767ec1bd44a
   languageName: node
   linkType: hard
 
