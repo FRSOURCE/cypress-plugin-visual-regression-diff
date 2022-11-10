@@ -1488,7 +1488,7 @@ __metadata:
     eslint-plugin-cypress: 2.12.1
     eslint-plugin-eslint-comments: 3.2.0
     glob: 8.0.3
-    meta-png: 1.0.3
+    meta-png: 1.0.4
     microbundle: 0.15.1
     move-file: 2.1.0
     pixelmatch: 5.3.0
@@ -7413,10 +7413,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"meta-png@npm:1.0.3":
-  version: 1.0.3
-  resolution: "meta-png@npm:1.0.3"
-  checksum: cc7e1e0950b149273eb127622d8079725855ca14fb5e0175a4f1a7946d7f4a1c92e78de9f44eb1b9fa339c60f43b099c5135dc06b218cf77879fbd0a7f6ecddb
+"meta-png@npm:1.0.4":
+  version: 1.0.4
+  resolution: "meta-png@npm:1.0.4"
+  checksum: 165072861ff9ec429dfcfa3d8223dfe845dc4de382f6ae8fce4e923227bd1441dd0c3c20142b5af8f8aadf9d2a889b28d90d3361f26e5107a1286f26d8526593
   languageName: node
   linkType: hard
 
