@@ -1,6 +1,6 @@
 name: CI
 on:
-  pull_request_target:
+  pull_request:
     branches:
       - main
   push:
@@ -124,7 +124,8 @@ jobs:
             example/node_modules
       - name: Install dependencies
         run: yarn --immutable
-      - name: Test integration (with coverage)
+      - name: Test integration (with coverage) and upload to CodeClimate
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: paambaati/codeclimate-action@93c6213edc13fcb74a684a39a32956ebf417dd1c
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
@@ -132,6 +133,9 @@ jobs:
           coverageCommand: yarn test:integration:ci
           coverageLocations: |
             ${{github.workspace}}/coverage/lcov.info:lcov
+      - name: Test integration (with coverage)
+        if: ${{ github.ref != 'refs/heads/main' }}
+        run: yarn test:integration:ci
 
   build-and-release:
     name: build and release
