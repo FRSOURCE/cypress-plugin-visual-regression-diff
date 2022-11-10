@@ -235,6 +235,7 @@ export default defineConfig({
 }
 ```
 
+a
 For more ways of setting environment variables [take a look here](https://docs.cypress.io/guides/guides/environment-variables#Setting).
 
 ## FAQ
