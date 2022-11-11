@@ -162,6 +162,7 @@ Cypress.Commands.add(
             },
             log: false,
           })
+          .then(() => cy.task(TASK.processImgPath, { path: imgPath }).then(newImgPath => imgPath = newImgPath))
           .then(() => imgPath);
       })
       .then((imgPath) =>
