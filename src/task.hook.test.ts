@@ -48,6 +48,7 @@ describe("getScreenshotPathInfoTask", () => {
         titleFromOptions: "some-title-withśpęćiał人物",
         imagesPath: "nested/images/dir",
         specPath,
+        currentRetryNumber: 0,
       })
     ).toEqual({
       screenshotPath:
@@ -62,6 +63,7 @@ describe("getScreenshotPathInfoTask", () => {
         titleFromOptions: "some-title",
         imagesPath: "{spec_path}/images/dir",
         specPath,
+        currentRetryNumber: 0,
       })
     ).toEqual({
       screenshotPath:
@@ -76,6 +78,7 @@ describe("getScreenshotPathInfoTask", () => {
         titleFromOptions: "some-title",
         imagesPath: "/images/dir",
         specPath,
+        currentRetryNumber: 0,
       })
     ).toEqual({
       screenshotPath:
@@ -88,6 +91,7 @@ describe("getScreenshotPathInfoTask", () => {
         titleFromOptions: "some-title",
         imagesPath: "C:/images/dir",
         specPath,
+        currentRetryNumber: 0,
       })
     ).toEqual({
       screenshotPath:
@@ -104,6 +108,7 @@ describe("cleanupImagesTask", () => {
         titleFromOptions: "some-file",
         imagesPath: "images",
         specPath: "some/spec/path",
+        currentRetryNumber: 0,
       });
       return path.join(
         projectRoot,
@@ -113,34 +118,56 @@ describe("cleanupImagesTask", () => {
       );
     };
 
-    it("does not remove used screenshot", async () => {
-      const { path: projectRoot } = await dir();
-      const screenshotPath = await writeTmpFixture(
-        await generateUsedScreenshotPath(projectRoot),
-        oldImgFixture
-      );
+    describe('when testing type does not match', () => {
+      it("does not remove unused screenshot", async () => {
+        const { path: projectRoot } = await dir();
+        const screenshotPath = await writeTmpFixture(
+          path.join(projectRoot, "some-file-2 #0.png"),
+          oldImgFixture
+        );
 
-      cleanupImagesTask({
-        projectRoot,
-        env: { pluginVisualRegressionCleanupUnusedImages: true },
-      } as unknown as Cypress.PluginConfigOptions);
+        cleanupImagesTask({
+          projectRoot,
+          env: { pluginVisualRegressionCleanupUnusedImages: true },
+          testingType: 'component',
+        } as unknown as Cypress.PluginConfigOptions);
 
-      expect(existsSync(screenshotPath)).toBe(true);
+        expect(existsSync(screenshotPath)).toBe(true);
+      });
     });
 
-    it("removes unused screenshot", async () => {
-      const { path: projectRoot } = await dir();
-      const screenshotPath = await writeTmpFixture(
-        path.join(projectRoot, "some-file-2 #0.png"),
-        oldImgFixture
-      );
+    describe('when testing type matches', () => {
+      it("does not remove used screenshot", async () => {
+        const { path: projectRoot } = await dir();
+        const screenshotPath = await writeTmpFixture(
+          await generateUsedScreenshotPath(projectRoot),
+          oldImgFixture
+        );
 
-      cleanupImagesTask({
-        projectRoot,
-        env: { pluginVisualRegressionCleanupUnusedImages: true },
-      } as unknown as Cypress.PluginConfigOptions);
+        cleanupImagesTask({
+          projectRoot,
+          env: { pluginVisualRegressionCleanupUnusedImages: true },
+          testingType: 'e2e',
+        } as unknown as Cypress.PluginConfigOptions);
 
-      expect(existsSync(screenshotPath)).toBe(false);
+        expect(existsSync(screenshotPath)).toBe(true);
+      });
+
+      it("removes unused screenshot", async () => {
+        const { path: projectRoot } = await dir();
+        const screenshotPath = await writeTmpFixture(
+          path.join(projectRoot, "some-file-2 #0.png"),
+          oldImgFixture
+        );
+
+        cleanupImagesTask({
+          projectRoot,
+          env: { pluginVisualRegressionCleanupUnusedImages: true },
+          testingType: 'e2e',
+        } as unknown as Cypress.PluginConfigOptions);
+
+        expect(existsSync(screenshotPath)).toBe(false);
+      });
     });
   });
 });
@@ -178,7 +205,7 @@ describe("compareImagesTask", () => {
     describe("when old screenshot exists", () => {
       it("resolves with a success message", async () =>
         expect(
-          compareImagesTask(await generateConfig({ updateImages: true }))
+          compareImagesTask({ testingType: 'e2e' }, await generateConfig({ updateImages: true }))
         ).resolves.toEqual({
           message:
             "Image diff factor (0%) is within boundaries of maximum threshold option 0.5.",
@@ -197,7 +224,7 @@ describe("compareImagesTask", () => {
         const cfg = await generateConfig({ updateImages: false });
         await fs.unlink(cfg.imgOld);
 
-        await expect(compareImagesTask(cfg)).resolves.toEqual({
+        await expect(compareImagesTask({ testingType: 'e2e' }, cfg)).resolves.toEqual({
           message:
             "Image diff factor (0%) is within boundaries of maximum threshold option 0.5.",
           imgDiff: 0,
@@ -214,7 +241,7 @@ describe("compareImagesTask", () => {
         it("resolves with an error message", async () => {
           const cfg = await generateConfig({ updateImages: false });
 
-          await expect(compareImagesTask(cfg)).resolves.toMatchSnapshot();
+          await expect(compareImagesTask({ testingType: 'e2e' }, cfg)).resolves.toMatchSnapshot();
         });
       });
 
@@ -223,7 +250,7 @@ describe("compareImagesTask", () => {
           const cfg = await generateConfig({ updateImages: false });
           await writeTmpFixture(cfg.imgNew, oldImgFixture);
 
-          await expect(compareImagesTask(cfg)).resolves.toMatchSnapshot();
+          await expect(compareImagesTask({ testingType: 'e2e' }, cfg)).resolves.toMatchSnapshot();
         });
       });
     });

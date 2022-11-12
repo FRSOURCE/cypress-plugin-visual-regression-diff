@@ -8,19 +8,41 @@ import { version } from "../package.json";
 import { wasScreenshotUsed } from "./screenshotPath.utils";
 import { METADATA_KEY } from "./constants";
 
-export const addPNGMetadata = (png: Buffer) =>
-  addMetadata(png, METADATA_KEY, version /* c8 ignore next */);
-export const getPNGMetadata = (png: Buffer) =>
-  getMetadata(png, METADATA_KEY /* c8 ignore next */);
+type PluginMetadata = {
+  version: string;
+  testingType?: 'e2e' | 'component';
+};
+
+type PluginMetadataConfig = {
+  testingType?: string;
+};
+
+export const addPNGMetadata = (config: PluginMetadataConfig, png: Buffer) =>
+  addMetadata(png, METADATA_KEY, JSON.stringify({ version, testingType: config.testingType || 'e2e' } as PluginMetadata) /* c8 ignore next */);
+export const getPNGMetadata = (png: Buffer): PluginMetadata | undefined => {
+  const metadataString = getMetadata(png, METADATA_KEY /* c8 ignore next */);
+
+  if (metadataString === undefined) return;
+  try {
+    return JSON.parse(metadataString);
+  } catch {
+    return { version: metadataString };
+  }
+}
 export const isImageCurrentVersion = (png: Buffer) =>
-  getPNGMetadata(png) === version;
+  getPNGMetadata(png)?.version === version;
 export const isImageGeneratedByPlugin = (png: Buffer) =>
   !!getPNGMetadata(png /* c8 ignore next */);
+export const isImageOfTestType = (png: Buffer, testingType?: PluginMetadataConfig['testingType']) => {
+  if (!isImageGeneratedByPlugin(png)) return false;
+  const imageTestingType = getPNGMetadata(png /* c8 ignore next */)?.testingType;
+  return imageTestingType === testingType || testingType === imageTestingType === undefined;
+};
 
-export const writePNG = (name: string, png: PNG | Buffer) =>
+export const writePNG = (config: PluginMetadataConfig, name: string, png: PNG | Buffer) =>
   fs.writeFileSync(
     name,
-    addPNGMetadata(png instanceof PNG ? PNG.sync.write(png) : png)
+    addPNGMetadata(config, png instanceof PNG ? PNG.sync.write(png) : png)
   );
 
 const inArea = (x: number, y: number, height: number, width: number) =>
@@ -95,17 +117,17 @@ export const alignImagesToSameSize = (
   ];
 };
 
-export const cleanupUnused = (rootPath: string) => {
+export const cleanupUnused = (config: PluginMetadataConfig & { projectRoot: string; }) => {
   glob
     .sync("**/*.png", {
-      cwd: rootPath,
+      cwd: config.projectRoot,
       ignore: "node_modules/**/*",
     })
     .forEach((pngPath) => {
-      const absolutePath = path.join(rootPath, pngPath);
+      const absolutePath = path.join(config.projectRoot, pngPath);
       if (
         !wasScreenshotUsed(pngPath) &&
-        isImageGeneratedByPlugin(fs.readFileSync(absolutePath))
+        isImageOfTestType(fs.readFileSync(absolutePath), config.testingType)
       ) {
         fs.unlinkSync(absolutePath);
       }
