@@ -1,7 +1,7 @@
 {
   "name": "@frsource/cypress-plugin-visual-regression-diff",
   "description": "Perform visual regression test with a nice GUI as help. 💅 Only for Cypress!",
-  "version": "3.1.4",
+  "version": "3.1.5",
   "author": "Jakub Freisler <jakub.freisler@frsource.org>",
   "homepage": "https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff",
   "repository": "https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff.git",
@@ -87,13 +87,13 @@
     "@types/pngjs": "6.0.1",
     "@types/sharp": "0.31.0",
     "@types/tmp": "0.2.3",
-    "@typescript-eslint/eslint-plugin": "5.42.0",
-    "@typescript-eslint/parser": "5.42.0",
-    "@vitest/coverage-c8": "0.24.5",
+    "@typescript-eslint/eslint-plugin": "5.42.1",
+    "@typescript-eslint/parser": "5.42.1",
+    "@vitest/coverage-c8": "0.25.1",
     "cpy-cli": "^4.2.0",
     "cypress": "10.11.0",
     "del-cli": "5.0.0",
-    "eslint": "8.26.0",
+    "eslint": "8.27.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-cypress": "2.12.1",
     "eslint-plugin-eslint-comments": "3.2.0",
@@ -104,7 +104,7 @@
     "tmp-promise": "3.0.3",
     "typescript": "4.8.4",
     "vite-tsconfig-paths": "3.5.2",
-    "vitest": "0.24.5"
+    "vitest": "0.25.1"
   },
   "keywords": [
     "Cypress",
