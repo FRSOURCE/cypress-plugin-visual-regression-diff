@@ -71,7 +71,7 @@
   "engines": {
     "node": ">=10"
   },
-  "packageManager": "yarn@3.2.4",
+  "packageManager": "yarn@3.3.0",
   "peerDependencies": {
     "cypress": ">=4.5.0"
   },
@@ -87,13 +87,13 @@
     "@types/pngjs": "6.0.1",
     "@types/sharp": "0.31.0",
     "@types/tmp": "0.2.3",
-    "@typescript-eslint/eslint-plugin": "5.42.1",
-    "@typescript-eslint/parser": "5.42.1",
-    "@vitest/coverage-c8": "0.25.1",
+    "@typescript-eslint/eslint-plugin": "5.43.0",
+    "@typescript-eslint/parser": "5.43.0",
+    "@vitest/coverage-c8": "0.25.2",
     "cpy-cli": "^4.2.0",
     "cypress": "10.11.0",
     "del-cli": "5.0.0",
-    "eslint": "8.27.0",
+    "eslint": "8.28.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-cypress": "2.12.1",
     "eslint-plugin-eslint-comments": "3.2.0",
@@ -102,9 +102,9 @@
     "sanitize-filename": "1.6.3",
     "semantic-release": "19.0.5",
     "tmp-promise": "3.0.3",
-    "typescript": "4.8.4",
-    "vite-tsconfig-paths": "3.5.2",
-    "vitest": "0.25.1"
+    "typescript": "4.9.3",
+    "vite-tsconfig-paths": "3.6.0",
+    "vitest": "0.25.2"
   },
   "keywords": [
     "Cypress",
