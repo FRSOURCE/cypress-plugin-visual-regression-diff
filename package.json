@@ -123,7 +123,7 @@
   "dependencies": {
     "@frsource/base64": "1.0.4",
     "glob": "8.0.3",
-    "meta-png": "1.0.4",
+    "meta-png": "1.0.5",
     "move-file": "2.1.0",
     "pixelmatch": "5.3.0",
     "pngjs": "6.0.0",
