@@ -126,10 +126,11 @@ jobs:
         run: yarn --immutable
       - name: Test integration (with coverage) and upload to CodeClimate
         if: ${{ github.ref == 'refs/heads/main' }}
-        uses: paambaati/codeclimate-action@93c6213edc13fcb74a684a39a32956ebf417dd1c
+        uses: paambaati/codeclimate-action@v3.2.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
+          debug: true
           coverageCommand: yarn test:integration:ci
           coverageLocations: |
             ${{github.workspace}}/coverage/lcov.info:lcov
