@@ -1,3 +1,10 @@
+## [3.2.2](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.2.1...v3.2.2) (2022-11-29)
+
+
+### Bug Fixes
+
+* return launchOptions so they are applied ([#186](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/186)) ([b1b9056](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/b1b905613c899af6d14af920e34290533c26c545))
+
 ## [3.2.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.2.0...v3.2.1) (2022-11-29)
 
 
