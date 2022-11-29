@@ -4,6 +4,7 @@ import { LINK_PREFIX, OVERLAY_CLASS, TASK } from "./constants";
 
 /* c8 ignore start */
 function queueClear() {
+  (cy as unknown as { queue: { reset: () => void } }).queue.reset?.();
   (cy as unknown as { queue: { clear: () => void } }).queue.clear();
   (cy as unknown as { state: (k: string, value: unknown) => void }).state(
     "index",
