@@ -109,7 +109,6 @@ after(() => {
         { log: false }
       ).then((wasImageNotUpdatedYet) => {
         if (!top) return false;
-        queueClear();
 
         Cypress.$(
           generateOverlayTemplate({
@@ -128,6 +127,7 @@ after(() => {
         });
 
         wrapper.on("submit", "form", function (e) {
+          queueClear();
           e.preventDefault();
 
           cy.task(TASK.approveImage, { img: imgPath }).then(() =>
