@@ -1,3 +1,10 @@
+## [3.2.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.2.0...v3.2.1) (2022-11-29)
+
+
+### Bug Fixes
+
+* update images via GUI in Cypress 11 ([#193](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/193)) ([bdebca2](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/bdebca28aea1dea63473243679a5a71e6b21f165)), closes [#187](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/187)
+
 # [3.2.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.1.7...v3.2.0) (2022-11-29)
 
 
