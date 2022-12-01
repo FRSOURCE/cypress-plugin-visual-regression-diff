@@ -16,6 +16,7 @@ declare global {
       imagesDir?: string;
       imagesPath?: string;
       maxDiffThreshold?: number;
+      forceDeviceScaleFactor?: boolean;
       title?: string;
       matchAgainstPath?: string;
       // IDEA: to be implemented if support for files NOT from filesystem needed
