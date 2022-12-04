@@ -48,11 +48,12 @@ describe("getScreenshotPathInfoTask", () => {
         titleFromOptions: "some-title-withśpęćiał人物",
         imagesPath: "nested/images/dir",
         specPath,
+        currentRetryNumber: 0,
       })
     ).toEqual({
       screenshotPath:
-        "__cp-visual-regression-diff_snapshots__/nested/images/dir/some-title-withśpęćiał人物 #0.actual.png",
-      title: "some-title-withśpęćiał人物 #0.actual",
+        "__cp-visual-regression-diff_snapshots__/nested/images/dir/some-title-withśpęćiał人物_#0.actual.png",
+      title: "some-title-withśpęćiał人物_#0.actual",
     });
   });
 
@@ -62,11 +63,12 @@ describe("getScreenshotPathInfoTask", () => {
         titleFromOptions: "some-title",
         imagesPath: "{spec_path}/images/dir",
         specPath,
+        currentRetryNumber: 0,
       })
     ).toEqual({
       screenshotPath:
-        "__cp-visual-regression-diff_snapshots__/some/nested/spec-path/images/dir/some-title #0.actual.png",
-      title: "some-title #0.actual",
+        "__cp-visual-regression-diff_snapshots__/some/nested/spec-path/images/dir/some-title_#0.actual.png",
+      title: "some-title_#0.actual",
     });
   });
 
@@ -76,11 +78,12 @@ describe("getScreenshotPathInfoTask", () => {
         titleFromOptions: "some-title",
         imagesPath: "/images/dir",
         specPath,
+        currentRetryNumber: 0,
       })
     ).toEqual({
       screenshotPath:
-        "__cp-visual-regression-diff_snapshots__/{unix_system_root_path}/images/dir/some-title #0.actual.png",
-      title: "some-title #0.actual",
+        "__cp-visual-regression-diff_snapshots__/{unix_system_root_path}/images/dir/some-title_#0.actual.png",
+      title: "some-title_#0.actual",
     });
 
     expect(
@@ -88,11 +91,12 @@ describe("getScreenshotPathInfoTask", () => {
         titleFromOptions: "some-title",
         imagesPath: "C:/images/dir",
         specPath,
+        currentRetryNumber: 0,
       })
     ).toEqual({
       screenshotPath:
-        "__cp-visual-regression-diff_snapshots__/{win_system_root_path}/C/images/dir/some-title #0.actual.png",
-      title: "some-title #0.actual",
+        "__cp-visual-regression-diff_snapshots__/{win_system_root_path}/C/images/dir/some-title_#0.actual.png",
+      title: "some-title_#0.actual",
     });
   });
 });
@@ -104,6 +108,7 @@ describe("cleanupImagesTask", () => {
         titleFromOptions: "some-file",
         imagesPath: "images",
         specPath: "some/spec/path",
+        currentRetryNumber: 0,
       });
       return path.join(
         projectRoot,
@@ -131,7 +136,7 @@ describe("cleanupImagesTask", () => {
     it("removes unused screenshot", async () => {
       const { path: projectRoot } = await dir();
       const screenshotPath = await writeTmpFixture(
-        path.join(projectRoot, "some-file-2 #0.png"),
+        path.join(projectRoot, "some-file-2_#0.png"),
         oldImgFixture
       );
 
