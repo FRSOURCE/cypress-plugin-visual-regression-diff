@@ -133,10 +133,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@frsource/base64@npm:1.0.4":
-  version: 1.0.4
-  resolution: "@frsource/base64@npm:1.0.4"
-  checksum: db5fd0a660a98d677a1de93b31af2941d223fe1eaee6d7ff99e93217233a0d32d4b0683c982c5990b5c8498fb0007dc8f87989f11d4a84e1e0f31cf950f8531d
+"@frsource/base64@npm:1.0.5":
+  version: 1.0.5
+  resolution: "@frsource/base64@npm:1.0.5"
+  checksum: ba526dd81df4e91b0abbcc34fc6818c8ff132e5230c23a4448a365ba934f782a86abb2a8566050f9450905851e467a7160f01f3d321fbb0fa3c8c516c5a82b9b
   languageName: node
   linkType: hard
 
@@ -144,9 +144,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@frsource/cypress-plugin-visual-regression-diff@portal:..::locator=example%40workspace%3A."
   dependencies:
-    "@frsource/base64": 1.0.4
+    "@frsource/base64": 1.0.5
     glob: 8.0.3
-    meta-png: 1.0.4
+    meta-png: 1.0.5
     move-file: 2.1.0
     pixelmatch: 5.3.0
     pngjs: 6.0.0
@@ -2342,9 +2342,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:10.11.0":
-  version: 10.11.0
-  resolution: "cypress@npm:10.11.0"
+"cypress@npm:11.2.0":
+  version: 11.2.0
+  resolution: "cypress@npm:11.2.0"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -2390,7 +2390,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 938cc6a20f7eeace5c8e850d234904ee1651cbb36d94666fe600cf17ce964e73d4f7d8d944aab677491702a57364e6aceeb4fe8bcbd96147ff5e2b575a956fb2
+  checksum: e13649fb4b62a3c9dff7cc571f4e01dba009d8179b05c4f885c5ceb4ed76b78a7323fec491d992da35527708b54e596bfc9edb1d702f788317889f794d8c1e76
   languageName: node
   linkType: hard
 
@@ -2889,8 +2889,8 @@ __metadata:
     "@frsource/cypress-plugin-visual-regression-diff": "portal:.."
     "@vue/cli-plugin-e2e-cypress": 5.0.8
     "@vue/cli-service": 5.0.8
-    cypress: 10.11.0
-    typescript: ^4.8.4
+    cypress: 11.2.0
+    typescript: 4.9.3
     vue: 3.2.45
   languageName: unknown
   linkType: soft
@@ -4279,13 +4279,13 @@ __metadata:
   linkType: hard
 
 "loader-utils@npm:^1.0.2, loader-utils@npm:^1.1.0":
-  version: 1.4.1
-  resolution: "loader-utils@npm:1.4.1"
+  version: 1.4.2
+  resolution: "loader-utils@npm:1.4.2"
   dependencies:
     big.js: ^5.2.2
     emojis-list: ^3.0.0
     json5: ^1.0.1
-  checksum: ea0b648cba0194e04a90aab6270619f0e35be009e33a443d9e642e93056cd49e6ca4c9678bd1c777a2392551bc5f4d0f24a87f5040608da1274aa84c6eebb502
+  checksum: eb6fb622efc0ffd1abdf68a2022f9eac62bef8ec599cf8adb75e94d1d338381780be6278534170e99edc03380a6d29bc7eb1563c89ce17c5fed3a0b17f1ad804
   languageName: node
   linkType: hard
 
@@ -4505,10 +4505,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"meta-png@npm:1.0.4":
-  version: 1.0.4
-  resolution: "meta-png@npm:1.0.4"
-  checksum: 165072861ff9ec429dfcfa3d8223dfe845dc4de382f6ae8fce4e923227bd1441dd0c3c20142b5af8f8aadf9d2a889b28d90d3361f26e5107a1286f26d8526593
+"meta-png@npm:1.0.5":
+  version: 1.0.5
+  resolution: "meta-png@npm:1.0.5"
+  checksum: b8c92a696d5e78ef7f0ab53eb9039f108ee0c55cdac9d70e92e5fe2187b090176c0489426d58e594c7d1096481dac37913dd1265f28dfa39926db4d702a5e21d
   languageName: node
   linkType: hard
 
@@ -7058,23 +7058,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.8.4":
-  version: 4.8.4
-  resolution: "typescript@npm:4.8.4"
+"typescript@npm:4.9.3":
+  version: 4.9.3
+  resolution: "typescript@npm:4.9.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 3e4f061658e0c8f36c820802fa809e0fd812b85687a9a2f5430bc3d0368e37d1c9605c3ce9b39df9a05af2ece67b1d844f9f6ea8ff42819f13bcb80f85629af0
+  checksum: 17b8f816050b412403e38d48eef0e893deb6be522d6dc7caf105e54a72e34daf6835c447735fd2b28b66784e72bfbf87f627abb4818a8e43d1fa8106396128dc
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.8.4#~builtin<compat/typescript>":
-  version: 4.8.4
-  resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=701156"
+"typescript@patch:typescript@4.9.3#~builtin<compat/typescript>":
+  version: 4.9.3
+  resolution: "typescript@patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=701156"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 301459fc3eb3b1a38fe91bf96d98eb55da88a9cb17b4ef80b4d105d620f4d547ba776cc27b44cc2ef58b66eda23fe0a74142feb5e79a6fb99f54fc018a696afa
+  checksum: ef65c22622d864497d0a0c5db693523329b3284c15fe632e93ad9aa059e8dc38ef3bd767d6f26b1e5ecf9446f49bd0f6c4e5714a2eeaf352805dc002479843d1
   languageName: node
   linkType: hard
 

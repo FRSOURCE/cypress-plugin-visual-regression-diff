@@ -8,6 +8,7 @@ const initForceDeviceScaleFactor = (on: Cypress.PluginEvents) => {
     if (browser.name === "chrome" || browser.name === "chromium") {
       launchOptions.args.push("--force-device-scale-factor=1");
       launchOptions.args.push("--high-dpi-support=1");
+      return launchOptions;
     } else if (browser.name === "electron" && browser.isHeaded) {
       // eslint-disable-next-line no-console
       console.log(
