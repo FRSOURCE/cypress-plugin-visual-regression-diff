@@ -126,7 +126,7 @@
     "meta-png": "1.0.5",
     "move-file": "2.1.0",
     "pixelmatch": "5.3.0",
-    "pngjs": "6.0.0",
+    "pngjs": "7.0.0",
     "sharp": "0.31.2"
   },
   "publishConfig": {
