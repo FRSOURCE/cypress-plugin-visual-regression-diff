@@ -179,6 +179,9 @@ cy.matchImage({
   diffConfig: {
     threshold: 0.01,
   },
+  // whether to create missing baseline images automatically
+  // default: true
+  createMissingImages: false,
   // whether to update images automatically, without making a diff - useful for CI
   // default: false
   updateImages: true,

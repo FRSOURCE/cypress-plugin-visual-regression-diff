@@ -9,6 +9,7 @@ declare global {
     type MatchImageOptions = {
       screenshotConfig?: Partial<Cypress.ScreenshotDefaultsOptions>;
       diffConfig?: Parameters<typeof pixelmatch>[5];
+      createMissingImages?: boolean;
       updateImages?: boolean;
       /**
        * @deprecated since version 3.0, use imagesPath instead
@@ -87,6 +88,12 @@ export const getConfig = (options: Cypress.MatchImageOptions) => {
       Cypress.env("pluginVisualRegressionForceDeviceScaleFactor") === false
         ? 1
         : 1 / window.devicePixelRatio,
+    createMissingImages:
+      options.createMissingImages ||
+      (Cypress.env("pluginVisualRegressionCreateMissingImages") as
+        | boolean
+        | undefined) ||
+      true,
     updateImages:
       options.updateImages ||
       (Cypress.env("pluginVisualRegressionUpdateImages") as
@@ -125,6 +132,7 @@ Cypress.Commands.add(
 
     const {
       scaleFactor,
+      createMissingImages,
       updateImages,
       imagesPath,
       maxDiffThreshold,
@@ -178,6 +186,7 @@ Cypress.Commands.add(
               imgNew: imgPath,
               imgOld:
                 matchAgainstPath || imgPath.replace(FILE_SUFFIX.actual, ""),
+              createMissingImages,
               updateImages,
               maxDiffThreshold,
               diffConfig,
