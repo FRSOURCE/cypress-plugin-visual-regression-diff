@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "18.x"
       - name: Remove git auth
         run: git config --unset http.https://github.com/.extraheader
       - name: Generate yarn cache-key
@@ -52,7 +52,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "18.x"
       - name: remove git auth
         run: git config --unset http.https://github.com/.extraheader
       - name: Configure Yarn cache
@@ -79,7 +79,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "18.x"
       - name: remove git auth
         run: git config --unset http.https://github.com/.extraheader
       - name: Configure Yarn cache
@@ -110,7 +110,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "18.x"
       - name: remove git auth
         run: git config --unset http.https://github.com/.extraheader
       - name: Configure Yarn cache
@@ -154,7 +154,7 @@ jobs:
           git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "18.x"
       - name: remove git auth
         run: git config --unset http.https://github.com/.extraheader
       - name: Configure Yarn cache
