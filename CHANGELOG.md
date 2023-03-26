@@ -1,3 +1,10 @@
+## [3.2.11](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.2.10...v3.2.11) (2023-03-26)
+
+
+### Bug Fixes
+
+* treat maxDiffThreshold 0 as valid value ([f4d3ec9](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/f4d3ec946547d648d1ec8ea9ccf9369540255adf))
+
 ## [3.2.10](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.2.9...v3.2.10) (2023-03-26)
 
 
