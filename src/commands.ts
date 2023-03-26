@@ -75,6 +75,11 @@ const getImagesDir = (options: Cypress.MatchImageOptions) => {
 
 export const getConfig = (options: Cypress.MatchImageOptions) => {
   const imagesDir = getImagesDir(options);
+  const maxDiffThreshold =
+    options.maxDiffThreshold ??
+    (Cypress.env("pluginVisualRegressionMaxDiffThreshold") as
+      | number
+      | undefined);
 
   return {
     scaleFactor:
@@ -94,11 +99,7 @@ export const getConfig = (options: Cypress.MatchImageOptions) => {
       (Cypress.env("pluginVisualRegressionImagesPath") as string | undefined) ||
       "{spec_path}/__image_snapshots__",
     maxDiffThreshold:
-      options.maxDiffThreshold ||
-      (Cypress.env("pluginVisualRegressionMaxDiffThreshold") as
-        | number
-        | undefined) ||
-      0.01,
+      typeof maxDiffThreshold === "number" ? maxDiffThreshold : 0.01,
     diffConfig:
       options.diffConfig ||
       (Cypress.env("pluginVisualRegressionDiffConfig") as
