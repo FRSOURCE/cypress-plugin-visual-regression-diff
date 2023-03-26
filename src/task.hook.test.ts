@@ -218,13 +218,15 @@ describe("compareImagesTask", () => {
 
       describe("when createMissingImages=false", () => {
         it("rejects with error message", async () => {
-          const cfg = await generateConfig({ updateImages: false, createMissingImages: false });
+          const cfg = await generateConfig({
+            updateImages: false,
+            createMissingImages: false,
+          });
           await fs.unlink(cfg.imgOld);
 
           await expect(compareImagesTask(cfg)).resolves.toEqual({
             error: true,
-            message:
-              `Baseline image is missing at path: "${cfg.imgOld}". Provide a baseline image or enable "createMissingImages" option in plugin configuration.`,
+            message: `Baseline image is missing at path: "${cfg.imgOld}". Provide a baseline image or enable "createMissingImages" option in plugin configuration.`,
             imgDiff: 0,
             imgDiffBase64: "",
             imgNewBase64: "",
