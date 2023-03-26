@@ -16,6 +16,7 @@ declare global {
       imagesDir?: string;
       imagesPath?: string;
       maxDiffThreshold?: number;
+      forceDeviceScaleFactor?: boolean;
       title?: string;
       matchAgainstPath?: string;
       // IDEA: to be implemented if support for files NOT from filesystem needed
@@ -77,6 +78,7 @@ export const getConfig = (options: Cypress.MatchImageOptions) => {
 
   return {
     scaleFactor:
+      options.forceDeviceScaleFactor === false ||
       Cypress.env("pluginVisualRegressionForceDeviceScaleFactor") === false
         ? 1
         : 1 / window.devicePixelRatio,
@@ -131,7 +133,9 @@ Cypress.Commands.add(
     } = getConfig(options);
 
     const currentRetryNumber = (
-      cy as unknown as { state: (s: string) => { currentRetry: () => number } }
+      cy as unknown as {
+        state: (s: string) => { currentRetry: () => number };
+      }
     )
       .state("test")
       .currentRetry();
