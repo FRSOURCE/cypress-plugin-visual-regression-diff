@@ -1,3 +1,10 @@
+## [3.2.12](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.2.11...v3.2.12) (2023-03-26)
+
+
+### Bug Fixes
+
+* import meta-png cjs dependency ([#209](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/209)) ([41aeee5](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/41aeee52c362e4a1817a9e364963c4aff1407d0a)), closes [#207](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/207)
+
 ## [3.2.11](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.2.10...v3.2.11) (2023-03-26)
 
 
