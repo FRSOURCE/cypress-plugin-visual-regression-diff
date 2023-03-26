@@ -1,3 +1,10 @@
+## [3.2.10](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.2.9...v3.2.10) (2023-03-26)
+
+
+### Bug Fixes
+
+* add missing forceDeviceScaleFactor option ([ba7d2f1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/ba7d2f15b57390bb1ef69de6f7ed979438155444))
+
 ## [3.2.9](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.2.8...v3.2.9) (2023-03-26)
 
 ## [3.2.8](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.2.7...v3.2.8) (2022-12-18)
