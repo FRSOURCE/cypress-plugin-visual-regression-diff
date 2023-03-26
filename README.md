@@ -248,6 +248,14 @@ Screenshots in Cypress do not scale to the viewport size by default. You can cha
 
 </details>
 
+<details><summary>I've upgraded version of this plugin and all on my baseline images has been automatically updated. Why?</summary>
+
+Sometimes we need to do a breaking change in image comparison or image generation algorithms. To provide you with the easiest upgrade path - the plugin updates your baseline images automatically. Just commit them to your repository after the plugin upgrade and you are good to go!
+
+</details>
+
+DIFF_IMAGES_VERSION
+
 ## Questions
 
 Don’t hesitate to ask a question directly on the [discussions board](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/discussions)!
