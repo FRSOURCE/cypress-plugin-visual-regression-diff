@@ -22,6 +22,7 @@ const newFileContent = "new file content";
 
 const generateConfig = async (cfg: Partial<CompareImagesCfg>) => ({
   updateImages: false,
+  createMissingImages: true,
   scaleFactor: 1,
   title: "some title",
   imgNew: await writeTmpFixture((await file()).path, newImgFixture),
@@ -48,6 +49,7 @@ describe("getScreenshotPathInfoTask", () => {
         titleFromOptions: "some-title-withśpęćiał人物",
         imagesPath: "nested/images/dir",
         specPath,
+        currentRetryNumber: 0,
       })
     ).toEqual({
       screenshotPath:
@@ -62,6 +64,7 @@ describe("getScreenshotPathInfoTask", () => {
         titleFromOptions: "some-title",
         imagesPath: "{spec_path}/images/dir",
         specPath,
+        currentRetryNumber: 0,
       })
     ).toEqual({
       screenshotPath:
@@ -76,6 +79,7 @@ describe("getScreenshotPathInfoTask", () => {
         titleFromOptions: "some-title",
         imagesPath: "/images/dir",
         specPath,
+        currentRetryNumber: 0,
       })
     ).toEqual({
       screenshotPath:
@@ -88,6 +92,7 @@ describe("getScreenshotPathInfoTask", () => {
         titleFromOptions: "some-title",
         imagesPath: "C:/images/dir",
         specPath,
+        currentRetryNumber: 0,
       })
     ).toEqual({
       screenshotPath:
@@ -104,6 +109,7 @@ describe("cleanupImagesTask", () => {
         titleFromOptions: "some-file",
         imagesPath: "images",
         specPath: "some/spec/path",
+        currentRetryNumber: 0,
       });
       return path.join(
         projectRoot,
@@ -180,6 +186,7 @@ describe("compareImagesTask", () => {
         expect(
           compareImagesTask(await generateConfig({ updateImages: true }))
         ).resolves.toEqual({
+          error: false,
           message:
             "Image diff factor (0%) is within boundaries of maximum threshold option 0.5.",
           imgDiff: 0,
@@ -198,6 +205,7 @@ describe("compareImagesTask", () => {
         await fs.unlink(cfg.imgOld);
 
         await expect(compareImagesTask(cfg)).resolves.toEqual({
+          error: false,
           message:
             "Image diff factor (0%) is within boundaries of maximum threshold option 0.5.",
           imgDiff: 0,
@@ -205,6 +213,24 @@ describe("compareImagesTask", () => {
           imgNewBase64: "",
           imgOldBase64: "",
           maxDiffThreshold: 0.5,
+        });
+      });
+
+      describe("when createMissingImages=false", () => {
+        it("rejects with error message", async () => {
+          const cfg = await generateConfig({ updateImages: false, createMissingImages: false });
+          await fs.unlink(cfg.imgOld);
+
+          await expect(compareImagesTask(cfg)).resolves.toEqual({
+            error: true,
+            message:
+              `Baseline image is missing at path: "${cfg.imgOld}". Provide a baseline image or enable "createMissingImages" option in plugin configuration.`,
+            imgDiff: 0,
+            imgDiffBase64: "",
+            imgNewBase64: "",
+            imgOldBase64: "",
+            maxDiffThreshold: 0.5,
+          });
         });
       });
     });
