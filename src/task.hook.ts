@@ -131,15 +131,6 @@ export const compareImagesTask = async (
         cfg.imgNew.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
         diffBuffer
       );
-      return {
-        error,
-        message: messages.join("\n"),
-        imgDiff,
-        imgNewBase64,
-        imgDiffBase64,
-        imgOldBase64,
-        maxDiffThreshold: cfg.maxDiffThreshold,
-      };
     } else {
       if (rawImgOld && !isImageCurrentVersion(rawImgOldBuffer)) {
         writePNG(cfg.imgNew, rawImgNewBuffer);
