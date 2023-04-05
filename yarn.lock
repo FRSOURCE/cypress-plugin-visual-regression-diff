@@ -1623,7 +1623,7 @@ __metadata:
     glob: 8.0.3
     meta-png: 1.0.5
     microbundle: 0.15.1
-    move-file: 2.1.0
+    move-file: 3.1.0
     pixelmatch: 5.3.0
     pngjs: 6.0.0
     prettier: 2.8.1
@@ -8046,12 +8046,12 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"move-file@npm:2.1.0":
-  version: 2.1.0
-  resolution: "move-file@npm:2.1.0"
+"move-file@npm:3.1.0":
+  version: 3.1.0
+  resolution: "move-file@npm:3.1.0"
   dependencies:
-    path-exists: ^4.0.0
-  checksum: 2b92bbe047a302b593fcb2c0bf1131bb090ec80b3264569fc80d782c8ff829eecc13573943fa4d804c9747dec612ef2d1e84a5cfcf29cbc64a69ffcbb7ea09b3
+    path-exists: ^5.0.0
+  checksum: 22585798101f7e5e645fdbe69ac915db362d27e2e0afcb3f049d23bf4e2a7a746ce6cc8f5b9956941cd8a683bf50fc9d0b3ac55ee5d22c93161cef4d8f86e13b
   languageName: node
   linkType: hard
 
