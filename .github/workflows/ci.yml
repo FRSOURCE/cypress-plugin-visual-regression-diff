@@ -126,7 +126,7 @@ jobs:
         run: yarn --immutable
       - name: Test integration (with coverage) and upload to CodeClimate
         if: ${{ github.ref == 'refs/heads/main' }}
-        uses: paambaati/codeclimate-action@v3.2.0
+        uses: paambaati/codeclimate-action@v4.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
