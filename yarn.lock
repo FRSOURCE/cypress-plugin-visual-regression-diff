@@ -1604,7 +1604,7 @@ __metadata:
     "@semantic-release/git": 10.0.1
     "@semantic-release/github": 8.0.7
     "@semantic-release/npm": 10.0.2
-    "@semantic-release/release-notes-generator": 10.0.3
+    "@semantic-release/release-notes-generator": 11.0.1
     "@types/glob": 8.0.0
     "@types/pixelmatch": 5.2.4
     "@types/pngjs": 6.0.1
@@ -2506,7 +2506,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semantic-release/release-notes-generator@npm:10.0.3, @semantic-release/release-notes-generator@npm:^10.0.0":
+"@semantic-release/release-notes-generator@npm:11.0.1":
+  version: 11.0.1
+  resolution: "@semantic-release/release-notes-generator@npm:11.0.1"
+  dependencies:
+    conventional-changelog-angular: ^5.0.0
+    conventional-changelog-writer: ^5.0.0
+    conventional-commits-filter: ^2.0.0
+    conventional-commits-parser: ^3.2.3
+    debug: ^4.0.0
+    get-stream: ^6.0.0
+    import-from: ^4.0.0
+    into-stream: ^7.0.0
+    lodash-es: ^4.17.21
+    read-pkg-up: ^9.0.0
+  peerDependencies:
+    semantic-release: ">=20.1.0"
+  checksum: 19bb468c96be0e642646d192d16cdcbf1aee5e60203c53c7e0148da09f47d581939cc20e7aaccd26f0198d93932254b7ab496ef3d73d59d129d38ea9e3f25c04
+  languageName: node
+  linkType: hard
+
+"@semantic-release/release-notes-generator@npm:^10.0.0":
   version: 10.0.3
   resolution: "@semantic-release/release-notes-generator@npm:10.0.3"
   dependencies:
@@ -6474,6 +6494,16 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"into-stream@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "into-stream@npm:7.0.0"
+  dependencies:
+    from2: ^2.3.0
+    p-is-promise: ^3.0.0
+  checksum: 10c259101237622b2f90a3a30388f2e997f7c4cb16d7236da0380f2e5691b8f9ce32ea2614ae5d1d3b5ad4eba89e2adac0e3d3d24f8494bff69de145432c2d94
+  languageName: node
+  linkType: hard
+
 "ip-regex@npm:^4.1.0":
   version: 4.3.0
   resolution: "ip-regex@npm:4.3.0"
@@ -9823,7 +9853,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"read-pkg-up@npm:^9.1.0":
+"read-pkg-up@npm:^9.0.0, read-pkg-up@npm:^9.1.0":
   version: 9.1.0
   resolution: "read-pkg-up@npm:9.1.0"
   dependencies:
