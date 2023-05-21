@@ -1625,7 +1625,7 @@ __metadata:
     microbundle: 0.15.1
     move-file: 2.1.0
     pixelmatch: 5.3.0
-    pngjs: 6.0.0
+    pngjs: 7.0.0
     prettier: 2.8.1
     sanitize-filename: 1.6.3
     semantic-release: 21.0.0
@@ -9142,7 +9142,14 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"pngjs@npm:6.0.0, pngjs@npm:^6.0.0":
+"pngjs@npm:7.0.0":
+  version: 7.0.0
+  resolution: "pngjs@npm:7.0.0"
+  checksum: b19a018930d27de26229c1b3ff250b3a25d09caa22cbb0b0459987d91eb0a560a18ab5d67da45a38ed7514140f26d1db58de83c31159ec101f2bb270a3c707f1
+  languageName: node
+  linkType: hard
+
+"pngjs@npm:^6.0.0":
   version: 6.0.0
   resolution: "pngjs@npm:6.0.0"
   checksum: ab6c285086060087097eab9fe6b5a528a24f9e79c03dea2b4fd6264ed4fdb5beff4a3257eeeaf2a9dc18249b539609c2a4e4013c567164a1f6b5ba2c974d5ecb
