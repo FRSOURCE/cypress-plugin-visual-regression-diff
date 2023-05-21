@@ -1,41 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "timezone": "Europe/Warsaw",
-  "extends": ["config:base"],
-  "packageRules": [
-    {
-      "extends": "packages:linters",
-      "groupName": "linters",
-      "automerge": true,
-      "automergeType": "branch"
-    },
-    {
-      "extends": "packages:postcss",
-      "groupName": "postcss packages"
-    },
-    {
-      "extends": "packages:test",
-      "groupName": "test packages",
-      "automerge": true,
-      "automergeType": "branch"
-    },
-    {
-      "groupName": "definitelyTyped",
-      "matchPackagePrefixes": ["@types/"],
-      "automerge": true,
-      "automergeType": "branch"
-    },
-    {
-      "groupName": "vitest",
-      "matchPackagePrefixes": ["@vitest/", "vitest"]
-    },
-    {
-      "matchPackagePatterns": ["*"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch",
-      "automerge": true,
-      "automergeType": "branch"
-    }
-  ]
+  "extends": ["github>FRSOURCE/renovate-config"]
 }
