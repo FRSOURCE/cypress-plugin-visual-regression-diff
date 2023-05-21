@@ -22,6 +22,7 @@ export type CompareImagesCfg = {
   title: string;
   imgNew: string;
   imgOld: string;
+  createMissingImages: boolean;
   updateImages: boolean;
   maxDiffThreshold: number;
   diffConfig: PixelmatchOptions;
@@ -130,15 +131,6 @@ export const compareImagesTask = async (
         cfg.imgNew.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
         diffBuffer
       );
-      return {
-        error,
-        message: messages.join("\n"),
-        imgDiff,
-        imgNewBase64,
-        imgDiffBase64,
-        imgOldBase64,
-        maxDiffThreshold: cfg.maxDiffThreshold,
-      };
     } else {
       if (rawImgOld && !isImageCurrentVersion(rawImgOldBuffer)) {
         writePNG(cfg.imgNew, rawImgNewBuffer);
@@ -154,19 +146,30 @@ export const compareImagesTask = async (
     imgNewBase64 = "";
     imgDiffBase64 = "";
     imgOldBase64 = "";
-    writePNG(cfg.imgNew, rawImgNewBuffer);
-    moveFile.sync(cfg.imgNew, cfg.imgOld);
+    if (cfg.createMissingImages) {
+      writePNG(cfg.imgNew, rawImgNewBuffer);
+      moveFile.sync(cfg.imgNew, cfg.imgOld);
+    } else {
+      error = true;
+      messages.unshift(
+        `Baseline image is missing at path: "${cfg.imgOld}". Provide a baseline image or enable "createMissingImages" option in plugin configuration.`
+      );
+    }
   }
 
   if (typeof imgDiff !== "undefined") {
-    messages.unshift(
-      `Image diff factor (${round(
-        imgDiff
-      )}%) is within boundaries of maximum threshold option ${
-        cfg.maxDiffThreshold
-      }.`
-    );
+    if (!error) {
+      messages.unshift(
+        `Image diff factor (${round(
+          imgDiff
+        )}%) is within boundaries of maximum threshold option ${
+          cfg.maxDiffThreshold
+        }.`
+      );
+    }
+
     return {
+      error,
       message: messages.join("\n"),
       imgDiff,
       imgNewBase64,
