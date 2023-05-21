@@ -13,13 +13,13 @@
     "test:e2e:ci": "yarn test:run --e2e --headless"
   },
   "dependencies": {
-    "vue": "3.2.45"
+    "vue": "3.3.4"
   },
   "devDependencies": {
     "@frsource/cypress-plugin-visual-regression-diff": "portal:..",
     "@vue/cli-plugin-e2e-cypress": "5.0.8",
     "@vue/cli-service": "5.0.8",
     "cypress": "12.12.0",
-    "typescript": "5.0.2"
+    "typescript": "5.0.4"
   }
 }
