@@ -133,10 +133,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@frsource/base64@npm:1.0.5":
-  version: 1.0.5
-  resolution: "@frsource/base64@npm:1.0.5"
-  checksum: ba526dd81df4e91b0abbcc34fc6818c8ff132e5230c23a4448a365ba934f782a86abb2a8566050f9450905851e467a7160f01f3d321fbb0fa3c8c516c5a82b9b
+"@frsource/base64@npm:1.0.14":
+  version: 1.0.14
+  resolution: "@frsource/base64@npm:1.0.14"
+  checksum: 9a5b718e4ac12fd1b5bfdefcdf669fb0a125599fb6cd55564da3beeccd7a5707f58bc41f572268a8120af15ccca32355e8384341561f738397521020e0c2564c
   languageName: node
   linkType: hard
 
@@ -144,9 +144,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@frsource/cypress-plugin-visual-regression-diff@portal:..::locator=example%40workspace%3A."
   dependencies:
-    "@frsource/base64": 1.0.5
+    "@frsource/base64": 1.0.14
     glob: 8.0.3
-    meta-png: 1.0.5
+    meta-png: 1.0.6
     move-file: 2.1.0
     pixelmatch: 5.3.0
     pngjs: 7.0.0
@@ -2890,7 +2890,7 @@ __metadata:
     "@vue/cli-plugin-e2e-cypress": 5.0.8
     "@vue/cli-service": 5.0.8
     cypress: 12.12.0
-    typescript: 5.0.2
+    typescript: 5.0.4
     vue: 3.2.45
   languageName: unknown
   linkType: soft
@@ -4505,10 +4505,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"meta-png@npm:1.0.5":
-  version: 1.0.5
-  resolution: "meta-png@npm:1.0.5"
-  checksum: b8c92a696d5e78ef7f0ab53eb9039f108ee0c55cdac9d70e92e5fe2187b090176c0489426d58e594c7d1096481dac37913dd1265f28dfa39926db4d702a5e21d
+"meta-png@npm:1.0.6":
+  version: 1.0.6
+  resolution: "meta-png@npm:1.0.6"
+  checksum: aed14b3b53189c9d32002d76c40926bd93dd9d439bae3ad23ffb2645c375c9772c160879aa8af59ac85a2f43ae8bbe06b9648a53fe27815f4aeab238f4e9b79d
   languageName: node
   linkType: hard
 
@@ -7072,23 +7072,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.0.2":
-  version: 5.0.2
-  resolution: "typescript@npm:5.0.2"
+"typescript@npm:5.0.4":
+  version: 5.0.4
+  resolution: "typescript@npm:5.0.4"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: bef1dcd166acfc6934b2ec4d72f93edb8961a5fab36b8dd2aaf6f4f4cd5c0210f2e0850aef4724f3b4913d5aef203a94a28ded731b370880c8bcff7e4ff91fc1
+  checksum: 82b94da3f4604a8946da585f7d6c3025fff8410779e5bde2855ab130d05e4fd08938b9e593b6ebed165bda6ad9292b230984f10952cf82f0a0ca07bbeaa08172
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@5.0.2#~builtin<compat/typescript>":
-  version: 5.0.2
-  resolution: "typescript@patch:typescript@npm%3A5.0.2#~builtin<compat/typescript>::version=5.0.2&hash=701156"
+"typescript@patch:typescript@5.0.4#~builtin<compat/typescript>":
+  version: 5.0.4
+  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=701156"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: bdbf3d0aac0d6cf010fbe0536753dc19f278eb4aba88140dcd25487dfe1c56ca8b33abc0dcd42078790a939b08ebc4046f3e9bb961d77d3d2c3cfa9829da4d53
+  checksum: 6a1fe9a77bb9c5176ead919cc4a1499ee63e46b4e05bf667079f11bf3a8f7887f135aa72460a4c3b016e6e6bb65a822cb8689a6d86cbfe92d22cc9f501f09213
   languageName: node
   linkType: hard
 
