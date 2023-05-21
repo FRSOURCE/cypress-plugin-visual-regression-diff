@@ -1,3 +1,16 @@
+# [3.3.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.2.15...v3.3.0) (2023-05-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency pngjs to v7 ([#215](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/215)) ([af71297](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/af71297f3d2ab180798bb64a46145919a6924c74))
+
+
+### Features
+
+* createMissingImages option ([#222](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/222)) ([2aef358](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/2aef35840e00299783ddede6f240c6005ac5bfcb)), closes [#204](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/204)
+* separate versioning for images ([#221](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/221)) ([b2a7434](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/b2a74340fc2616aa16d54a4dfbd43ddbfdd24eb1)), closes [#197](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/197)
+
 ## [3.2.15](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.2.14...v3.2.15) (2023-05-21)
 
 ## [3.2.14](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/v3.2.13...v3.2.14) (2023-03-26)
