@@ -1605,10 +1605,10 @@ __metadata:
     "@semantic-release/github": 8.0.7
     "@semantic-release/npm": 10.0.2
     "@semantic-release/release-notes-generator": 11.0.1
-    "@types/glob": 8.0.0
+    "@types/glob": 8.1.0
     "@types/pixelmatch": 5.2.4
     "@types/pngjs": 6.0.1
-    "@types/sharp": 0.31.0
+    "@types/sharp": 0.31.1
     "@types/tmp": 0.2.3
     "@typescript-eslint/eslint-plugin": 5.46.1
     "@typescript-eslint/parser": 5.46.1
@@ -2632,13 +2632,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/glob@npm:8.0.0":
-  version: 8.0.0
-  resolution: "@types/glob@npm:8.0.0"
+"@types/glob@npm:8.1.0":
+  version: 8.1.0
+  resolution: "@types/glob@npm:8.1.0"
   dependencies:
-    "@types/minimatch": "*"
+    "@types/minimatch": ^5.1.2
     "@types/node": "*"
-  checksum: 1817b05f5a8aed851d102a65b5e926d5c777bef927ea62b36d635860eef5364f2046bb5a692d135b6f2b28f34e4a9d44ade9396122c0845bcc7636d35f624747
+  checksum: 9101f3a9061e40137190f70626aa0e202369b5ec4012c3fabe6f5d229cce04772db9a94fa5a0eb39655e2e4ad105c38afbb4af56a56c0996a8c7d4fc72350e3d
   languageName: node
   linkType: hard
 
@@ -2656,7 +2656,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/minimatch@npm:*":
+"@types/minimatch@npm:^5.1.2":
   version: 5.1.2
   resolution: "@types/minimatch@npm:5.1.2"
   checksum: 0391a282860c7cb6fe262c12b99564732401bdaa5e395bee9ca323c312c1a0f45efbf34dce974682036e857db59a5c9b1da522f3d6055aeead7097264c8705a8
@@ -2739,12 +2739,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sharp@npm:0.31.0":
-  version: 0.31.0
-  resolution: "@types/sharp@npm:0.31.0"
+"@types/sharp@npm:0.31.1":
+  version: 0.31.1
+  resolution: "@types/sharp@npm:0.31.1"
   dependencies:
     "@types/node": "*"
-  checksum: c7698de18183a0574bf2f703226a5a7dc32b8a7340b52790eff0f6775b8ad708b6782f48fcaaf4d1be15fd76215c81c3ea55595d55484bf7ce870923c8174294
+  checksum: 226871181fc88b5ef8a6bc32c1e14a3426cc45480ed49536c45bb5c166c089169b8fe3e5c57aea8c34cc40b08311a95d5582c1a2f540f4425eb66fea3d6e0489
   languageName: node
   linkType: hard
 
