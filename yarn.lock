@@ -1614,7 +1614,7 @@ __metadata:
     "@typescript-eslint/parser": 5.46.1
     "@vitest/coverage-c8": 0.25.8
     cpy-cli: 4.2.0
-    cypress: 11.2.0
+    cypress: 12.12.0
     del-cli: 5.0.0
     eslint: 8.30.0
     eslint-config-prettier: 8.5.0
@@ -4080,10 +4080,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "commander@npm:5.1.0"
-  checksum: 0b7fec1712fbcc6230fcb161d8d73b4730fa91a21dc089515489402ad78810547683f058e2a9835929c212fead1d6a6ade70db28bbb03edbc2829a9ab7d69447
+"commander@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "commander@npm:6.2.1"
+  checksum: d7090410c0de6bc5c67d3ca41c41760d6d268f3c799e530aafb73b7437d1826bbf0d2a3edac33f8b57cc9887b4a986dce307fa5557e109be40eadb7c43b21742
   languageName: node
   linkType: hard
 
@@ -4451,9 +4451,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:11.2.0":
-  version: 11.2.0
-  resolution: "cypress@npm:11.2.0"
+"cypress@npm:12.12.0":
+  version: 12.12.0
+  resolution: "cypress@npm:12.12.0"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -4469,10 +4469,10 @@ __metadata:
     check-more-types: ^2.24.0
     cli-cursor: ^3.1.0
     cli-table3: ~0.6.1
-    commander: ^5.1.0
+    commander: ^6.2.1
     common-tags: ^1.8.0
     dayjs: ^1.10.4
-    debug: ^4.3.2
+    debug: ^4.3.4
     enquirer: ^2.3.6
     eventemitter2: 6.4.7
     execa: 4.1.0
@@ -4487,7 +4487,7 @@ __metadata:
     listr2: ^3.8.3
     lodash: ^4.17.21
     log-symbols: ^4.0.0
-    minimist: ^1.2.6
+    minimist: ^1.2.8
     ospath: ^1.2.2
     pretty-bytes: ^5.6.0
     proxy-from-env: 1.0.0
@@ -4499,7 +4499,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: e13649fb4b62a3c9dff7cc571f4e01dba009d8179b05c4f885c5ceb4ed76b78a7323fec491d992da35527708b54e596bfc9edb1d702f788317889f794d8c1e76
+  checksum: 5ab0a8bc58c8af90cdb5fea93692422e6e74436ffdaeb41853e91a3fcfcdb7a39ad6ae512537bf0edf25cc3bc3732248a32e8ad3bec3440d5f527f3a3b4650b7
   languageName: node
   linkType: hard
 
@@ -7920,10 +7920,17 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"minimist@npm:^1.2.0, minimist@npm:^1.2.3, minimist@npm:^1.2.5, minimist@npm:^1.2.6":
+"minimist@npm:^1.2.0, minimist@npm:^1.2.3, minimist@npm:^1.2.5":
   version: 1.2.6
   resolution: "minimist@npm:1.2.6"
   checksum: d15428cd1e11eb14e1233bcfb88ae07ed7a147de251441d61158619dfb32c4d7e9061d09cab4825fdee18ecd6fce323228c8c47b5ba7cd20af378ca4048fb3fb
+  languageName: node
+  linkType: hard
+
+"minimist@npm:^1.2.8":
+  version: 1.2.8
+  resolution: "minimist@npm:1.2.8"
+  checksum: 75a6d645fb122dad29c06a7597bddea977258957ed88d7a6df59b5cd3fe4a527e253e9bbf2e783e4b73657f9098b96a5fe96ab8a113655d4109108577ecf85b0
   languageName: node
   linkType: hard
 
