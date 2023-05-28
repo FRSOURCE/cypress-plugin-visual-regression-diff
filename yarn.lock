@@ -1631,7 +1631,7 @@ __metadata:
     "@semantic-release/git": 10.0.1
     "@semantic-release/github": 8.0.7
     "@semantic-release/npm": 10.0.3
-    "@semantic-release/release-notes-generator": 11.0.1
+    "@semantic-release/release-notes-generator": 11.0.2
     "@types/glob": 8.1.0
     "@types/pixelmatch": 5.2.4
     "@types/pngjs": 6.0.1
@@ -2556,7 +2556,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semantic-release/release-notes-generator@npm:11.0.1, @semantic-release/release-notes-generator@npm:^11.0.0":
+"@semantic-release/release-notes-generator@npm:11.0.2":
+  version: 11.0.2
+  resolution: "@semantic-release/release-notes-generator@npm:11.0.2"
+  dependencies:
+    conventional-changelog-angular: ^5.0.0
+    conventional-changelog-writer: ^5.0.0
+    conventional-commits-filter: ^2.0.0
+    conventional-commits-parser: ^3.2.3
+    debug: ^4.0.0
+    get-stream: ^7.0.0
+    import-from: ^4.0.0
+    into-stream: ^7.0.0
+    lodash-es: ^4.17.21
+    read-pkg-up: ^9.0.0
+  peerDependencies:
+    semantic-release: ">=20.1.0"
+  checksum: bbecdafeea9a140f4a9ba615f871a69179801802145debc35588987c833fdcd16008b5a8b6c8c8604625c0074cd28ced014e5fee35bf0a0dce7ee916912c0224
+  languageName: node
+  linkType: hard
+
+"@semantic-release/release-notes-generator@npm:^11.0.0":
   version: 11.0.1
   resolution: "@semantic-release/release-notes-generator@npm:11.0.1"
   dependencies:
@@ -5868,6 +5888,13 @@ fsevents@~2.3.2:
   version: 6.0.1
   resolution: "get-stream@npm:6.0.1"
   checksum: e04ecece32c92eebf5b8c940f51468cd53554dcbb0ea725b2748be583c9523d00128137966afce410b9b051eb2ef16d657cd2b120ca8edafcf5a65e81af63cad
+  languageName: node
+  linkType: hard
+
+"get-stream@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "get-stream@npm:7.0.0"
+  checksum: 1f8e6ddc0c2752ea60d03c5509ac02ea3e5e2e3f0f4d3ac4f89cc56e1c61990cade097c60ec2e2ec21d8f33ac89ffd26c49db5df42dd70f17f815a55335ce5c5
   languageName: node
   linkType: hard
 
