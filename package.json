@@ -100,7 +100,7 @@
     "microbundle": "0.15.1",
     "prettier": "2.8.8",
     "sanitize-filename": "1.6.3",
-    "semantic-release": "21.0.2",
+    "semantic-release": "21.0.3",
     "tmp-promise": "3.0.3",
     "typescript": "5.0.4",
     "vite-tsconfig-paths": "4.0.7",
