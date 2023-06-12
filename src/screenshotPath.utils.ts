@@ -66,12 +66,12 @@ export const generateScreenshotPath = ({
 
   return path.join(
     IMAGE_SNAPSHOT_PREFIX,
-    `${screenshotPath} #${nameCacheCounter[screenshotPath]}${FILE_SUFFIX.actual}.png`
+    `${screenshotPath}_#${nameCacheCounter[screenshotPath]}${FILE_SUFFIX.actual}.png`
   );
 };
 
 const screenshotPathRegex = new RegExp(
-  `^([\\s\\S]+?) #([0-9]+)(?:(?:\\${FILE_SUFFIX.diff})|(?:\\${FILE_SUFFIX.actual}))?\\.(?:png|PNG)$`
+  `^([\\s\\S]+?)_#([0-9]+)(?:(?:\\${FILE_SUFFIX.diff})|(?:\\${FILE_SUFFIX.actual}))?\\.(?:png|PNG)$`
 );
 export const wasScreenshotUsed = (imagePath: string) => {
   const matched = imagePath.match(screenshotPathRegex);
