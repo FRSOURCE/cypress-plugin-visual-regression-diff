@@ -186,6 +186,8 @@ export const compareImagesTask = async (
 export const doesFileExistTask = ({ path }: { path: string }) =>
   fs.existsSync(path);
 
+export const processImgPath = ({ path: string }) => path;
+
 /* c8 ignore start */
 export const initTaskHook = (config: Cypress.PluginConfigOptions) => ({
   [TASK.getScreenshotPathInfo]: getScreenshotPathInfoTask,
@@ -193,5 +195,6 @@ export const initTaskHook = (config: Cypress.PluginConfigOptions) => ({
   [TASK.doesFileExist]: doesFileExistTask,
   [TASK.approveImage]: approveImageTask,
   [TASK.compareImages]: compareImagesTask,
+  [TASK.processImgPath]: processImgPath,
 });
 /* c8 ignore stop */
