@@ -46,7 +46,7 @@ jobs:
         with:
           node-version: "18.x"
           cache: 'pnpm'
-      - run: pnpm install
+      - run: pnpm install && pnpx cypress install
       - run: pnpm build --filter cypress-plugin-visual-regression-diff
       - name: Test e2e
         run: pnpm test:e2e:ci
