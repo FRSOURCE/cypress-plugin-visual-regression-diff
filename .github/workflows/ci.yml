@@ -11,38 +11,14 @@ jobs:
   cache:
     name: CI cache
     runs-on: ubuntu-latest
-    outputs:
-      yarn-cache-key: ${{ steps.yarn-cache-key.outputs.key }}
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.4
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
-      - name: Remove git auth
-        run: git config --unset http.https://github.com/.extraheader
-      - name: Generate yarn cache-key
-        id: yarn-cache-key
-        run: echo "::set-output name=key::${{ runner.os }}-yarn-ci-cache-v3-${{ hashFiles('./yarn.lock') }}-${{ hashFiles('**/yarn.lock') }}"
-      - name: Configure Yarn cache
-        uses: actions/cache@v3
-        with:
-          key: ${{ steps.yarn-cache-key.outputs.key }}
-          path: |
-            ~/.cache/Cypress
-            .yarn
-            node_modules
-            example/node_modules
-      - name: Install dependencies
-        if: ${{ github.actor != 'dependabot[bot]' || github.ref == 'refs/heads/main' }}
-        run: yarn --immutable
-      - name: Reset yarn.lock (due to dependabot incompatibility with yarn 3)
-        if: ${{ github.actor == 'dependabot[bot]' && github.ref != 'refs/heads/main' }}
-        run: "git checkout HEAD~1 yarn.lock"
-      - name: Install dependencies & update yarn.lock (dependabot)
-        if: ${{ github.actor == 'dependabot[bot]' && github.ref != 'refs/heads/main' }}
-        run: "yarn install && git stage yarn.lock && git commit -m 'chore: update yarn.lock' && git push"
-        env:
-          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+          cache: 'pnpm'
+      - run: pnpm install
 
   lint:
     name: lint
@@ -50,26 +26,14 @@ jobs:
     needs: cache
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.4
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
-      - name: remove git auth
-        run: git config --unset http.https://github.com/.extraheader
-      - name: Configure Yarn cache
-        uses: actions/cache@v3
-        with:
-          key: ${{ needs.cache.outputs.yarn-cache-key }}
-          path: |
-            ~/.cache/Cypress
-            .yarn
-            node_modules
-            example/node_modules
-      - name: Install dependencies
-        run: yarn --immutable
-      - name: Lint
-        run: yarn lint:ci
-      - name: Prettify
-        run: yarn prettify:ci
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm lint:ci
+      - run: pnpm format:ci
 
   test:
     name: test
@@ -77,30 +41,17 @@ jobs:
     needs: cache
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.4
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
-      - name: remove git auth
-        run: git config --unset http.https://github.com/.extraheader
-      - name: Configure Yarn cache
-        uses: actions/cache@v3
-        with:
-          key: ${{ needs.cache.outputs.yarn-cache-key }}
-          path: |
-            ~/.cache/Cypress
-            .yarn
-            node_modules
-            example/node_modules
-      - name: Install dependencies
-        run: yarn --immutable
-      - name: Build plugin
-        run: yarn build
-      - name: Install example dependencies
-        run: cd example && yarn --immutable
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm build --filter cypress-plugin-visual-regression-diff
       - name: Test e2e
-        run: yarn test:e2e:ci
+        run: pnpm test:e2e:ci
       - name: Test component-testing
-        run: yarn test:ct:ci
+        run: pnpm test:ct:ci
 
   test-integration-coverage:
     name: test-integration-coverage
@@ -108,22 +59,12 @@ jobs:
     needs: cache
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.4
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
-      - name: remove git auth
-        run: git config --unset http.https://github.com/.extraheader
-      - name: Configure Yarn cache
-        uses: actions/cache@v3
-        with:
-          key: ${{ needs.cache.outputs.yarn-cache-key }}
-          path: |
-            ~/.cache/Cypress
-            .yarn
-            node_modules
-            example/node_modules
-      - name: Install dependencies
-        run: yarn --immutable
+          cache: 'pnpm'
+      - run: pnpm install
       - name: Test integration (with coverage) and upload to CodeClimate
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: paambaati/codeclimate-action@v4.0.0
@@ -131,12 +72,12 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           debug: true
-          coverageCommand: yarn test:integration:ci
+          coverageCommand: pnpm test:integration:ci
           coverageLocations: |
             ${{github.workspace}}/coverage/lcov.info:lcov
       - name: Test integration (with coverage)
         if: ${{ github.ref != 'refs/heads/main' }}
-        run: yarn test:integration:ci
+        run: pnpm test:integration:ci
 
   build-and-release:
     name: build and release
@@ -144,43 +85,26 @@ jobs:
     needs: [cache, lint, test, test-integration-coverage]
     if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' && github.event_name == 'push' }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: google-github-actions/release-please-action@v2
+        id: release
         with:
-          # pulls all commits (needed for lerna / semantic release to correctly version)
-          fetch-depth: "0"
-      - name: Setup git user
-        run: |
-          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
-          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
+          command: manifest
+          default-branch: main
+      - if: ${{ steps.release.outputs.releases_created }}
+        uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.4
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
-      - name: remove git auth
-        run: git config --unset http.https://github.com/.extraheader
-      - name: Configure Yarn cache
-        uses: actions/cache@v3
-        with:
-          key: ${{ needs.cache.outputs.yarn-cache-key }}
-          path: |
-            ~/.cache/Cypress
-            .yarn
-            node_modules
-            example/node_modules
-      - name: Install dependencies
-        run: yarn --immutable
-      - name: Authenticate with Registry
-        run: |
-          yarn npm logout
-          echo "registry=http://registry.npmjs.org/" >> .npmrc
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
-          npm whoami
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: pnpm install
+      - name: Build packages to get cross-references working 🔧
+        run: pnpm build
+      - name: Release package
+        run: pnpm release:ci
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: release package
-        if: ${{ success() }}
-        run: yarn release:ci
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

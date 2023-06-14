@@ -61,11 +61,14 @@
 You can install this library using your favorite package manager:
 
 ```bash
+# npm
+npm install --save-dev @frsource/cypress-plugin-visual-regression-diff
+
 # yarn
 yarn add -D @frsource/cypress-plugin-visual-regression-diff
 
-# npm
-npm install --save-dev @frsource/cypress-plugin-visual-regression-diff
+# pnpm
+pnpm add -D @frsource/cypress-plugin-visual-regression-diff
 ```
 
 Next, you need to import the library:

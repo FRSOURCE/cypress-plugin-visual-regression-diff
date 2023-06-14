@@ -7,16 +7,16 @@
     "build": "vue-cli-service build",
     "test:open": "vue-cli-service test:e2e --env \"pluginVisualRegressionImagesPath={spec_path}/__image_snapshots_local__\"",
     "test:run": "vue-cli-service test:e2e",
-    "test:ct": "yarn test:open --component",
-    "test:ct:ci": "yarn test:run --component --headless",
-    "test:e2e": "yarn test:open --e2e",
-    "test:e2e:ci": "yarn test:run --e2e --headless"
+    "test:ct": "pnpm test:open --component",
+    "test:ct:ci": "pnpm test:run --component --headless",
+    "test:e2e": "pnpm test:open --e2e",
+    "test:e2e:ci": "pnpm test:run --e2e --headless"
   },
   "dependencies": {
     "vue": "3.2.45"
   },
   "devDependencies": {
-    "@frsource/cypress-plugin-visual-regression-diff": "portal:..",
+    "@frsource/cypress-plugin-visual-regression-diff": "workspace:*",
     "@vue/cli-plugin-e2e-cypress": "5.0.8",
     "@vue/cli-service": "5.0.8",
     "cypress": "12.12.0",

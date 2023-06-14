@@ -18,7 +18,7 @@ module.exports = {
       parser: "@typescript-eslint/parser",
       parserOptions: {
         sourceType: "module",
-        project: ["./tsconfig.json", "./example/tsconfig.json"],
+        project: ["./packages/cypress-plugin-visual-regression-diff/tsconfig.json", "./example/tsconfig.json"],
         tsconfigRootDir: __dirname,
         warnOnUnsupportedTypeScriptVersion: false,
         EXPERIMENTAL_useSourceOfProjectReferenceRedirect: true,
