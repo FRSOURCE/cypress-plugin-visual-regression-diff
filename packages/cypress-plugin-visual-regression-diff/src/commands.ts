@@ -59,10 +59,16 @@ const constructCypressError = (log: Cypress.Log, err: Error) => {
   return err;
 };
 
+const capitalize = (text: string) =>
+  text.charAt(0).toUpperCase() + text.slice(1);
+
+const getPluginEnv = <R extends keyof Cypress.MatchImageOptions>(key: R) =>
+  Cypress.env(`pluginVisualRegression${capitalize(key)}`) as
+    | Cypress.MatchImageOptions[R]
+    | undefined;
+
 const getImagesDir = (options: Cypress.MatchImageOptions) => {
-  const imagesDir =
-    options.imagesDir ||
-    (Cypress.env("pluginVisualRegressionImagesDir") as string | undefined);
+  const imagesDir = options.imagesDir || getPluginEnv("imagesDir");
 
   // TODO: remove in 4.0.0
   if (imagesDir) {
@@ -76,49 +82,28 @@ const getImagesDir = (options: Cypress.MatchImageOptions) => {
 
 export const getConfig = (options: Cypress.MatchImageOptions) => {
   const imagesDir = getImagesDir(options);
-  const maxDiffThreshold =
-    options.maxDiffThreshold ??
-    (Cypress.env("pluginVisualRegressionMaxDiffThreshold") as
-      | number
-      | undefined);
 
   return {
     scaleFactor:
       options.forceDeviceScaleFactor === false ||
-      Cypress.env("pluginVisualRegressionForceDeviceScaleFactor") === false
+      getPluginEnv("forceDeviceScaleFactor") === false
         ? 1
         : 1 / window.devicePixelRatio,
     createMissingImages:
-      options.createMissingImages ||
-      (Cypress.env("pluginVisualRegressionCreateMissingImages") as
-        | boolean
-        | undefined) ||
+      options.createMissingImages ??
+      getPluginEnv("createMissingImages") ??
       true,
-    updateImages:
-      options.updateImages ||
-      (Cypress.env("pluginVisualRegressionUpdateImages") as
-        | boolean
-        | undefined) ||
-      false,
+    updateImages: options.updateImages ?? getPluginEnv("updateImages") ?? false,
     imagesPath:
       (imagesDir && `{spec_path}/${imagesDir}`) ||
       options.imagesPath ||
-      (Cypress.env("pluginVisualRegressionImagesPath") as string | undefined) ||
+      getPluginEnv("imagesPath") ||
       "{spec_path}/__image_snapshots__",
     maxDiffThreshold:
-      typeof maxDiffThreshold === "number" ? maxDiffThreshold : 0.01,
-    diffConfig:
-      options.diffConfig ||
-      (Cypress.env("pluginVisualRegressionDiffConfig") as
-        | Parameters<typeof pixelmatch>[5]
-        | undefined) ||
-      {},
+      options.maxDiffThreshold ?? getPluginEnv("maxDiffThreshold") ?? 0.01,
+    diffConfig: options.diffConfig || getPluginEnv("diffConfig") || {},
     screenshotConfig:
-      options.screenshotConfig ||
-      (Cypress.env("pluginVisualRegressionScreenshotConfig") as
-        | Partial<Cypress.ScreenshotDefaultsOptions>
-        | undefined) ||
-      {},
+      options.screenshotConfig || getPluginEnv("screenshotConfig") || {},
     matchAgainstPath: options.matchAgainstPath || undefined,
   };
 };
