@@ -50,7 +50,7 @@ After cloning the repository, run:
 
 ```bash
 pnpm i # installs the project dependencies
-cd example && pnpm i # install dependencies for example project (useful for testing)
+cd examples/webpack && pnpm i # install dependencies for example project (useful for testing)
 ```
 
 ### Committing Changes

@@ -13,15 +13,15 @@
     "release": "pnpm publish",
     "release:ci": "pnpm release --yes",
     "release:test": "pnpm release --no-git-tag-version --no-push --skip-npm",
-    "test": "cd example && pnpm test:ct:ci && pnpm test:e2e:ci && pnpm test:integration:ci",
+    "test": "cd examples/webpack && pnpm test:ct:ci && pnpm test:e2e:ci && pnpm test:integration:ci",
     "test:integration": "pnpm -r test:integration",
     "test:integration:watch": "pnpm -r test:integration:watch",
     "test:integration:coverage": "pnpm -r test:integration:coverage",
     "test:integration:ci": "pnpm -r test:integration:ci",
-    "test:ct": "cd example && pnpm test:ct",
-    "test:ct:ci": "cd example && pnpm test:ct:ci",
-    "test:e2e": "cd example && pnpm test:e2e",
-    "test:e2e:ci": "cd example && pnpm test:e2e:ci"
+    "test:ct": "cd examples/webpack && pnpm test:ct",
+    "test:ct:ci": "cd examples/webpack && pnpm test:ct:ci",
+    "test:e2e": "cd examples/webpack && pnpm test:e2e",
+    "test:e2e:ci": "cd examples/webpack && pnpm test:e2e:ci"
   },
   "engines": {
     "node": ">=10"

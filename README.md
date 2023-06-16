@@ -153,7 +153,7 @@ cy.matchImage();
 
 ## Example
 
-Still got troubles with installation? Have a look at [example directory of this repo](./example) to see how this plugin can be used in e2e or component-testing Cypress environment within your project.
+Still got troubles with installation? Have a look at [examples directory of this repo](./examples) to see how this plugin can be used in e2e or component-testing Cypress environment within your project.
 
 ## Automatic clean up of unused images
 
