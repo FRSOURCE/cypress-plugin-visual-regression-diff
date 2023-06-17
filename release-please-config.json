@@ -3,40 +3,8 @@
   "plugins": ["node-workspace"],
   "packages": {
     "packages/core": {
-      "path": "packages/core",
-      "component": "@frsource/tiny-carousel-core"
-    },
-    "packages/docs": {
-      "component": "@frsource/tiny-carousel-docs",
-      "path": "packages/docs"
-    },
-    "packages/plugin-autoplay": {
-      "component": "@frsource/tiny-carousel-plugin-autoplay",
-      "path": "packages/plugin-autoplay"
-    },
-    "packages/plugin-custom-events": {
-      "component": "@frsource/tiny-carousel-plugin-custom-events",
-      "path": "packages/plugin-custom-events"
-    },
-    "packages/plugin-mouse-drag": {
-      "component": "@frsource/tiny-carousel-plugin-mouse-drag",
-      "path": "packages/plugin-mouse-drag"
-    },
-    "packages/plugin-scroll-snap-fallback": {
-      "component": "@frsource/tiny-carousel-plugin-scroll-snap-fallback",
-      "path": "packages/plugin-scroll-snap-fallback"
-    },
-    "packages/react": {
-      "component": "@frsource/tiny-carousel-react",
-      "path": "packages/react"
-    },
-    "packages/utils": {
-      "component": "@frsource/tiny-carousel-utils",
-      "path": "packages/utils"
-    },
-    "packages/vue": {
-      "component": "@frsource/tiny-carousel-vue",
-      "path": "packages/vue"
+      "path": "packages/cypress-plugin-visual-regression-diff",
+      "component": "@frsource/cypress-plugin-visual-regression-diff"
     }
   }
 }
