@@ -22,7 +22,7 @@ Don’t hesitate to ask a question directly on the [discussions board](https://g
 
 - Checkout the master branch and (after you do your work) file a PR against it
 
-- Read through the [development setup](#development-setup) to learn how to work with this project. Always make sure that `yarn lint`, `yarn build` and `yarn test` pass
+- Read through the [development setup](#development-setup) to learn how to work with this project. Always make sure that `pnpm lint`, `pnpm build` and `pnpm test` pass
 
 - Please use [conventional commits v1.0.0 style guide](https://www.conventionalcommits.org/en/v1.0.0/) for commits and PR names
 
@@ -42,15 +42,15 @@ Don’t hesitate to ask a question directly on the [discussions board](https://g
 
 <!-- textlint-disable spelling -->
 
-You will need [Node.js](https://nodejs.org/en/) **version 16+** and [yarn](https://yarnpkg.com/getting-started/install).
+You will need [Node.js](https://nodejs.org/en/) **version 16+** and [pnpm](https://pnpm.io/installation).
 
 <!-- textlint-enable -->
 
 After cloning the repository, run:
 
 ```bash
-yarn i # installs the project dependencies
-cd example && yarn i # install dependencies for example project (useful for testing)
+pnpm i # installs the project dependencies
+cd examples/webpack && pnpm i # install dependencies for example project (useful for testing)
 ```
 
 ### Committing Changes
@@ -63,30 +63,30 @@ When fired in the project root they will run corresponding actions in every nest
 
 ```bash
 # build the project for NPM and example usage
-$ yarn build
+$ pnpm build
 
 # run tests once
-$ yarn test
+$ pnpm test
 
 # open cypress component runner from example directory
-# requires plugin to be built first via `yarn build`
-$ yarn test:ct
+# requires plugin to be built first via `pnpm build`
+$ pnpm test:ct
 
 # open cypress e2e runner from example directory
-# requires plugin to be built first via `yarn build`
-$ yarn test:e2e
+# requires plugin to be built first via `pnpm build`
+$ pnpm test:e2e
 
 # run integration tests once and collect coverage
-$ yarn test:integration:coverage
+$ pnpm test:integration:coverage
 
 # run integration tests in watch mode
-$ yarn test:integration:watch
+$ pnpm test:integration:watch
 
 # lint & try to autofix linting errors
-$ yarn fix:lint && yarn prettify
+$ pnpm fix:lint && pnpm format
 
 # lint files
-$ yarn lint && yarn prettify:ci
+$ pnpm lint && pnpm format:ci
 ```
 
 There are some other scripts available in the `scripts` section of the `package.json` file.

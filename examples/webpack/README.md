@@ -3,27 +3,27 @@
 ## Project setup
 
 ```bash
-yarn install
+pnpm install
 ```
 
 ### Run your end-to-end tests
 
-> Important - remember to run `yarn && yarn build` command in this repo's root directory before starting e2e tests.
+> Important - remember to run `pnpm && pnpm build` command in this repo's root directory before starting e2e tests.
 
 ```bash
-yarn test:e2e
+pnpm test:e2e
 ```
 
 ### Compiles and hot-reloads for development
 
 ```bash
-yarn serve
+pnpm serve
 ```
 
 ### Compiles and minifies for production
 
 ```bash
-yarn build
+pnpm build
 ```
 
 ### Customize configuration

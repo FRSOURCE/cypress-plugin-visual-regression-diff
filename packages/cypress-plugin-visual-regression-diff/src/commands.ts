@@ -59,10 +59,32 @@ const constructCypressError = (log: Cypress.Log, err: Error) => {
   return err;
 };
 
+const capitalize = (text: string) =>
+  text.charAt(0).toUpperCase() + text.slice(1);
+
+const getPluginEnv = <K extends keyof Cypress.MatchImageOptions>(key: K) =>
+  Cypress.env(`pluginVisualRegression${capitalize(key)}`) as
+    | Cypress.MatchImageOptions[K]
+    | undefined;
+
+const booleanOption = <K extends keyof Cypress.MatchImageOptions, Return>(
+  options: Cypress.MatchImageOptions,
+  key: K,
+  truthyValue: Return,
+  falsyValue: Return
+) =>
+  options[key] === false || getPluginEnv(key) === false
+    ? truthyValue
+    : falsyValue;
+
+const optionWithDefaults = <K extends keyof Cypress.MatchImageOptions>(
+  options: Cypress.MatchImageOptions,
+  key: K,
+  defaultValue: NonNullable<Cypress.MatchImageOptions[K]>
+) => options[key] ?? getPluginEnv(key) ?? defaultValue;
+
 const getImagesDir = (options: Cypress.MatchImageOptions) => {
-  const imagesDir =
-    options.imagesDir ||
-    (Cypress.env("pluginVisualRegressionImagesDir") as string | undefined);
+  const imagesDir = options.imagesDir || getPluginEnv("imagesDir");
 
   // TODO: remove in 4.0.0
   if (imagesDir) {
@@ -74,54 +96,30 @@ const getImagesDir = (options: Cypress.MatchImageOptions) => {
   return imagesDir;
 };
 
-export const getConfig = (options: Cypress.MatchImageOptions) => {
+const getImagesPath = (options: Cypress.MatchImageOptions) => {
   const imagesDir = getImagesDir(options);
-  const maxDiffThreshold =
-    options.maxDiffThreshold ??
-    (Cypress.env("pluginVisualRegressionMaxDiffThreshold") as
-      | number
-      | undefined);
 
-  return {
-    scaleFactor:
-      options.forceDeviceScaleFactor === false ||
-      Cypress.env("pluginVisualRegressionForceDeviceScaleFactor") === false
-        ? 1
-        : 1 / window.devicePixelRatio,
-    createMissingImages:
-      options.createMissingImages ||
-      (Cypress.env("pluginVisualRegressionCreateMissingImages") as
-        | boolean
-        | undefined) ||
-      true,
-    updateImages:
-      options.updateImages ||
-      (Cypress.env("pluginVisualRegressionUpdateImages") as
-        | boolean
-        | undefined) ||
-      false,
-    imagesPath:
-      (imagesDir && `{spec_path}/${imagesDir}`) ||
-      options.imagesPath ||
-      (Cypress.env("pluginVisualRegressionImagesPath") as string | undefined) ||
-      "{spec_path}/__image_snapshots__",
-    maxDiffThreshold:
-      typeof maxDiffThreshold === "number" ? maxDiffThreshold : 0.01,
-    diffConfig:
-      options.diffConfig ||
-      (Cypress.env("pluginVisualRegressionDiffConfig") as
-        | Parameters<typeof pixelmatch>[5]
-        | undefined) ||
-      {},
-    screenshotConfig:
-      options.screenshotConfig ||
-      (Cypress.env("pluginVisualRegressionScreenshotConfig") as
-        | Partial<Cypress.ScreenshotDefaultsOptions>
-        | undefined) ||
-      {},
-    matchAgainstPath: options.matchAgainstPath || undefined,
-  };
+  return (
+    (imagesDir && `{spec_path}/${imagesDir}`) ||
+    optionWithDefaults(options, "imagesPath", "{spec_path}/__image_snapshots__")
+  );
 };
+
+export const getConfig = (options: Cypress.MatchImageOptions) => ({
+  scaleFactor: booleanOption(
+    options,
+    "forceDeviceScaleFactor",
+    1,
+    1 / window.devicePixelRatio
+  ),
+  createMissingImages: optionWithDefaults(options, "createMissingImages", true),
+  updateImages: optionWithDefaults(options, "updateImages", false),
+  imagesPath: getImagesPath(options),
+  maxDiffThreshold: optionWithDefaults(options, "maxDiffThreshold", 0.01),
+  diffConfig: optionWithDefaults(options, "diffConfig", {}),
+  screenshotConfig: optionWithDefaults(options, "screenshotConfig", {}),
+  matchAgainstPath: options.matchAgainstPath || undefined,
+});
 
 Cypress.Commands.add(
   "matchImage",

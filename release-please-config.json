@@ -1,0 +1,10 @@
+{
+  "sequential-calls": true,
+  "plugins": ["node-workspace"],
+  "packages": {
+    "packages/core": {
+      "path": "packages/cypress-plugin-visual-regression-diff",
+      "component": "@frsource/cypress-plugin-visual-regression-diff"
+    }
+  }
+}
