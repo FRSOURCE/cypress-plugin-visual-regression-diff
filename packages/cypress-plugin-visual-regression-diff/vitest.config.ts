@@ -20,7 +20,9 @@ export default defineConfig({
     include: [testsGlob],
     coverage: {
       provider: "c8",
-      reporter: isCI ? ["text", "lcovonly"] : ["text", "lcov"],
+      reporter: isCI
+        ? ["text", ["lcovonly", { projectRoot: "../.." }]]
+        : ["text", "lcov"],
       lines: 90,
       functions: 90,
       branches: 90,

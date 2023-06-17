@@ -1,0 +1,121 @@
+{
+  "name": "@frsource/cypress-plugin-visual-regression-diff",
+  "description": "Perform visual regression test with a nice GUI as help. 💅 Only for Cypress!",
+  "version": "3.3.9",
+  "author": "Jakub Freisler <jakub.freisler@frsource.org>",
+  "homepage": "https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff",
+  "repository": "https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff.git",
+  "sideEffects": [
+    "./dist/**"
+  ],
+  "main": "dist/support.js",
+  "types": "dist/support.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/support.d.ts",
+      "import": "./dist/support.mjs",
+      "default": "./dist/support.js"
+    },
+    "./support": {
+      "types": "./dist/support.d.ts",
+      "import": "./dist/support.mjs",
+      "default": "./dist/support.js"
+    },
+    "./plugins": {
+      "types": "./dist/plugins.d.ts",
+      "import": "./dist/plugins.mjs",
+      "default": "./dist/plugins.js"
+    },
+    "./constants": {
+      "types": "./dist/constants.d.ts",
+      "import": "./dist/constants.mjs",
+      "default": "./dist/constants.js"
+    },
+    "./*": "./*.js"
+  },
+  "typesVersions": {
+    "*": {
+      "support": [
+        "dist/support.d.ts"
+      ],
+      "plugins": [
+        "dist/plugins.d.ts"
+      ],
+      "constants": [
+        "dist/constants.d.ts"
+      ]
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "del-cli dist && microbundle src/{support,plugins,constants}.ts --target node --tsconfig tsconfig.build.json -f cjs,modern && cpy 'dist/src/*' dist && del-cli dist/src \"dist/*.{hook,utils}.d.ts\"",
+    "format": "prettier --write .",
+    "format:ci": "prettier --check .",
+    "test": "cd examples/webpack && pnpm test:ct:ci && pnpm test:e2e:ci && pnpm test:integration:ci",
+    "test:integration": "vitest run",
+    "test:integration:watch": "vitest",
+    "test:integration:coverage": "vitest run --coverage",
+    "test:integration:ci": "CI=true vitest run --coverage",
+    "test:ct": "cd examples/webpack && pnpm test:ct",
+    "test:ct:ci": "cd examples/webpack && pnpm test:ct:ci",
+    "test:e2e": "cd examples/webpack && pnpm test:e2e",
+    "test:e2e:ci": "cd examples/webpack && pnpm test:e2e:ci"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "packageManager": "pnpm@8.6.2",
+  "peerDependencies": {
+    "cypress": ">=4.5.0"
+  },
+  "devDependencies": {
+    "@types/glob": "8.1.0",
+    "@types/pixelmatch": "5.2.4",
+    "@types/pngjs": "6.0.1",
+    "@types/sharp": "0.31.1",
+    "@types/tmp": "0.2.3",
+    "@vitest/coverage-c8": "0.31.4",
+    "cpy-cli": "4.2.0",
+    "cypress": "12.12.0",
+    "del-cli": "5.0.0",
+    "microbundle": "0.15.1",
+    "prettier": "2.8.8",
+    "sanitize-filename": "1.6.3",
+    "tmp-promise": "3.0.3",
+    "typescript": "5.0.4",
+    "vite-tsconfig-paths": "4.0.7",
+    "vitest": "0.31.4"
+  },
+  "keywords": [
+    "Cypress",
+    "Cypress plugin",
+    "visual regression testing",
+    "visual diff",
+    "image diff",
+    "visual comparison",
+    "image comparison",
+    "Cypress visual regression",
+    "regression testing",
+    "visual snapshot",
+    "image snapshot",
+    "Cypress image snapshot"
+  ],
+  "dependencies": {
+    "@frsource/base64": "1.0.14",
+    "glob": "8.0.3",
+    "meta-png": "1.0.6",
+    "move-file": "2.1.0",
+    "pixelmatch": "5.3.0",
+    "pngjs": "7.0.0",
+    "sharp": "0.31.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ]
+}
