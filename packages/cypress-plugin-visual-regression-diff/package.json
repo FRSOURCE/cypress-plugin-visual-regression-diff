@@ -101,7 +101,7 @@
     "Cypress image snapshot"
   ],
   "dependencies": {
-    "@frsource/base64": "1.0.14",
+    "@frsource/base64": "1.0.17",
     "glob": "8.0.3",
     "meta-png": "1.0.6",
     "move-file": "2.1.0",
