@@ -20,7 +20,7 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/src/assets/logo.svg" alt="Cypress Plugin Visual Regression Diff logo" height="120px"/>
+  <img src="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/assets/logo.svg" alt="Cypress Plugin Visual Regression Diff logo" height="120px"/>
 </p>
 
 <h1 align="center">Plugin for Cypress - Visual Regression Diff</h1>
