@@ -51,15 +51,10 @@
     "build": "del-cli dist && microbundle src/{support,plugins,constants}.ts --target node --tsconfig tsconfig.build.json -f cjs,modern && cpy 'dist/src/*' dist && del-cli dist/src \"dist/*.{hook,utils}.d.ts\"",
     "format": "prettier --write .",
     "format:ci": "prettier --check .",
-    "test": "cd examples/webpack && pnpm test:ct:ci && pnpm test:e2e:ci && pnpm test:integration:ci",
     "test:integration": "vitest run",
     "test:integration:watch": "vitest",
     "test:integration:coverage": "vitest run --coverage",
-    "test:integration:ci": "CI=true vitest run --coverage",
-    "test:ct": "cd examples/webpack && pnpm test:ct",
-    "test:ct:ci": "cd examples/webpack && pnpm test:ct:ci",
-    "test:e2e": "cd examples/webpack && pnpm test:e2e",
-    "test:e2e:ci": "cd examples/webpack && pnpm test:e2e:ci"
+    "test:integration:ci": "CI=true vitest run --coverage"
   },
   "engines": {
     "node": ">=10"
