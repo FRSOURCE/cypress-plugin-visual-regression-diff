@@ -4,10 +4,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test:e2e": "start-server-and-test dev http://localhost:3000 \"cypress open --e2e --env \"pluginVisualRegressionImagesPath={spec_path}/__image_snapshots_local__\"\"",
-    "test:e2e:ci": "start-server-and-test dev http://localhost:3000 \"cypress run --e2e\"",
-    "test:ci": "cypress open --component --env \"pluginVisualRegressionImagesPath={spec_path}/__image_snapshots_local__\"",
-    "test:ct:ci": "cypress run --component"
+    "cypress": "cypress open --env \"pluginVisualRegressionImagesPath={spec_path}/__image_snapshots_local__\"",
+    "cypress:ci": "cypress run --env \"pluginVisualRegressionImagesPath={spec_path}/__image_snapshots_local__\"",
+    "test:e2e": "start-server-and-test dev http://localhost:3000 \"pnpm cypress --e2e\"",
+    "test:e2e:ci": "start-server-and-test dev http://localhost:3000 \"pnpm cypress:ci --e2e\"",
+    "test:ct": "start-server-and-test dev http://localhost:3000 \"pnpm cypress --component\"",
+    "test:ct:ci": "start-server-and-test dev http://localhost:3000 \"pnpm cypress:ci --component\""
   },
   "dependencies": {
     "next": "latest",
