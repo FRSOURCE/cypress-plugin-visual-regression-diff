@@ -11,14 +11,33 @@ jobs:
   cache:
     name: CI cache
     runs-on: ubuntu-latest
+    outputs:
+      pnpm-cache: ${{ steps.vars.outputs.pnpm-cache }}
+      key: ${{ steps.vars.outputs.key }}
     steps:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2.2.4
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
-          cache: 'pnpm'
-      - run: pnpm install
+      - id: vars
+        run: |
+          echo "pnpm-cache=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+          echo "key=${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}" >> $GITHUB_OUTPUT
+      - name: Cache NPM and Cypress 📦
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            ${{ steps.vars.outputs.pnpm-cache }}
+            ~/.cache/Cypress
+          key: ${{ steps.vars.outputs.key }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-pnpm-
+      - run: pnpm install --frozen-lockfile --prefer-offline
+        env:
+          HUSKY: '0' # By default do not run HUSKY install
 
   lint:
     name: lint
@@ -30,8 +49,20 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
-          cache: 'pnpm'
-      - run: pnpm install
+      - name: Cache NPM and Cypress 📦
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            ${{ needs.cache.outputs.pnpm-cache }}
+            ~/.cache/Cypress
+          key: ${{ needs.cache.outputs.key }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-pnpm-
+      - run: pnpm install --frozen-lockfile --prefer-offline
+        env:
+          HUSKY: '0' # By default do not run HUSKY install
       - run: pnpm lint:ci
       - run: pnpm format:ci
 
@@ -45,13 +76,32 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
-          cache: 'pnpm'
-      - run: pnpm install && cd ./examples/webpack && pnpm cypress install
+      - name: Cache NPM and Cypress 📦
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            ${{ needs.cache.outputs.pnpm-cache }}
+            ~/.cache/Cypress
+          key: ${{ needs.cache.outputs.key }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-pnpm-
+      - run: pnpm install --frozen-lockfile --prefer-offline
+        env:
+          HUSKY: '0' # By default do not run HUSKY install
       - run: pnpm --filter cypress-plugin-visual-regression-diff -r build
       - name: Test e2e
         run: pnpm test:e2e:ci
       - name: Test component-testing
         run: pnpm test:ct:ci
+      - uses: actions/upload-artifact@v3
+        with:
+          name: test
+          path: |
+            examples/next/**/*.png
+            examples/next/**/*.jpg
+            examples/next/**/*.jpeg
 
   test-integration-coverage:
     name: test-integration-coverage
@@ -63,8 +113,20 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
-          cache: 'pnpm'
-      - run: pnpm install
+      - name: Cache NPM and Cypress 📦
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            ${{ needs.cache.outputs.pnpm-cache }}
+            ~/.cache/Cypress
+          key: ${{ needs.cache.outputs.key }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-pnpm-
+      - run: pnpm install --frozen-lockfile --prefer-offline
+        env:
+          HUSKY: '0' # By default do not run HUSKY install
       - name: Test integration (with coverage) and upload to CodeClimate
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: paambaati/codeclimate-action@v4.0.0
@@ -100,7 +162,7 @@ jobs:
   build-and-release:
     name: build and release
     runs-on: ubuntu-latest
-    needs: prepare-release
+    needs: [cache, prepare-release]
     if: needs.prepare-release.outputs.releases_created
     steps:
       - uses: actions/checkout@v3
@@ -108,10 +170,22 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
-          cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - run: pnpm install
+      - name: Cache NPM and Cypress 📦
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            ${{ needs.cache.outputs.pnpm-cache }}
+            ~/.cache/Cypress
+          key: ${{ needs.cache.outputs.key }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-pnpm-
+      - run: pnpm install --frozen-lockfile --prefer-offline
+        env:
+          HUSKY: '0' # By default do not run HUSKY install
       - name: Build packages to get cross-references working 🔧
         run: pnpm build
       - name: Release package
