@@ -1,4 +1,6 @@
-# Example for @frsource/cypress-plugin-visual-regression-diff
+# Next.js + Cypress + @frsource/cypress-plugin-visual-regression-diff
+
+This example shows how to configure @frsource/cypress-plugin-visual-regression-diff to work with Cypress & Next.js.
 
 ## Project setup
 
@@ -6,12 +8,12 @@
 pnpm install
 ```
 
-### Run your end-to-end tests
+### Run end-to-end tests
 
 > Important - remember to run `pnpm && pnpm build` command in this repo's root directory before starting e2e tests.
 
 ```bash
-pnpm test:e2e
+pnpm e2e
 ```
 
 ### Run component tests
@@ -19,13 +21,13 @@ pnpm test:e2e
 > Important - remember to run `pnpm && pnpm build` command in this repo's root directory before starting e2e tests.
 
 ```bash
-pnpm test:ct
+pnpm component
 ```
 
 ### Compiles and hot-reloads for development
 
 ```bash
-pnpm serve
+pnpm dev
 ```
 
 ### Compiles and minifies for production
@@ -34,6 +36,6 @@ pnpm serve
 pnpm build
 ```
 
-### Customize configuration
+## Credits
 
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Created using [Next.js Cypress template](https://nextjs.org/docs/pages/building-your-application/optimizing/testing#cypress).
