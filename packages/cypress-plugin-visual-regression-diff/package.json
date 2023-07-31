@@ -59,7 +59,7 @@
   "engines": {
     "node": ">=10"
   },
-  "packageManager": "pnpm@8.6.10",
+  "packageManager": "pnpm@8.6.11",
   "peerDependencies": {
     "cypress": ">=4.5.0"
   },
