@@ -90,8 +90,8 @@ importers:
   packages/cypress-plugin-visual-regression-diff:
     dependencies:
       '@frsource/base64':
-        specifier: 1.0.21
-        version: 1.0.21
+        specifier: 1.0.22
+        version: 1.0.22
       glob:
         specifier: 8.1.0
         version: 8.1.0
@@ -136,8 +136,8 @@ importers:
         specifier: 12.14.0
         version: 12.14.0
       del-cli:
-        specifier: 5.0.0
-        version: 5.0.0
+        specifier: 5.0.1
+        version: 5.0.1
       microbundle:
         specifier: 0.15.1
         version: 0.15.1
@@ -1718,8 +1718,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@frsource/base64@1.0.21:
-    resolution: {integrity: sha512-pZOpCYx+hNq1GOoqMK/X9DtGgyo4n9nAECUYg7Ew7MgnemUZ3TInHOKrrnK/Uh4dpYc4DF3x3CYUa6jKldgJog==}
+  /@frsource/base64@1.0.22:
+    resolution: {integrity: sha512-iWg/DBZAnc9s+kcGzYSJJce8zQMnDxFvDVUOzH5mCo1jetGpO3fc1OuyHvhXb95sgiKCO58w2RtCikZRrPskqg==}
     dev: false
 
   /@hapi/hoek@9.3.0:
@@ -4503,8 +4503,8 @@ packages:
       object-keys: 1.1.1
     dev: true
 
-  /del-cli@5.0.0:
-    resolution: {integrity: sha512-rENFhUaYcjoMODwFhhlON+ogN7DoG+4+GFN+bsA1XeDt4w2OKQnQadFP1thHSAlK9FAtl88qgP66wOV+eFZZiQ==}
+  /del-cli@5.0.1:
+    resolution: {integrity: sha512-hCDHJd0u0jKFqizgInYXZaILsqOIA7Zl6e7M3hJwP+SlwUAgtV/EB22EPF4e2+9VAVnBDQQBE6tDRe+/UuoFhg==}
     engines: {node: '>=14.16'}
     hasBin: true
     dependencies:
