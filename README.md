@@ -229,8 +229,6 @@ export default defineConfig({
     pluginVisualRegressionDiffConfig: { threshold: 0.01 },
   },
 });
-{
-}
 ```
 
 ```json
@@ -259,8 +257,6 @@ Screenshots in Cypress do not scale to the viewport size by default. You can cha
 Sometimes we need to do a breaking change in image comparison or image generation algorithms. To provide you with the easiest upgrade path - the plugin updates your baseline images automatically. Just commit them to your repository after the plugin upgrade and you are good to go!
 
 </details>
-
-DIFF_IMAGES_VERSION
 
 ## Questions
 
