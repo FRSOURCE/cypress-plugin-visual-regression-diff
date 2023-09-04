@@ -90,8 +90,8 @@ importers:
   packages/cypress-plugin-visual-regression-diff:
     dependencies:
       '@frsource/base64':
-        specifier: 1.0.22
-        version: 1.0.22
+        specifier: 1.0.26
+        version: 1.0.26
       glob:
         specifier: 8.1.0
         version: 8.1.0
@@ -1718,8 +1718,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@frsource/base64@1.0.22:
-    resolution: {integrity: sha512-iWg/DBZAnc9s+kcGzYSJJce8zQMnDxFvDVUOzH5mCo1jetGpO3fc1OuyHvhXb95sgiKCO58w2RtCikZRrPskqg==}
+  /@frsource/base64@1.0.26:
+    resolution: {integrity: sha512-WAA+Xb16CfPu8CesS8Wp9BXCIK27U8Nc320mf3MCFG8amZ927TKrHqLM2DsBCbrhZkblqegh0cINgzgiICNMHw==}
     dev: false
 
   /@hapi/hoek@9.3.0:
