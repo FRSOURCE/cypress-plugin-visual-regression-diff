@@ -205,7 +205,7 @@ cy.matchImage({
   forceDeviceScaleFactor: false,
   // title used for naming the image file
   // default: Cypress.currentTest.titlePath (your test title)
-  title: `${Cypress.currentTest.titlePath.join(' ')} (${Cypress.browser.displayName})`
+  title: `${Cypress.currentTest.titlePath.join(' ')} (${Cypress.browser.displayName})`,
   // pass a path to custom image that should be used for comparison
   // instead of checking against the image from previous run
   // default: undefined
