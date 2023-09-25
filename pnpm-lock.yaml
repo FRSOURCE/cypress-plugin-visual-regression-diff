@@ -90,8 +90,8 @@ importers:
   packages/cypress-plugin-visual-regression-diff:
     dependencies:
       '@frsource/base64':
-        specifier: 1.0.26
-        version: 1.0.26
+        specifier: 1.0.29
+        version: 1.0.29
       glob:
         specifier: 8.1.0
         version: 8.1.0
@@ -108,8 +108,8 @@ importers:
         specifier: 7.0.0
         version: 7.0.0
       sharp:
-        specifier: 0.32.5
-        version: 0.32.5
+        specifier: 0.32.6
+        version: 0.32.6
     devDependencies:
       '@types/glob':
         specifier: 8.1.0
@@ -1718,8 +1718,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@frsource/base64@1.0.26:
-    resolution: {integrity: sha512-WAA+Xb16CfPu8CesS8Wp9BXCIK27U8Nc320mf3MCFG8amZ927TKrHqLM2DsBCbrhZkblqegh0cINgzgiICNMHw==}
+  /@frsource/base64@1.0.29:
+    resolution: {integrity: sha512-IIMDRBbTlrlVQbkTZd+K52GyVY8oG3r4pRJkZgY87ow9L3DFSwnoXd/59cgN1Ik5DYc5l/C7xwJpZZhQwmHvTQ==}
     dev: false
 
   /@hapi/hoek@9.3.0:
@@ -8359,8 +8359,8 @@ packages:
       kind-of: 6.0.3
     dev: true
 
-  /sharp@0.32.5:
-    resolution: {integrity: sha512-0dap3iysgDkNaPOaOL4X/0akdu0ma62GcdC2NBQ+93eqpePdDdr2/LM0sFdDSMmN7yS+odyZtPsb7tx/cYBKnQ==}
+  /sharp@0.32.6:
+    resolution: {integrity: sha512-KyLTWwgcR9Oe4d9HwCwNM2l7+J0dUQwn/yf7S0EnTtb0eVS4RxO0eUSvxPtzT4F3SY+C4K6fqdv/DO27sJ/v/w==}
     engines: {node: '>=14.15.0'}
     requiresBuild: true
     dependencies:
