@@ -65,10 +65,10 @@
   },
   "devDependencies": {
     "@types/glob": "8.1.0",
-    "@types/pixelmatch": "5.2.4",
-    "@types/pngjs": "6.0.2",
+    "@types/pixelmatch": "5.2.5",
+    "@types/pngjs": "6.0.3",
     "@types/sharp": "0.31.1",
-    "@types/tmp": "0.2.4",
+    "@types/tmp": "0.2.5",
     "@vitest/coverage-c8": "0.33.0",
     "cpy-cli": "4.2.0",
     "cypress": "12.14.0",
