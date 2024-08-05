@@ -27,11 +27,11 @@
     "cypress": ">=4.5.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "7.14.1",
-    "@typescript-eslint/parser": "7.14.1",
-    "eslint": "9.6.0",
+    "@typescript-eslint/eslint-plugin": "7.18.0",
+    "@typescript-eslint/parser": "7.18.0",
+    "eslint": "9.8.0",
     "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-cypress": "3.3.0",
+    "eslint-plugin-cypress": "3.4.0",
     "eslint-plugin-eslint-comments": "3.2.0"
   }
 }
