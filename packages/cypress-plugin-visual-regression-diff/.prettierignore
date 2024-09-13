@@ -1,7 +1,7 @@
 node_modules
-dist
+**/node_modules
+**/coverage
 coverage
+**/dist
+pnpm-lock.yaml
 CHANGELOG.md
-.yarnrc.yml
-example/.yarnrc.yml
-.yarn

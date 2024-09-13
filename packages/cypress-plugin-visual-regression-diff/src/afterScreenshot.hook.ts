@@ -1,20 +1,20 @@
-import path from "path";
-import { promises as fs } from "fs";
-import moveFile from "move-file";
-import { IMAGE_SNAPSHOT_PREFIX, PATH_VARIABLES } from "./constants";
+import path from 'path';
+import { promises as fs } from 'fs';
+import moveFile from 'move-file';
+import { IMAGE_SNAPSHOT_PREFIX, PATH_VARIABLES } from './constants';
 
 type NotFalsy<T> = T extends false | null | undefined ? never : T;
 
 const MIMIC_ROOT_WIN_REGEX = new RegExp(
-  `^${PATH_VARIABLES.winSystemRootPath}\\${path.sep}([A-Z])\\${path.sep}`
+  `^${PATH_VARIABLES.winSystemRootPath}\\${path.sep}([A-Z])\\${path.sep}`,
 );
 const MIMIC_ROOT_UNIX_REGEX = new RegExp(
-  `^${PATH_VARIABLES.unixSystemRootPath}\\${path.sep}`
+  `^${PATH_VARIABLES.unixSystemRootPath}\\${path.sep}`,
 );
 
 const getConfigVariableOrThrow = <K extends keyof Cypress.PluginConfigOptions>(
   config: Cypress.PluginConfigOptions,
-  name: K
+  name: K,
 ) => {
   if (config[name]) {
     return config[name] as NotFalsy<Cypress.PluginConfigOptions[K]>;
@@ -39,7 +39,7 @@ export const parseAbsolutePath = ({
     const driveLetter = matchedMimicingWinRoot[1];
     newAbsolutePath = path.join(
       `${driveLetter}:\\`,
-      screenshotPath.substring(matchedMimicingWinRoot[0].length)
+      screenshotPath.substring(matchedMimicingWinRoot[0].length),
     );
   } else if (matchedMimicingUnixRoot) {
     newAbsolutePath =
@@ -53,7 +53,7 @@ export const parseAbsolutePath = ({
 export const initAfterScreenshotHook =
   (config: Cypress.PluginConfigOptions) =>
   (
-    details: Cypress.ScreenshotDetails
+    details: Cypress.ScreenshotDetails,
   ):
     | void
     | Cypress.AfterScreenshotReturnObject
@@ -64,10 +64,10 @@ export const initAfterScreenshotHook =
     /* c8 ignore stop */
     const screenshotsFolder = getConfigVariableOrThrow(
       config,
-      "screenshotsFolder"
+      'screenshotsFolder',
     );
     const screenshotPath = details.name.substring(
-      IMAGE_SNAPSHOT_PREFIX.length + path.sep.length
+      IMAGE_SNAPSHOT_PREFIX.length + path.sep.length,
     );
     const newAbsolutePath = parseAbsolutePath({
       screenshotPath,

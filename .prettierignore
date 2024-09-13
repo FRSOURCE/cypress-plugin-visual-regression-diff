@@ -1,7 +1,0 @@
-node_modules
-dist
-coverage
-CHANGELOG.md
-.yarnrc.yml
-example/.yarnrc.yml
-.yarn

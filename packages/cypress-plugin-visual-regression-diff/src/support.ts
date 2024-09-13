@@ -1,14 +1,14 @@
-import * as Base64 from "@frsource/base64";
-import "./commands";
-import { LINK_PREFIX, OVERLAY_CLASS, TASK } from "./constants";
+import * as Base64 from '@frsource/base64';
+import './commands';
+import { LINK_PREFIX, OVERLAY_CLASS, TASK } from './constants';
 
 /* c8 ignore start */
 function queueClear() {
   (cy as unknown as { queue: { reset: () => void } }).queue.reset?.();
   (cy as unknown as { queue: { clear: () => void } }).queue.clear();
   (cy as unknown as { state: (k: string, value: unknown) => void }).state(
-    "index",
-    0
+    'index',
+    0,
   );
 }
 
@@ -40,8 +40,8 @@ export const generateOverlayTemplate = ({
         wasImageNotUpdatedYet
           ? `<button type="submit"><i class="fa fa-check"></i> Update screenshot</button>`
           : error
-          ? "Image was already updated, rerun test to see new comparison"
-          : ""
+            ? 'Image was already updated, rerun test to see new comparison'
+            : ''
       }
       <button type="button" data-type="close"><i class="fa fa-times"></i> Close</button>
     <form>
@@ -81,7 +81,7 @@ after(() => {
   cy.task(TASK.cleanupImages, { log: false });
 
   Cypress.$(top.document.body).on(
-    "click",
+    'click',
     `a[href^="${LINK_PREFIX}"]`,
     function (e) {
       e.preventDefault();
@@ -97,16 +97,16 @@ after(() => {
       } = JSON.parse(
         decodeURIComponent(
           Base64.decode(
-            e.currentTarget.getAttribute("href").substring(LINK_PREFIX.length)
-          )
-        )
+            e.currentTarget.getAttribute('href').substring(LINK_PREFIX.length),
+          ),
+        ),
       );
       queueClear();
 
       cy.task<boolean>(
         TASK.doesFileExist,
         { path: imgPath },
-        { log: false }
+        { log: false },
       ).then((wasImageNotUpdatedYet) => {
         if (!top) return false;
 
@@ -118,20 +118,20 @@ after(() => {
             imgDiffBase64,
             error,
             wasImageNotUpdatedYet,
-          })
+          }),
         ).appendTo(top.document.body);
 
         const wrapper = Cypress.$(`.${OVERLAY_CLASS}`, top.document.body);
-        wrapper.on("click", 'button[data-type="close"]', function () {
+        wrapper.on('click', 'button[data-type="close"]', function () {
           wrapper.remove();
         });
 
-        wrapper.on("submit", "form", function (e) {
+        wrapper.on('submit', 'form', function (e) {
           queueClear();
           e.preventDefault();
 
           cy.task(TASK.approveImage, { img: imgPath }).then(() =>
-            wrapper.remove()
+            wrapper.remove(),
           );
 
           queueRun();
@@ -141,7 +141,7 @@ after(() => {
       queueRun();
 
       return false;
-    }
+    },
   );
 });
 /* c8 ignore stop */

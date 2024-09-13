@@ -1,24 +1,25 @@
-import path from "path";
+import path from 'path';
 import {
   FILE_SUFFIX,
   IMAGE_SNAPSHOT_PREFIX,
   PATH_VARIABLES,
   WINDOWS_LIKE_DRIVE_REGEX,
-} from "./constants";
-import sanitize from "sanitize-filename";
+} from './constants';
+import sanitize from 'sanitize-filename';
 
 const nameCacheCounter: Record<string, number> = {};
 const lastRetryNameCacheCounter: Record<string, number> = {};
 let lastRetryNumber = 0;
 
 const resetMap = (map: Record<string, unknown>) => {
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   for (const key in map) delete map[key];
 };
 
 const parsePathPartVariables = (
   specPath: string,
   pathPart: string,
-  i: number
+  i: number,
 ) => {
   if (pathPart === PATH_VARIABLES.specPath) {
     return path.dirname(specPath);
@@ -45,11 +46,11 @@ export const generateScreenshotPath = ({
   currentRetryNumber: number;
 }) => {
   const screenshotPath = path.join(
-    ...imagesPath.split("/").map(parsePathPartVariables.bind(void 0, specPath)),
-    sanitize(titleFromOptions)
+    ...imagesPath.split('/').map(parsePathPartVariables.bind(void 0, specPath)),
+    sanitize(titleFromOptions),
   );
 
-  if (typeof nameCacheCounter[screenshotPath] === "undefined") {
+  if (typeof nameCacheCounter[screenshotPath] === 'undefined') {
     nameCacheCounter[screenshotPath] = -1;
   }
 
@@ -70,12 +71,12 @@ export const generateScreenshotPath = ({
 
   return path.join(
     IMAGE_SNAPSHOT_PREFIX,
-    `${screenshotPath} #${nameCacheCounter[screenshotPath]}${FILE_SUFFIX.actual}.png`
+    `${screenshotPath} #${nameCacheCounter[screenshotPath]}${FILE_SUFFIX.actual}.png`,
   );
 };
 
 const screenshotPathRegex = new RegExp(
-  `^([\\s\\S]+?) #([0-9]+)(?:(?:\\${FILE_SUFFIX.diff})|(?:\\${FILE_SUFFIX.actual}))?\\.(?:png|PNG)$`
+  `^([\\s\\S]+?) #([0-9]+)(?:(?:\\${FILE_SUFFIX.diff})|(?:\\${FILE_SUFFIX.actual}))?\\.(?:png|PNG)$`,
 );
 export const wasScreenshotUsed = (imagePath: string) => {
   const matched = imagePath.match(screenshotPathRegex);

@@ -1,7 +1,7 @@
-import { FILE_SUFFIX, LINK_PREFIX, TASK } from "./constants";
-import type pixelmatch from "pixelmatch";
-import * as Base64 from "@frsource/base64";
-import type { CompareImagesTaskReturn } from "./types";
+import { FILE_SUFFIX, LINK_PREFIX, TASK } from './constants';
+import type pixelmatch from 'pixelmatch';
+import * as Base64 from '@frsource/base64';
+import type { CompareImagesTaskReturn } from './types';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -32,9 +32,9 @@ declare global {
       imgNewBase64: string | undefined;
       imgBase64: string | undefined;
       imgDiffBase64: string | undefined;
-      imgNew: InstanceType<Cypress["Buffer"]> | undefined;
-      img: InstanceType<Cypress["Buffer"]> | undefined;
-      imgDiff: InstanceType<Cypress["Buffer"]> | undefined;
+      imgNew: InstanceType<Cypress['Buffer']> | undefined;
+      img: InstanceType<Cypress['Buffer']> | undefined;
+      imgDiff: InstanceType<Cypress['Buffer']> | undefined;
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -45,7 +45,7 @@ declare global {
        * @example cy.get('.my-element').matchImage();
        */
       matchImage(
-        options?: Cypress.MatchImageOptions
+        options?: Cypress.MatchImageOptions,
       ): Chainable<MatchImageReturn>;
     }
   }
@@ -71,7 +71,7 @@ const booleanOption = <K extends keyof Cypress.MatchImageOptions, Return>(
   options: Cypress.MatchImageOptions,
   key: K,
   truthyValue: Return,
-  falsyValue: Return
+  falsyValue: Return,
 ) =>
   options[key] === false || getPluginEnv(key) === false
     ? truthyValue
@@ -80,16 +80,17 @@ const booleanOption = <K extends keyof Cypress.MatchImageOptions, Return>(
 const optionWithDefaults = <K extends keyof Cypress.MatchImageOptions>(
   options: Cypress.MatchImageOptions,
   key: K,
-  defaultValue: NonNullable<Cypress.MatchImageOptions[K]>
+  defaultValue: NonNullable<Cypress.MatchImageOptions[K]>,
 ) => options[key] ?? getPluginEnv(key) ?? defaultValue;
 
 const getImagesDir = (options: Cypress.MatchImageOptions) => {
-  const imagesDir = options.imagesDir || getPluginEnv("imagesDir");
+  const imagesDir = options.imagesDir || getPluginEnv('imagesDir');
 
   // TODO: remove in 4.0.0
   if (imagesDir) {
+    // eslint-disable-next-line no-console
     console.warn(
-      "@frsource/cypress-plugin-visual-regression-diff] `imagesDir` option is deprecated, use `imagesPath` instead (https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff#configuration)"
+      '@frsource/cypress-plugin-visual-regression-diff] `imagesDir` option is deprecated, use `imagesPath` instead (https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff#configuration)',
     );
   }
 
@@ -101,29 +102,29 @@ const getImagesPath = (options: Cypress.MatchImageOptions) => {
 
   return (
     (imagesDir && `{spec_path}/${imagesDir}`) ||
-    optionWithDefaults(options, "imagesPath", "{spec_path}/__image_snapshots__")
+    optionWithDefaults(options, 'imagesPath', '{spec_path}/__image_snapshots__')
   );
 };
 
 export const getConfig = (options: Cypress.MatchImageOptions) => ({
   scaleFactor: booleanOption(
     options,
-    "forceDeviceScaleFactor",
+    'forceDeviceScaleFactor',
     1,
-    1 / window.devicePixelRatio
+    1 / window.devicePixelRatio,
   ),
-  createMissingImages: optionWithDefaults(options, "createMissingImages", true),
-  updateImages: optionWithDefaults(options, "updateImages", false),
+  createMissingImages: optionWithDefaults(options, 'createMissingImages', true),
+  updateImages: optionWithDefaults(options, 'updateImages', false),
   imagesPath: getImagesPath(options),
-  maxDiffThreshold: optionWithDefaults(options, "maxDiffThreshold", 0.01),
-  diffConfig: optionWithDefaults(options, "diffConfig", {}),
-  screenshotConfig: optionWithDefaults(options, "screenshotConfig", {}),
+  maxDiffThreshold: optionWithDefaults(options, 'maxDiffThreshold', 0.01),
+  diffConfig: optionWithDefaults(options, 'diffConfig', {}),
+  screenshotConfig: optionWithDefaults(options, 'screenshotConfig', {}),
   matchAgainstPath: options.matchAgainstPath || undefined,
 });
 
 Cypress.Commands.add(
-  "matchImage",
-  { prevSubject: "optional" },
+  'matchImage',
+  { prevSubject: 'optional' },
   (subject, options = {}) => {
     const $el = subject as JQuery<HTMLElement> | undefined;
     let title: string;
@@ -144,7 +145,7 @@ Cypress.Commands.add(
         state: (s: string) => { currentRetry: () => number };
       }
     )
-      .state("test")
+      .state('test')
       .currentRetry();
 
     return cy
@@ -153,13 +154,13 @@ Cypress.Commands.add(
           TASK.getScreenshotPathInfo,
           {
             titleFromOptions:
-              options.title || Cypress.currentTest.titlePath.join(" "),
+              options.title || Cypress.currentTest.titlePath.join(' '),
             imagesPath,
             specPath: Cypress.spec.relative,
             currentRetryNumber,
           },
-          { log: false }
-        )
+          { log: false },
+        ),
       )
       .then(({ screenshotPath, title: titleFromTask }) => {
         title = titleFromTask;
@@ -183,33 +184,33 @@ Cypress.Commands.add(
               scaleFactor,
               imgNew: imgPath,
               imgOld:
-                matchAgainstPath || imgPath.replace(FILE_SUFFIX.actual, ""),
+                matchAgainstPath || imgPath.replace(FILE_SUFFIX.actual, ''),
               createMissingImages,
               updateImages,
               maxDiffThreshold,
               diffConfig,
             },
-            { log: false }
+            { log: false },
           )
           .then((res) => ({
             res,
             imgPath,
-          }))
+          })),
       )
       .then(({ res, imgPath }) => {
         const log = Cypress.log({
-          name: "log",
-          displayName: "Match image",
+          name: 'log',
+          displayName: 'Match image',
           $el,
         });
 
         if (!res) {
-          log.set("message", "Unexpected error!");
-          throw constructCypressError(log, new Error("Unexpected error!"));
+          log.set('message', 'Unexpected error!');
+          throw constructCypressError(log, new Error('Unexpected error!'));
         }
 
         log.set(
-          "message",
+          'message',
           `${res.message}${
             res.imgDiffBase64 && res.imgNewBase64 && res.imgOldBase64
               ? `\n[See comparison](${LINK_PREFIX}${Base64.encode(
@@ -221,39 +222,39 @@ Cypress.Commands.add(
                       imgNewBase64: res.imgNewBase64,
                       imgOldBase64: res.imgOldBase64,
                       error: res.error,
-                    })
-                  )
+                    }),
+                  ),
                 )})`
-              : ""
-          }`
+              : ''
+          }`,
         );
 
         if (res.error) {
-          log.set("consoleProps", () => res);
+          log.set('consoleProps', () => res);
           throw constructCypressError(log, new Error(res.message));
         }
 
         return {
           diffValue: res.imgDiff,
           imgNewPath: imgPath,
-          imgPath: imgPath.replace(FILE_SUFFIX.actual, ""),
+          imgPath: imgPath.replace(FILE_SUFFIX.actual, ''),
           imgDiffPath: imgPath.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
           imgNewBase64: res.imgNewBase64,
           imgBase64: res.imgOldBase64,
           imgDiffBase64: res.imgDiffBase64,
           imgNew:
-            typeof res.imgNewBase64 === "string"
-              ? Cypress.Buffer.from(res.imgNewBase64, "base64")
+            typeof res.imgNewBase64 === 'string'
+              ? Cypress.Buffer.from(res.imgNewBase64, 'base64')
               : undefined,
           img:
-            typeof res.imgOldBase64 === "string"
-              ? Cypress.Buffer.from(res.imgOldBase64, "base64")
+            typeof res.imgOldBase64 === 'string'
+              ? Cypress.Buffer.from(res.imgOldBase64, 'base64')
               : undefined,
           imgDiff:
-            typeof res.imgDiffBase64 === "string"
-              ? Cypress.Buffer.from(res.imgDiffBase64, "base64")
+            typeof res.imgDiffBase64 === 'string'
+              ? Cypress.Buffer.from(res.imgDiffBase64, 'base64')
               : undefined,
         };
       });
-  }
+  },
 );

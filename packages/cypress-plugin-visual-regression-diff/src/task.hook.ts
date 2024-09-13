@@ -1,21 +1,21 @@
-import fs from "fs";
-import { PNG } from "pngjs";
-import pixelmatch, { PixelmatchOptions } from "pixelmatch";
-import moveFile from "move-file";
-import path from "path";
-import { FILE_SUFFIX, TASK } from "./constants";
+import fs from 'fs';
+import { PNG } from 'pngjs';
+import pixelmatch, { PixelmatchOptions } from 'pixelmatch';
+import moveFile from 'move-file';
+import path from 'path';
+import { FILE_SUFFIX, TASK } from './constants';
 import {
   cleanupUnused,
   alignImagesToSameSize,
   scaleImageAndWrite,
   isImageCurrentVersion,
   writePNG,
-} from "./image.utils";
+} from './image.utils';
 import {
   generateScreenshotPath,
   resetScreenshotNameCache,
-} from "./screenshotPath.utils";
-import type { CompareImagesTaskReturn } from "./types";
+} from './screenshotPath.utils';
+import type { CompareImagesTaskReturn } from './types';
 
 export type CompareImagesCfg = {
   scaleFactor: number;
@@ -43,11 +43,11 @@ export const getScreenshotPathInfoTask = (cfg: {
 }) => {
   const screenshotPath = generateScreenshotPath(cfg);
 
-  return { screenshotPath, title: path.basename(screenshotPath, ".png") };
+  return { screenshotPath, title: path.basename(screenshotPath, '.png') };
 };
 
 export const cleanupImagesTask = (config: Cypress.PluginConfigOptions) => {
-  if (config.env["pluginVisualRegressionCleanupUnusedImages"]) {
+  if (config.env['pluginVisualRegressionCleanupUnusedImages']) {
     cleanupUnused(config.projectRoot);
   }
 
@@ -57,7 +57,7 @@ export const cleanupImagesTask = (config: Cypress.PluginConfigOptions) => {
 };
 
 export const approveImageTask = ({ img }: { img: string }) => {
-  const oldImg = img.replace(FILE_SUFFIX.actual, "");
+  const oldImg = img.replace(FILE_SUFFIX.actual, '');
   unlinkSyncSafe(oldImg);
 
   const diffImg = img.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff);
@@ -69,7 +69,7 @@ export const approveImageTask = ({ img }: { img: string }) => {
 };
 
 export const compareImagesTask = async (
-  cfg: CompareImagesCfg
+  cfg: CompareImagesCfg,
 ): Promise<CompareImagesTaskReturn> => {
   const messages = [] as string[];
   const rawImgNewBuffer = await scaleImageAndWrite({
@@ -102,34 +102,34 @@ export const compareImagesTask = async (
       diff.data,
       width,
       height,
-      diffConfig
+      diffConfig,
     );
     imgDiff = diffPixels / (width * height);
 
     if (isImgSizeDifferent) {
       messages.push(
-        `Warning: Images size mismatch - new screenshot is ${rawImgNew.width}px by ${rawImgNew.height}px while old one is ${rawImgOld.width}px by ${rawImgOld.height} (width x height).`
+        `Warning: Images size mismatch - new screenshot is ${rawImgNew.width}px by ${rawImgNew.height}px while old one is ${rawImgOld.width}px by ${rawImgOld.height} (width x height).`,
       );
     }
 
     if (imgDiff > cfg.maxDiffThreshold) {
       messages.unshift(
         `Image diff factor (${round(
-          imgDiff
-        )}%) is bigger than maximum threshold option ${cfg.maxDiffThreshold}.`
+          imgDiff,
+        )}%) is bigger than maximum threshold option ${cfg.maxDiffThreshold}.`,
       );
       error = true;
     }
 
     const diffBuffer = PNG.sync.write(diff);
-    imgNewBase64 = PNG.sync.write(imgNew).toString("base64");
-    imgDiffBase64 = diffBuffer.toString("base64");
-    imgOldBase64 = PNG.sync.write(imgOld).toString("base64");
+    imgNewBase64 = PNG.sync.write(imgNew).toString('base64');
+    imgDiffBase64 = diffBuffer.toString('base64');
+    imgOldBase64 = PNG.sync.write(imgOld).toString('base64');
 
     if (error) {
       writePNG(
         cfg.imgNew.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
-        diffBuffer
+        diffBuffer,
       );
     } else {
       if (rawImgOld && !isImageCurrentVersion(rawImgOldBuffer)) {
@@ -143,34 +143,34 @@ export const compareImagesTask = async (
   } else {
     // there is no "old screenshot" or screenshots should be immediately updated
     imgDiff = 0;
-    imgNewBase64 = "";
-    imgDiffBase64 = "";
-    imgOldBase64 = "";
+    imgNewBase64 = '';
+    imgDiffBase64 = '';
+    imgOldBase64 = '';
     if (cfg.createMissingImages) {
       writePNG(cfg.imgNew, rawImgNewBuffer);
       moveFile.sync(cfg.imgNew, cfg.imgOld);
     } else {
       error = true;
       messages.unshift(
-        `Baseline image is missing at path: "${cfg.imgOld}". Provide a baseline image or enable "createMissingImages" option in plugin configuration.`
+        `Baseline image is missing at path: "${cfg.imgOld}". Provide a baseline image or enable "createMissingImages" option in plugin configuration.`,
       );
     }
   }
 
-  if (typeof imgDiff !== "undefined") {
+  if (typeof imgDiff !== 'undefined') {
     if (!error) {
       messages.unshift(
         `Image diff factor (${round(
-          imgDiff
+          imgDiff,
         )}%) is within boundaries of maximum threshold option ${
           cfg.maxDiffThreshold
-        }.`
+        }.`,
       );
     }
 
     return {
       error,
-      message: messages.join("\n"),
+      message: messages.join('\n'),
       imgDiff,
       imgNewBase64,
       imgDiffBase64,
