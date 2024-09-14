@@ -20,11 +20,11 @@
     "test:e2e:ci": "pnpm -r test:e2e:ci"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=14"
   },
   "packageManager": "pnpm@8.6.12",
   "peerDependencies": {
-    "cypress": ">=4.5.0"
+    "cypress": ">=13.0.0"
   },
   "devDependencies": {
     "@frsource/eslint-config": "1.15.0",

@@ -13,14 +13,16 @@ export default defineConfig({
     exclude: exludeFiles,
     include: [testsGlob],
     coverage: {
-      provider: 'c8',
+      provider: 'v8',
       reporter: isCI
         ? ['text', ['lcovonly', { projectRoot: '../..' }]]
         : ['text', 'lcov'],
-      lines: 90,
-      functions: 90,
-      branches: 90,
-      statements: 90,
+      thresholds: {
+        lines: 90,
+        functions: 90,
+        branches: 90,
+        statements: 90,
+      },
     },
     alias: {
       '@fixtures/*': path.resolve(__dirname, '__tests__', 'partials'),
