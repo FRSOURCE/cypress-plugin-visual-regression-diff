@@ -16,5 +16,18 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 
+Cypress.on('window:before:load', win => {
+  // TODO: remove when Cypress update electron to version >= 28.0.0
+  win.URL.canParse = function canParse(url) {
+    const urlString = String(url);
+    const base = length < 2 || arguments[1] === undefined ? undefined : String(arguments[1]);
+    try {
+      return !!new URL(urlString, base);
+    } catch (error) {
+      return false;
+    }
+  };
+});
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

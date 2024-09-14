@@ -89,18 +89,18 @@ require("@frsource/cypress-plugin-visual-regression-diff");
 ```ts
 // typescript / ES6
 import { defineConfig } from "cypress";
-import { initPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
+import { initPlugin as initVisualRegressionPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
 
 export default defineConfig({
   // initPlugin must be called in the section where it is used: e2e or component
   e2e: {
     setupNodeEvents(on, config) {
-      initPlugin(on, config);
+      initVisualRegressionPlugin(on, config);
     },
   },
   component: {
     setupNodeEvents(on, config) {
-      initPlugin(on, config);
+      initVisualRegressionPlugin(on, config);
     },
   },
 });
@@ -110,24 +110,24 @@ export default defineConfig({
 
 ```ts
 // typescript / ES6
-import { initPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
+import { initPlugin as initVisualRegressionPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
 
 export default function (
   on: Cypress.PluginEvents,
   config: Cypress.PluginConfigOptions
 ) {
-  initPlugin(on, config);
+  initVisualRegressionPlugin(on, config);
 
   return config;
 }
 
 // javascript
 const {
-  initPlugin,
+  initPlugin: initVisualRegressionPlugin,
 } = require("@frsource/cypress-plugin-visual-regression-diff/plugins");
 
 module.exports = function (on, config) {
-  initPlugin(on, config);
+  initVisualRegressionPlugin(on, config);
 
   return config;
 };

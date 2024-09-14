@@ -2,7 +2,6 @@ import { defineConfig } from "cypress";
 import { initPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
 
 module.exports = defineConfig({
-  video: false,
   e2e: {
     setupNodeEvents(on, config) {
       initPlugin(on, config);

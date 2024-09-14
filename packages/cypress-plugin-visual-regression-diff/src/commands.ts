@@ -165,7 +165,7 @@ Cypress.Commands.add(
       .then(({ screenshotPath, title: titleFromTask }) => {
         title = titleFromTask;
         let imgPath: string;
-        return ($el ? cy.wrap($el) : cy)
+        return (($el ? cy.wrap($el) : cy) as Cypress.Chainable<unknown>)
           .screenshot(screenshotPath, {
             ...screenshotConfig,
             onAfterScreenshot(el, props) {
