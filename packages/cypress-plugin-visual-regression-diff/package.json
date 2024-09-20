@@ -67,7 +67,7 @@
     "@frsource/prettier-config": "^1.11.0",
     "@types/glob": "8.1.0",
     "@types/pixelmatch": "5.2.6",
-    "@types/pngjs": "6.0.4",
+    "@types/pngjs": "6.0.5",
     "@types/sharp": "0.32.0",
     "@types/tmp": "0.2.6",
     "@vitest/coverage-c8": "0.33.0",
