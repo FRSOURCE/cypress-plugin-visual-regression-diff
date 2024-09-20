@@ -115,8 +115,8 @@ importers:
         specifier: 5.2.6
         version: 5.2.6
       '@types/pngjs':
-        specifier: 6.0.4
-        version: 6.0.4
+        specifier: 6.0.5
+        version: 6.0.5
       '@types/sharp':
         specifier: 0.32.0
         version: 0.32.0
@@ -2246,8 +2246,8 @@ packages:
       '@types/node': 18.0.6
     dev: true
 
-  /@types/pngjs@6.0.4:
-    resolution: {integrity: sha512-atAK9xLKOnxiuArxcHovmnOUUGBZOQ3f0vCf43FnoKs6XnqiambT1kkJWmdo71IR+BoXSh+CueeFR0GfH3dTlQ==}
+  /@types/pngjs@6.0.5:
+    resolution: {integrity: sha512-0k5eKfrA83JOZPppLtS2C7OUtyNAl2wKNxfyYl9Q5g9lPkgBl/9hNyAu6HuEH2J4XmIv2znEpkDd0SaZVxW6iQ==}
     dependencies:
       '@types/node': 18.0.6
     dev: true
