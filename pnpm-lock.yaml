@@ -84,8 +84,8 @@ importers:
   packages/cypress-plugin-visual-regression-diff:
     dependencies:
       '@frsource/base64':
-        specifier: 1.0.30
-        version: 1.0.30
+        specifier: 1.0.79
+        version: 1.0.79
       glob:
         specifier: 8.1.0
         version: 8.1.0
@@ -1738,8 +1738,8 @@ packages:
       levn: 0.4.1
     dev: true
 
-  /@frsource/base64@1.0.30:
-    resolution: {integrity: sha512-/SnkfJDyf5ArZifTftB9UbQFepyQQeDXp5PYmdUTFKgjgyIp4PF6tv+e+cRs7uF9JkCA1+gBX0N8so71nRR1CA==}
+  /@frsource/base64@1.0.79:
+    resolution: {integrity: sha512-Q1+5HgYrm2PfrPjs6txQr/Y3UrFgKavWuSUOoJ2O5RIHY4odL1pvYkgUYcl0uqkTHpO/XtuDvomHCVBsSajYdQ==}
     dev: false
 
   /@frsource/eslint-config@1.15.0(eslint@9.11.0)(typescript@5.1.6):
