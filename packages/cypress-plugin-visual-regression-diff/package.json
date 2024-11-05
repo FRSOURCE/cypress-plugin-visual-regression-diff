@@ -71,7 +71,7 @@
     "@types/sharp": "0.32.0",
     "@types/tmp": "0.2.6",
     "@vitest/coverage-c8": "0.33.0",
-    "cpy-cli": "4.2.0",
+    "cpy-cli": "5.0.0",
     "cypress": "12.14.0",
     "del-cli": "5.0.1",
     "microbundle": "0.15.1",
