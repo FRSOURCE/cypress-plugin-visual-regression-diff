@@ -49,7 +49,9 @@ export const isImageOfTestType = (
   testingType?: PluginMetadataConfig['testingType'],
 ) => {
   if (!isImageGeneratedByPlugin(png)) return false;
-  const imageTestingType = getPNGMetadata(png /* c8 ignore next */)?.testingType;
+  const imageTestingType = getPNGMetadata(
+    png /* c8 ignore next */,
+  )?.testingType;
   return imageTestingType === testingType || testingType === undefined;
 };
 

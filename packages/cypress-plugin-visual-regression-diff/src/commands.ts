@@ -176,8 +176,15 @@ Cypress.Commands.add(
           })
           .then(() =>
             cy
-              .task<string>(TASK.processImgPath, { path: imgPath }, { log: false })
-              .then((newImgPath) => { imgPath = newImgPath; return imgPath; }),
+              .task<string>(
+                TASK.processImgPath,
+                { path: imgPath },
+                { log: false },
+              )
+              .then((newImgPath) => {
+                imgPath = newImgPath;
+                return imgPath;
+              }),
           );
       })
       .then((imgPath) =>
