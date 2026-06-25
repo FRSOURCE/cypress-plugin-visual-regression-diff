@@ -274,6 +274,39 @@ describe('compareImagesTask', () => {
     });
   });
 
+  describe('when updateImages is failures-only', () => {
+    describe('when images differ beyond threshold', () => {
+      it('updates baseline and resolves with success message', async () => {
+        const cfg = await generateConfig({
+          updateImages: 'failures-only',
+          maxDiffThreshold: 0,
+        });
+        const result = await compareImagesTask({ testingType: 'e2e' }, cfg);
+
+        expect(result).toMatchObject({
+          error: false,
+          message: expect.stringContaining('was bigger than maximum threshold'),
+        });
+        expect(existsSync(cfg.imgOld)).toBe(true);
+        expect(existsSync(cfg.imgNew)).toBe(false);
+      });
+    });
+
+    describe('when images are within threshold', () => {
+      it('resolves with a success message without updating', async () => {
+        const cfg = await generateConfig({
+          updateImages: 'failures-only',
+          maxDiffThreshold: 0.5,
+        });
+        await writeTmpFixture(cfg.imgNew, oldImgFixture);
+        const result = await compareImagesTask({ testingType: 'e2e' }, cfg);
+
+        expect(result).toMatchObject({ error: false });
+        expect(existsSync(cfg.imgNew)).toBe(false);
+      });
+    });
+  });
+
   describe("when images shouldn't be updated", () => {
     describe("when old screenshot doesn't exist", () => {
       it('resolves with a success message', async () => {

@@ -10,7 +10,7 @@ declare global {
       screenshotConfig?: Partial<Cypress.ScreenshotDefaultsOptions>;
       diffConfig?: Parameters<typeof pixelmatch>[5];
       createMissingImages?: boolean;
-      updateImages?: boolean;
+      updateImages?: boolean | 'failures-only';
       /**
        * @deprecated since version 3.0, use imagesPath instead
        */
