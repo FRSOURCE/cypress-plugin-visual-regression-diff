@@ -229,6 +229,9 @@ Cypress.Commands.add(
                     JSON.stringify({
                       title,
                       imgPath,
+                      imgOldPath:
+                        matchAgainstPath ||
+                        imgPath.replace(FILE_SUFFIX.actual, ''),
                       imgDiffBase64: res.imgDiffBase64,
                       imgNewBase64: res.imgNewBase64,
                       imgOldBase64: res.imgOldBase64,

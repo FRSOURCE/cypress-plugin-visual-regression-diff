@@ -56,8 +56,14 @@ export const cleanupImagesTask = (config: Cypress.PluginConfigOptions) => {
   return null;
 };
 
-export const approveImageTask = ({ img }: { img: string }) => {
-  const oldImg = img.replace(FILE_SUFFIX.actual, '');
+export const approveImageTask = ({
+  img,
+  imgOld,
+}: {
+  img: string;
+  imgOld?: string;
+}) => {
+  const oldImg = imgOld ?? img.replace(FILE_SUFFIX.actual, '');
   unlinkSyncSafe(oldImg);
 
   const diffImg = img.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff);

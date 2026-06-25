@@ -242,6 +242,14 @@ describe('approveImageTask', () => {
     expect(existsSync(newImgPath)).toBe(false);
     expect(existsSync(diffImgPath)).toBe(false);
   });
+
+  it('writes to imgOld path when provided', async () => {
+    const { path: customOldPath } = await file();
+    approveImageTask({ img: newImgPath, imgOld: customOldPath });
+
+    expect((await fs.readFile(customOldPath)).toString()).toBe(newFileContent);
+    expect(existsSync(newImgPath)).toBe(false);
+  });
 });
 
 describe('compareImagesTask', () => {
