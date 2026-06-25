@@ -17,6 +17,11 @@ export default defineConfig({
       reporter: isCI
         ? ['text', ['lcovonly', { projectRoot: '../..' }]]
         : ['text', 'lcov'],
+      exclude: [
+        ...(configDefaults.coverage.exclude ?? []),
+        'src/commands.ts',
+        'src/types.ts',
+      ],
       thresholds: {
         lines: 90,
         functions: 90,

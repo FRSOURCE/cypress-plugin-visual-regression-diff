@@ -18,12 +18,12 @@ import './commands'
 
 Cypress.on('window:before:load', win => {
   // TODO: remove when Cypress update electron to version >= 28.0.0
-  win.URL.canParse = function canParse(url) {
+  win.URL.canParse = function canParse(url, ...rest: [string?]) {
     const urlString = String(url);
-    const base = length < 2 || arguments[1] === undefined ? undefined : String(arguments[1]);
+    const base = rest.length === 0 || rest[0] === undefined ? undefined : String(rest[0]);
     try {
       return !!new URL(urlString, base);
-    } catch (error) {
+    } catch {
       return false;
     }
   };
