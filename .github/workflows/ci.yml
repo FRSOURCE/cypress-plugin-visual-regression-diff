@@ -95,7 +95,7 @@ jobs:
         run: pnpm test:e2e:ci
       - name: Test component-testing
         run: pnpm test:ct:ci
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: test
           path: |
@@ -152,7 +152,7 @@ jobs:
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
     steps:
-      - uses: google-github-actions/release-please-action@v3.7.12
+      - uses: google-github-actions/release-please-action@v3.7.13
         id: release
         with:
           command: manifest
