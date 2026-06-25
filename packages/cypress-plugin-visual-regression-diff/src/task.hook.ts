@@ -48,7 +48,7 @@ export const getScreenshotPathInfoTask = (cfg: {
 
 export const cleanupImagesTask = (config: Cypress.PluginConfigOptions) => {
   if (config.env['pluginVisualRegressionCleanupUnusedImages']) {
-    cleanupUnused(config.projectRoot);
+    cleanupUnused(config);
   }
 
   resetScreenshotNameCache();
@@ -69,6 +69,7 @@ export const approveImageTask = ({ img }: { img: string }) => {
 };
 
 export const compareImagesTask = async (
+  cypressConfig: { testingType?: string },
   cfg: CompareImagesCfg,
 ): Promise<CompareImagesTaskReturn> => {
   const messages = [] as string[];
@@ -128,12 +129,13 @@ export const compareImagesTask = async (
 
     if (error) {
       writePNG(
+        cypressConfig,
         cfg.imgNew.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
         diffBuffer,
       );
     } else {
       if (rawImgOld && !isImageCurrentVersion(rawImgOldBuffer)) {
-        writePNG(cfg.imgNew, rawImgNewBuffer);
+        writePNG(cypressConfig, cfg.imgNew, rawImgNewBuffer);
         moveFile.sync(cfg.imgNew, cfg.imgOld);
       } else {
         // don't overwrite file if it's the same (imgDiff < cfg.maxDiffThreshold && !isImgSizeDifferent)
@@ -147,7 +149,7 @@ export const compareImagesTask = async (
     imgDiffBase64 = '';
     imgOldBase64 = '';
     if (cfg.createMissingImages) {
-      writePNG(cfg.imgNew, rawImgNewBuffer);
+      writePNG(cypressConfig, cfg.imgNew, rawImgNewBuffer);
       moveFile.sync(cfg.imgNew, cfg.imgOld);
     } else {
       error = true;
@@ -194,7 +196,7 @@ export const initTaskHook = (config: Cypress.PluginConfigOptions) => ({
   [TASK.cleanupImages]: cleanupImagesTask.bind(undefined, config),
   [TASK.doesFileExist]: doesFileExistTask,
   [TASK.approveImage]: approveImageTask,
-  [TASK.compareImages]: compareImagesTask,
+  [TASK.compareImages]: compareImagesTask.bind(undefined, config),
   [TASK.processImgPath]: processImgPathTask,
 });
 /* c8 ignore stop */
