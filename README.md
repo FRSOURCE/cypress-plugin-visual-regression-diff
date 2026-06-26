@@ -332,6 +332,76 @@ setupNodeEvents(on, config) {
 
 </details>
 
+<details><summary>How to fail on any visual difference, no matter how small?</summary>
+
+Set `maxDiffThreshold` to `0`:
+
+```ts
+cy.matchImage({ maxDiffThreshold: 0 });
+```
+
+Or globally via an environment variable:
+
+```bash
+npx cypress run --env "pluginVisualRegressionMaxDiffThreshold=0"
+```
+
+</details>
+
+<details><summary>Why is the actual screenshot deleted after a successful image comparison?</summary>
+
+When images match, the `.actual.png` file is temporary and gets cleaned up after the comparison. Only the baseline image (no suffix) is kept. This avoids storing redundant files.
+
+If you need actual screenshots to stay accessible for a reporter (e.g. `cypress-mochawesome-reporter`), use the `processImgPath` task hook to control where screenshots are stored. See [How do I integrate with mochawesome or other reporters that embed screenshot images?](#how-do-i-integrate-with-mochawesome-or-other-reporters-that-embed-screenshot-images)
+
+</details>
+
+<details><summary>How to remove spaces from screenshot filenames?</summary>
+
+Screenshot filenames are derived from Cypress test titles, which may contain spaces. To use a filename without spaces, pass a custom `title` option to each `matchImage` call:
+
+```ts
+cy.matchImage({ title: 'my-screenshot-without-spaces' });
+```
+
+To apply this globally for all `matchImage` calls, override the command in your support file (`cypress/support/commands.ts`):
+
+```ts
+Cypress.Commands.overwrite('matchImage', (originalFn, subject, options = {}) =>
+  originalFn(subject, {
+    title: Cypress.currentTest.titlePath.join(' ').replace(/\s+/g, '-'),
+    ...options,
+  }),
+);
+```
+
+</details>
+
+<details><summary>How to include the browser name in image filenames (for cross-browser testing)?</summary>
+
+Different browsers may render fonts and elements slightly differently. To keep separate baseline images per browser, override `matchImage` in your support file (`cypress/support/commands.ts`) to set a browser-specific `imagesPath`:
+
+```ts
+Cypress.Commands.overwrite('matchImage', (originalFn, subject, options = {}) =>
+  originalFn(subject, {
+    imagesPath: `{spec_path}/__image_snapshots__/${Cypress.browser.name}`,
+    ...options,
+  }),
+);
+```
+
+This creates separate image directories per browser (e.g. `__image_snapshots__/chrome/`, `__image_snapshots__/firefox/`).
+
+</details>
+
+<details><summary>How to generate an HTML report showing baseline, diff, and actual images?</summary>
+
+The plugin provides a built-in visual comparison overlay in the Cypress UI — clicking "See comparison" on a failed test shows the baseline, diff, and actual images side by side.
+
+For CI or sharable HTML reports, integrate with a reporter such as [`cypress-mochawesome-reporter`](https://www.npmjs.com/package/cypress-mochawesome-reporter). See [How do I integrate with mochawesome or other reporters that embed screenshot images?](#how-do-i-integrate-with-mochawesome-or-other-reporters-that-embed-screenshot-images) for setup details.
+
+</details>
+
 ## Questions
 
 Don’t hesitate to ask a question directly on the [discussions board](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/discussions)!
