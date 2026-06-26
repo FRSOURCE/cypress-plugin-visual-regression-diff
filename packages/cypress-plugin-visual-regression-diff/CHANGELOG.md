@@ -40,7 +40,7 @@ For migration, look to the end of release note.
 
 * `updateImages: 'failures-only'` (resolves [#204](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/204))
 
-A new value for the existing `updateImages` option. When set, baselines are only overwritten when the diff exceeds the configured threshold — unchanged screenshots are left as-is. This is particularly useful for CI jobs that capture screenshots on a reference platform: images that haven't changed are skipped, speeding up the run.
+A new value for the existing `updateImages` option. When set, baselines are only overwritten when the diff exceeds the configured threshold — unchanged screenshots are left as-is. Images that haven't changed are skipped, speeding up the run.
 
 ```js
 cy.matchImage({ updateImages: 'failures-only' });
