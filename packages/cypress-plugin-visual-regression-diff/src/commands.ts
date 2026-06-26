@@ -11,10 +11,6 @@ declare global {
       diffConfig?: Parameters<typeof pixelmatch>[5];
       createMissingImages?: boolean;
       updateImages?: boolean | 'failures-only';
-      /**
-       * @deprecated since version 3.0, use imagesPath instead
-       */
-      imagesDir?: string;
       imagesPath?: string;
       maxDiffThreshold?: number;
       forceDeviceScaleFactor?: boolean;
@@ -83,28 +79,8 @@ const optionWithDefaults = <K extends keyof Cypress.MatchImageOptions>(
   defaultValue: NonNullable<Cypress.MatchImageOptions[K]>,
 ) => options[key] ?? getPluginEnv(key) ?? defaultValue;
 
-const getImagesDir = (options: Cypress.MatchImageOptions) => {
-  const imagesDir = options.imagesDir || getPluginEnv('imagesDir');
-
-  // TODO: remove in 4.0.0
-  if (imagesDir) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      '@frsource/cypress-plugin-visual-regression-diff] `imagesDir` option is deprecated, use `imagesPath` instead (https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff#configuration)',
-    );
-  }
-
-  return imagesDir;
-};
-
-const getImagesPath = (options: Cypress.MatchImageOptions) => {
-  const imagesDir = getImagesDir(options);
-
-  return (
-    (imagesDir && `{spec_path}/${imagesDir}`) ||
-    optionWithDefaults(options, 'imagesPath', '{spec_path}/__image_snapshots__')
-  );
-};
+const getImagesPath = (options: Cypress.MatchImageOptions) =>
+  optionWithDefaults(options, 'imagesPath', '{spec_path}/__image_snapshots__');
 
 export const getConfig = (options: Cypress.MatchImageOptions) => ({
   scaleFactor: booleanOption(
