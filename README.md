@@ -185,7 +185,10 @@ cy.matchImage({
   // whether to create missing baseline images automatically
   // default: true
   createMissingImages: false,
-  // whether to update images automatically, without making a diff - useful for CI
+  // whether to update images automatically - useful for CI
+  // - true: overwrite all baseline images without comparing (fastest)
+  // - 'failures-only': compare first, update baseline only when diff exceeds threshold
+  // - false: never update baseline images automatically
   // default: false
   updateImages: true,
   // directory path in which screenshot images will be stored
@@ -255,6 +258,77 @@ Screenshots in Cypress do not scale to the viewport size by default. You can cha
 <details><summary>I've upgraded version of this plugin and all on my baseline images has been automatically updated. Why?</summary>
 
 Sometimes we need to do a breaking change in image comparison or image generation algorithms. To provide you with the easiest upgrade path - the plugin updates your baseline images automatically. Just commit them to your repository after the plugin upgrade and you are good to go!
+
+</details>
+
+<details><summary>Screenshots look different between <code>cypress run</code> and <code>cypress open</code>. How do I fix it?</summary>
+
+This is typically caused by device pixel ratio differences between headless and headed modes. Use the `forceDeviceScaleFactor` option to normalize the scale factor to `1`:
+
+```ts
+cy.matchImage({ forceDeviceScaleFactor: true });
+```
+
+Or set it globally via environment variable:
+
+```bash
+npx cypress run --env "pluginVisualRegressionForceDeviceScaleFactor=true"
+```
+
+For persistent viewport size differences, consider setting the browser window size explicitly in `setupNodeEvents`:
+
+```ts
+on('before:browser:launch', (browser, launchOptions) => {
+  if (browser.name === 'chrome' && browser.isHeadless) {
+    launchOptions.args.push('--window-size=1280,720');
+  }
+  return launchOptions;
+});
+```
+
+</details>
+
+<details><summary>How do I use this plugin alongside other Cypress plugins that also register <code>setupNodeEvents</code> events?</summary>
+
+Cypress only supports a single handler per event. If multiple plugins register the same event (e.g. `after:screenshot`), only the last one will be called. To compose multiple plugins safely, use [`cypress-on-fix`](https://github.com/bahmutov/cypress-on-fix):
+
+```ts
+import { defineConfig } from "cypress";
+import { initPlugin as initVisualRegressionPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
+import fix from "cypress-on-fix";
+
+export default defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      const fixedOn = fix(on);
+      initVisualRegressionPlugin(fixedOn, config);
+      // register other plugins using fixedOn here
+    },
+  },
+});
+```
+
+</details>
+
+<details><summary>How do I integrate with mochawesome or other reporters that embed screenshot images?</summary>
+
+The plugin stores baseline images outside the default `cypress/screenshots/` directory. Some reporters (like `cypress-mochawesome-reporter`) expect screenshots to be in that folder.
+
+Use the `processImgPath` task hook to control where the screenshot file is placed. Override it in `setupNodeEvents` after calling `initPlugin`:
+
+```ts
+setupNodeEvents(on, config) {
+  initVisualRegressionPlugin(on, config);
+
+  // Override the path processor to keep screenshots accessible to the reporter
+  on('task', {
+    'cp-visual-regression-diff-processImgPath': ({ path }: { path: string }) => {
+      // return a new path, or the same path to keep default behavior
+      return path;
+    },
+  });
+}
+```
 
 </details>
 
