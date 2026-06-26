@@ -89,18 +89,18 @@ require("@frsource/cypress-plugin-visual-regression-diff");
 ```ts
 // typescript / ES6
 import { defineConfig } from "cypress";
-import { initPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
+import { initPlugin as initVisualRegressionPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
 
 export default defineConfig({
   // initPlugin must be called in the section where it is used: e2e or component
   e2e: {
     setupNodeEvents(on, config) {
-      initPlugin(on, config);
+      initVisualRegressionPlugin(on, config);
     },
   },
   component: {
     setupNodeEvents(on, config) {
-      initPlugin(on, config);
+      initVisualRegressionPlugin(on, config);
     },
   },
 });
@@ -110,24 +110,24 @@ export default defineConfig({
 
 ```ts
 // typescript / ES6
-import { initPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
+import { initPlugin as initVisualRegressionPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
 
 export default function (
   on: Cypress.PluginEvents,
   config: Cypress.PluginConfigOptions
 ) {
-  initPlugin(on, config);
+  initVisualRegressionPlugin(on, config);
 
   return config;
 }
 
 // javascript
 const {
-  initPlugin,
+  initPlugin: initVisualRegressionPlugin,
 } = require("@frsource/cypress-plugin-visual-regression-diff/plugins");
 
 module.exports = function (on, config) {
-  initPlugin(on, config);
+  initVisualRegressionPlugin(on, config);
 
   return config;
 };
@@ -185,7 +185,10 @@ cy.matchImage({
   // whether to create missing baseline images automatically
   // default: true
   createMissingImages: false,
-  // whether to update images automatically, without making a diff - useful for CI
+  // whether to update images automatically - useful for CI
+  // - true: overwrite all baseline images without comparing (fastest)
+  // - 'failures-only': compare first, update baseline only when diff exceeds threshold
+  // - false: never update baseline images automatically
   // default: false
   updateImages: true,
   // directory path in which screenshot images will be stored
@@ -255,6 +258,147 @@ Screenshots in Cypress do not scale to the viewport size by default. You can cha
 <details><summary>I've upgraded version of this plugin and all on my baseline images has been automatically updated. Why?</summary>
 
 Sometimes we need to do a breaking change in image comparison or image generation algorithms. To provide you with the easiest upgrade path - the plugin updates your baseline images automatically. Just commit them to your repository after the plugin upgrade and you are good to go!
+
+</details>
+
+<details><summary>Screenshots look different between <code>cypress run</code> and <code>cypress open</code>. How do I fix it?</summary>
+
+This is typically caused by device pixel ratio differences between headless and headed modes. Use the `forceDeviceScaleFactor` option to normalize the scale factor to `1`:
+
+```ts
+cy.matchImage({ forceDeviceScaleFactor: true });
+```
+
+Or set it globally via environment variable:
+
+```bash
+npx cypress run --env "pluginVisualRegressionForceDeviceScaleFactor=true"
+```
+
+For persistent viewport size differences, consider setting the browser window size explicitly in `setupNodeEvents`:
+
+```ts
+on('before:browser:launch', (browser, launchOptions) => {
+  if (browser.name === 'chrome' && browser.isHeadless) {
+    launchOptions.args.push('--window-size=1280,720');
+  }
+  return launchOptions;
+});
+```
+
+</details>
+
+<details><summary>How do I use this plugin alongside other Cypress plugins that also register <code>setupNodeEvents</code> events?</summary>
+
+Cypress only supports a single handler per event. If multiple plugins register the same event (e.g. `after:screenshot`), only the last one will be called. To compose multiple plugins safely, use [`cypress-on-fix`](https://github.com/bahmutov/cypress-on-fix):
+
+```ts
+import { defineConfig } from "cypress";
+import { initPlugin as initVisualRegressionPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
+import fix from "cypress-on-fix";
+
+export default defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      const fixedOn = fix(on);
+      initVisualRegressionPlugin(fixedOn, config);
+      // register other plugins using fixedOn here
+    },
+  },
+});
+```
+
+</details>
+
+<details><summary>How do I integrate with mochawesome or other reporters that embed screenshot images?</summary>
+
+The plugin stores baseline images outside the default `cypress/screenshots/` directory. Some reporters (like `cypress-mochawesome-reporter`) expect screenshots to be in that folder.
+
+Use the `processImgPath` task hook to control where the screenshot file is placed. Override it in `setupNodeEvents` after calling `initPlugin`:
+
+```ts
+setupNodeEvents(on, config) {
+  initVisualRegressionPlugin(on, config);
+
+  // Override the path processor to keep screenshots accessible to the reporter
+  on('task', {
+    'cp-visual-regression-diff-processImgPath': ({ path }: { path: string }) => {
+      // return a new path, or the same path to keep default behavior
+      return path;
+    },
+  });
+}
+```
+
+</details>
+
+<details><summary>How to fail on any visual difference, no matter how small?</summary>
+
+Set `maxDiffThreshold` to `0`:
+
+```ts
+cy.matchImage({ maxDiffThreshold: 0 });
+```
+
+Or globally via an environment variable:
+
+```bash
+npx cypress run --env "pluginVisualRegressionMaxDiffThreshold=0"
+```
+
+</details>
+
+<details><summary>Why is the actual screenshot deleted after a successful image comparison?</summary>
+
+When images match, the `.actual.png` file is temporary and gets cleaned up after the comparison. Only the baseline image (no suffix) is kept. This avoids storing redundant files.
+
+If you need actual screenshots to stay accessible for a reporter (e.g. `cypress-mochawesome-reporter`), use the `processImgPath` task hook to control where screenshots are stored. See [How do I integrate with mochawesome or other reporters that embed screenshot images?](#how-do-i-integrate-with-mochawesome-or-other-reporters-that-embed-screenshot-images)
+
+</details>
+
+<details><summary>How to remove spaces from screenshot filenames?</summary>
+
+Screenshot filenames are derived from Cypress test titles, which may contain spaces. To use a filename without spaces, pass a custom `title` option to each `matchImage` call:
+
+```ts
+cy.matchImage({ title: 'my-screenshot-without-spaces' });
+```
+
+To apply this globally for all `matchImage` calls, override the command in your support file (`cypress/support/commands.ts`):
+
+```ts
+Cypress.Commands.overwrite('matchImage', (originalFn, subject, options = {}) =>
+  originalFn(subject, {
+    title: Cypress.currentTest.titlePath.join(' ').replace(/\s+/g, '-'),
+    ...options,
+  }),
+);
+```
+
+</details>
+
+<details><summary>How to include the browser name in image filenames (for cross-browser testing)?</summary>
+
+Different browsers may render fonts and elements slightly differently. To keep separate baseline images per browser, override `matchImage` in your support file (`cypress/support/commands.ts`) to set a browser-specific `imagesPath`:
+
+```ts
+Cypress.Commands.overwrite('matchImage', (originalFn, subject, options = {}) =>
+  originalFn(subject, {
+    imagesPath: `{spec_path}/__image_snapshots__/${Cypress.browser.name}`,
+    ...options,
+  }),
+);
+```
+
+This creates separate image directories per browser (e.g. `__image_snapshots__/chrome/`, `__image_snapshots__/firefox/`).
+
+</details>
+
+<details><summary>How to generate an HTML report showing baseline, diff, and actual images?</summary>
+
+The plugin provides a built-in visual comparison overlay in the Cypress UI — clicking "See comparison" on a failed test shows the baseline, diff, and actual images side by side.
+
+For CI or sharable HTML reports, integrate with a reporter such as [`cypress-mochawesome-reporter`](https://www.npmjs.com/package/cypress-mochawesome-reporter). See [How do I integrate with mochawesome or other reporters that embed screenshot images?](#how-do-i-integrate-with-mochawesome-or-other-reporters-that-embed-screenshot-images) for setup details.
 
 </details>
 
