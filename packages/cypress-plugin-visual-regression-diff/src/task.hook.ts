@@ -1,7 +1,9 @@
 import fs from 'fs';
 import { PNG } from 'pngjs';
-import pixelmatch, { PixelmatchOptions } from 'pixelmatch';
-import moveFile from 'move-file';
+import pixelmatch from 'pixelmatch';
+
+type PixelmatchOptions = NonNullable<Parameters<typeof pixelmatch>[5]>;
+import { moveFile } from 'move-file';
 import path from 'path';
 import { FILE_SUFFIX, TASK } from './constants';
 import {
@@ -32,8 +34,6 @@ const round = (n: number) => Math.ceil(n * 1000) / 1000;
 
 const unlinkSyncSafe = (path: string) =>
   fs.existsSync(path) && fs.unlinkSync(path);
-const moveSyncSafe = (pathFrom: string, pathTo: string) =>
-  fs.existsSync(pathFrom) && moveFile.sync(pathFrom, pathTo);
 
 export const getScreenshotPathInfoTask = (cfg: {
   titleFromOptions: string;
@@ -56,7 +56,7 @@ export const cleanupImagesTask = (config: Cypress.PluginConfigOptions) => {
   return null;
 };
 
-export const approveImageTask = ({
+export const approveImageTask = async ({
   img,
   imgOld,
 }: {
@@ -69,7 +69,7 @@ export const approveImageTask = ({
   const diffImg = img.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff);
   unlinkSyncSafe(diffImg);
 
-  moveSyncSafe(img, oldImg);
+  await moveFile(img, oldImg);
 
   return null;
 };
@@ -104,9 +104,9 @@ export const compareImagesTask = async (
     const diffConfig = Object.assign({ includeAA: true }, cfg.diffConfig);
 
     const diffPixels = pixelmatch(
-      imgNew.data,
-      imgOld.data,
-      diff.data,
+      new Uint8Array(imgNew.data),
+      new Uint8Array(imgOld.data),
+      new Uint8Array(diff.data),
       width,
       height,
       diffConfig,
@@ -135,7 +135,7 @@ export const compareImagesTask = async (
 
     if (error && cfg.updateImages === 'failures-only') {
       writePNG(cypressConfig, cfg.imgNew, rawImgNewBuffer);
-      moveFile.sync(cfg.imgNew, cfg.imgOld);
+      await moveFile(cfg.imgNew, cfg.imgOld);
       error = false;
       messages[0] = messages[0].replace(
         'is bigger than maximum threshold option',
@@ -150,7 +150,7 @@ export const compareImagesTask = async (
     } else {
       if (rawImgOld && !isImageCurrentVersion(rawImgOldBuffer)) {
         writePNG(cypressConfig, cfg.imgNew, rawImgNewBuffer);
-        moveFile.sync(cfg.imgNew, cfg.imgOld);
+        await moveFile(cfg.imgNew, cfg.imgOld);
       } else {
         // don't overwrite file if it's the same (imgDiff < cfg.maxDiffThreshold && !isImgSizeDifferent)
         fs.unlinkSync(cfg.imgNew);
@@ -164,7 +164,7 @@ export const compareImagesTask = async (
     imgOldBase64 = '';
     if (cfg.createMissingImages) {
       writePNG(cypressConfig, cfg.imgNew, rawImgNewBuffer);
-      moveFile.sync(cfg.imgNew, cfg.imgOld);
+      await moveFile(cfg.imgNew, cfg.imgOld);
     } else {
       error = true;
       messages.unshift(
