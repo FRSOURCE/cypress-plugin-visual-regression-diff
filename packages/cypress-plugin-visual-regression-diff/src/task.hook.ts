@@ -34,9 +34,6 @@ const round = (n: number) => Math.ceil(n * 1000) / 1000;
 
 const unlinkSyncSafe = (path: string) =>
   fs.existsSync(path) && fs.unlinkSync(path);
-const moveFileSafe = async (pathFrom: string, pathTo: string) => {
-  if (fs.existsSync(pathFrom)) await moveFile(pathFrom, pathTo);
-};
 
 export const getScreenshotPathInfoTask = (cfg: {
   titleFromOptions: string;
@@ -72,7 +69,7 @@ export const approveImageTask = async ({
   const diffImg = img.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff);
   unlinkSyncSafe(diffImg);
 
-  await moveFileSafe(img, oldImg);
+  await moveFile(img, oldImg);
 
   return null;
 };
