@@ -151,8 +151,8 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
       vite-tsconfig-paths:
-        specifier: 5.1.4
-        version: 5.1.4(typescript@5.9.3)(vite@8.1.0)
+        specifier: 6.1.1
+        version: 6.1.1(typescript@5.9.3)(vite@8.1.0)
       vitest:
         specifier: 4.1.9
         version: 4.1.9(@vitest/coverage-v8@4.1.9)(vite@8.1.0)
@@ -10306,13 +10306,10 @@ packages:
       core-util-is: 1.0.2
       extsprintf: 1.4.1
 
-  /vite-tsconfig-paths@5.1.4(typescript@5.9.3)(vite@8.1.0):
-    resolution: {integrity: sha512-cYj0LRuLV2c2sMqhqhGpaO3LretdtMn/BVX4cPLanIZuwwrkVl+lK84E/miEXkCHWXuq65rhNN4rXsBcOB3S4w==}
+  /vite-tsconfig-paths@6.1.1(typescript@5.9.3)(vite@8.1.0):
+    resolution: {integrity: sha512-2cihq7zliibCCZ8P9cKJrQBkfgdvcFkOOc3Y02o3GWUDLgqjWsZudaoiuOwO/gzTzy17cS5F7ZPo4bsnS4DGkg==}
     peerDependencies:
       vite: '*'
-    peerDependenciesMeta:
-      vite:
-        optional: true
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       globrex: 0.1.2
