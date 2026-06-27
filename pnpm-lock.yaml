@@ -96,8 +96,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0
       pixelmatch:
-        specifier: 5.3.0
-        version: 5.3.0
+        specifier: 7.2.0
+        version: 7.2.0
       pngjs:
         specifier: 7.0.0
         version: 7.0.0
@@ -7982,11 +7982,11 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /pixelmatch@5.3.0:
-    resolution: {integrity: sha512-o8mkY4E/+LNUf6LzX96ht6k6CEDi65k9G2rjMtBe9Oo+VPKSvl+0GKHuH/AlG+GA5LPG/i5hrekkxUc3s2HU+Q==}
+  /pixelmatch@7.2.0:
+    resolution: {integrity: sha512-xhcb4yHu9sM/G7foGzoLtXYcC0zHEaOXXjRKhGup0fw78Nf2Tkiapv4EQyMzrbcmQPsllAI7DbFY2UT7PlI9Pg==}
     hasBin: true
     dependencies:
-      pngjs: 6.0.0
+      pngjs: 7.0.0
     dev: false
 
   /pkg-dir@4.2.0:
@@ -7995,11 +7995,6 @@ packages:
     dependencies:
       find-up: 4.1.0
     dev: true
-
-  /pngjs@6.0.0:
-    resolution: {integrity: sha512-TRzzuFRRmEoSW/p1KVAmiOgPco2Irlah+bGFCeNfJXxxYGwSw7YwAOAcd7X28K/m5bjBWKsC29KyoMfHbypayg==}
-    engines: {node: '>=12.13.0'}
-    dev: false
 
   /pngjs@7.0.0:
     resolution: {integrity: sha512-LKWqWJRhstyYo9pGvgor/ivk2w94eSjE3RGVuzLGlr3NmD8bf7RcYGze1mNdEHRP6TRP6rMuDHk5t44hnTRyow==}
