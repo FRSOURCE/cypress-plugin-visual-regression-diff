@@ -70,7 +70,7 @@
     "@types/pngjs": "6.0.5",
     "@types/sharp": "0.32.0",
     "@types/tmp": "0.2.6",
-    "@vitest/coverage-v8": "2.1.1",
+    "@vitest/coverage-v8": "3.2.6",
     "cpy-cli": "4.2.0",
     "cypress": "13.14.2",
     "del-cli": "5.0.1",
@@ -80,7 +80,7 @@
     "tmp-promise": "3.0.3",
     "typescript": "5.6.2",
     "vite-tsconfig-paths": "5.0.1",
-    "vitest": "2.1.1"
+    "vitest": "3.2.6"
   },
   "keywords": [
     "Cypress",
