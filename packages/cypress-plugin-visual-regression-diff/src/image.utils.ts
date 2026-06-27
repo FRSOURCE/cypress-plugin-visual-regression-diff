@@ -4,7 +4,7 @@ import { PNG, PNGWithMetadata } from 'pngjs';
 import sharp from 'sharp';
 import metaPngPkg from 'meta-png';
 const { addMetadata, getMetadata } = metaPngPkg;
-import glob from 'glob';
+import { globSync } from 'glob';
 import { wasScreenshotUsed } from './screenshotPath.utils';
 import { METADATA_KEY } from './constants';
 
@@ -143,8 +143,7 @@ export const alignImagesToSameSize = (
 export const cleanupUnused = (
   config: PluginMetadataConfig & { projectRoot: string },
 ) => {
-  glob
-    .sync('**/*.png', {
+  globSync('**/*.png', {
       cwd: config.projectRoot,
       ignore: 'node_modules/**/*',
     })
