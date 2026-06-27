@@ -3,3 +3,5 @@ packages:
   - 'examples/*'
 allowBuilds:
   cypress: true
+minimumReleaseAgeExclude:
+  - prettier@3.9.0
