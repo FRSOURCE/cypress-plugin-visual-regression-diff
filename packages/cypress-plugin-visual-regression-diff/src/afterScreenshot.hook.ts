@@ -1,6 +1,6 @@
 import path from 'path';
 import { promises as fs } from 'fs';
-import moveFile from 'move-file';
+import { moveFile } from 'move-file';
 import { IMAGE_SNAPSHOT_PREFIX, PATH_VARIABLES } from './constants';
 
 type NotFalsy<T> = T extends false | null | undefined ? never : T;
