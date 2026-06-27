@@ -90,6 +90,7 @@ after(() => {
       const {
         title,
         imgPath,
+        imgOldPath,
         imgDiffBase64,
         imgNewBase64,
         imgOldBase64,
@@ -130,9 +131,10 @@ after(() => {
           queueClear();
           e.preventDefault();
 
-          cy.task(TASK.approveImage, { img: imgPath }).then(() =>
-            wrapper.remove(),
-          );
+          cy.task(TASK.approveImage, {
+            img: imgPath,
+            imgOld: imgOldPath,
+          }).then(() => wrapper.remove());
 
           queueRun();
         });

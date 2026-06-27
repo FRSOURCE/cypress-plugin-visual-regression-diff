@@ -15,7 +15,7 @@ jobs:
       pnpm-cache: ${{ steps.vars.outputs.pnpm-cache }}
       key: ${{ steps.vars.outputs.key }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v3
       - uses: actions/setup-node@v6
         with:
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: cache
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v3
       - uses: actions/setup-node@v6
         with:
@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: cache
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v3
       - uses: actions/setup-node@v6
         with:
@@ -107,8 +107,11 @@ jobs:
     name: test-integration-coverage
     runs-on: ubuntu-latest
     needs: cache
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v3
       - uses: actions/setup-node@v6
         with:
@@ -127,19 +130,14 @@ jobs:
       - run: pnpm install --frozen-lockfile --prefer-offline
         env:
           HUSKY: '0' # By default do not run HUSKY install
-      - name: Test integration (with coverage) and upload to CodeClimate
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: paambaati/codeclimate-action@v4.0.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          debug: true
-          coverageCommand: pnpm test:integration:ci
-          coverageLocations: |
-            ${{github.workspace}}/packages/*/coverage/lcov.info:lcov
       - name: Test integration (with coverage)
-        if: ${{ github.ref != 'refs/heads/main' }}
         run: pnpm test:integration:ci
+      - name: Upload coverage to Qlty
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: qltysh/qlty-action/coverage@v2
+        with:
+          oidc: true
+          files: ${{github.workspace}}/packages/*/coverage/lcov.info
 
   prepare-release:
     name: detect changes, bump package versions, generate changelog and commit it to main branch
@@ -165,7 +163,7 @@ jobs:
     needs: [cache, prepare-release]
     if: needs.prepare-release.outputs.releases_created
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v3
       - uses: actions/setup-node@v6
         with:

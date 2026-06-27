@@ -19,7 +19,7 @@
     "@frsource/cypress-plugin-visual-regression-diff": "workspace:*",
     "@vue/cli-plugin-e2e-cypress": "5.0.8",
     "@vue/cli-service": "5.0.8",
-    "cypress": "12.12.0",
+    "cypress": "13.14.2",
     "typescript": "5.0.4"
   }
 }
