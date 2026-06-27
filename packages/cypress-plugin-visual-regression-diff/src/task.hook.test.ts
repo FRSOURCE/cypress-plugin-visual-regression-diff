@@ -236,7 +236,7 @@ describe('approveImageTask', () => {
   });
 
   it('removes diff image and replaces old with new', async () => {
-    approveImageTask({ img: newImgPath });
+    await approveImageTask({ img: newImgPath });
 
     expect((await fs.readFile(oldImgPath)).toString()).toBe(newFileContent);
     expect(existsSync(newImgPath)).toBe(false);
@@ -245,7 +245,7 @@ describe('approveImageTask', () => {
 
   it('writes to imgOld path when provided', async () => {
     const { path: customOldPath } = await file();
-    approveImageTask({ img: newImgPath, imgOld: customOldPath });
+    await approveImageTask({ img: newImgPath, imgOld: customOldPath });
 
     expect((await fs.readFile(customOldPath)).toString()).toBe(newFileContent);
     expect(existsSync(newImgPath)).toBe(false);
