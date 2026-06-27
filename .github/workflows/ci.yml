@@ -23,7 +23,7 @@ jobs:
       - id: vars
         run: |
           echo "pnpm-cache=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
-          echo "key=${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}" >> $GITHUB_OUTPUT
+          echo "key=${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}" >> $GITHUB_OUTPUT
       - name: Cache NPM and Cypress 📦
         uses: actions/cache@v4
         id: cache
@@ -33,7 +33,7 @@ jobs:
             ~/.cache/Cypress
           key: ${{ steps.vars.outputs.key }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}
             ${{ runner.os }}-pnpm-
       - run: pnpm install --frozen-lockfile --prefer-offline
         env:
@@ -58,7 +58,7 @@ jobs:
             ~/.cache/Cypress
           key: ${{ needs.cache.outputs.key }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}
             ${{ runner.os }}-pnpm-
       - run: pnpm install --frozen-lockfile --prefer-offline
         env:
@@ -85,7 +85,7 @@ jobs:
             ~/.cache/Cypress
           key: ${{ needs.cache.outputs.key }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}
             ${{ runner.os }}-pnpm-
       - run: pnpm install --frozen-lockfile --prefer-offline
         env:
@@ -125,7 +125,7 @@ jobs:
             ~/.cache/Cypress
           key: ${{ needs.cache.outputs.key }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}
             ${{ runner.os }}-pnpm-
       - run: pnpm install --frozen-lockfile --prefer-offline
         env:
@@ -178,7 +178,7 @@ jobs:
             ~/.cache/Cypress
           key: ${{ needs.cache.outputs.key }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}
             ${{ runner.os }}-pnpm-
       - run: pnpm install --frozen-lockfile --prefer-offline
         env:
