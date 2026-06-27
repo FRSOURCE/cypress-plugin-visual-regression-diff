@@ -73,13 +73,13 @@
     "@vitest/coverage-v8": "4.1.9",
     "cpy-cli": "4.2.0",
     "cypress": "13.17.0",
-    "del-cli": "5.1.0",
+    "del-cli": "7.0.0",
     "microbundle": "0.15.1",
     "prettier": "3.9.0",
-    "sanitize-filename": "1.6.3",
+    "sanitize-filename": "1.6.4",
     "tmp-promise": "3.0.3",
     "typescript": "5.9.3",
-    "vite-tsconfig-paths": "5.1.4",
+    "vite-tsconfig-paths": "6.1.1",
     "vitest": "4.1.9"
   },
   "keywords": [
@@ -97,7 +97,7 @@
     "Cypress image snapshot"
   ],
   "dependencies": {
-    "@frsource/base64": "1.0.79",
+    "@frsource/base64": "1.0.213",
     "glob": "8.1.0",
     "meta-png": "1.0.6",
     "move-file": "2.1.0",
