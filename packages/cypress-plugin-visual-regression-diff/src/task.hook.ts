@@ -1,6 +1,8 @@
 import fs from 'fs';
 import { PNG } from 'pngjs';
-import pixelmatch, { PixelmatchOptions } from 'pixelmatch';
+import pixelmatch from 'pixelmatch';
+
+type PixelmatchOptions = NonNullable<Parameters<typeof pixelmatch>[5]>;
 import moveFile from 'move-file';
 import path from 'path';
 import { FILE_SUFFIX, TASK } from './constants';
@@ -104,9 +106,9 @@ export const compareImagesTask = async (
     const diffConfig = Object.assign({ includeAA: true }, cfg.diffConfig);
 
     const diffPixels = pixelmatch(
-      imgNew.data,
-      imgOld.data,
-      diff.data,
+      new Uint8Array(imgNew.data),
+      new Uint8Array(imgOld.data),
+      new Uint8Array(diff.data),
       width,
       height,
       diffConfig,
