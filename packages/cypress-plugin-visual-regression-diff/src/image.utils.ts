@@ -144,16 +144,15 @@ export const cleanupUnused = (
   config: PluginMetadataConfig & { projectRoot: string },
 ) => {
   globSync('**/*.png', {
-      cwd: config.projectRoot,
-      ignore: 'node_modules/**/*',
-    })
-    .forEach((pngPath) => {
-      const absolutePath = path.join(config.projectRoot, pngPath);
-      if (
-        !wasScreenshotUsed(pngPath) &&
-        isImageOfTestType(fs.readFileSync(absolutePath), config.testingType)
-      ) {
-        fs.unlinkSync(absolutePath);
-      }
-    });
+    cwd: config.projectRoot,
+    ignore: 'node_modules/**/*',
+  }).forEach((pngPath) => {
+    const absolutePath = path.join(config.projectRoot, pngPath);
+    if (
+      !wasScreenshotUsed(pngPath) &&
+      isImageOfTestType(fs.readFileSync(absolutePath), config.testingType)
+    ) {
+      fs.unlinkSync(absolutePath);
+    }
+  });
 };
