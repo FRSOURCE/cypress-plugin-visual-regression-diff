@@ -53,8 +53,8 @@ describe('getScreenshotPathInfoTask', () => {
       }),
     ).toEqual({
       screenshotPath:
-        '__cp-visual-regression-diff_snapshots__/nested/images/dir/some-title-withśpęćiał人物 #0.actual.png',
-      title: 'some-title-withśpęćiał人物 #0.actual',
+        '__cp-visual-regression-diff_snapshots__/nested/images/dir/some-title-withśpęćiał人物_#0.actual.png',
+      title: 'some-title-withśpęćiał人物_#0.actual',
     });
   });
 
@@ -68,8 +68,8 @@ describe('getScreenshotPathInfoTask', () => {
       }),
     ).toEqual({
       screenshotPath:
-        '__cp-visual-regression-diff_snapshots__/some/nested/spec-path/images/dir/some-title #0.actual.png',
-      title: 'some-title #0.actual',
+        '__cp-visual-regression-diff_snapshots__/some/nested/spec-path/images/dir/some-title_#0.actual.png',
+      title: 'some-title_#0.actual',
     });
   });
 
@@ -83,8 +83,8 @@ describe('getScreenshotPathInfoTask', () => {
       }),
     ).toEqual({
       screenshotPath:
-        '__cp-visual-regression-diff_snapshots__/{unix_system_root_path}/images/dir/some-title #0.actual.png',
-      title: 'some-title #0.actual',
+        '__cp-visual-regression-diff_snapshots__/{unix_system_root_path}/images/dir/some-title_#0.actual.png',
+      title: 'some-title_#0.actual',
     });
 
     expect(
@@ -96,8 +96,8 @@ describe('getScreenshotPathInfoTask', () => {
       }),
     ).toEqual({
       screenshotPath:
-        '__cp-visual-regression-diff_snapshots__/{win_system_root_path}/C/images/dir/some-title #0.actual.png',
-      title: 'some-title #0.actual',
+        '__cp-visual-regression-diff_snapshots__/{win_system_root_path}/C/images/dir/some-title_#0.actual.png',
+      title: 'some-title_#0.actual',
     });
   });
 });
@@ -119,34 +119,99 @@ describe('cleanupImagesTask', () => {
       );
     };
 
-    it('does not remove used screenshot', async () => {
+    it('does not remove non-plugin PNG files', async () => {
       const { path: projectRoot } = await dir();
-      const screenshotPath = await writeTmpFixture(
-        await generateUsedScreenshotPath(projectRoot),
-        oldImgFixture,
+      // write a plain PNG without plugin metadata
+      const plainPngPath = path.join(projectRoot, 'plain.png');
+      await writeTmpFixture(plainPngPath, oldImgFixture);
+      // overwrite metadata to remove plugin marker
+      const { promises: fsp } = await import('fs');
+      await fsp.writeFile(
+        plainPngPath,
+        Buffer.from([
+          137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0,
+          1, 0, 0, 0, 1, 8, 2, 0, 0, 0, 144, 119, 83, 222, 0, 0, 0, 12, 73, 68,
+          65, 84, 8, 215, 99, 248, 207, 192, 0, 0, 0, 2, 0, 1, 226, 33, 188, 51,
+          0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130,
+        ]),
       );
 
       cleanupImagesTask({
         projectRoot,
         env: { pluginVisualRegressionCleanupUnusedImages: true },
+        testingType: 'e2e',
       } as unknown as Cypress.PluginConfigOptions);
 
-      expect(existsSync(screenshotPath)).toBe(true);
+      expect(existsSync(plainPngPath)).toBe(true);
     });
 
-    it('removes unused screenshot', async () => {
-      const { path: projectRoot } = await dir();
-      const screenshotPath = await writeTmpFixture(
-        path.join(projectRoot, 'some-file-2 #0.png'),
-        oldImgFixture,
-      );
+    describe('when no testingType is specified', () => {
+      it('removes any unused plugin-generated screenshot', async () => {
+        const { path: projectRoot } = await dir();
+        const screenshotPath = await writeTmpFixture(
+          path.join(projectRoot, 'some-file-2_#0.png'),
+          oldImgFixture,
+        );
 
-      cleanupImagesTask({
-        projectRoot,
-        env: { pluginVisualRegressionCleanupUnusedImages: true },
-      } as unknown as Cypress.PluginConfigOptions);
+        cleanupImagesTask({
+          projectRoot,
+          env: { pluginVisualRegressionCleanupUnusedImages: true },
+        } as unknown as Cypress.PluginConfigOptions);
 
-      expect(existsSync(screenshotPath)).toBe(false);
+        expect(existsSync(screenshotPath)).toBe(false);
+      });
+    });
+
+    describe('when testing type does not match', () => {
+      it('does not remove unused screenshot', async () => {
+        const { path: projectRoot } = await dir();
+        const screenshotPath = await writeTmpFixture(
+          path.join(projectRoot, 'some-file-2_#0.png'),
+          oldImgFixture,
+        );
+
+        cleanupImagesTask({
+          projectRoot,
+          env: { pluginVisualRegressionCleanupUnusedImages: true },
+          testingType: 'component',
+        } as unknown as Cypress.PluginConfigOptions);
+
+        expect(existsSync(screenshotPath)).toBe(true);
+      });
+    });
+
+    describe('when testing type matches', () => {
+      it('does not remove used screenshot', async () => {
+        const { path: projectRoot } = await dir();
+        const screenshotPath = await writeTmpFixture(
+          await generateUsedScreenshotPath(projectRoot),
+          oldImgFixture,
+        );
+
+        cleanupImagesTask({
+          projectRoot,
+          env: { pluginVisualRegressionCleanupUnusedImages: true },
+          testingType: 'e2e',
+        } as unknown as Cypress.PluginConfigOptions);
+
+        expect(existsSync(screenshotPath)).toBe(true);
+      });
+
+      it('removes unused screenshot', async () => {
+        const { path: projectRoot } = await dir();
+        const screenshotPath = await writeTmpFixture(
+          path.join(projectRoot, 'some-file-2_#0.png'),
+          oldImgFixture,
+        );
+
+        cleanupImagesTask({
+          projectRoot,
+          env: { pluginVisualRegressionCleanupUnusedImages: true },
+          testingType: 'e2e',
+        } as unknown as Cypress.PluginConfigOptions);
+
+        expect(existsSync(screenshotPath)).toBe(false);
+      });
     });
   });
 });
@@ -177,6 +242,14 @@ describe('approveImageTask', () => {
     expect(existsSync(newImgPath)).toBe(false);
     expect(existsSync(diffImgPath)).toBe(false);
   });
+
+  it('writes to imgOld path when provided', async () => {
+    const { path: customOldPath } = await file();
+    approveImageTask({ img: newImgPath, imgOld: customOldPath });
+
+    expect((await fs.readFile(customOldPath)).toString()).toBe(newFileContent);
+    expect(existsSync(newImgPath)).toBe(false);
+  });
 });
 
 describe('compareImagesTask', () => {
@@ -184,7 +257,10 @@ describe('compareImagesTask', () => {
     describe('when old screenshot exists', () => {
       it('resolves with a success message', async () =>
         expect(
-          compareImagesTask(await generateConfig({ updateImages: true })),
+          compareImagesTask(
+            { testingType: 'e2e' },
+            await generateConfig({ updateImages: true }),
+          ),
         ).resolves.toEqual({
           error: false,
           message:
@@ -198,13 +274,48 @@ describe('compareImagesTask', () => {
     });
   });
 
+  describe('when updateImages is failures-only', () => {
+    describe('when images differ beyond threshold', () => {
+      it('updates baseline and resolves with success message', async () => {
+        const cfg = await generateConfig({
+          updateImages: 'failures-only',
+          maxDiffThreshold: 0,
+        });
+        const result = await compareImagesTask({ testingType: 'e2e' }, cfg);
+
+        expect(result).toMatchObject({
+          error: false,
+          message: expect.stringContaining('was bigger than maximum threshold'),
+        });
+        expect(existsSync(cfg.imgOld)).toBe(true);
+        expect(existsSync(cfg.imgNew)).toBe(false);
+      });
+    });
+
+    describe('when images are within threshold', () => {
+      it('resolves with a success message without updating', async () => {
+        const cfg = await generateConfig({
+          updateImages: 'failures-only',
+          maxDiffThreshold: 0.5,
+        });
+        await writeTmpFixture(cfg.imgNew, oldImgFixture);
+        const result = await compareImagesTask({ testingType: 'e2e' }, cfg);
+
+        expect(result).toMatchObject({ error: false });
+        expect(existsSync(cfg.imgNew)).toBe(false);
+      });
+    });
+  });
+
   describe("when images shouldn't be updated", () => {
     describe("when old screenshot doesn't exist", () => {
       it('resolves with a success message', async () => {
         const cfg = await generateConfig({ updateImages: false });
         await fs.unlink(cfg.imgOld);
 
-        await expect(compareImagesTask(cfg)).resolves.toEqual({
+        await expect(
+          compareImagesTask({ testingType: 'e2e' }, cfg),
+        ).resolves.toEqual({
           error: false,
           message:
             'Image diff factor (0%) is within boundaries of maximum threshold option 0.5.',
@@ -224,7 +335,9 @@ describe('compareImagesTask', () => {
           });
           await fs.unlink(cfg.imgOld);
 
-          await expect(compareImagesTask(cfg)).resolves.toEqual({
+          await expect(
+            compareImagesTask({ testingType: 'e2e' }, cfg),
+          ).resolves.toEqual({
             error: true,
             message: `Baseline image is missing at path: "${cfg.imgOld}". Provide a baseline image or enable "createMissingImages" option in plugin configuration.`,
             imgDiff: 0,
@@ -242,7 +355,9 @@ describe('compareImagesTask', () => {
         it('resolves with an error message', async () => {
           const cfg = await generateConfig({ updateImages: false });
 
-          await expect(compareImagesTask(cfg)).resolves.toMatchSnapshot();
+          await expect(
+            compareImagesTask({ testingType: 'e2e' }, cfg),
+          ).resolves.toMatchSnapshot();
         });
       });
 
@@ -251,7 +366,9 @@ describe('compareImagesTask', () => {
           const cfg = await generateConfig({ updateImages: false });
           await writeTmpFixture(cfg.imgNew, oldImgFixture);
 
-          await expect(compareImagesTask(cfg)).resolves.toMatchSnapshot();
+          await expect(
+            compareImagesTask({ testingType: 'e2e' }, cfg),
+          ).resolves.toMatchSnapshot();
         });
       });
     });
