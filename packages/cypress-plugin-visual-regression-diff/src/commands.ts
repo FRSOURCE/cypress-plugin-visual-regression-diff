@@ -60,8 +60,7 @@ const capitalize = (text: string) =>
 
 const getPluginEnv = <K extends keyof Cypress.MatchImageOptions>(key: K) =>
   Cypress.env(`pluginVisualRegression${capitalize(key)}`) as
-    | Cypress.MatchImageOptions[K]
-    | undefined;
+    Cypress.MatchImageOptions[K] | undefined;
 
 const booleanOption = <K extends keyof Cypress.MatchImageOptions, Return>(
   options: Cypress.MatchImageOptions,
