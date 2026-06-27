@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.2](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/@frsource/cypress-plugin-visual-regression-diff-v4.0.1...@frsource/cypress-plugin-visual-regression-diff-v4.0.2) (2026-06-27)
+
+
+### Bug Fixes
+
+* **deps:** update all minor dependency bump ([#256](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/256)) ([a30132c](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/a30132c18ff9d7f08804ca97166dd3383c1185b5))
+
 ## [4.0.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/@frsource/cypress-plugin-visual-regression-diff-v4.0.0...@frsource/cypress-plugin-visual-regression-diff-v4.0.1) (2026-06-26)
 
 
