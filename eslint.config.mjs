@@ -1,6 +1,6 @@
 import { typescript, javascript } from '@frsource/eslint-config';
 import globals from 'globals';
-import cypress from 'eslint-plugin-cypress/flat'
+import cypress from 'eslint-plugin-cypress'
 
 /** @type {import("eslint").Linter.Config[]} */
 export default [
@@ -15,7 +15,7 @@ export default [
       globals: {
         ...globals.es2021,
         ...globals.node,
-        ...cypress.globals,
+        ...cypress.configs.globals.languageOptions.globals,
       },
     },
   },
