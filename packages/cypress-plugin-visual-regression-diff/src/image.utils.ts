@@ -32,7 +32,10 @@ export const addPNGMetadata = (config: PluginMetadataConfig, png: Buffer) =>
     } as PluginMetadata) /* c8 ignore next */,
   );
 export const getPNGMetadata = (png: Buffer): PluginMetadata | undefined => {
-  const metadataString = getMetadata(new Uint8Array(png), METADATA_KEY /* c8 ignore next */);
+  const metadataString = getMetadata(
+    new Uint8Array(png),
+    METADATA_KEY /* c8 ignore next */,
+  );
   if (metadataString === undefined) return;
   try {
     return JSON.parse(metadataString);
