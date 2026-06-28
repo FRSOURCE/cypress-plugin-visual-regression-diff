@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.2](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/@frsource/cypress-plugin-visual-regression-diff-v4.0.1...@frsource/cypress-plugin-visual-regression-diff-v4.0.2) (2026-06-28)
+
+
+### Bug Fixes
+
+* **deps:** update all minor dependency bump ([#256](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/256)) ([a30132c](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/a30132c18ff9d7f08804ca97166dd3383c1185b5))
+* **deps:** update all non-major dependency bump ([#356](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/356)) ([a6c31f2](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/a6c31f2905be58833c03fcc01b010c23ca3f2265))
+* **deps:** update dependency glob to v13 ([#368](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/368)) ([1a40d42](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/1a40d42776324817147906b87870a449cf7aeb76))
+* **deps:** update dependency move-file to v4 ([#369](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/369)) ([6fdfbb8](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/6fdfbb82bcbb0dbac17a69fdae934ef23d7ccec9))
+* **deps:** update dependency pixelmatch to v7 ([#370](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/370)) ([19f0d77](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/19f0d77686171918dbe7c17b6c0afef697da6790))
+
 ## [4.0.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/@frsource/cypress-plugin-visual-regression-diff-v4.0.0...@frsource/cypress-plugin-visual-regression-diff-v4.0.1) (2026-06-26)
 
 
