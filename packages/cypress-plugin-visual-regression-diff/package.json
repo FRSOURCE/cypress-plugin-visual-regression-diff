@@ -48,7 +48,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "del-cli dist && microbundle src/{support,plugins,constants}.ts --target node --tsconfig tsconfig.build.json -f cjs,modern && cpy 'dist/src/*' dist && del-cli dist/src \"dist/*.{hook,utils}.d.ts\"",
+    "build": "del-cli dist && microbundle src/{support,plugins,constants}.ts --target node --tsconfig tsconfig.build.json -f cjs,modern && del-cli \"dist/*.{hook,utils}.d.ts\"",
     "format": "prettier --write .",
     "format:ci": "prettier --check .",
     "test:integration": "vitest run",
