@@ -1,8 +1,10 @@
 import { defineConfig } from "cypress";
 import { initPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
+import { VueLoaderPlugin } from "vue-loader";
 
-module.exports = defineConfig({
+export default defineConfig({
   e2e: {
+    baseUrl: "http://localhost:8080",
     setupNodeEvents(on, config) {
       initPlugin(on, config);
     },
@@ -14,8 +16,18 @@ module.exports = defineConfig({
       initPlugin(on, config);
     },
     devServer: {
-      framework: "vue-cli",
+      framework: "vue",
       bundler: "webpack",
+      webpackConfig: {
+        plugins: [new VueLoaderPlugin()],
+        module: {
+          rules: [
+            { test: /\.vue$/, loader: "vue-loader" },
+            { test: /\.css$/, use: ["vue-style-loader", "css-loader"] },
+            { test: /\.(png|jpg|gif|svg)$/, type: "asset/resource" },
+          ],
+        },
+      },
     },
   },
 });

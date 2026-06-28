@@ -72,7 +72,7 @@
     "@types/tmp": "0.2.6",
     "@vitest/coverage-v8": "4.1.9",
     "cpy-cli": "4.2.0",
-    "cypress": "13.17.0",
+    "cypress": "15.18.0",
     "del-cli": "7.0.0",
     "microbundle": "0.15.1",
     "prettier": "3.9.0",

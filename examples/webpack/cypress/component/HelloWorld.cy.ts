@@ -6,7 +6,7 @@ const msg = "Some random test message";
 describe("HelloWorld.cy.js", () => {
   it("playground", () => {
     mount(HelloWorld, {
-      propsData: { msg },
+      props: { msg },
     }).then(() => {
       cy.contains("h1", msg);
       cy.matchImage();
