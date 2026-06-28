@@ -1,0 +1,26 @@
+diff --git a/dist/rollup-plugin-typescript2.cjs.js b/dist/rollup-plugin-typescript2.cjs.js
+index 0eaef9359a030df7b3043ebb9075340420252cf3..7fb5e64616f0495b740406636c5994502fc036e5 100644
+--- a/dist/rollup-plugin-typescript2.cjs.js
++++ b/dist/rollup-plugin-typescript2.cjs.js
+@@ -29672,7 +29672,7 @@ const typescript = (options) => {
+         verbosity: VerbosityLevel.Warning,
+         clean: false,
+         cacheRoot: findCacheDir({ name: "rollup-plugin-typescript2" }),
+-        include: ["*.ts+(|x)", "**/*.ts+(|x)"],
++        include: ["*.{ts,tsx}", "**/*.{ts,tsx}"],
+         exclude: ["*.d.ts", "**/*.d.ts"],
+         abortOnError: true,
+         rollupCommonJSResolveHack: false,
+diff --git a/dist/rollup-plugin-typescript2.es.js b/dist/rollup-plugin-typescript2.es.js
+index 3a9bd62290fb8f541bbade75950ef229b268b53e..735d0740297fab9c8fbf0872a6b1483e3f87daa0 100644
+--- a/dist/rollup-plugin-typescript2.es.js
++++ b/dist/rollup-plugin-typescript2.es.js
+@@ -29643,7 +29643,7 @@ const typescript = (options) => {
+         verbosity: VerbosityLevel.Warning,
+         clean: false,
+         cacheRoot: findCacheDir({ name: "rollup-plugin-typescript2" }),
+-        include: ["*.ts+(|x)", "**/*.ts+(|x)"],
++        include: ["*.{ts,tsx}", "**/*.{ts,tsx}"],
+         exclude: ["*.d.ts", "**/*.d.ts"],
+         abortOnError: true,
+         rollupCommonJSResolveHack: false,

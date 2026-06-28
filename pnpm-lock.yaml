@@ -7,6 +7,9 @@ settings:
 overrides:
   '@rollup/pluginutils@4.2.1>picomatch': 2.3.2
 
+patchedDependencies:
+  rollup-plugin-typescript2@0.32.1: 99e8e77a4e0cd3b11894e32a718af135219538d07f62bec56ceec88dd47a7471
+
 importers:
 
   .:
@@ -9634,7 +9637,7 @@ snapshots:
       rollup-plugin-bundle-size: 1.0.3
       rollup-plugin-postcss: 4.0.2(postcss@8.5.15)
       rollup-plugin-terser: 7.0.2(rollup@2.80.0)
-      rollup-plugin-typescript2: 0.32.1(rollup@2.80.0)(typescript@4.7.4)
+      rollup-plugin-typescript2: 0.32.1(patch_hash=99e8e77a4e0cd3b11894e32a718af135219538d07f62bec56ceec88dd47a7471)(rollup@2.80.0)(typescript@4.7.4)
       rollup-plugin-visualizer: 5.14.0(rolldown@1.1.3)(rollup@2.80.0)
       sade: 1.8.1
       terser: 5.48.0
@@ -10428,7 +10431,7 @@ snapshots:
       serialize-javascript: 4.0.0
       terser: 5.48.0
 
-  rollup-plugin-typescript2@0.32.1(rollup@2.80.0)(typescript@4.7.4):
+  rollup-plugin-typescript2@0.32.1(patch_hash=99e8e77a4e0cd3b11894e32a718af135219538d07f62bec56ceec88dd47a7471)(rollup@2.80.0)(typescript@4.7.4):
     dependencies:
       '@rollup/pluginutils': 4.2.1
       find-cache-dir: 3.3.2
