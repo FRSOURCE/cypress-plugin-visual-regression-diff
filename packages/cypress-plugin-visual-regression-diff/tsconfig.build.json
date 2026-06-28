@@ -1,5 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "include": ["src/*.ts"],
-  "exclude": ["src/*.test.ts"]
+  "exclude": ["src/*.test.ts"],
+  "compilerOptions": {
+    "rootDir": "./src",
+    "ignoreDeprecations": "6.0"
+  }
 }

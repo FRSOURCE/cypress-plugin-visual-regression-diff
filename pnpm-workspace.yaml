@@ -5,3 +5,5 @@ allowBuilds:
   cypress: true
 minimumReleaseAgeExclude:
   - prettier@3.9.0
+overrides:
+  "@rollup/pluginutils@4.2.1>picomatch": "2.3.1"
