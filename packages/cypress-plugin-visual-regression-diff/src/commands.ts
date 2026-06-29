@@ -1,7 +1,7 @@
-import { FILE_SUFFIX, LINK_PREFIX, TASK } from './constants';
+import { FAB_BADGE_CLASS, FILE_SUFFIX, LINK_PREFIX, TASK } from './constants';
 import type pixelmatch from 'pixelmatch';
 import * as Base64 from '@frsource/base64';
-import type { CompareImagesTaskReturn } from './types';
+import type { CompareImagesTaskReturn, PendingDiffRecord } from './types';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -195,6 +195,9 @@ Cypress.Commands.add(
           throw constructCypressError(log, new Error('Unexpected error!'));
         }
 
+        const imgOldPath =
+          matchAgainstPath || imgPath.replace(FILE_SUFFIX.actual, '');
+
         log.set(
           'message',
           `${res.message}${
@@ -204,9 +207,7 @@ Cypress.Commands.add(
                     JSON.stringify({
                       title,
                       imgPath,
-                      imgOldPath:
-                        matchAgainstPath ||
-                        imgPath.replace(FILE_SUFFIX.actual, ''),
+                      imgOldPath,
                       imgDiffBase64: res.imgDiffBase64,
                       imgNewBase64: res.imgNewBase64,
                       imgOldBase64: res.imgOldBase64,
@@ -218,12 +219,7 @@ Cypress.Commands.add(
           }`,
         );
 
-        if (res.error) {
-          log.set('consoleProps', () => res);
-          throw constructCypressError(log, new Error(res.message));
-        }
-
-        return {
+        const matchImageReturn = {
           diffValue: res.imgDiff,
           imgNewPath: imgPath,
           imgPath: imgPath.replace(FILE_SUFFIX.actual, ''),
@@ -244,6 +240,50 @@ Cypress.Commands.add(
               ? Cypress.Buffer.from(res.imgDiffBase64, 'base64')
               : undefined,
         };
+
+        if (res.error) {
+          log.set('consoleProps', () => res);
+
+          if (Cypress.env('pluginVisualRegressionDeferFailures')) {
+            const record: PendingDiffRecord = {
+              title,
+              imgPath,
+              imgOldPath,
+              imgNewBase64: res.imgNewBase64 ?? '',
+              imgOldBase64: res.imgOldBase64 ?? '',
+              imgDiffBase64: res.imgDiffBase64 ?? '',
+              message: res.message ?? '',
+            };
+            return (
+              cy
+                .task<number>(TASK.recordPendingDiff, record, { log: false })
+                .then((count) => {
+                  /* c8 ignore start */
+                  if (top) {
+                    const badge = top.document.querySelector(
+                      `.${FAB_BADGE_CLASS}`,
+                    );
+                    if (badge) {
+                      badge.textContent = String(count);
+                      badge.removeAttribute('hidden');
+                      badge.classList.add(`${FAB_BADGE_CLASS}--pulse`);
+                      setTimeout(
+                        () =>
+                          badge.classList.remove(`${FAB_BADGE_CLASS}--pulse`),
+                        700,
+                      );
+                    }
+                  }
+                  /* c8 ignore stop */
+                  return matchImageReturn;
+                }) as unknown as Cypress.MatchImageReturn
+            );
+          }
+
+          throw constructCypressError(log, new Error(res.message));
+        }
+
+        return matchImageReturn;
       });
   },
 );

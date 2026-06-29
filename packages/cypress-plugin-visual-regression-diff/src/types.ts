@@ -7,3 +7,13 @@ export type CompareImagesTaskReturn = null | {
   imgOldBase64?: string;
   maxDiffThreshold?: number;
 };
+
+export type PendingDiffRecord = {
+  title: string;
+  imgPath: string;
+  imgOldPath: string;
+  imgNewBase64: string;
+  imgOldBase64: string;
+  imgDiffBase64: string;
+  message: string;
+};

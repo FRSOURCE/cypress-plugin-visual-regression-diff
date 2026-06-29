@@ -17,7 +17,9 @@ import {
   generateScreenshotPath,
   resetScreenshotNameCache,
 } from './screenshotPath.utils';
-import type { CompareImagesTaskReturn } from './types';
+import type { CompareImagesTaskReturn, PendingDiffRecord } from './types';
+
+let pendingDiffs: PendingDiffRecord[] = [];
 
 export type CompareImagesCfg = {
   scaleFactor: number;
@@ -204,6 +206,18 @@ export const doesFileExistTask = ({ path }: { path: string }) =>
 
 export const processImgPathTask = ({ path }: { path: string }) => path;
 
+export const recordPendingDiffTask = (record: PendingDiffRecord): number => {
+  pendingDiffs.push(record);
+  return pendingDiffs.length;
+};
+
+export const getPendingDiffsTask = (): PendingDiffRecord[] => [...pendingDiffs];
+
+export const clearPendingDiffsTask = (): null => {
+  pendingDiffs = [];
+  return null;
+};
+
 /* c8 ignore start */
 export const initTaskHook = (config: Cypress.PluginConfigOptions) => ({
   [TASK.getScreenshotPathInfo]: getScreenshotPathInfoTask,
@@ -212,5 +226,8 @@ export const initTaskHook = (config: Cypress.PluginConfigOptions) => ({
   [TASK.approveImage]: approveImageTask,
   [TASK.compareImages]: compareImagesTask.bind(undefined, config),
   [TASK.processImgPath]: processImgPathTask,
+  [TASK.recordPendingDiff]: recordPendingDiffTask,
+  [TASK.getPendingDiffs]: getPendingDiffsTask,
+  [TASK.clearPendingDiffs]: clearPendingDiffsTask,
 });
 /* c8 ignore stop */
