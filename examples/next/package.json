@@ -4,7 +4,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "cypress": "cypress open --env \"pluginVisualRegressionUpdateImages=true,pluginVisualRegressionImagesPath={spec_path}/__image_snapshots_local__\"",
+    "cypress": "cypress open --env \"pluginVisualRegressionImagesPath={spec_path}/__image_snapshots_local__\"",
     "cypress:ci": "cypress run --env \"pluginVisualRegressionUpdateImages=true\"",
     "test:e2e": "start-server-and-test dev http://localhost:3000 \"pnpm cypress --e2e\"",
     "test:e2e:ci": "start-server-and-test dev http://localhost:3000 \"pnpm cypress:ci --e2e\"",
