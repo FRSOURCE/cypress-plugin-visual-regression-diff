@@ -254,30 +254,27 @@ Cypress.Commands.add(
               imgDiffBase64: res.imgDiffBase64 ?? '',
               message: res.message ?? '',
             };
-            return (
-              cy
-                .task<number>(TASK.recordPendingDiff, record, { log: false })
-                .then((count) => {
-                  /* c8 ignore start */
-                  if (top) {
-                    const badge = top.document.querySelector(
-                      `.${FAB_BADGE_CLASS}`,
+            return cy
+              .task<number>(TASK.recordPendingDiff, record, { log: false })
+              .then((count) => {
+                /* c8 ignore start */
+                if (top) {
+                  const badge = top.document.querySelector(
+                    `.${FAB_BADGE_CLASS}`,
+                  );
+                  if (badge) {
+                    badge.textContent = String(count);
+                    badge.removeAttribute('hidden');
+                    badge.classList.add(`${FAB_BADGE_CLASS}--pulse`);
+                    setTimeout(
+                      () => badge.classList.remove(`${FAB_BADGE_CLASS}--pulse`),
+                      700,
                     );
-                    if (badge) {
-                      badge.textContent = String(count);
-                      badge.removeAttribute('hidden');
-                      badge.classList.add(`${FAB_BADGE_CLASS}--pulse`);
-                      setTimeout(
-                        () =>
-                          badge.classList.remove(`${FAB_BADGE_CLASS}--pulse`),
-                        700,
-                      );
-                    }
                   }
-                  /* c8 ignore stop */
-                  return matchImageReturn;
-                }) as unknown as Cypress.MatchImageReturn
-            );
+                }
+                /* c8 ignore stop */
+                return matchImageReturn;
+              }) as unknown as Cypress.MatchImageReturn;
           }
 
           throw constructCypressError(log, new Error(res.message));

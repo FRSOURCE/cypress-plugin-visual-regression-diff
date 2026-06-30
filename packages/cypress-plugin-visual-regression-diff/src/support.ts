@@ -1,6 +1,12 @@
 import * as Base64 from '@frsource/base64';
 import './commands';
-import { FAB_CLASS, FAB_BADGE_CLASS, LINK_PREFIX, OVERLAY_CLASS, TASK } from './constants';
+import {
+  FAB_CLASS,
+  FAB_BADGE_CLASS,
+  LINK_PREFIX,
+  OVERLAY_CLASS,
+  TASK,
+} from './constants';
 import type { PendingDiffRecord } from './types';
 
 const CAROUSEL_CLASS = 'cp-visual-regression-diff-carousel';
@@ -78,11 +84,15 @@ export const generateOverlayTemplate = ({
   </div>
 </div>`;
 
+/* c8 ignore start */
 const generateDiffPanelHTML = ({
   imgNewBase64,
   imgOldBase64,
   imgDiffBase64,
-}: Pick<PendingDiffRecord, 'imgNewBase64' | 'imgOldBase64' | 'imgDiffBase64'>) =>
+}: Pick<
+  PendingDiffRecord,
+  'imgNewBase64' | 'imgOldBase64' | 'imgDiffBase64'
+>) =>
   `<div style="display:flex;justify-content:space-evenly;align-items:flex-start;gap:15px;flex-wrap:wrap">
     <div
       style="position:relative;background:#fff;border:solid 15px #fff"
@@ -169,6 +179,7 @@ const generateCarouselTemplate = () =>
       <button data-type="next" style="background:transparent;border:1px solid #4a5568;color:#a0aec0;padding:8px 14px;border-radius:4px;cursor:pointer">Next →</button>
     </footer>
   </div>`;
+/* c8 ignore stop */
 
 /* c8 ignore start */
 function showFABSuccess() {
@@ -200,7 +211,9 @@ function openCarousel(diffs: PendingDiffRecord[]) {
     carouselEl
       .find('[data-carousel-counter]')
       .text(`Image ${index + 1} of ${diffs.length}`);
-    carouselEl.find('[data-carousel-title]').text(`${diff.title} – screenshot diff`);
+    carouselEl
+      .find('[data-carousel-title]')
+      .text(`${diff.title} – screenshot diff`);
     (carouselEl.find('[data-type="prev"]')[0] as HTMLButtonElement).disabled =
       index === 0;
     (carouselEl.find('[data-type="next"]')[0] as HTMLButtonElement).disabled =
