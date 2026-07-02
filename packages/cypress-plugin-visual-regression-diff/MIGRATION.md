@@ -12,23 +12,23 @@ No code change is required inside your tests. You only need to update **how you 
 
 ### What changed
 
-| Location | Before (all Cypress versions) | After (Cypress ≥ 15.10) |
-|---|---|---|
-| CLI flag | `--env "key=value"` | `--expose "key=value"` |
-| `cypress.config.ts` | `env: { key: value }` | `expose: { key: value }` |
-| `cypress.env.json` | `{ "key": "value" }` | use `expose` in `cypress.config.ts` instead |
+| Location            | Before (all Cypress versions) | After (Cypress ≥ 15.10)                     |
+| ------------------- | ----------------------------- | ------------------------------------------- |
+| CLI flag            | `--env "key=value"`           | `--expose "key=value"`                      |
+| `cypress.config.ts` | `env: { key: value }`         | `expose: { key: value }`                    |
+| `cypress.env.json`  | `{ "key": "value" }`          | use `expose` in `cypress.config.ts` instead |
 
 ### Plugin option names
 
 All option names stay the same — they are prefixed with `pluginVisualRegression`:
 
-| Option | Config key |
-|---|---|
-| `updateImages` | `pluginVisualRegressionUpdateImages` |
-| `cleanupUnusedImages` | `pluginVisualRegressionCleanupUnusedImages` |
-| `diffConfig` | `pluginVisualRegressionDiffConfig` |
+| Option                   | Config key                                     |
+| ------------------------ | ---------------------------------------------- |
+| `updateImages`           | `pluginVisualRegressionUpdateImages`           |
+| `cleanupUnusedImages`    | `pluginVisualRegressionCleanupUnusedImages`    |
+| `diffConfig`             | `pluginVisualRegressionDiffConfig`             |
 | `forceDeviceScaleFactor` | `pluginVisualRegressionForceDeviceScaleFactor` |
-| `maxDiffThreshold` | `pluginVisualRegressionMaxDiffThreshold` |
+| `maxDiffThreshold`       | `pluginVisualRegressionMaxDiffThreshold`       |
 
 ### CLI
 

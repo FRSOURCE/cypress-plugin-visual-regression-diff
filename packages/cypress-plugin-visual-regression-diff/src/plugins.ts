@@ -25,7 +25,10 @@ export const initPlugin = (
   config: Cypress.PluginConfigOptions,
 ) => {
   /* c8 ignore start */
-  if (getPluginConfig(config, 'pluginVisualRegressionForceDeviceScaleFactor') !== false) {
+  if (
+    getPluginConfig(config, 'pluginVisualRegressionForceDeviceScaleFactor') !==
+    false
+  ) {
     initForceDeviceScaleFactor(on);
   }
   /* c8 ignore stop */
