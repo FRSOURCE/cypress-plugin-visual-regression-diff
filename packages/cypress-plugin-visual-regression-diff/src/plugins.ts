@@ -1,5 +1,6 @@
 import { initTaskHook } from './task.hook';
 import { initAfterScreenshotHook } from './afterScreenshot.hook';
+import { getPluginConfig } from './version.utils';
 
 /* c8 ignore start */
 const initForceDeviceScaleFactor = (on: Cypress.PluginEvents) => {
@@ -24,7 +25,7 @@ export const initPlugin = (
   config: Cypress.PluginConfigOptions,
 ) => {
   /* c8 ignore start */
-  if (config.env['pluginVisualRegressionForceDeviceScaleFactor'] !== false) {
+  if (getPluginConfig(config, 'pluginVisualRegressionForceDeviceScaleFactor') !== false) {
     initForceDeviceScaleFactor(on);
   }
   /* c8 ignore stop */
