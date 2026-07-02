@@ -5,7 +5,7 @@
   "scripts": {
     "build": "pnpm -r build",
     "lint": "eslint '**/*.ts' --ignore-pattern '**/*.d.ts'",
-    "lint:fix": "pnpm lint --fix",
+    "fix": "pnpm lint --fix",
     "lint:ci": "pnpm lint --max-warnings 0",
     "format": "pnpm -r format",
     "format:ci": "pnpm -r format:ci",

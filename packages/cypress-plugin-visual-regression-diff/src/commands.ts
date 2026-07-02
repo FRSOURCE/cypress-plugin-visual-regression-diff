@@ -1,4 +1,5 @@
 import { FILE_SUFFIX, LINK_PREFIX, TASK } from './constants';
+import { supportsExpose } from './version.utils';
 import type pixelmatch from 'pixelmatch';
 import * as Base64 from '@frsource/base64';
 import type { CompareImagesTaskReturn } from './types';
@@ -58,9 +59,14 @@ const constructCypressError = (log: Cypress.Log, err: Error) => {
 const capitalize = (text: string) =>
   text.charAt(0).toUpperCase() + text.slice(1);
 
-const getPluginEnv = <K extends keyof Cypress.MatchImageOptions>(key: K) =>
-  Cypress.env(`pluginVisualRegression${capitalize(key)}`) as
-    Cypress.MatchImageOptions[K] | undefined;
+const getPluginEnv = <K extends keyof Cypress.MatchImageOptions>(key: K) => {
+  const envKey = `pluginVisualRegression${capitalize(key)}`;
+  if (supportsExpose(Cypress.version)) {
+    return Cypress.expose(envKey) as Cypress.MatchImageOptions[K] | undefined;
+  }
+
+  return Cypress.env(envKey) as Cypress.MatchImageOptions[K] | undefined;
+};
 
 const booleanOption = <K extends keyof Cypress.MatchImageOptions, Return>(
   options: Cypress.MatchImageOptions,
