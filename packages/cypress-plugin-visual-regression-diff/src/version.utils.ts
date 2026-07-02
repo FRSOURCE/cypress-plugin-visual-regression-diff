@@ -10,5 +10,5 @@ export const getPluginConfig = (
   if (supportsExpose(config.version ?? '')) {
     return config.expose?.[key];
   }
-  return config.env[key];
+  return config.env?.[key];
 };

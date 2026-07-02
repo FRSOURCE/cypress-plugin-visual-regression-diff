@@ -64,7 +64,7 @@ const getPluginEnv = <K extends keyof Cypress.MatchImageOptions>(key: K) => {
   if (supportsExpose(Cypress.version)) {
     return Cypress.expose(envKey) as Cypress.MatchImageOptions[K] | undefined;
   }
-   
+
   return Cypress.env(envKey) as Cypress.MatchImageOptions[K] | undefined;
 };
 
