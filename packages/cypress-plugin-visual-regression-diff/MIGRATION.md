@@ -1,6 +1,8 @@
 # Migration Guide
 
-## Migrating to Cypress 16 (`Cypress.expose` API)
+## 4.0.x -> 4.1.x
+
+### Migrating to Cypress 16 (`Cypress.expose` API)
 
 Cypress 16 removes `Cypress.env()` in favor of the new `Cypress.expose()` API (introduced in Cypress 15.10.0).
 This plugin supports both APIs automatically based on the detected Cypress version:

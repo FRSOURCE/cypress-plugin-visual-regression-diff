@@ -241,7 +241,7 @@ export default defineConfig({
 ```
 
 ```ts
-// cypress.config.ts (Cypress <15.10, deprecated)
+// cypress.config.ts (Cypress <15.10, deprecated in newer versions)
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
