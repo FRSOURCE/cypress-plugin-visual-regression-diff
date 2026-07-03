@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/@frsource/cypress-plugin-visual-regression-diff-v4.0.2...@frsource/cypress-plugin-visual-regression-diff-v4.1.0) (2026-07-02)
+
+
+### Features
+
+* migrate plugin options from Cypress.env() to Cypress.expose() in preparation for Cypress 16 ([#376](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/376)) ([2b71557](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/2b7155700bcddbbef92c5c42d0e5fe05beb3fa00)), closes [#375](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/375). For migration guide, go to this link: https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/packages/cypress-plugin-visual-regression-diff/MIGRATION.md#40x---41x
+
 ## [4.0.2](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/@frsource/cypress-plugin-visual-regression-diff-v4.0.1...@frsource/cypress-plugin-visual-regression-diff-v4.0.2) (2026-06-28)
 
 
