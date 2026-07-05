@@ -11,9 +11,10 @@ vi.mock('./afterScreenshot.hook.ts', () => ({
 }));
 
 describe('initPlugin', () => {
-  it('inits hooks', () => {
+  it('inits hooks (Cypress <15.10, env API)', () => {
     const onMock = vi.fn();
     initPlugin(onMock, {
+      version: '13.17.0',
       env: { pluginVisualRegressionForceDeviceScaleFactor: false },
     } as unknown as Cypress.PluginConfigOptions);
 
@@ -21,5 +22,19 @@ describe('initPlugin', () => {
     expect(onMock).toBeCalledWith('after:screenshot', 'after:screenshot');
     expect(initTaskHook).toBeCalledTimes(1);
     expect(initAfterScreenshotHook).toBeCalledTimes(1);
+  });
+
+  it('inits hooks (Cypress 15.10+, expose API)', () => {
+    const onMock = vi.fn();
+    initPlugin(onMock, {
+      version: '15.10.0',
+      expose: { pluginVisualRegressionForceDeviceScaleFactor: false },
+      env: {},
+    } as unknown as Cypress.PluginConfigOptions);
+
+    expect(onMock).toBeCalledWith('task', 'task');
+    expect(onMock).toBeCalledWith('after:screenshot', 'after:screenshot');
+    expect(initTaskHook).toBeCalledTimes(2);
+    expect(initAfterScreenshotHook).toBeCalledTimes(2);
   });
 });

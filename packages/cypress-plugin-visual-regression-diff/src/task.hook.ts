@@ -6,6 +6,7 @@ type PixelmatchOptions = NonNullable<Parameters<typeof pixelmatch>[5]>;
 import { moveFile } from 'move-file';
 import path from 'path';
 import { FILE_SUFFIX, TASK } from './constants';
+import { getPluginConfig } from './version.utils';
 import {
   cleanupUnused,
   alignImagesToSameSize,
@@ -49,7 +50,7 @@ export const getScreenshotPathInfoTask = (cfg: {
 };
 
 export const cleanupImagesTask = (config: Cypress.PluginConfigOptions) => {
-  if (config.env['pluginVisualRegressionCleanupUnusedImages']) {
+  if (getPluginConfig(config, 'pluginVisualRegressionCleanupUnusedImages')) {
     cleanupUnused(config);
   }
 

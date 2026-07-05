@@ -141,6 +141,7 @@ describe('cleanupImagesTask', () => {
 
       cleanupImagesTask({
         projectRoot,
+        version: '13.17.0',
         env: { pluginVisualRegressionCleanupUnusedImages: true },
         testingType: 'e2e',
       } as unknown as Cypress.PluginConfigOptions);
@@ -158,6 +159,7 @@ describe('cleanupImagesTask', () => {
 
         cleanupImagesTask({
           projectRoot,
+          version: '13.17.0',
           env: { pluginVisualRegressionCleanupUnusedImages: true },
         } as unknown as Cypress.PluginConfigOptions);
 
@@ -175,6 +177,7 @@ describe('cleanupImagesTask', () => {
 
         cleanupImagesTask({
           projectRoot,
+          version: '13.17.0',
           env: { pluginVisualRegressionCleanupUnusedImages: true },
           testingType: 'component',
         } as unknown as Cypress.PluginConfigOptions);
@@ -193,6 +196,7 @@ describe('cleanupImagesTask', () => {
 
         cleanupImagesTask({
           projectRoot,
+          version: '13.17.0',
           env: { pluginVisualRegressionCleanupUnusedImages: true },
           testingType: 'e2e',
         } as unknown as Cypress.PluginConfigOptions);
@@ -209,11 +213,50 @@ describe('cleanupImagesTask', () => {
 
         cleanupImagesTask({
           projectRoot,
+          version: '13.17.0',
           env: { pluginVisualRegressionCleanupUnusedImages: true },
           testingType: 'e2e',
         } as unknown as Cypress.PluginConfigOptions);
 
         expect(existsSync(screenshotPath)).toBe(false);
+      });
+    });
+
+    describe('with Cypress 15.10+ (expose API)', () => {
+      it('reads pluginVisualRegressionCleanupUnusedImages from config.expose', async () => {
+        const { path: projectRoot } = await dir();
+        const screenshotPath = await writeTmpFixture(
+          path.join(projectRoot, 'some-file-2_#0.png'),
+          oldImgFixture,
+        );
+
+        cleanupImagesTask({
+          projectRoot,
+          version: '15.10.0',
+          expose: { pluginVisualRegressionCleanupUnusedImages: true },
+          env: {},
+          testingType: 'e2e',
+        } as unknown as Cypress.PluginConfigOptions);
+
+        expect(existsSync(screenshotPath)).toBe(false);
+      });
+
+      it('does not remove images when expose flag is not set', async () => {
+        const { path: projectRoot } = await dir();
+        const screenshotPath = await writeTmpFixture(
+          path.join(projectRoot, 'some-file-2_#0.png'),
+          oldImgFixture,
+        );
+
+        cleanupImagesTask({
+          projectRoot,
+          version: '15.10.0',
+          expose: {},
+          env: {},
+          testingType: 'e2e',
+        } as unknown as Cypress.PluginConfigOptions);
+
+        expect(existsSync(screenshotPath)).toBe(true);
       });
     });
   });
