@@ -6,6 +6,6 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - prettier@3.9.0
 overrides:
-  "@rollup/pluginutils@4.2.1>picomatch": "2.3.2"
+  "@rollup/pluginutils@4.2.1>picomatch": "4.0.5"
 patchedDependencies:
   rollup-plugin-typescript2@0.32.1: patches/rollup-plugin-typescript2@0.32.1.patch
