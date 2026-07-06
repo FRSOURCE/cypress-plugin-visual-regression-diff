@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@rollup/pluginutils@4.2.1>picomatch': 2.3.2
+  '@rollup/pluginutils@4.2.1>picomatch': 4.0.5
 
 patchedDependencies:
   rollup-plugin-typescript2@0.32.1: 99e8e77a4e0cd3b11894e32a718af135219538d07f62bec56ceec88dd47a7471
@@ -6919,7 +6919,7 @@ snapshots:
   '@rollup/pluginutils@4.2.1':
     dependencies:
       estree-walker: 2.0.2
-      picomatch: 2.3.2
+      picomatch: 4.0.5
 
   '@sideway/address@4.1.5':
     dependencies:
