@@ -22,7 +22,7 @@
   "engines": {
     "node": ">=14"
   },
-  "packageManager": "pnpm@11.9.0",
+  "packageManager": "pnpm@11.10.0",
   "peerDependencies": {
     "cypress": ">=13.0.0"
   },
