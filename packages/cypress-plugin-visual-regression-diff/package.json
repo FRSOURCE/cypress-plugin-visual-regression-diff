@@ -75,7 +75,7 @@
     "cypress": "15.18.0",
     "del-cli": "7.0.0",
     "microbundle": "0.15.1",
-    "prettier": "3.9.4",
+    "prettier": "3.9.5",
     "sanitize-filename": "1.6.4",
     "tmp-promise": "3.0.3",
     "typescript": "6.0.3",
