@@ -111,8 +111,8 @@ importers:
   packages/cypress-plugin-visual-regression-diff:
     dependencies:
       '@frsource/base64':
-        specifier: 1.0.213
-        version: 1.0.213
+        specifier: 1.0.221
+        version: 1.0.221
       glob:
         specifier: 13.0.6
         version: 13.0.6
@@ -823,8 +823,8 @@ packages:
     resolution: {integrity: sha512-+CNAzxglkrpNf/kKywqQfk74QjtceuOE7Qm+AF8miRvPF/wmmK5+OJOgVh3AVTT3RP2mH3+FOaxlE5v72owk0A==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  '@frsource/base64@1.0.213':
-    resolution: {integrity: sha512-KaW0AbWO5gLtFJ+C9QZjY25P2dKkOFBtKtuyIj+DEA87moaO4cpovazCE8Zps8JP7cVyuZ+rDxkXlQTt8xli+Q==}
+  '@frsource/base64@1.0.221':
+    resolution: {integrity: sha512-sZt1Gto5o/jhSkxB4EQ4q6ILotbegJN1eKvKgHiSfHy9jhATKLLuXOHMUI3erABqO8H9yRaytetgbQjVHlkECQ==}
 
   '@frsource/eslint-config@1.85.6':
     resolution: {integrity: sha512-mJn0hcLGoMUI3guR2xTCCNXgEtbVYAL++Y9dInvxSvFUvE/FiI7R4PGM6/ZdbPmuToVXSVBOEiYmmWjtSYdzOg==}
@@ -6368,7 +6368,7 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
-  '@frsource/base64@1.0.213': {}
+  '@frsource/base64@1.0.221': {}
 
   '@frsource/eslint-config@1.85.6(eslint@10.6.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
     dependencies:
