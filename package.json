@@ -27,8 +27,8 @@
     "cypress": ">=13.0.0"
   },
   "devDependencies": {
-    "@frsource/eslint-config": "1.85.7",
-    "eslint": "10.8.0",
+    "@frsource/eslint-config": "1.85.8",
+    "eslint": "10.8.1",
     "eslint-plugin-cypress": "^6.0.0",
     "globals": "17.8.0"
   }
