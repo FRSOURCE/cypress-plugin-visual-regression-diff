@@ -22,14 +22,14 @@
   "engines": {
     "node": ">=14"
   },
-  "packageManager": "pnpm@11.22.0",
+  "packageManager": "pnpm@11.27.0",
   "peerDependencies": {
     "cypress": ">=13.0.0"
   },
   "devDependencies": {
     "@frsource/eslint-config": "1.85.10",
-    "eslint": "10.8.1",
+    "eslint": "10.10.0",
     "eslint-plugin-cypress": "^6.0.0",
-    "globals": "17.11.0"
+    "globals": "17.12.0"
   }
 }
