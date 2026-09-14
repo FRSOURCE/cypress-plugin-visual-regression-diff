@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@rollup/pluginutils@4.2.1>picomatch': 4.0.5
+  '@rollup/pluginutils@4.2.1>picomatch': 4.0.7
 
 patchedDependencies:
   rollup-plugin-typescript2@0.32.1: 99e8e77a4e0cd3b11894e32a718af135219538d07f62bec56ceec88dd47a7471
@@ -111,8 +111,8 @@ importers:
   packages/cypress-plugin-visual-regression-diff:
     dependencies:
       '@frsource/base64':
-        specifier: 1.0.228
-        version: 1.0.228
+        specifier: 1.0.236
+        version: 1.0.236
       glob:
         specifier: 13.0.6
         version: 13.0.6
@@ -826,8 +826,8 @@ packages:
     resolution: {integrity: sha512-+CNAzxglkrpNf/kKywqQfk74QjtceuOE7Qm+AF8miRvPF/wmmK5+OJOgVh3AVTT3RP2mH3+FOaxlE5v72owk0A==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  '@frsource/base64@1.0.228':
-    resolution: {integrity: sha512-PJsUDR1+sFOMHR4x7wapRy/hIjjCAopJbwaJVMt+jAfQybPAl0vZmTcYgTqD3UkpAaj/MpmriQCNFjRZJnNxMg==}
+  '@frsource/base64@1.0.236':
+    resolution: {integrity: sha512-NtnlVD0UeAREddQCSvVz+Ge1RBe7BbC4rjs3zCAXKVgikf9qdfleThPS65dZQbIFG3NT2mSpikxUr2W+0qDrJw==}
 
   '@frsource/eslint-config@1.85.10':
     resolution: {integrity: sha512-arg2hSItMxZkGfXx0/nLftFpxDwjId55mkjoAkJA3lL8OVBMv7rP1DD4HE+uvx9qbNdQ1nEe2ZecteOjEw27Hg==}
@@ -4111,6 +4111,10 @@ packages:
     resolution: {integrity: sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==}
     engines: {node: '>=12'}
 
+  picomatch@4.0.7:
+    resolution: {integrity: sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==}
+    engines: {node: '>=12'}
+
   pify@2.3.0:
     resolution: {integrity: sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==}
     engines: {node: '>=0.10.0'}
@@ -6384,7 +6388,7 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
-  '@frsource/base64@1.0.228': {}
+  '@frsource/base64@1.0.236': {}
 
   '@frsource/eslint-config@1.85.10(eslint@10.8.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
     dependencies:
@@ -6931,7 +6935,7 @@ snapshots:
   '@rollup/pluginutils@4.2.1':
     dependencies:
       estree-walker: 2.0.2
-      picomatch: 4.0.5
+      picomatch: 4.0.7
 
   '@sideway/address@4.1.5':
     dependencies:
@@ -10013,6 +10017,8 @@ snapshots:
   picomatch@2.3.2: {}
 
   picomatch@4.0.5: {}
+
+  picomatch@4.0.7: {}
 
   pify@2.3.0: {}
 
