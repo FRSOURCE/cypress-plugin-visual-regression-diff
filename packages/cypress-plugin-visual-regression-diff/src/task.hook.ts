@@ -109,7 +109,7 @@ export const compareImagesTask = async (
     const diffPixels = pixelmatch(
       new Uint8Array(imgNew.data),
       new Uint8Array(imgOld.data),
-      new Uint8Array(diff.data),
+      diff.data as unknown as Uint8Array,
       width,
       height,
       diffConfig,
@@ -125,8 +125,8 @@ export const compareImagesTask = async (
     if (imgDiff > cfg.maxDiffThreshold) {
       messages.unshift(
         `Image diff factor (${round(
-          imgDiff,
-        )}%) is bigger than maximum threshold option ${cfg.maxDiffThreshold}.`,
+          imgDiff * 100,
+        )}%) is bigger than maximum threshold option ${round(cfg.maxDiffThreshold * 100)}%.`,
       );
       error = true;
     }
@@ -180,10 +180,8 @@ export const compareImagesTask = async (
     if (!error) {
       messages.unshift(
         `Image diff factor (${round(
-          imgDiff,
-        )}%) is within boundaries of maximum threshold option ${
-          cfg.maxDiffThreshold
-        }.`,
+          imgDiff * 100,
+        )}%) is within boundaries of maximum threshold option ${round(cfg.maxDiffThreshold * 100)}%.`,
       );
     }
 
@@ -209,7 +207,7 @@ export const processImgPathTask = ({ path }: { path: string }) => path;
 
 export const recordPendingDiffTask = (record: PendingDiffRecord): number => {
   pendingDiffs.push(record);
-  return pendingDiffs.length;
+  return pendingDiffs.filter((d) => !d.passed).length;
 };
 
 export const getPendingDiffsTask = (): PendingDiffRecord[] => [...pendingDiffs];

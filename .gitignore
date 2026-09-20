@@ -112,3 +112,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Batch review demo recording temp files
+scripts/.frames/
+scripts/.palette.png

@@ -2,22 +2,13 @@ import { defineConfig } from "cypress";
 import { initPlugin } from "@frsource/cypress-plugin-visual-regression-diff/plugins";
 
 export default defineConfig({
-  env: {
-    pluginVisualRegressionBatchReviewMode: true,
-  },
   e2e: {
     setupNodeEvents(on, config) {
       initPlugin(on, config);
     },
     baseUrl: "http://localhost:3000",
-  },
-  component: {
-    setupNodeEvents(on, config) {
-      initPlugin(on, config);
-    },
-    devServer: {
-      framework: "next",
-      bundler: "webpack",
+    env: {
+      pluginVisualRegressionBatchReviewMode: true,
     },
   },
 });

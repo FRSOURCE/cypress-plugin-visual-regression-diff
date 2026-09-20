@@ -16,3 +16,9 @@ vi.stubGlobal('before', before);
 
 export const after = vi.fn();
 vi.stubGlobal('after', after);
+
+export const beforeEach = vi.fn();
+vi.stubGlobal('beforeEach', beforeEach);
+
+export const afterEach = vi.fn();
+vi.stubGlobal('afterEach', afterEach);

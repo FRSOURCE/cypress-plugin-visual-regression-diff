@@ -17,6 +17,7 @@ declare global {
       forceDeviceScaleFactor?: boolean;
       title?: string;
       matchAgainstPath?: string;
+      showPassingImages?: boolean;
       // IDEA: to be implemented if support for files NOT from filesystem needed
       // matchAgainst?: string | Buffer;
     };
@@ -109,6 +110,8 @@ Cypress.Commands.add(
   (subject, options = {}) => {
     const $el = subject as JQuery<HTMLElement> | undefined;
     let title: string;
+    /* c8 ignore next */
+    let pendingPassingRecord: PendingDiffRecord | null = null;
 
     const {
       scaleFactor,
@@ -206,7 +209,7 @@ Cypress.Commands.add(
 
         log.set(
           'message',
-          `${res.message}${
+          `[${title}] ${res.message}${
             res.imgDiffBase64 && res.imgNewBase64 && res.imgOldBase64
               ? `\n[See comparison](${LINK_PREFIX}${Base64.encode(
                   encodeURIComponent(
@@ -250,43 +253,74 @@ Cypress.Commands.add(
         if (res.error) {
           log.set('consoleProps', () => res);
 
-          if (Cypress.env('pluginVisualRegressionDeferFailures')) {
-            const record: PendingDiffRecord = {
-              title,
-              imgPath,
-              imgOldPath,
-              imgNewBase64: res.imgNewBase64 ?? '',
-              imgOldBase64: res.imgOldBase64 ?? '',
-              imgDiffBase64: res.imgDiffBase64 ?? '',
-              message: res.message ?? '',
-            };
-            return cy
-              .task<number>(TASK.recordPendingDiff, record, { log: false })
-              .then((count) => {
-                /* c8 ignore start */
-                if (top) {
-                  const badge = top.document.querySelector(
-                    `.${FAB_BADGE_CLASS}`,
-                  );
-                  if (badge) {
-                    badge.textContent = String(count);
-                    badge.removeAttribute('hidden');
-                    badge.classList.add(`${FAB_BADGE_CLASS}--pulse`);
-                    setTimeout(
-                      () => badge.classList.remove(`${FAB_BADGE_CLASS}--pulse`),
-                      700,
-                    );
-                  }
-                }
-                /* c8 ignore stop */
-                return matchImageReturn;
-              }) as unknown as Cypress.MatchImageReturn;
-          }
+          const deferred = supportsExpose(Cypress.version)
+            ? !!Cypress.expose('pluginVisualRegressionBatchReviewMode')
+            : !!Cypress.env('pluginVisualRegressionBatchReviewMode');
+          const record: PendingDiffRecord = {
+            title,
+            imgPath,
+            imgOldPath,
+            imgNewBase64: res.imgNewBase64 ?? '',
+            imgOldBase64: res.imgOldBase64 ?? '',
+            imgDiffBase64: res.imgDiffBase64 ?? '',
+            message: res.message ?? '',
+            deferred,
+          };
 
-          throw constructCypressError(log, new Error(res.message));
+          return (cy
+            .task<number>(TASK.recordPendingDiff, record, { log: false })
+            .then((count) => {
+              /* c8 ignore start */
+              if (top) {
+                const badge = top.document.querySelector(`.${FAB_BADGE_CLASS}`);
+                if (badge) {
+                  badge.textContent = String(count);
+                  (badge as HTMLElement).style.display = 'flex';
+                  badge.classList.add(`${FAB_BADGE_CLASS}--pulse`);
+                  setTimeout(
+                    () => badge.classList.remove(`${FAB_BADGE_CLASS}--pulse`),
+                    700,
+                  );
+                }
+                if (deferred) {
+                  (top as any).__cpvrdDeferredCount =
+                    (((top as any).__cpvrdDeferredCount as number) || 0) + 1;
+                }
+              }
+              /* c8 ignore stop */
+              if (!deferred) {
+                throw constructCypressError(log, new Error(res.message));
+              }
+              return matchImageReturn;
+            }) as unknown) as Cypress.MatchImageReturn;
         }
 
+        /* c8 ignore start */
+        if (res.imgDiffBase64 && res.imgNewBase64 && res.imgOldBase64) {
+          pendingPassingRecord = {
+            title,
+            imgPath,
+            imgOldPath,
+            imgNewBase64: res.imgNewBase64,
+            imgOldBase64: res.imgOldBase64,
+            imgDiffBase64: res.imgDiffBase64,
+            message: res.message ?? '',
+            passed: true,
+          };
+        }
+        /* c8 ignore stop */
+
         return matchImageReturn;
+      })
+      .then((result) => {
+        /* c8 ignore start */
+        if (!pendingPassingRecord) return cy.wrap(result, { log: false });
+        const record = pendingPassingRecord;
+        pendingPassingRecord = null;
+        return cy
+          .task<number>(TASK.recordPendingDiff, record, { log: false })
+          .then(() => result);
+        /* c8 ignore stop */
       });
   },
 );

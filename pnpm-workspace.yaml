@@ -3,6 +3,7 @@ packages:
   - 'examples/*'
 allowBuilds:
   cypress: true
+  ffmpeg-static: true
 minimumReleaseAgeExclude:
   - prettier@3.9.0
 overrides:

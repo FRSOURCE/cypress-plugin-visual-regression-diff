@@ -310,7 +310,7 @@ describe('compareImagesTask', () => {
         ).resolves.toEqual({
           error: false,
           message:
-            'Image diff factor (0%) is within boundaries of maximum threshold option 0.5.',
+            'Image diff factor (0%) is within boundaries of maximum threshold option 50%.',
           imgDiff: 0,
           imgDiffBase64: '',
           imgNewBase64: '',
@@ -364,7 +364,7 @@ describe('compareImagesTask', () => {
         ).resolves.toEqual({
           error: false,
           message:
-            'Image diff factor (0%) is within boundaries of maximum threshold option 0.5.',
+            'Image diff factor (0%) is within boundaries of maximum threshold option 50%.',
           imgDiff: 0,
           imgDiffBase64: '',
           imgNewBase64: '',

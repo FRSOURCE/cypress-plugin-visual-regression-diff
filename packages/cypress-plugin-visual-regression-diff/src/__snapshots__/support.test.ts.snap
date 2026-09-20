@@ -1,103 +1,115 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`generateOverlayTemplate > generates proper template 1`] = `
-"<div class="cp-visual-regression-diff-overlay runner" style="position:fixed;z-index:10;top:0;bottom:0;left:0;right:0;display:flex;flex-flow:column">
-  <header style="position:static">
-  <nav style="display:flex;width:100%;align-items:center;justify-content:space-between;padding:10px 15px;">
-    <h2>some title - screenshot diff</h2>
-    <form style="display:flex;align-items:center;gap:5px;text-align:right">
-      <button type="submit"><i class="fa fa-check"></i> Update screenshot</button>
-      <button type="button" data-type="close"><i class="fa fa-times"></i> Close</button>
-    <form>
-  </nav>
+"<div class="cp-visual-regression-diff-overlay" style="position:fixed;z-index:100000;top:0;bottom:0;left:0;right:0;display:flex;flex-flow:column;background:#1a202c;font-family:sans-serif">
+  <header style="background:#2d3748;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:28px;height:28px;flex-shrink:0"><svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 72 72"><circle cx="35.5" cy="36.5" r="27.5" fill="#4A4A4D" stroke="#FFF"/><g fill="#FFF" transform="matrix(.075 0 0 .075 16 17)"><circle cx="259.8" cy="259.9" r="80"/><path d="M511.7 237.7C450.2 163.4 357 92 259.8 92 162.5 91.9 69.4 163.4 8 237.7A34.8 34.8 0 0 0 8 282a520.8 520.8 0 0 0 91 86.2c109 79.3 212.4 79.5 321.6 0a520.8 520.8 0 0 0 91-86.2 34.8 34.8 0 0 0 0-44.3zM259.8 148a112.1 112.1 0 0 1 0 224 112.1 112.1 0 0 1 0-224z"/></g></svg></div>
+      <span style="font-weight:600;color:#fff;font-size:.95em">some title – screenshot diff</span>
+    </div>
+    <button type="button" data-type="close" style="background:transparent;border:1px solid #4a5568;color:#a0aec0;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:.85em">✕ Close</button>
   </header>
-  <div style="padding:15px;overflow:auto">
-    <div style="display:flex;justify-content:space-evenly;align-items:flex-start;gap:15px">
-      <div
-        style="position:relative;background:#fff;border:solid 15px #fff"
-        onmouseover="this.querySelector('div').style.opacity=0,this.querySelector('img').style.opacity=1"
-        onmouseleave="this.querySelector('div').style.opacity=1,this.querySelector('img').style.opacity=0"
-      >
-        <h3>New screenshot (hover mouse away too see the old one):</h3>
-        <img style="min-width:300px;width:100%;opacity:0" src="data:image/png;base64,img-new-base64" />
-        <div style="position:absolute;top:0;left:0;background:#fff">
-          <h3>Old screenshot (hover over to see the new one):</h3>
-          <img style="min-width:300px;width:100%" src="data:image/png;base64,img-old-base64" />
-        </div>
-      </div>
-      <div style="background:#fff;border:solid 15px #fff">
-        <h3>Diff between new and old screenshot</h3>
-        <img style="min-width:300px;width:100%" src="data:image/png;base64,img-diff-base64" />
+  <div data-diff-base64="img-diff-base64" style="flex:1;overflow:auto;padding:20px;color:#fff">
+    <div style="display:flex;justify-content:center;align-items:flex-start;gap:15px;flex-wrap:wrap">
+    <div
+      style="position:relative;background:#fff;border:solid 15px #fff;overflow:hidden;color:#1a202c"
+      onmouseover="this.querySelector('div').style.opacity=0,this.querySelector('img').style.opacity=1"
+      onmouseleave="this.querySelector('div').style.opacity=1,this.querySelector('img').style.opacity=0"
+    >
+      <h3 style="margin:0 0 8px">New screenshot (hover off to see old one):</h3>
+      <img style="min-width:200px;max-width:100%;opacity:0" src="data:image/png;base64,img-new-base64" />
+      <div style="position:absolute;top:0;left:0;width:100%;background:#fff">
+        <h3 style="margin:0 0 8px">Old screenshot (hover to see new one):</h3>
+        <img style="min-width:200px;max-width:100%" src="data:image/png;base64,img-old-base64" />
       </div>
     </div>
   </div>
+  </div>
+  <div style="background:#1a202c;padding:0 16px 10px;display:flex;justify-content:flex-end;flex-shrink:0">
+    <button data-type="see-diff" style="background:#4a5568;border:none;color:#fff;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:.85em">See diff image →</button>
+  </div>
+  <footer style="background:#2d3748;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-shrink:0">
+    <div></div>
+    <div style="display:flex;gap:8px">
+      <button type="button" data-type="replace" style="background:#38a169;border:none;color:#fff;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:600">✓ Replace image</button>
+    </div>
+    <div></div>
+  </footer>
 </div>"
 `;
 
 exports[`generateOverlayTemplate > generates proper template 2`] = `
-"<div class="cp-visual-regression-diff-overlay runner" style="position:fixed;z-index:10;top:0;bottom:0;left:0;right:0;display:flex;flex-flow:column">
-  <header style="position:static">
-  <nav style="display:flex;width:100%;align-items:center;justify-content:space-between;padding:10px 15px;">
-    <h2>some title - screenshot diff</h2>
-    <form style="display:flex;align-items:center;gap:5px;text-align:right">
-      Image was already updated, rerun test to see new comparison
-      <button type="button" data-type="close"><i class="fa fa-times"></i> Close</button>
-    <form>
-  </nav>
+"<div class="cp-visual-regression-diff-overlay" style="position:fixed;z-index:100000;top:0;bottom:0;left:0;right:0;display:flex;flex-flow:column;background:#1a202c;font-family:sans-serif">
+  <header style="background:#2d3748;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:28px;height:28px;flex-shrink:0"><svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 72 72"><circle cx="35.5" cy="36.5" r="27.5" fill="#4A4A4D" stroke="#FFF"/><g fill="#FFF" transform="matrix(.075 0 0 .075 16 17)"><circle cx="259.8" cy="259.9" r="80"/><path d="M511.7 237.7C450.2 163.4 357 92 259.8 92 162.5 91.9 69.4 163.4 8 237.7A34.8 34.8 0 0 0 8 282a520.8 520.8 0 0 0 91 86.2c109 79.3 212.4 79.5 321.6 0a520.8 520.8 0 0 0 91-86.2 34.8 34.8 0 0 0 0-44.3zM259.8 148a112.1 112.1 0 0 1 0 224 112.1 112.1 0 0 1 0-224z"/></g></svg></div>
+      <span style="font-weight:600;color:#fff;font-size:.95em">some title – screenshot diff</span>
+    </div>
+    <button type="button" data-type="close" style="background:transparent;border:1px solid #4a5568;color:#a0aec0;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:.85em">✕ Close</button>
   </header>
-  <div style="padding:15px;overflow:auto">
-    <div style="display:flex;justify-content:space-evenly;align-items:flex-start;gap:15px">
-      <div
-        style="position:relative;background:#fff;border:solid 15px #fff"
-        onmouseover="this.querySelector('div').style.opacity=0,this.querySelector('img').style.opacity=1"
-        onmouseleave="this.querySelector('div').style.opacity=1,this.querySelector('img').style.opacity=0"
-      >
-        <h3>New screenshot (hover mouse away too see the old one):</h3>
-        <img style="min-width:300px;width:100%;opacity:0" src="data:image/png;base64,img-new-base64" />
-        <div style="position:absolute;top:0;left:0;background:#fff">
-          <h3>Old screenshot (hover over to see the new one):</h3>
-          <img style="min-width:300px;width:100%" src="data:image/png;base64,img-old-base64" />
-        </div>
-      </div>
-      <div style="background:#fff;border:solid 15px #fff">
-        <h3>Diff between new and old screenshot</h3>
-        <img style="min-width:300px;width:100%" src="data:image/png;base64,img-diff-base64" />
+  <div data-diff-base64="img-diff-base64" style="flex:1;overflow:auto;padding:20px;color:#fff">
+    <div style="display:flex;justify-content:center;align-items:flex-start;gap:15px;flex-wrap:wrap">
+    <div
+      style="position:relative;background:#fff;border:solid 15px #fff;overflow:hidden;color:#1a202c"
+      onmouseover="this.querySelector('div').style.opacity=0,this.querySelector('img').style.opacity=1"
+      onmouseleave="this.querySelector('div').style.opacity=1,this.querySelector('img').style.opacity=0"
+    >
+      <h3 style="margin:0 0 8px">New screenshot (hover off to see old one):</h3>
+      <img style="min-width:200px;max-width:100%;opacity:0" src="data:image/png;base64,img-new-base64" />
+      <div style="position:absolute;top:0;left:0;width:100%;background:#fff">
+        <h3 style="margin:0 0 8px">Old screenshot (hover to see new one):</h3>
+        <img style="min-width:200px;max-width:100%" src="data:image/png;base64,img-old-base64" />
       </div>
     </div>
   </div>
+  </div>
+  <div style="background:#1a202c;padding:0 16px 10px;display:flex;justify-content:flex-end;flex-shrink:0">
+    <button data-type="see-diff" style="background:#4a5568;border:none;color:#fff;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:.85em">See diff image →</button>
+  </div>
+  <footer style="background:#2d3748;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-shrink:0">
+    <div></div>
+    <div style="display:flex;gap:8px">
+      <span style="color:#fc8181;font-size:.85em">Image was already updated, rerun test to see new comparison</span>
+    </div>
+    <div></div>
+  </footer>
 </div>"
 `;
 
 exports[`generateOverlayTemplate > generates proper template 3`] = `
-"<div class="cp-visual-regression-diff-overlay runner" style="position:fixed;z-index:10;top:0;bottom:0;left:0;right:0;display:flex;flex-flow:column">
-  <header style="position:static">
-  <nav style="display:flex;width:100%;align-items:center;justify-content:space-between;padding:10px 15px;">
-    <h2>some title - screenshot diff</h2>
-    <form style="display:flex;align-items:center;gap:5px;text-align:right">
-      
-      <button type="button" data-type="close"><i class="fa fa-times"></i> Close</button>
-    <form>
-  </nav>
+"<div class="cp-visual-regression-diff-overlay" style="position:fixed;z-index:100000;top:0;bottom:0;left:0;right:0;display:flex;flex-flow:column;background:#1a202c;font-family:sans-serif">
+  <header style="background:#2d3748;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:28px;height:28px;flex-shrink:0"><svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 72 72"><circle cx="35.5" cy="36.5" r="27.5" fill="#4A4A4D" stroke="#FFF"/><g fill="#FFF" transform="matrix(.075 0 0 .075 16 17)"><circle cx="259.8" cy="259.9" r="80"/><path d="M511.7 237.7C450.2 163.4 357 92 259.8 92 162.5 91.9 69.4 163.4 8 237.7A34.8 34.8 0 0 0 8 282a520.8 520.8 0 0 0 91 86.2c109 79.3 212.4 79.5 321.6 0a520.8 520.8 0 0 0 91-86.2 34.8 34.8 0 0 0 0-44.3zM259.8 148a112.1 112.1 0 0 1 0 224 112.1 112.1 0 0 1 0-224z"/></g></svg></div>
+      <span style="font-weight:600;color:#fff;font-size:.95em">some title – screenshot diff</span>
+    </div>
+    <button type="button" data-type="close" style="background:transparent;border:1px solid #4a5568;color:#a0aec0;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:.85em">✕ Close</button>
   </header>
-  <div style="padding:15px;overflow:auto">
-    <div style="display:flex;justify-content:space-evenly;align-items:flex-start;gap:15px">
-      <div
-        style="position:relative;background:#fff;border:solid 15px #fff"
-        onmouseover="this.querySelector('div').style.opacity=0,this.querySelector('img').style.opacity=1"
-        onmouseleave="this.querySelector('div').style.opacity=1,this.querySelector('img').style.opacity=0"
-      >
-        <h3>New screenshot (hover mouse away too see the old one):</h3>
-        <img style="min-width:300px;width:100%;opacity:0" src="data:image/png;base64,img-new-base64" />
-        <div style="position:absolute;top:0;left:0;background:#fff">
-          <h3>Old screenshot (hover over to see the new one):</h3>
-          <img style="min-width:300px;width:100%" src="data:image/png;base64,img-old-base64" />
-        </div>
-      </div>
-      <div style="background:#fff;border:solid 15px #fff">
-        <h3>Diff between new and old screenshot</h3>
-        <img style="min-width:300px;width:100%" src="data:image/png;base64,img-diff-base64" />
+  <div data-diff-base64="img-diff-base64" style="flex:1;overflow:auto;padding:20px;color:#fff">
+    <div style="display:flex;justify-content:center;align-items:flex-start;gap:15px;flex-wrap:wrap">
+    <div
+      style="position:relative;background:#fff;border:solid 15px #fff;overflow:hidden;color:#1a202c"
+      onmouseover="this.querySelector('div').style.opacity=0,this.querySelector('img').style.opacity=1"
+      onmouseleave="this.querySelector('div').style.opacity=1,this.querySelector('img').style.opacity=0"
+    >
+      <h3 style="margin:0 0 8px">New screenshot (hover off to see old one):</h3>
+      <img style="min-width:200px;max-width:100%;opacity:0" src="data:image/png;base64,img-new-base64" />
+      <div style="position:absolute;top:0;left:0;width:100%;background:#fff">
+        <h3 style="margin:0 0 8px">Old screenshot (hover to see new one):</h3>
+        <img style="min-width:200px;max-width:100%" src="data:image/png;base64,img-old-base64" />
       </div>
     </div>
   </div>
+  </div>
+  <div style="background:#1a202c;padding:0 16px 10px;display:flex;justify-content:flex-end;flex-shrink:0">
+    <button data-type="see-diff" style="background:#4a5568;border:none;color:#fff;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:.85em">See diff image →</button>
+  </div>
+  <footer style="background:#2d3748;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-shrink:0">
+    <div></div>
+    <div style="display:flex;gap:8px">
+      
+    </div>
+    <div></div>
+  </footer>
 </div>"
 `;

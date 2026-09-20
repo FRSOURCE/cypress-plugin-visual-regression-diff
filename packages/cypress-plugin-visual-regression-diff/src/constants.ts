@@ -32,3 +32,5 @@ export const PATH_VARIABLES = {
 export const WINDOWS_LIKE_DRIVE_REGEX = /^[A-Z]:$/;
 
 export const METADATA_KEY = 'FRSOURCE_CPVRD_V';
+
+export const LS_SHOW_NON_FAILING_DIFFS = 'cp-vrd-show-non-failing-diffs';

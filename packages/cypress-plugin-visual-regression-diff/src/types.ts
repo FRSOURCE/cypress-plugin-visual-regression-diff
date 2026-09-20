@@ -16,4 +16,6 @@ export type PendingDiffRecord = {
   imgOldBase64: string;
   imgDiffBase64: string;
   message: string;
+  passed?: boolean;
+  deferred?: boolean;
 };
