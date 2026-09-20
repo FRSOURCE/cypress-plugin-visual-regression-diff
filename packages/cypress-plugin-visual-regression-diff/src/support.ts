@@ -103,10 +103,7 @@ export const generateOverlayTemplate = ({
 const generateDiffPanelHTML = ({
   imgNewBase64,
   imgOldBase64,
-}: Pick<
-  PendingDiffRecord,
-  'imgNewBase64' | 'imgOldBase64'
->) =>
+}: Pick<PendingDiffRecord, 'imgNewBase64' | 'imgOldBase64'>) =>
   `<div style="display:flex;justify-content:center;align-items:flex-start;gap:15px;flex-wrap:wrap">
     <div
       style="position:relative;background:#fff;border:solid 15px #fff;overflow:hidden;color:#1a202c"
@@ -218,16 +215,21 @@ function pulseFAB() {
 
 function openDiffLightbox(imgBase64: string) {
   if (!top) return;
-  Cypress.$(`<div style="position:fixed;z-index:200000;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;cursor:zoom-out">
+  Cypress.$(
+    `<div style="position:fixed;z-index:200000;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;cursor:zoom-out">
     <img src="data:image/png;base64,${imgBase64}" style="max-width:95vw;max-height:95vh;object-fit:contain" />
-  </div>`)
+  </div>`,
+  )
     .appendTo(top.document.body)
     .on('click', function () {
       Cypress.$(this).remove();
     });
 }
 
-function openCarousel(initialDiffs: PendingDiffRecord[], allDiffs: PendingDiffRecord[] = initialDiffs) {
+function openCarousel(
+  initialDiffs: PendingDiffRecord[],
+  allDiffs: PendingDiffRecord[] = initialDiffs,
+) {
   if (!top) return;
 
   let diffs = initialDiffs;
@@ -283,7 +285,10 @@ function openCarousel(initialDiffs: PendingDiffRecord[], allDiffs: PendingDiffRe
   }
 
   function handleKey(e: KeyboardEvent) {
-    if (inPlaceholderMode) { if (e.key === 'Escape') closeCarousel(); return; }
+    if (inPlaceholderMode) {
+      if (e.key === 'Escape') closeCarousel();
+      return;
+    }
     if (e.key === 'ArrowLeft' && currentIndex > 0) renderDiff(currentIndex - 1);
     else if (e.key === 'ArrowRight' && currentIndex < diffs.length - 1)
       renderDiff(currentIndex + 1);
@@ -313,12 +318,20 @@ function openCarousel(initialDiffs: PendingDiffRecord[], allDiffs: PendingDiffRe
     );
     carouselEl.find('[data-carousel-counter]').css('visibility', 'hidden');
     carouselEl.find('[data-carousel-title]').css('visibility', 'hidden');
-    carouselEl.find('[data-see-diff-row],[data-type="skip"],[data-type="replace"],[data-replaced-info],[data-type="prev"],[data-type="next"]').hide();
+    carouselEl
+      .find(
+        '[data-see-diff-row],[data-type="skip"],[data-type="replace"],[data-replaced-info],[data-type="prev"],[data-type="next"]',
+      )
+      .hide();
   }
 
   function restoreFromPlaceholder() {
     inPlaceholderMode = false;
-    carouselEl.find('[data-see-diff-row],[data-type="skip"],[data-type="replace"],[data-type="prev"],[data-type="next"]').show();
+    carouselEl
+      .find(
+        '[data-see-diff-row],[data-type="skip"],[data-type="replace"],[data-type="prev"],[data-type="next"]',
+      )
+      .show();
     renderDiff(currentIndex);
   }
 
@@ -389,34 +402,38 @@ before(() => {
     }
 
     // Reset badge and success state at the start of each spec run
-    top.document.querySelector(`.${FAB_CLASS}`)?.removeAttribute('data-success');
+    top.document
+      .querySelector(`.${FAB_CLASS}`)
+      ?.removeAttribute('data-success');
     const badge = top.document.querySelector(`.${FAB_BADGE_CLASS}`);
     if (badge) {
       (badge as HTMLElement).style.display = 'none';
       badge.textContent = '';
     }
 
-    Cypress.$(top.document.body).off('click', `.${FAB_CLASS}`).on('click', `.${FAB_CLASS}`, () => {
-      queueClear();
-      cy.task<PendingDiffRecord[]>(TASK.getPendingDiffs, null, {
-        log: false,
-      }).then((diffs) => {
-        const failingDiffs = diffs.filter((d) => !d.passed);
-        if (failingDiffs.length > 0) {
-          openCarousel(failingDiffs, diffs);
-        } else if (getEffectiveShowPassingImages()) {
-          const passingDiffs = diffs.filter((d) => d.passed);
-          openCarousel(passingDiffs, diffs);
-        } else {
-          openCarousel([], diffs);
-        }
+    Cypress.$(top.document.body)
+      .off('click', `.${FAB_CLASS}`)
+      .on('click', `.${FAB_CLASS}`, () => {
+        queueClear();
+        cy.task<PendingDiffRecord[]>(TASK.getPendingDiffs, null, {
+          log: false,
+        }).then((diffs) => {
+          const failingDiffs = diffs.filter((d) => !d.passed);
+          if (failingDiffs.length > 0) {
+            openCarousel(failingDiffs, diffs);
+          } else if (getEffectiveShowPassingImages()) {
+            const passingDiffs = diffs.filter((d) => d.passed);
+            openCarousel(passingDiffs, diffs);
+          } else {
+            openCarousel([], diffs);
+          }
+        });
+        queueRun();
       });
-      queueRun();
-    });
   }
 
   // Reset client-side deferred count and clean up artifacts from the previous spec
-  (top as any).__cpvrdDeferredCount = 0;
+  if (top) top.__cpvrdDeferredCount = 0;
   cy.task(TASK.cleanupImages, { log: false });
   cy.task(TASK.clearPendingDiffs, null, { log: false });
 });
@@ -481,7 +498,8 @@ after(() => {
         });
 
         wrapper.on('click', '[data-type="see-diff"]', function () {
-          const base64 = wrapper.find('[data-diff-base64]').attr('data-diff-base64') ?? '';
+          const base64 =
+            wrapper.find('[data-diff-base64]').attr('data-diff-base64') ?? '';
           openDiffLightbox(base64);
         });
 
@@ -500,10 +518,9 @@ after(() => {
       queueRun();
 
       return false;
-    },
-  );
+    });
 
-  const deferredCount = ((top as any).__cpvrdDeferredCount as number) || 0;
+  const deferredCount = top?.__cpvrdDeferredCount || 0;
   if (deferredCount > 0) {
     pulseFAB();
     throw new Error(

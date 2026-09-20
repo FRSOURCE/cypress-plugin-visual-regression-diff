@@ -5,6 +5,11 @@ import * as Base64 from '@frsource/base64';
 import type { CompareImagesTaskReturn, PendingDiffRecord } from './types';
 
 declare global {
+  interface Window {
+    /** Number of deferred visual diffs recorded during the current spec run. */
+    __cpvrdDeferredCount?: number;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     type MatchImageOptions = {
@@ -267,7 +272,7 @@ Cypress.Commands.add(
             deferred,
           };
 
-          return (cy
+          return cy
             .task<number>(TASK.recordPendingDiff, record, { log: false })
             .then((count) => {
               /* c8 ignore start */
@@ -283,8 +288,8 @@ Cypress.Commands.add(
                   );
                 }
                 if (deferred) {
-                  (top as any).__cpvrdDeferredCount =
-                    (((top as any).__cpvrdDeferredCount as number) || 0) + 1;
+                  top.__cpvrdDeferredCount =
+                    (top.__cpvrdDeferredCount || 0) + 1;
                 }
               }
               /* c8 ignore stop */
@@ -292,7 +297,7 @@ Cypress.Commands.add(
                 throw constructCypressError(log, new Error(res.message));
               }
               return matchImageReturn;
-            }) as unknown) as Cypress.MatchImageReturn;
+            }) as unknown as Cypress.MatchImageReturn;
         }
 
         /* c8 ignore start */
