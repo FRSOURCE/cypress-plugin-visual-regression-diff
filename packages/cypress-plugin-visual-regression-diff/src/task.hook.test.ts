@@ -1,6 +1,7 @@
 import { it, expect, describe, beforeEach, afterEach } from 'vitest';
 import path from 'path';
-import { promises as fs, existsSync } from 'fs';
+import { promises as fs, existsSync, readFileSync } from 'fs';
+import { PNG } from 'pngjs';
 import { dir, file, setGracefulCleanup, withFile } from 'tmp-promise';
 import {
   approveImageTask,
@@ -14,6 +15,7 @@ import {
   clearPendingDiffsTask,
 } from './task.hook';
 import { generateScreenshotPath } from './screenshotPath.utils';
+import { getPNGMetadata, isImageGeneratedByPlugin } from './image.utils';
 import { IMAGE_SNAPSHOT_PREFIX } from './constants';
 
 setGracefulCleanup();
@@ -34,6 +36,20 @@ const generateConfig = async (cfg: Partial<CompareImagesCfg>) => ({
   diffConfig: {},
   ...cfg,
 });
+// pngjs drops tEXt chunks on re-encode, which yields a PNG without the plugin
+// metadata - exactly what Cypress (or sharp) hands over as the .actual.png file
+const stripMetadata = (png: Buffer) => PNG.sync.write(PNG.sync.read(png));
+const writeUnstampedFixture = async (
+  pathToWriteTo: string,
+  fixtureName: string,
+) => {
+  await fs.mkdir(path.dirname(pathToWriteTo), { recursive: true });
+  await fs.writeFile(
+    pathToWriteTo,
+    stripMetadata(await fs.readFile(path.join(fixturesPath, fixtureName))),
+  );
+  return pathToWriteTo;
+};
 const writeTmpFixture = async (pathToWriteTo: string, fixtureName: string) => {
   await fs.mkdir(path.dirname(pathToWriteTo), { recursive: true });
   await fs.writeFile(
@@ -418,6 +434,100 @@ describe('compareImagesTask', () => {
         });
       });
     });
+  });
+  describe('plugin metadata (FRSOURCE_CPVRD_V) on generated files', () => {
+    it('keeps a stamped .actual.png when comparison fails', async () => {
+      const cfg = await generateConfig({
+        updateImages: false,
+        maxDiffThreshold: 0,
+      });
+      await writeUnstampedFixture(cfg.imgNew, newImgFixture);
+      expect(isImageGeneratedByPlugin(readFileSync(cfg.imgNew))).toBe(false);
+
+      const result = await compareImagesTask({ testingType: 'component' }, cfg);
+
+      expect(result).toMatchObject({ error: true });
+      expect(existsSync(cfg.imgNew)).toBe(true);
+      const actualPng = readFileSync(cfg.imgNew);
+      expect(isImageGeneratedByPlugin(actualPng)).toBe(true);
+      expect(getPNGMetadata(actualPng)?.testingType).toBe('component');
+    });
+
+    // regression test for https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/322
+    it('does not rewrite a baseline that was created from an approved .actual.png', async () => {
+      // approveImageTask derives the .diff path from the .actual suffix, so use real-looking names
+      const { path: tmpDir } = await dir();
+      const cfg = await generateConfig({
+        updateImages: false,
+        maxDiffThreshold: 0,
+        imgNew: await writeUnstampedFixture(
+          path.join(tmpDir, 'shot.actual.png'),
+          newImgFixture,
+        ),
+        imgOld: await writeTmpFixture(
+          path.join(tmpDir, 'shot.png'),
+          oldImgFixture,
+        ),
+      });
+
+      // 1. comparison fails and leaves .actual.png behind
+      expect(
+        await compareImagesTask({ testingType: 'e2e' }, cfg),
+      ).toMatchObject({ error: true });
+      // 2. user approves it (GUI "Replace image" button or manual rename)
+      await approveImageTask({ img: cfg.imgNew, imgOld: cfg.imgOld });
+      const baselineAfterApprove = readFileSync(cfg.imgOld);
+      expect(isImageGeneratedByPlugin(baselineAfterApprove)).toBe(true);
+
+      // 3. next run produces the very same screenshot
+      await writeUnstampedFixture(cfg.imgNew, newImgFixture);
+      expect(
+        await compareImagesTask({ testingType: 'e2e' }, cfg),
+      ).toMatchObject({ error: false, imgDiff: 0 });
+
+      // baseline must be left untouched byte-for-byte, .actual.png removed
+      expect(readFileSync(cfg.imgOld).equals(baselineAfterApprove)).toBe(true);
+      expect(existsSync(cfg.imgNew)).toBe(false);
+    });
+
+    describe.each([
+      {
+        name: 'createMissingImages',
+        cfgOverrides: { updateImages: false as const },
+        removeBaseline: true,
+      },
+      {
+        name: 'updateImages: true',
+        cfgOverrides: { updateImages: true as const },
+        removeBaseline: false,
+      },
+      {
+        name: "updateImages: 'failures-only'",
+        cfgOverrides: {
+          updateImages: 'failures-only' as const,
+          maxDiffThreshold: 0,
+        },
+        removeBaseline: false,
+      },
+    ])(
+      'when baseline is written via $name',
+      ({ cfgOverrides, removeBaseline }) => {
+        it('stamps the new baseline', async () => {
+          const cfg = await generateConfig(cfgOverrides);
+          await writeUnstampedFixture(cfg.imgNew, newImgFixture);
+          if (removeBaseline) await fs.unlink(cfg.imgOld);
+
+          expect(
+            await compareImagesTask({ testingType: 'e2e' }, cfg),
+          ).toMatchObject({ error: false });
+
+          expect(existsSync(cfg.imgNew)).toBe(false);
+          const baseline = readFileSync(cfg.imgOld);
+          expect(isImageGeneratedByPlugin(baseline)).toBe(true);
+          expect(getPNGMetadata(baseline)?.testingType).toBe('e2e');
+        });
+      },
+    );
   });
 });
 
