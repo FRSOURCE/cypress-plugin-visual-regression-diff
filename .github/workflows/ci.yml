@@ -8,88 +8,26 @@ on:
       - main
 
 jobs:
-  cache:
-    name: CI cache
-    runs-on: ubuntu-latest
-    outputs:
-      pnpm-cache: ${{ steps.vars.outputs.pnpm-cache }}
-      key: ${{ steps.vars.outputs.key }}
-    steps:
-      - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: '.nvmrc'
-      - id: vars
-        run: |
-          echo "pnpm-cache=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
-          echo "key=v2-${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}" >> $GITHUB_OUTPUT
-      - name: Cache NPM and Cypress 📦
-        uses: actions/cache@v6
-        id: cache
-        with:
-          path: |
-            ${{ steps.vars.outputs.pnpm-cache }}
-            ~/.cache/Cypress
-          key: ${{ steps.vars.outputs.key }}
-          restore-keys: |
-            v2-${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}
-            v2-${{ runner.os }}-pnpm-
-      - run: pnpm install --frozen-lockfile
-        env:
-          HUSKY: '0' # By default do not run HUSKY install
-
   lint:
     name: lint
     runs-on: ubuntu-latest
-    needs: cache
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
+      - uses: ./.github/actions/setup
         with:
-          node-version-file: '.nvmrc'
-      - name: Cache NPM and Cypress 📦
-        uses: actions/cache@v6
-        id: cache
-        with:
-          path: |
-            ${{ needs.cache.outputs.pnpm-cache }}
-            ~/.cache/Cypress
-          key: ${{ needs.cache.outputs.key }}
-          restore-keys: |
-            v2-${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}
-            v2-${{ runner.os }}-pnpm-
-      - run: pnpm install --frozen-lockfile --prefer-offline
-        env:
-          HUSKY: '0' # By default do not run HUSKY install
+          # the only job that saves the cache (fastest job, never on the critical path)
+          save-cache: 'true'
       - run: pnpm lint:ci
       - run: pnpm format:ci
 
   test:
     name: test
     runs-on: ubuntu-latest
-    needs: cache
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: '.nvmrc'
-      - name: Cache NPM and Cypress 📦
-        uses: actions/cache@v6
-        id: cache
-        with:
-          path: |
-            ${{ needs.cache.outputs.pnpm-cache }}
-            ~/.cache/Cypress
-          key: ${{ needs.cache.outputs.key }}
-          restore-keys: |
-            v2-${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}
-            v2-${{ runner.os }}-pnpm-
-      - run: pnpm install --frozen-lockfile --prefer-offline
-        env:
-          HUSKY: '0' # By default do not run HUSKY install
+      - uses: ./.github/actions/setup
       - run: pnpm --filter cypress-plugin-visual-regression-diff -r build
       - name: Test e2e
         run: pnpm test:e2e:ci
@@ -106,30 +44,13 @@ jobs:
   test-integration-coverage:
     name: test-integration-coverage
     runs-on: ubuntu-latest
-    needs: cache
+    timeout-minutes: 10
     permissions:
       contents: read
       id-token: write
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: '.nvmrc'
-      - name: Cache NPM and Cypress 📦
-        uses: actions/cache@v6
-        id: cache
-        with:
-          path: |
-            ${{ needs.cache.outputs.pnpm-cache }}
-            ~/.cache/Cypress
-          key: ${{ needs.cache.outputs.key }}
-          restore-keys: |
-            v2-${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}
-            v2-${{ runner.os }}-pnpm-
-      - run: pnpm install --frozen-lockfile --prefer-offline
-        env:
-          HUSKY: '0' # By default do not run HUSKY install
+      - uses: ./.github/actions/setup
       - name: Test integration (with coverage)
         run: pnpm test:integration:ci
       - name: Upload coverage to Qlty
@@ -142,7 +63,8 @@ jobs:
   prepare-release:
     name: detect changes, bump package versions, generate changelog and commit it to main branch
     runs-on: ubuntu-latest
-    needs: [cache, lint, test, test-integration-coverage]
+    timeout-minutes: 10
+    needs: [lint, test, test-integration-coverage]
     if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' && github.event_name == 'push' }}
     permissions:
       contents: write
@@ -160,29 +82,14 @@ jobs:
   build-and-release:
     name: build and release
     runs-on: ubuntu-latest
-    needs: [cache, prepare-release]
+    timeout-minutes: 15
+    needs: [prepare-release]
     if: needs.prepare-release.outputs.releases_created
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
+      - uses: ./.github/actions/setup
         with:
-          node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
-      - name: Cache NPM and Cypress 📦
-        uses: actions/cache@v6
-        id: cache
-        with:
-          path: |
-            ${{ needs.cache.outputs.pnpm-cache }}
-            ~/.cache/Cypress
-          key: ${{ needs.cache.outputs.key }}
-          restore-keys: |
-            v2-${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}
-            v2-${{ runner.os }}-pnpm-
-      - run: pnpm install --frozen-lockfile --prefer-offline
-        env:
-          HUSKY: '0' # By default do not run HUSKY install
       - name: Build packages to get cross-references working 🔧
         run: pnpm build
       - name: Release package

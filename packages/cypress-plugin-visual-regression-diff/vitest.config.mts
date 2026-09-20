@@ -10,6 +10,8 @@ const isCI = !!process.env.CI;
 export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
+    // image-diff tests (pixelmatch + pngjs encodes) run ~8x slower under v8 coverage on CI runners
+    testTimeout: 30_000,
     exclude: exludeFiles,
     include: [testsGlob],
     coverage: {
