@@ -33,7 +33,7 @@ function queueRun() {
 }
 /* c8 ignore stop */
 
-const getShowPassingImagesConfig = (): boolean => {
+export const getShowPassingImagesConfig = (): boolean => {
   const key = 'pluginVisualRegressionBatchReviewModeShowPassingImages';
   if (supportsExpose(Cypress.version)) {
     return !!(Cypress.expose(key) as boolean | undefined);
@@ -41,7 +41,7 @@ const getShowPassingImagesConfig = (): boolean => {
   return !!(Cypress.env(key) as boolean | undefined);
 };
 
-const getBatchReviewMode = (): boolean => {
+export const getBatchReviewMode = (): boolean => {
   const key = 'pluginVisualRegressionBatchReviewMode';
   if (supportsExpose(Cypress.version)) {
     return !!(Cypress.expose(key) as boolean | undefined);
@@ -49,7 +49,7 @@ const getBatchReviewMode = (): boolean => {
   return !!(Cypress.env(key) as boolean | undefined);
 };
 
-const getEffectiveShowPassingImages = (): boolean => {
+export const getEffectiveShowPassingImages = (): boolean => {
   if (!top) return getShowPassingImagesConfig();
   const stored = top.localStorage.getItem(LS_SHOW_NON_FAILING_DIFFS);
   if (stored !== null) return stored === 'true';
