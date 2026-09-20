@@ -18,7 +18,9 @@ import {
   generateScreenshotPath,
   resetScreenshotNameCache,
 } from './screenshotPath.utils';
-import type { CompareImagesTaskReturn } from './types';
+import type { CompareImagesTaskReturn, PendingDiffRecord } from './types';
+
+let pendingDiffs: PendingDiffRecord[] = [];
 
 export type CompareImagesCfg = {
   scaleFactor: number;
@@ -107,7 +109,7 @@ export const compareImagesTask = async (
     const diffPixels = pixelmatch(
       new Uint8Array(imgNew.data),
       new Uint8Array(imgOld.data),
-      new Uint8Array(diff.data),
+      diff.data as unknown as Uint8Array,
       width,
       height,
       diffConfig,
@@ -123,8 +125,8 @@ export const compareImagesTask = async (
     if (imgDiff > cfg.maxDiffThreshold) {
       messages.unshift(
         `Image diff factor (${round(
-          imgDiff,
-        )}%) is bigger than maximum threshold option ${cfg.maxDiffThreshold}.`,
+          imgDiff * 100,
+        )}%) is bigger than maximum threshold option ${round(cfg.maxDiffThreshold * 100)}%.`,
       );
       error = true;
     }
@@ -178,10 +180,8 @@ export const compareImagesTask = async (
     if (!error) {
       messages.unshift(
         `Image diff factor (${round(
-          imgDiff,
-        )}%) is within boundaries of maximum threshold option ${
-          cfg.maxDiffThreshold
-        }.`,
+          imgDiff * 100,
+        )}%) is within boundaries of maximum threshold option ${round(cfg.maxDiffThreshold * 100)}%.`,
       );
     }
 
@@ -205,6 +205,18 @@ export const doesFileExistTask = ({ path }: { path: string }) =>
 
 export const processImgPathTask = ({ path }: { path: string }) => path;
 
+export const recordPendingDiffTask = (record: PendingDiffRecord): number => {
+  pendingDiffs.push(record);
+  return pendingDiffs.filter((d) => !d.passed).length;
+};
+
+export const getPendingDiffsTask = (): PendingDiffRecord[] => [...pendingDiffs];
+
+export const clearPendingDiffsTask = (): null => {
+  pendingDiffs = [];
+  return null;
+};
+
 /* c8 ignore start */
 export const initTaskHook = (config: Cypress.PluginConfigOptions) => ({
   [TASK.getScreenshotPathInfo]: getScreenshotPathInfoTask,
@@ -213,5 +225,8 @@ export const initTaskHook = (config: Cypress.PluginConfigOptions) => ({
   [TASK.approveImage]: approveImageTask,
   [TASK.compareImages]: compareImagesTask.bind(undefined, config),
   [TASK.processImgPath]: processImgPathTask,
+  [TASK.recordPendingDiff]: recordPendingDiffTask,
+  [TASK.getPendingDiffs]: getPendingDiffsTask,
+  [TASK.clearPendingDiffs]: clearPendingDiffsTask,
 });
 /* c8 ignore stop */

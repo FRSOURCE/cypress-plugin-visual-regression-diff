@@ -9,6 +9,9 @@ import {
   getScreenshotPathInfoTask,
   CompareImagesCfg,
   cleanupImagesTask,
+  recordPendingDiffTask,
+  getPendingDiffsTask,
+  clearPendingDiffsTask,
 } from './task.hook';
 import { generateScreenshotPath } from './screenshotPath.utils';
 import { IMAGE_SNAPSHOT_PREFIX } from './constants';
@@ -307,7 +310,7 @@ describe('compareImagesTask', () => {
         ).resolves.toEqual({
           error: false,
           message:
-            'Image diff factor (0%) is within boundaries of maximum threshold option 0.5.',
+            'Image diff factor (0%) is within boundaries of maximum threshold option 50%.',
           imgDiff: 0,
           imgDiffBase64: '',
           imgNewBase64: '',
@@ -361,7 +364,7 @@ describe('compareImagesTask', () => {
         ).resolves.toEqual({
           error: false,
           message:
-            'Image diff factor (0%) is within boundaries of maximum threshold option 0.5.',
+            'Image diff factor (0%) is within boundaries of maximum threshold option 50%.',
           imgDiff: 0,
           imgDiffBase64: '',
           imgNewBase64: '',
@@ -424,5 +427,41 @@ describe('doesFileExistsTask', () => {
     expect(
       doesFileExistTask({ path: path.join(fixturesPath, oldImgFixture) }),
     ).toBe(true);
+  });
+});
+
+describe('pendingDiffs tasks', () => {
+  const record = {
+    title: 'test title',
+    imgPath: 'some/path.png',
+    imgOldPath: 'some/old.png',
+    imgNewBase64: 'newbase64',
+    imgOldBase64: 'oldbase64',
+    imgDiffBase64: 'diffbase64',
+    message: 'images differ',
+  };
+
+  beforeEach(() => {
+    clearPendingDiffsTask();
+  });
+
+  it('recordPendingDiffTask adds record and returns count', () => {
+    expect(recordPendingDiffTask(record)).toBe(1);
+    expect(recordPendingDiffTask(record)).toBe(2);
+  });
+
+  it('getPendingDiffsTask returns all recorded diffs', () => {
+    recordPendingDiffTask(record);
+    recordPendingDiffTask({ ...record, title: 'other' });
+    const diffs = getPendingDiffsTask();
+    expect(diffs).toHaveLength(2);
+    expect(diffs[0]).toEqual(record);
+    expect(diffs[1].title).toBe('other');
+  });
+
+  it('clearPendingDiffsTask empties the list and returns null', () => {
+    recordPendingDiffTask(record);
+    expect(clearPendingDiffsTask()).toBeNull();
+    expect(getPendingDiffsTask()).toHaveLength(0);
   });
 });

@@ -1,8 +1,12 @@
 import { vi } from 'vitest';
 import { promises as fs } from 'fs';
+import { version as cypressVersion } from 'cypress/package.json';
 
 export const Cypress = {
   Promise,
+  version: cypressVersion,
+  expose: vi.fn(),
+  env: vi.fn(),
 };
 vi.stubGlobal('Cypress', Cypress);
 
@@ -16,3 +20,9 @@ vi.stubGlobal('before', before);
 
 export const after = vi.fn();
 vi.stubGlobal('after', after);
+
+export const beforeEach = vi.fn();
+vi.stubGlobal('beforeEach', beforeEach);
+
+export const afterEach = vi.fn();
+vi.stubGlobal('afterEach', afterEach);

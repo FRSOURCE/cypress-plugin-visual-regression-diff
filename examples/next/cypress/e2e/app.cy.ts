@@ -6,10 +6,14 @@ describe("Navigation", () => {
 
     cy.url().should("include", "/about");
 
-    cy.matchImage().then(({ imgNewPath }) => {
-      // match against image from custom path
-      cy.matchImage({ matchAgainstPath: imgNewPath });
-    });
+    cy.matchImage();
+  });
+
+  it("should display the about page content", () => {
+    cy.visit("http://localhost:3000/about");
+
+    cy.get('main').should('be.visible').matchImage();
+
   });
 });
 

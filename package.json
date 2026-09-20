@@ -17,7 +17,8 @@
     "test:ct": "pnpm -r test:ct",
     "test:ct:ci": "pnpm -r test:ct:ci",
     "test:e2e": "pnpm -r test:e2e",
-    "test:e2e:ci": "pnpm -r test:e2e:ci"
+    "test:e2e:ci": "pnpm -r test:e2e:ci",
+    "record-demo": "node scripts/record-batch-demo.mjs"
   },
   "engines": {
     "node": ">=14"
@@ -30,6 +31,8 @@
     "@frsource/eslint-config": "1.85.10",
     "eslint": "10.10.0",
     "eslint-plugin-cypress": "^6.0.0",
-    "globals": "17.12.0"
+    "ffmpeg-static": "^5.2.0",
+    "globals": "17.12.0",
+    "playwright": "^1.52.0"
   }
 }
