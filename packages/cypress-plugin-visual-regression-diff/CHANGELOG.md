@@ -1,5 +1,24 @@
 # Changelog
 
+## [4.2.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/@frsource/cypress-plugin-visual-regression-diff-v4.1.1...@frsource/cypress-plugin-visual-regression-diff-v4.2.0) (2026-09-20)
+
+
+### Features
+
+* add Batch Review Mode (pluginVisualRegressionBatchReviewMode) with batch image review UI ([#374](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/374)) ([7d8e975](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/7d8e97548e3a3771657d82f667d4721f7f51f7de))
+
+
+### Bug Fixes
+
+* add plugin metadata to .actual.png so approved or renamed baselines are not rewritten ([#404](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/404)) ([5ed7ebe](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/5ed7ebe2c7dddfc394cbfe4e42bbe67ca9cb1b08))
+* **deps:** update all non-major dependency bump ([#401](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/401)) ([f442275](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/f442275bd8409b753798abcda259f0fa3cd424b8))
+* **deps:** update dependency @frsource/base64 to v1.0.221 ([#386](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/386)) ([3aa16e6](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/3aa16e6db761b934c46647229ad45a3571b32749))
+* **deps:** update dependency @frsource/base64 to v1.0.223 ([#389](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/389)) ([0ed6003](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/0ed600379711cffc79caaf12095e53c88608b0ba))
+* **deps:** update dependency @frsource/base64 to v1.0.226 ([#394](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/394)) ([caa95ff](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/caa95ffdca080ce6d2e78d8d998f04f2a657094e))
+* **deps:** update dependency @frsource/base64 to v1.0.228 ([#395](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/395)) ([df44a6f](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/df44a6f8416a1203235767a4f56250a8a2c6bba4))
+* **deps:** update dependency @frsource/base64 to v1.0.237 ([#406](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/406)) ([d1029c1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/d1029c1a9f81cec51000d0244bf6d83830aad876))
+* **deps:** update dependency sharp to v0.35.4 [security] ([#399](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/399)) ([6ef06d1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/6ef06d137add50bff62e05e34d1a32854d5451dd))
+
 ## [4.1.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/@frsource/cypress-plugin-visual-regression-diff-v4.1.0...@frsource/cypress-plugin-visual-regression-diff-v4.1.1) (2026-07-05)
 
 
