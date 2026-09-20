@@ -444,6 +444,8 @@ npx cypress run --env "pluginVisualRegressionMaxDiffThreshold=0"
 
 When images match, the `.actual.png` file is temporary and gets cleaned up after the comparison. Only the baseline image (no suffix) is kept. This avoids storing redundant files.
 
+When images do not match, the `.actual.png` file is kept and carries the same plugin metadata as a baseline image. You can safely rename or copy it over the baseline (e.g. in a CI job that opens a PR with updated baselines) - the plugin will treat it as an up-to-date baseline and won't rewrite it on the next run.
+
 If you need actual screenshots to stay accessible for a reporter (e.g. `cypress-mochawesome-reporter`), use the `processImgPath` task hook to control where screenshots are stored. See [How do I integrate with mochawesome or other reporters that embed screenshot images?](#how-do-i-integrate-with-mochawesome-or-other-reporters-that-embed-screenshot-images)
 
 </details>

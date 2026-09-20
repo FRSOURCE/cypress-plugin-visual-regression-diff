@@ -12,6 +12,7 @@ import {
   alignImagesToSameSize,
   scaleImageAndWrite,
   isImageCurrentVersion,
+  addPNGMetadata,
   writePNG,
 } from './image.utils';
 import {
@@ -82,10 +83,18 @@ export const compareImagesTask = async (
   cfg: CompareImagesCfg,
 ): Promise<CompareImagesTaskReturn> => {
   const messages = [] as string[];
-  const rawImgNewBuffer = await scaleImageAndWrite({
-    scaleFactor: cfg.scaleFactor,
-    path: cfg.imgNew,
-  });
+  // Stamp the screenshot with plugin metadata exactly once, so that every file
+  // derived from it (baseline via moveFile, kept .actual.png, manual rename)
+  // carries FRSOURCE_CPVRD_V and won't be silently rewritten on the next run.
+  const stampedImgNew = addPNGMetadata(
+    cypressConfig,
+    await scaleImageAndWrite({
+      scaleFactor: cfg.scaleFactor,
+      path: cfg.imgNew,
+    }),
+  );
+  fs.writeFileSync(cfg.imgNew, stampedImgNew);
+  const rawImgNewBuffer = Buffer.from(stampedImgNew);
   let imgDiff: number | undefined;
   let imgNewBase64: string, imgOldBase64: string, imgDiffBase64: string;
   let error = false;
@@ -137,7 +146,6 @@ export const compareImagesTask = async (
     imgOldBase64 = PNG.sync.write(imgOld).toString('base64');
 
     if (error && cfg.updateImages === 'failures-only') {
-      writePNG(cypressConfig, cfg.imgNew, rawImgNewBuffer);
       await moveFile(cfg.imgNew, cfg.imgOld);
       error = false;
       messages[0] = messages[0].replace(
@@ -152,7 +160,6 @@ export const compareImagesTask = async (
       );
     } else {
       if (rawImgOld && !isImageCurrentVersion(rawImgOldBuffer)) {
-        writePNG(cypressConfig, cfg.imgNew, rawImgNewBuffer);
         await moveFile(cfg.imgNew, cfg.imgOld);
       } else {
         // don't overwrite file if it's the same (imgDiff < cfg.maxDiffThreshold && !isImgSizeDifferent)
@@ -166,7 +173,6 @@ export const compareImagesTask = async (
     imgDiffBase64 = '';
     imgOldBase64 = '';
     if (cfg.createMissingImages) {
-      writePNG(cypressConfig, cfg.imgNew, rawImgNewBuffer);
       await moveFile(cfg.imgNew, cfg.imgOld);
     } else {
       error = true;
