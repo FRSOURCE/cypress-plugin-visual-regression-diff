@@ -1,0 +1,48 @@
+name: Setup
+description: Set up pnpm and Node (from .nvmrc), restore the pnpm store and Cypress binary cache, and install dependencies
+
+inputs:
+  registry-url:
+    description: Optional npm registry URL to configure for publishing (passed to actions/setup-node)
+    required: false
+    default: ''
+  save-cache:
+    description: Whether this job saves the cache at the end of the job. Exactly one job per workflow should, the others only restore.
+    required: false
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@v6
+    - uses: actions/setup-node@v7
+      with:
+        node-version-file: '.nvmrc'
+        registry-url: ${{ inputs.registry-url }}
+    - id: vars
+      shell: bash
+      run: echo "pnpm-cache=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+    - name: Cache NPM and Cypress 📦 (restore, save at job end)
+      if: ${{ inputs.save-cache == 'true' }}
+      uses: actions/cache@v6
+      with:
+        path: |
+          ${{ steps.vars.outputs.pnpm-cache }}
+          ~/.cache/Cypress
+        key: v2-${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}
+        restore-keys: |
+          v2-${{ runner.os }}-pnpm-
+    - name: Cache NPM and Cypress 📦 (restore only)
+      if: ${{ inputs.save-cache != 'true' }}
+      uses: actions/cache/restore@v6
+      with:
+        path: |
+          ${{ steps.vars.outputs.pnpm-cache }}
+          ~/.cache/Cypress
+        key: v2-${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml', '.npmrc') }}
+        restore-keys: |
+          v2-${{ runner.os }}-pnpm-
+    - shell: bash
+      run: pnpm install --frozen-lockfile --prefer-offline
+      env:
+        HUSKY: '0' # By default do not run HUSKY install

@@ -1,7 +1,7 @@
 {
   "name": "@frsource/cypress-plugin-visual-regression-diff",
   "description": "Perform visual regression test with a nice GUI as help. 💅 Only for Cypress!",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "author": "Jakub Freisler <jakub.freisler@frsource.org>",
   "homepage": "https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff",
   "repository": "https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff.git",
@@ -59,28 +59,28 @@
   "engines": {
     "node": ">=14"
   },
-  "packageManager": "pnpm@11.9.0",
+  "packageManager": "pnpm@11.27.0",
   "peerDependencies": {
     "cypress": ">=13.0.0"
   },
   "devDependencies": {
     "@frsource/prettier-config": "^1.11.0",
     "@types/glob": "9.0.0",
-    "@types/pixelmatch": "5.2.6",
+    "@types/pixelmatch": "7.1.0",
     "@types/pngjs": "6.0.5",
     "@types/sharp": "0.32.0",
     "@types/tmp": "0.2.6",
-    "@vitest/coverage-v8": "4.1.9",
+    "@vitest/coverage-v8": "4.1.11",
     "cpy-cli": "7.0.0",
-    "cypress": "15.18.0",
+    "cypress": "15.21.1",
     "del-cli": "7.0.0",
     "microbundle": "0.15.1",
-    "prettier": "3.9.0",
+    "prettier": "3.9.6",
     "sanitize-filename": "1.6.4",
     "tmp-promise": "3.0.3",
     "typescript": "6.0.3",
     "vite-tsconfig-paths": "6.1.1",
-    "vitest": "4.1.9"
+    "vitest": "4.1.11"
   },
   "keywords": [
     "Cypress",
@@ -97,13 +97,13 @@
     "Cypress image snapshot"
   ],
   "dependencies": {
-    "@frsource/base64": "1.0.213",
+    "@frsource/base64": "1.0.236",
     "glob": "13.0.6",
     "meta-png": "1.0.6",
     "move-file": "4.1.0",
     "pixelmatch": "7.2.0",
     "pngjs": "7.0.0",
-    "sharp": "0.35.2"
+    "sharp": "0.35.4"
   },
   "publishConfig": {
     "access": "public"
