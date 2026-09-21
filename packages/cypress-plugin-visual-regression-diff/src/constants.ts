@@ -33,4 +33,9 @@ export const WINDOWS_LIKE_DRIVE_REGEX = /^[A-Z]:$/;
 
 export const METADATA_KEY = 'FRSOURCE_CPVRD_V';
 
+export const MANIFEST_VERSION = 1;
+/** File name of the run manifest, e.g. `cp-visual-regression-diff-manifest.e2e.json`. */
+export const getManifestFileName = (testingType?: string) =>
+  `${PLUGIN_NAME}-manifest${testingType ? `.${testingType}` : ''}.json`;
+
 export const LS_SHOW_NON_FAILING_DIFFS = 'cp-vrd-show-non-failing-diffs';

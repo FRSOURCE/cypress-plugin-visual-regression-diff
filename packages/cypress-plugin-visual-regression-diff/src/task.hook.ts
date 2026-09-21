@@ -14,12 +14,24 @@ import {
   scaleImage,
   isImageCurrentVersion,
   addPNGMetadata,
+  type ImageInfo,
 } from './image.utils';
+import {
+  dropSpecEntries,
+  markManifestEntryApproved,
+  recordManifestEntry,
+  type ManifestConfig,
+} from './manifest.utils';
 import {
   generateScreenshotPath,
   resetScreenshotNameCache,
 } from './screenshotPath.utils';
-import type { CompareImagesTaskReturn, PendingDiffRecord } from './types';
+import type {
+  CompareImagesTaskReturn,
+  ManifestEntry,
+  ManifestStatus,
+  PendingDiffRecord,
+} from './types';
 
 let pendingDiffs: PendingDiffRecord[] = [];
 
@@ -32,6 +44,12 @@ export type CompareImagesCfg = {
   updateImages: boolean | 'failures-only';
   maxDiffThreshold: number;
   diffConfig: PixelmatchOptions;
+  // test context, only used for the run manifest
+  specPath?: string;
+  testTitlePath?: string[];
+  currentRetryNumber?: number;
+  browser?: ManifestEntry['browser'];
+  viewport?: ManifestEntry['viewport'];
 };
 
 const round = (n: number) => Math.ceil(n * 1000) / 1000;
@@ -50,23 +68,32 @@ export const getScreenshotPathInfoTask = (cfg: {
   return { screenshotPath, title: path.basename(screenshotPath, '.png') };
 };
 
-export const cleanupImagesTask = (config: Cypress.PluginConfigOptions) => {
+export const cleanupImagesTask = (
+  config: Cypress.PluginConfigOptions,
+  { specPath }: { specPath?: string } = {},
+) => {
   if (getPluginConfig(config, 'pluginVisualRegressionCleanupUnusedImages')) {
     cleanupUnused(config);
   }
 
   resetScreenshotNameCache();
+  if (specPath) dropSpecEntries(config, specPath);
 
   return null;
 };
 
-export const approveImageTask = async ({
-  img,
-  imgOld,
-}: {
-  img: string;
-  imgOld?: string;
-}) => {
+export const approveImageTask = async (
+  config: ManifestConfig,
+  {
+    img,
+    imgOld,
+    specPath,
+  }: {
+    img: string;
+    imgOld?: string;
+    specPath?: string;
+  },
+) => {
   const oldImg = imgOld ?? img.replace(FILE_SUFFIX.actual, '');
   unlinkSyncSafe(oldImg);
 
@@ -74,12 +101,13 @@ export const approveImageTask = async ({
   unlinkSyncSafe(diffImg);
 
   await moveFile(img, oldImg);
+  markManifestEntryApproved(config, { img, imgOld: oldImg, specPath });
 
   return null;
 };
 
 export const compareImagesTask = async (
-  cypressConfig: { testingType?: string },
+  cypressConfig: ManifestConfig,
   cfg: CompareImagesCfg,
 ): Promise<CompareImagesTaskReturn> => {
   const messages = [] as string[];
@@ -91,16 +119,17 @@ export const compareImagesTask = async (
     await scaleImage(fs.readFileSync(cfg.imgNew), cfg.scaleFactor),
   );
   fs.writeFileSync(cfg.imgNew, rawImgNewBuffer);
+  const imgNewSize = await getImageSize(rawImgNewBuffer);
+  let imgOldSize: ImageInfo | undefined;
   let imgDiff: number | undefined;
   let imgNewBase64: string, imgOldBase64: string, imgDiffBase64: string;
   let error = false;
+  let status: ManifestStatus;
+  let baselineWritten = false;
 
   if (fs.existsSync(cfg.imgOld) && cfg.updateImages !== true) {
     const rawImgOldBuffer = fs.readFileSync(cfg.imgOld);
-    const [imgNewSize, imgOldSize] = await Promise.all([
-      getImageSize(rawImgNewBuffer),
-      getImageSize(rawImgOldBuffer),
-    ]);
+    imgOldSize = await getImageSize(rawImgOldBuffer);
     const isImgSizeDifferent =
       imgNewSize.height !== imgOldSize.height ||
       imgNewSize.width !== imgOldSize.width;
@@ -159,6 +188,8 @@ export const compareImagesTask = async (
     if (error && cfg.updateImages === 'failures-only') {
       await moveFile(cfg.imgNew, cfg.imgOld);
       error = false;
+      status = 'updated';
+      baselineWritten = true;
       messages[0] = messages[0].replace(
         'is bigger than maximum threshold option',
         'was bigger than maximum threshold option (baseline updated):',
@@ -168,9 +199,12 @@ export const compareImagesTask = async (
         cfg.imgNew.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
         addPNGMetadata(cypressConfig, diffBuffer),
       );
+      status = 'failed';
     } else {
+      status = 'passed';
       if (!isImageCurrentVersion(rawImgOldBuffer)) {
         await moveFile(cfg.imgNew, cfg.imgOld);
+        baselineWritten = true;
       } else {
         // don't overwrite file if it's the same (imgDiff < cfg.maxDiffThreshold && !isImgSizeDifferent)
         fs.unlinkSync(cfg.imgNew);
@@ -182,38 +216,55 @@ export const compareImagesTask = async (
     imgNewBase64 = '';
     imgDiffBase64 = '';
     imgOldBase64 = '';
+    const baselineExisted = fs.existsSync(cfg.imgOld);
     if (cfg.createMissingImages) {
       await moveFile(cfg.imgNew, cfg.imgOld);
+      baselineWritten = true;
+      status = baselineExisted ? 'updated' : 'created';
     } else {
       error = true;
+      status = 'missing-baseline';
       messages.unshift(
         `Baseline image is missing at path: "${cfg.imgOld}". Provide a baseline image or enable "createMissingImages" option in plugin configuration.`,
       );
     }
   }
 
-  if (typeof imgDiff !== 'undefined') {
-    if (!error) {
-      messages.unshift(
-        `Image diff factor (${round(
-          imgDiff * 100,
-        )}%) is within boundaries of maximum threshold option ${round(cfg.maxDiffThreshold * 100)}%.`,
-      );
-    }
-
-    return {
-      error,
-      message: messages.join('\n'),
-      imgDiff,
-      imgNewBase64,
-      imgDiffBase64,
-      imgOldBase64,
-      maxDiffThreshold: cfg.maxDiffThreshold,
-    };
+  if (!error) {
+    messages.unshift(
+      `Image diff factor (${round(
+        imgDiff * 100,
+      )}%) is within boundaries of maximum threshold option ${round(cfg.maxDiffThreshold * 100)}%.`,
+    );
   }
+  const message = messages.join('\n');
 
-  /* c8 ignore next */
-  return null;
+  recordManifestEntry(cypressConfig, {
+    imgNew: cfg.imgNew,
+    imgOld: cfg.imgOld,
+    specPath: cfg.specPath,
+    testTitlePath: cfg.testTitlePath,
+    currentRetryNumber: cfg.currentRetryNumber,
+    browser: cfg.browser,
+    viewport: cfg.viewport,
+    status,
+    imgDiff,
+    maxDiffThreshold: cfg.maxDiffThreshold,
+    baselineWritten,
+    imgNewSize,
+    imgOldSize,
+    message,
+  });
+
+  return {
+    error,
+    message,
+    imgDiff,
+    imgNewBase64,
+    imgDiffBase64,
+    imgOldBase64,
+    maxDiffThreshold: cfg.maxDiffThreshold,
+  };
 };
 
 export const doesFileExistTask = ({ path }: { path: string }) =>
@@ -238,7 +289,7 @@ export const initTaskHook = (config: Cypress.PluginConfigOptions) => ({
   [TASK.getScreenshotPathInfo]: getScreenshotPathInfoTask,
   [TASK.cleanupImages]: cleanupImagesTask.bind(undefined, config),
   [TASK.doesFileExist]: doesFileExistTask,
-  [TASK.approveImage]: approveImageTask,
+  [TASK.approveImage]: approveImageTask.bind(undefined, config),
   [TASK.compareImages]: compareImagesTask.bind(undefined, config),
   [TASK.processImgPath]: processImgPathTask,
   [TASK.recordPendingDiff]: recordPendingDiffTask,

@@ -28,6 +28,23 @@ export default defineConfig({
 });
 ```
 
+### A run manifest is written to `screenshotsFolder`
+
+Every run now writes `<screenshotsFolder>/cp-visual-regression-diff-manifest.<testingType>.json`
+(by default `cypress/screenshots/cp-visual-regression-diff-manifest.e2e.json`), a JSON summary of
+every `matchImage` comparison meant for CI tooling. See [Run manifest](./README.md#run-manifest-ci-integration)
+for the format.
+
+- `cypress/screenshots` is usually gitignored already, so no action is needed in most projects.
+- To write it elsewhere or turn it off, set `pluginVisualRegressionManifestPath` (a path, or `false`):
+
+```bash
+# Cypress 15.10+
+npx cypress run --expose "pluginVisualRegressionManifestPath=false"
+# Cypress <15.10
+npx cypress run --env "pluginVisualRegressionManifestPath=false"
+```
+
 ### Node.js 20.9+ required
 
 The declared minimum Node.js version is now `>=20.9.0`. This only makes the requirement of `sharp`

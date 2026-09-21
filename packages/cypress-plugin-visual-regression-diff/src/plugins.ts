@@ -1,6 +1,15 @@
 import { initTaskHook } from './task.hook';
 import { initAfterScreenshotHook } from './afterScreenshot.hook';
 import { getPluginConfig } from './version.utils';
+import { resetManifest } from './manifest.utils';
+
+export type {
+  Manifest,
+  ManifestEntry,
+  ManifestImage,
+  ManifestRunner,
+  ManifestStatus,
+} from './types';
 
 /* c8 ignore start */
 const initForceDeviceScaleFactor = (on: Cypress.PluginEvents) => {
@@ -34,4 +43,7 @@ export const initPlugin = (
   /* c8 ignore stop */
   on('task', initTaskHook(config));
   on('after:screenshot', initAfterScreenshotHook(config));
+  // start every run with a fresh manifest (run mode only; `cypress open` keeps
+  // the entries and overwrites them per screenshot)
+  on('before:run', () => resetManifest(config));
 };

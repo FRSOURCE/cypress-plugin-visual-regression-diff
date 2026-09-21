@@ -167,6 +167,80 @@ npx cypress run --expose "pluginVisualRegressionCleanupUnusedImages=true"
 npx cypress run --env "pluginVisualRegressionCleanupUnusedImages=true"
 ```
 
+## Run manifest (CI integration)
+
+Every run writes a JSON manifest listing each `matchImage` comparison: which test it came from, whether it passed, failed, created or updated its baseline, the diff ratio, and the project-relative paths of the baseline, `.actual.png` and `.diff.png` files. It is meant for CI tooling (PR comments, review dashboards, approval bots) that runs after Cypress is done.
+
+By default the file lands next to your other Cypress artifacts, at `<screenshotsFolder>/cp-visual-regression-diff-manifest.<testingType>.json` (e.g. `cypress/screenshots/cp-visual-regression-diff-manifest.e2e.json`). Upload it together with your snapshots directory as a CI artifact.
+
+```jsonc
+{
+  "version": 1,
+  "runner": { "name": "cypress", "version": "16.1.0", "testingType": "e2e" },
+  "projectRoot": "/home/runner/work/app",
+  "entries": [
+    {
+      "name": "home page renders_#0",
+      "test": {
+        "file": "cypress/e2e/home.cy.ts",
+        "titlePath": ["home page", "renders"],
+        "retry": 0,
+      },
+      "status": "failed",
+      "comparison": { "diffRatio": 0.0231, "threshold": 0.01 },
+      "images": {
+        "baseline": {
+          "path": "cypress/e2e/__image_snapshots__/home page renders_#0.png",
+          "width": 1280,
+          "height": 720,
+        },
+        "actual": {
+          "path": "cypress/e2e/__image_snapshots__/home page renders_#0.actual.png",
+          "width": 1280,
+          "height": 720,
+        },
+        "diff": {
+          "path": "cypress/e2e/__image_snapshots__/home page renders_#0.diff.png",
+        },
+      },
+      "baselineWritten": false,
+      "browser": { "name": "chrome", "version": "130.0.0.0" },
+      "viewport": { "width": 1280, "height": 720 },
+      "message": "Image diff factor (2.31%) is bigger than maximum threshold option 1%.",
+    },
+  ],
+}
+```
+
+| `status`           | meaning                                                          | `images.actual.path` | `images.diff.path` |
+| ------------------ | ---------------------------------------------------------------- | -------------------- | ------------------ |
+| `passed`           | within threshold                                                 | `null`               | `null`             |
+| `failed`           | above threshold, `.actual.png` and `.diff.png` kept for review   | path                 | path               |
+| `missing-baseline` | no baseline and `createMissingImages: false`                     | path                 | `null`             |
+| `created`          | no baseline, `.actual.png` became the baseline                   | `null`               | `null`             |
+| `updated`          | baseline overwritten (`updateImages: true` or `'failures-only'`) | `null`               | `null`             |
+| `approved`         | baseline replaced from the headed review UI ("Replace image")    | `null`               | `null`             |
+
+Notes for consumers:
+
+- All paths are relative to `projectRoot` and use `/` separators; they may point outside the project (`../…`) when `imagesPath` is absolute.
+- `failed` and `missing-baseline` are the entries that need a human: copying `images.actual.path` over `images.baseline.path` approves them.
+- `baselineWritten` tells whether the working tree changed for that screenshot, regardless of `status`.
+- The file is rewritten after every comparison, so it is complete even when the run is aborted. When specs run in parallel on several machines, each machine writes its own manifest; glob and concatenate the `entries` arrays.
+- Only the `runner` block is Cypress-specific; the rest of the format is shared with future runners. `version` is bumped on breaking changes to the format only.
+
+To write the manifest somewhere else (paths are resolved against the project root) or to turn it off, use the `pluginVisualRegressionManifestPath` key:
+
+```bash
+# Cypress 15.10+
+npx cypress run --expose "pluginVisualRegressionManifestPath=reports/visual-regression.json"
+npx cypress run --expose "pluginVisualRegressionManifestPath=false"
+# Cypress <15.10 (deprecated in 15.10, removed in 16)
+npx cypress run --env "pluginVisualRegressionManifestPath=false"
+```
+
+When you run both e2e and component tests with a custom path, include the testing type in it yourself; the runs would otherwise overwrite each other's file.
+
 ## Configuration
 
 Configure the plugin:

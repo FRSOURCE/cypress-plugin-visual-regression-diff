@@ -184,6 +184,18 @@ Cypress.Commands.add(
               updateImages,
               maxDiffThreshold,
               diffConfig,
+              // test context for the run manifest
+              specPath: Cypress.spec.relative,
+              testTitlePath: Cypress.currentTest.titlePath,
+              currentRetryNumber,
+              browser: {
+                name: Cypress.browser.name,
+                version: Cypress.browser.version,
+              },
+              viewport: {
+                width: Cypress.config('viewportWidth'),
+                height: Cypress.config('viewportHeight'),
+              },
             },
             { log: false },
           )
