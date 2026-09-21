@@ -459,7 +459,7 @@ async function main() {
       '--headless',
       '--browser chrome',
       '--config-file cypress.demo.config.ts',
-      '--env pluginVisualRegressionUpdateImages=true',
+      '--expose pluginVisualRegressionUpdateImages=true',
     ].join(' '),
     { cwd: EXAMPLE_DIR, stdio: 'inherit' },
   );
