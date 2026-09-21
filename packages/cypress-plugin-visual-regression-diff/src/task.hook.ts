@@ -10,11 +10,10 @@ import {
   cleanupUnused,
   decodePNG,
   encodePNG,
-  padImageToSize,
-  scaleImageAndWrite,
+  getImageSize,
+  scaleImage,
   isImageCurrentVersion,
   addPNGMetadata,
-  writePNG,
 } from './image.utils';
 import {
   generateScreenshotPath,
@@ -39,10 +38,6 @@ const round = (n: number) => Math.ceil(n * 1000) / 1000;
 
 const unlinkSyncSafe = (path: string) =>
   fs.existsSync(path) && fs.unlinkSync(path);
-
-// view over the same memory, no copy
-const asUint8Array = (buf: Buffer) =>
-  new Uint8Array(buf.buffer, buf.byteOffset, buf.length);
 
 export const getScreenshotPathInfoTask = (cfg: {
   titleFromOptions: string;
@@ -91,49 +86,45 @@ export const compareImagesTask = async (
   // Stamp the screenshot with plugin metadata exactly once, so that every file
   // derived from it (baseline via moveFile, kept .actual.png, manual rename)
   // carries FRSOURCE_CPVRD_V and won't be silently rewritten on the next run.
-  const stampedImgNew = addPNGMetadata(
+  const rawImgNewBuffer = addPNGMetadata(
     cypressConfig,
-    await scaleImageAndWrite({
-      scaleFactor: cfg.scaleFactor,
-      path: cfg.imgNew,
-    }),
+    await scaleImage(fs.readFileSync(cfg.imgNew), cfg.scaleFactor),
   );
-  fs.writeFileSync(cfg.imgNew, stampedImgNew);
-  const rawImgNewBuffer = Buffer.from(stampedImgNew);
+  fs.writeFileSync(cfg.imgNew, rawImgNewBuffer);
   let imgDiff: number | undefined;
   let imgNewBase64: string, imgOldBase64: string, imgDiffBase64: string;
   let error = false;
 
   if (fs.existsSync(cfg.imgOld) && cfg.updateImages !== true) {
     const rawImgOldBuffer = fs.readFileSync(cfg.imgOld);
-    const [rawImgNew, rawImgOld] = await Promise.all([
-      decodePNG(rawImgNewBuffer),
-      decodePNG(rawImgOldBuffer),
+    const [imgNewSize, imgOldSize] = await Promise.all([
+      getImageSize(rawImgNewBuffer),
+      getImageSize(rawImgOldBuffer),
     ]);
     const isImgSizeDifferent =
-      rawImgNew.info.height !== rawImgOld.info.height ||
-      rawImgNew.info.width !== rawImgOld.info.width;
+      imgNewSize.height !== imgOldSize.height ||
+      imgNewSize.width !== imgOldSize.width;
 
     const size = {
-      width: Math.max(rawImgNew.info.width, rawImgOld.info.width),
-      height: Math.max(rawImgNew.info.height, rawImgOld.info.height),
+      width: Math.max(imgNewSize.width, imgOldSize.width),
+      height: Math.max(imgNewSize.height, imgOldSize.height),
     };
     const { width, height } = size;
 
-    const [imgNew, imgOld] = isImgSizeDifferent
-      ? await Promise.all([
-          padImageToSize(rawImgNewBuffer, rawImgNew.info, size),
-          padImageToSize(rawImgOldBuffer, rawImgOld.info, size),
-        ])
-      : [rawImgNew.data, rawImgOld.data];
+    // both images are decoded straight to the common size, so the same-size
+    // case is just a decode and the mismatch case pads in the same pass
+    const [imgNew, imgOld] = await Promise.all([
+      decodePNG(rawImgNewBuffer, imgNewSize, size),
+      decodePNG(rawImgOldBuffer, imgOldSize, size),
+    ]);
 
     const diff = Buffer.alloc(width * height * 4);
     const diffConfig = Object.assign({ includeAA: true }, cfg.diffConfig);
 
     const diffPixels = pixelmatch(
-      asUint8Array(imgNew),
-      asUint8Array(imgOld),
-      asUint8Array(diff),
+      imgNew,
+      imgOld,
+      diff,
       width,
       height,
       diffConfig,
@@ -142,7 +133,7 @@ export const compareImagesTask = async (
 
     if (isImgSizeDifferent) {
       messages.push(
-        `Warning: Images size mismatch - new screenshot is ${rawImgNew.info.width}px by ${rawImgNew.info.height}px while old one is ${rawImgOld.info.width}px by ${rawImgOld.info.height} (width x height).`,
+        `Warning: Images size mismatch - new screenshot is ${imgNewSize.width}px by ${imgNewSize.height}px while old one is ${imgOldSize.width}px by ${imgOldSize.height} (width x height).`,
       );
     }
 
@@ -173,10 +164,9 @@ export const compareImagesTask = async (
         'was bigger than maximum threshold option (baseline updated):',
       );
     } else if (error) {
-      writePNG(
-        cypressConfig,
+      fs.writeFileSync(
         cfg.imgNew.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff),
-        diffBuffer,
+        addPNGMetadata(cypressConfig, diffBuffer),
       );
     } else {
       if (!isImageCurrentVersion(rawImgOldBuffer)) {

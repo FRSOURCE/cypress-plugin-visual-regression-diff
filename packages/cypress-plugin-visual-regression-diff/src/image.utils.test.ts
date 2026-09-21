@@ -2,59 +2,42 @@ import { it, expect, describe } from 'vitest';
 import path from 'path';
 import { promises as fs } from 'fs';
 import sharp from 'sharp';
-import { file } from 'tmp-promise';
-import {
-  decodePNG,
-  encodePNG,
-  padImageToSize,
-  scaleImageAndWrite,
-} from './image.utils';
+import { decodePNG, encodePNG, getImageSize, scaleImage } from './image.utils';
 
 const fixturesPath = path.resolve(__dirname, '..', '__tests__', 'fixtures');
 const readFixture = (name: string) =>
   fs.readFile(path.join(fixturesPath, name));
 
 // 2x2 image: red, green / blue, white
+const rgbSize = { width: 2, height: 2 };
 const rgbPixels = Buffer.from([255, 0, 0, 0, 255, 0, 0, 0, 255, 255, 255, 255]);
 const rgbPNG = () =>
-  sharp(rgbPixels, { raw: { width: 2, height: 2, channels: 3 } })
+  sharp(rgbPixels, { raw: { ...rgbSize, channels: 3 } })
     .png()
     .toBuffer();
 const pixelAt = (data: Buffer, width: number, x: number, y: number) => [
   ...data.subarray((y * width + x) * 4, (y * width + x) * 4 + 4),
 ];
 
+describe('getImageSize', () => {
+  it('reads the dimensions of a PNG', async () => {
+    expect(await getImageSize(await rgbPNG())).toEqual(rgbSize);
+  });
+});
+
 describe('decodePNG', () => {
   it('decodes to RGBA even when the PNG has no alpha channel', async () => {
-    const { data, info } = await decodePNG(await rgbPNG());
+    const data = await decodePNG(await rgbPNG(), rgbSize);
 
-    expect(info).toEqual({ width: 2, height: 2 });
     expect(data).toHaveLength(2 * 2 * 4);
     expect(pixelAt(data, 2, 0, 0)).toEqual([255, 0, 0, 255]);
     expect(pixelAt(data, 2, 1, 1)).toEqual([255, 255, 255, 255]);
   });
-});
 
-describe('encodePNG', () => {
-  it('round-trips raw RGBA pixels', async () => {
-    const { data, info } = await decodePNG(await readFixture('screenshot.png'));
-
-    const decodedAgain = await decodePNG(await encodePNG(data, info));
-
-    expect(decodedAgain.info).toEqual(info);
-    expect(decodedAgain.data.equals(data)).toBe(true);
-  });
-});
-
-describe('padImageToSize', () => {
   it('extends the canvas to the right and bottom with translucent black', async () => {
     const size = { width: 4, height: 3 };
 
-    const data = await padImageToSize(
-      await rgbPNG(),
-      { width: 2, height: 2 },
-      size,
-    );
+    const data = await decodePNG(await rgbPNG(), rgbSize, size);
 
     expect(data).toHaveLength(size.width * size.height * 4);
     // original pixels stay anchored top-left
@@ -67,29 +50,29 @@ describe('padImageToSize', () => {
   });
 });
 
-describe('scaleImageAndWrite', () => {
-  it('returns the file untouched when scaleFactor is 1', async () => {
-    const { path: imgPath } = await file();
+describe('encodePNG', () => {
+  it('round-trips raw RGBA pixels', async () => {
+    const png = await readFixture('screenshot.png');
+    const size = await getImageSize(png);
+    const data = await decodePNG(png, size);
+
+    const encoded = await encodePNG(data, size);
+
+    expect(await getImageSize(encoded)).toEqual(size);
+    expect((await decodePNG(encoded, size)).equals(data)).toBe(true);
+  });
+});
+
+describe('scaleImage', () => {
+  it('returns the very same buffer when scaleFactor is 1', async () => {
     const original = await readFixture('screenshot.png');
-    await fs.writeFile(imgPath, original);
 
-    const result = await scaleImageAndWrite({ scaleFactor: 1, path: imgPath });
-
-    expect(result.equals(original)).toBe(true);
-    expect((await fs.readFile(imgPath)).equals(original)).toBe(true);
+    expect(await scaleImage(original, 1)).toBe(original);
   });
 
-  it('scales the image in place and returns the scaled bytes', async () => {
-    const { path: imgPath } = await file();
-    await fs.writeFile(imgPath, await readFixture('screenshot.png'));
+  it('scales the image by the given factor', async () => {
+    const result = await scaleImage(await readFixture('screenshot.png'), 0.5);
 
-    const result = await scaleImageAndWrite({
-      scaleFactor: 0.5,
-      path: imgPath,
-    });
-
-    const { width, height } = await sharp(result).metadata();
-    expect({ width, height }).toEqual({ width: 63, height: 63 });
-    expect((await fs.readFile(imgPath)).equals(result)).toBe(true);
+    expect(await getImageSize(result)).toEqual({ width: 63, height: 63 });
   });
 });

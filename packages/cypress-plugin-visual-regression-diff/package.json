@@ -65,7 +65,7 @@
   },
   "devDependencies": {
     "@frsource/prettier-config": "^1.11.0",
-    "@types/glob": "9.0.0",
+    "@types/node": "20.19.43",
     "@types/tmp": "0.2.6",
     "@vitest/coverage-v8": "4.1.11",
     "cpy-cli": "7.0.0",

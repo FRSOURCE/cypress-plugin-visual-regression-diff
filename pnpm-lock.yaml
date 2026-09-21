@@ -210,8 +210,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/cypress-plugin-visual-regression-diff
       '@types/node':
-        specifier: 18.0.6
-        version: 18.0.6
+        specifier: 20.19.43
+        version: 20.19.43
       '@types/react':
         specifier: 18.0.15
         version: 18.0.15
@@ -290,14 +290,14 @@ importers:
         version: 7.2.0
       sharp:
         specifier: 0.35.4
-        version: 0.35.4
+        version: 0.35.4(@types/node@20.19.43)
     devDependencies:
       '@frsource/prettier-config':
         specifier: ^1.11.0
         version: 1.47.11(prettier@3.9.8)
-      '@types/glob':
-        specifier: 9.0.0
-        version: 9.0.0
+      '@types/node':
+        specifier: 20.19.43
+        version: 20.19.43
       '@types/tmp':
         specifier: 0.2.6
         version: 0.2.6
@@ -330,10 +330,10 @@ importers:
         version: 6.0.3
       vite-tsconfig-paths:
         specifier: 6.1.1
-        version: 6.1.1(supports-color@8.1.1)(typescript@6.0.3)(vite@8.1.0(terser@5.48.0))
+        version: 6.1.1(supports-color@8.1.1)(typescript@6.0.3)(vite@8.1.0(@types/node@20.19.43)(terser@5.48.0))
       vitest:
         specifier: 4.1.11
-        version: 4.1.11(@vitest/coverage-v8@4.1.11)(vite@8.1.0(terser@5.48.0))
+        version: 4.1.11(@types/node@20.19.43)(@vitest/coverage-v8@4.1.11)(vite@8.1.0(@types/node@20.19.43)(terser@5.48.0))
 
 packages:
 
@@ -1671,10 +1671,6 @@ packages:
   '@types/express@4.17.25':
     resolution: {integrity: sha512-dVd04UKsfpINUnK0yBoYHDF3xu7xVH4BuDotC/xGuycx4CgbP48X/KF/586bcObxT0HENHXEU8Nqtu6NR+eKhw==}
 
-  '@types/glob@9.0.0':
-    resolution: {integrity: sha512-00UxlRaIUvYm4R4W9WYkN8/J+kV8fmOQ7okeH6YFtGWFMt3odD45tpG5yA5wnL7HE6lLgjaTW5n14ju2hl2NNA==}
-    deprecated: This is a stub types definition. glob provides its own type definitions, so you do not need this installed.
-
   '@types/html-minifier-terser@6.1.0':
     resolution: {integrity: sha512-oh/6byDPnL1zeNXFrDXFLyZjkr1MsBG667IM792caf1L2UPOOMf65NFzjUH/ltyfwjAGfs1rsX1eftK0jC/KIg==}
 
@@ -1695,6 +1691,9 @@ packages:
 
   '@types/node@18.0.6':
     resolution: {integrity: sha512-/xUq6H2aQm261exT6iZTMifUySEt4GR5KX8eYyY+C4MSNPqSh9oNIP7tz2GLKTlFaiBbgZNxffoR3CVRG+cljw==}
+
+  '@types/node@20.19.43':
+    resolution: {integrity: sha512-6oYBAi5ikg4Pl+kGsoYtawUMBT2zZMCvPNF7pVLnHZfd1zf38DRiWn/gT01RYCdUqkv7Fhr+C9ot4/tb+2sVvA==}
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
@@ -5267,6 +5266,9 @@ packages:
     resolution: {integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==}
     engines: {node: '>= 0.4'}
 
+  undici-types@6.21.0:
+    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+
   unicode-canonical-property-names-ecmascript@2.0.1:
     resolution: {integrity: sha512-dA8WbNeb2a6oQzAQ55YlT5vQAWGV9WXOsi3SskE3bcCdM0P4SDd+24zS/OCacdRq5BkdsRj9q3Pg6YyQoxIGqg==}
     engines: {node: '>=4'}
@@ -7125,10 +7127,6 @@ snapshots:
       '@types/qs': 6.15.1
       '@types/serve-static': 1.15.10
 
-  '@types/glob@9.0.0':
-    dependencies:
-      glob: 13.0.6
-
   '@types/html-minifier-terser@6.1.0': {}
 
   '@types/http-errors@2.0.5': {}
@@ -7144,6 +7142,10 @@ snapshots:
   '@types/node@10.17.60': {}
 
   '@types/node@18.0.6': {}
+
+  '@types/node@20.19.43':
+    dependencies:
+      undici-types: 6.21.0
 
   '@types/parse-json@4.0.2': {}
 
@@ -7165,7 +7167,7 @@ snapshots:
 
   '@types/resolve@1.17.1':
     dependencies:
-      '@types/node': 18.0.6
+      '@types/node': 20.19.43
 
   '@types/retry@0.12.2': {}
 
@@ -7307,7 +7309,7 @@ snapshots:
       obug: 2.1.3
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.11(@vitest/coverage-v8@4.1.11)(vite@8.1.0(terser@5.48.0))
+      vitest: 4.1.11(@types/node@20.19.43)(@vitest/coverage-v8@4.1.11)(vite@8.1.0(@types/node@20.19.43)(terser@5.48.0))
 
   '@vitest/expect@4.1.11':
     dependencies:
@@ -7318,13 +7320,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.11(vite@8.1.0(terser@5.48.0))':
+  '@vitest/mocker@4.1.11(vite@8.1.0(@types/node@20.19.43)(terser@5.48.0))':
     dependencies:
       '@vitest/spy': 4.1.11
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.1.0(terser@5.48.0)
+      vite: 8.1.0(@types/node@20.19.43)(terser@5.48.0)
 
   '@vitest/pretty-format@4.1.11':
     dependencies:
@@ -9319,7 +9321,7 @@ snapshots:
 
   jest-worker@26.6.2:
     dependencies:
-      '@types/node': 18.0.6
+      '@types/node': 20.19.43
       merge-stream: 2.0.0
       supports-color: 7.2.0
 
@@ -10593,7 +10595,7 @@ snapshots:
     dependencies:
       kind-of: 6.0.3
 
-  sharp@0.35.4:
+  sharp@0.35.4(@types/node@20.19.43):
     dependencies:
       '@img/colour': 1.1.0
       detect-libc: 2.1.2
@@ -10624,6 +10626,7 @@ snapshots:
       '@img/sharp-win32-arm64': 0.35.4
       '@img/sharp-win32-ia32': 0.35.4
       '@img/sharp-win32-x64': 0.35.4
+      '@types/node': 20.19.43
 
   shebang-command@2.0.0:
     dependencies:
@@ -11079,6 +11082,8 @@ snapshots:
       has-symbols: 1.1.0
       which-boxed-primitive: 1.1.1
 
+  undici-types@6.21.0: {}
+
   unicode-canonical-property-names-ecmascript@2.0.1: {}
 
   unicode-match-property-ecmascript@2.0.0:
@@ -11128,17 +11133,17 @@ snapshots:
       core-util-is: 1.0.2
       extsprintf: 1.3.0
 
-  vite-tsconfig-paths@6.1.1(supports-color@8.1.1)(typescript@6.0.3)(vite@8.1.0(terser@5.48.0)):
+  vite-tsconfig-paths@6.1.1(supports-color@8.1.1)(typescript@6.0.3)(vite@8.1.0(@types/node@20.19.43)(terser@5.48.0)):
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       globrex: 0.1.2
       tsconfck: 3.1.6(typescript@6.0.3)
-      vite: 8.1.0(terser@5.48.0)
+      vite: 8.1.0(@types/node@20.19.43)(terser@5.48.0)
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  vite@8.1.0(terser@5.48.0):
+  vite@8.1.0(@types/node@20.19.43)(terser@5.48.0):
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.7
@@ -11146,13 +11151,14 @@ snapshots:
       rolldown: 1.1.4
       tinyglobby: 0.2.17
     optionalDependencies:
+      '@types/node': 20.19.43
       fsevents: 2.3.3
       terser: 5.48.0
 
-  vitest@4.1.11(@vitest/coverage-v8@4.1.11)(vite@8.1.0(terser@5.48.0)):
+  vitest@4.1.11(@types/node@20.19.43)(@vitest/coverage-v8@4.1.11)(vite@8.1.0(@types/node@20.19.43)(terser@5.48.0)):
     dependencies:
       '@vitest/expect': 4.1.11
-      '@vitest/mocker': 4.1.11(vite@8.1.0(terser@5.48.0))
+      '@vitest/mocker': 4.1.11(vite@8.1.0(@types/node@20.19.43)(terser@5.48.0))
       '@vitest/pretty-format': 4.1.11
       '@vitest/runner': 4.1.11
       '@vitest/snapshot': 4.1.11
@@ -11169,9 +11175,10 @@ snapshots:
       tinyexec: 1.2.4
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.0
-      vite: 8.1.0(terser@5.48.0)
+      vite: 8.1.0(@types/node@20.19.43)(terser@5.48.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
+      '@types/node': 20.19.43
       '@vitest/coverage-v8': 4.1.11(vitest@4.1.11)
     transitivePeerDependencies:
       - msw

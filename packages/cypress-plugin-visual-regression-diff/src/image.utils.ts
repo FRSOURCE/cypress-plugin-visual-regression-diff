@@ -21,8 +21,8 @@ type PluginMetadataConfig = {
   testingType?: string;
 };
 
-export const addPNGMetadata = (config: PluginMetadataConfig, png: Buffer) =>
-  addMetadata(
+export const addPNGMetadata = (config: PluginMetadataConfig, png: Buffer) => {
+  const stamped = addMetadata(
     new Uint8Array(png),
     METADATA_KEY,
     JSON.stringify({
@@ -30,6 +30,9 @@ export const addPNGMetadata = (config: PluginMetadataConfig, png: Buffer) =>
       testingType: config.testingType || 'e2e',
     } as PluginMetadata) /* c8 ignore next */,
   );
+  // view over the same memory, no copy
+  return Buffer.from(stamped.buffer, stamped.byteOffset, stamped.byteLength);
+};
 export const getPNGMetadata = (png: Buffer): PluginMetadata | undefined => {
   const metadataString = getMetadata(
     new Uint8Array(png),
@@ -50,32 +53,38 @@ export const isImageOfTestType = (
   png: Buffer,
   testingType?: PluginMetadataConfig['testingType'],
 ) => {
-  if (!isImageGeneratedByPlugin(png)) return false;
-  const imageTestingType = getPNGMetadata(
-    png /* c8 ignore next */,
-  )?.testingType;
-  return imageTestingType === testingType || testingType === undefined;
+  const metadata = getPNGMetadata(png /* c8 ignore next */);
+  return (
+    !!metadata &&
+    (testingType === undefined || metadata.testingType === testingType)
+  );
 };
-
-export const writePNG = (
-  config: PluginMetadataConfig,
-  name: string,
-  png: Buffer,
-) => fs.writeFileSync(name, addPNGMetadata(config, png));
 
 export type ImageInfo = { width: number; height: number };
 
-// decodes a PNG to 8-bit RGBA pixels (what pixelmatch expects)
-export const decodePNG = async (png: Buffer) => {
-  const { data, info } = await sharp(png)
-    .ensureAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  return {
-    data,
-    info: { width: info.width, height: info.height } as ImageInfo,
-  };
+// reads the dimensions from the PNG header, without decoding pixels
+export const getImageSize = async (png: Buffer): Promise<ImageInfo> => {
+  const { width, height } = await sharp(png).metadata();
+  return { width, height };
 };
+
+// decodes a PNG to 8-bit RGBA pixels (what pixelmatch expects); when `size` is
+// larger than the image, the canvas is extended (anchored top-left) and the
+// added area is filled with translucent black
+export const decodePNG = (
+  png: Buffer,
+  imageSize: ImageInfo,
+  size: ImageInfo = imageSize,
+) =>
+  sharp(png)
+    .ensureAlpha()
+    .extend({
+      right: size.width - imageSize.width,
+      bottom: size.height - imageSize.height,
+      background: { r: 0, g: 0, b: 0, alpha: 64 / 255 },
+    })
+    .raw()
+    .toBuffer();
 
 // encodes 8-bit RGBA pixels to PNG
 export const encodePNG = (raw: Buffer, { width, height }: ImageInfo) =>
@@ -83,39 +92,14 @@ export const encodePNG = (raw: Buffer, { width, height }: ImageInfo) =>
     .png()
     .toBuffer();
 
-// extends the image canvas to width x height (anchored top-left) and
-// returns 8-bit RGBA pixels; the added area is filled with translucent black
-export const padImageToSize = (
-  png: Buffer,
-  info: ImageInfo,
-  { width, height }: ImageInfo,
-) =>
-  sharp(png)
-    .ensureAlpha()
-    .extend({
-      right: width - info.width,
-      bottom: height - info.height,
-      background: { r: 0, g: 0, b: 0, alpha: 64 / 255 },
-    })
-    .raw()
+export const scaleImage = async (png: Buffer, scaleFactor: number) => {
+  if (scaleFactor === 1) return png;
+
+  const image = sharp(png);
+  const { width, height } = await image.metadata();
+  return image
+    .resize(Math.ceil(width * scaleFactor), Math.ceil(height * scaleFactor))
     .toBuffer();
-
-export const scaleImageAndWrite = async ({
-  scaleFactor,
-  path,
-}: {
-  scaleFactor: number;
-  path: string;
-}) => {
-  const imgBuffer = fs.readFileSync(path);
-  if (scaleFactor === 1) return imgBuffer;
-
-  const { width, height } = await sharp(imgBuffer).metadata();
-  const newImageWidth = Math.ceil(width * scaleFactor);
-  const newImageHeight = Math.ceil(height * scaleFactor);
-  await sharp(imgBuffer).resize(newImageWidth, newImageHeight).toFile(path);
-
-  return fs.readFileSync(path);
 };
 
 export const cleanupUnused = (
