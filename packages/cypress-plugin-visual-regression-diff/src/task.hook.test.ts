@@ -529,6 +529,55 @@ describe('compareImagesTask', () => {
       },
     );
   });
+
+  describe('stale .diff.png from an earlier failed run', () => {
+    // real-looking names, so the `.diff.png` sibling is derived like in production
+    const shotConfig = async (overrides: Partial<CompareImagesCfg> = {}) => {
+      const { path: shots } = await dir();
+      const imgNew = path.join(shots, 'home renders_#0.actual.png');
+      const cfg = await generateConfig({
+        imgNew: await writeTmpFixture(imgNew, oldImgFixture),
+        imgOld: await writeTmpFixture(
+          path.join(shots, 'home renders_#0.png'),
+          oldImgFixture,
+        ),
+        ...overrides,
+      });
+      const stale = imgNew.replace('.actual.png', '.diff.png');
+      await fs.writeFile(stale, 'stale');
+      return { cfg, stale };
+    };
+
+    it('is removed when the comparison passes', async () => {
+      const { cfg, stale } = await shotConfig();
+      await compareImagesTask({ testingType: 'e2e' }, cfg);
+      expect(existsSync(stale)).toBe(false);
+    });
+
+    it('is removed when the baseline is updated', async () => {
+      const { cfg, stale } = await shotConfig({ updateImages: true });
+      await compareImagesTask({ testingType: 'e2e' }, cfg);
+      expect(existsSync(stale)).toBe(false);
+    });
+
+    it("is removed when 'failures-only' replaces the baseline", async () => {
+      const { cfg, stale } = await shotConfig({
+        updateImages: 'failures-only',
+        maxDiffThreshold: 0,
+      });
+      await fs.copyFile(path.join(fixturesPath, newImgFixture), cfg.imgNew);
+      await compareImagesTask({ testingType: 'e2e' }, cfg);
+      expect(existsSync(stale)).toBe(false);
+    });
+
+    it('is kept (overwritten) when the comparison fails', async () => {
+      const { cfg, stale } = await shotConfig({ maxDiffThreshold: 0 });
+      await fs.copyFile(path.join(fixturesPath, newImgFixture), cfg.imgNew);
+      await compareImagesTask({ testingType: 'e2e' }, cfg);
+      expect(existsSync(stale)).toBe(true);
+      expect(readFileSync(stale).toString()).not.toBe('stale');
+    });
+  });
 });
 
 describe('doesFileExistsTask', () => {
