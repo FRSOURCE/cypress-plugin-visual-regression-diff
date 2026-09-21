@@ -223,10 +223,12 @@ cy.matchImage({
 
 ```bash
 # Cypress 15.10+
-npx cypress run --expose "pluginVisualRegressionUpdateImages=true" --expose "pluginVisualRegressionDiffConfig={\"threshold\":0.01}"
+npx cypress run --expose "pluginVisualRegressionUpdateImages=true,pluginVisualRegressionDiffConfig={\"threshold\":0.01}"
 # Cypress <15.10 (deprecated in 15.10, removed in 16)
 npx cypress run --env "pluginVisualRegressionUpdateImages=true,pluginVisualRegressionDiffConfig={\"threshold\":0.01}"
 ```
+
+Pass several options in one flag, separated by commas. When `--expose` (or `--env`) is repeated, Cypress keeps only the last occurrence.
 
 ```ts
 // cypress.config.ts (Cypress 15.10+)
