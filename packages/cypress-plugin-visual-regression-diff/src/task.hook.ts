@@ -56,6 +56,7 @@ export const getScreenshotPathInfoTask = (cfg: {
   imagesPath: string;
   specPath: string;
   currentRetryNumber: number;
+  testId: string;
 }) => {
   const screenshotPath = generateScreenshotPath(cfg);
 
