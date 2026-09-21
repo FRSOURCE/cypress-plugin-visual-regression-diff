@@ -341,6 +341,40 @@ describe('compareImagesTask', () => {
           imgOldBase64: '',
           maxDiffThreshold: 0.5,
         }));
+
+      it('replaces the baseline even when createMissingImages is off', async () => {
+        const cfg = await generateConfig({
+          updateImages: true,
+          createMissingImages: false,
+        });
+        const newSize = await sharp(cfg.imgNew).metadata();
+
+        await expect(
+          compareImagesTask({ testingType: 'e2e' }, cfg),
+        ).resolves.toMatchObject({ error: false });
+        expect(existsSync(cfg.imgNew)).toBe(false);
+        // the baseline is now the (stamped) new screenshot
+        expect(await sharp(cfg.imgOld).metadata()).toMatchObject({
+          width: newSize.width,
+          height: newSize.height,
+        });
+        expect(isImageGeneratedByPlugin(readFileSync(cfg.imgOld))).toBe(true);
+      });
+    });
+
+    describe('when old screenshot is missing', () => {
+      it('creates the baseline even when createMissingImages is off', async () => {
+        const cfg = await generateConfig({
+          updateImages: true,
+          createMissingImages: false,
+        });
+        await fs.unlink(cfg.imgOld);
+
+        await expect(
+          compareImagesTask({ testingType: 'e2e' }, cfg),
+        ).resolves.toMatchObject({ error: false });
+        expect(existsSync(cfg.imgOld)).toBe(true);
+      });
     });
   });
 

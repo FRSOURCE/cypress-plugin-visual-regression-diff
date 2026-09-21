@@ -182,7 +182,7 @@ export const compareImagesTask = async (
     imgNewBase64 = '';
     imgDiffBase64 = '';
     imgOldBase64 = '';
-    if (cfg.createMissingImages) {
+    if (cfg.updateImages === true || cfg.createMissingImages) {
       await moveFile(cfg.imgNew, cfg.imgOld);
     } else {
       error = true;
