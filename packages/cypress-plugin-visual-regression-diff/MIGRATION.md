@@ -2,6 +2,32 @@
 
 ## 4.x -> 5.x
 
+### Batch Review Mode is enabled by default
+
+[Batch Review Mode](./README.md#batch-review-mode) (introduced as opt-in in 4.2) is now the default.
+`matchImage()` no longer throws on the first mismatch. Instead, every failing snapshot is collected,
+a single error listing the number of failures is thrown once the spec finishes, and in headed mode
+the failures can be reviewed and approved in bulk from the plugin's floating button.
+
+- If you already had `pluginVisualRegressionBatchReviewMode: true` in your config, you can remove it.
+- To keep the 4.x behaviour (fail immediately on the first mismatch), set the option explicitly to `false`:
+
+```bash
+# Cypress 15.10+
+npx cypress run --expose "pluginVisualRegressionBatchReviewMode=false"
+# Cypress <15.10
+npx cypress run --env "pluginVisualRegressionBatchReviewMode=false"
+```
+
+```ts
+// cypress.config.ts (Cypress 15.10+; use `env` instead of `expose` on Cypress <15.10)
+export default defineConfig({
+  expose: {
+    pluginVisualRegressionBatchReviewMode: false,
+  },
+});
+```
+
 ### Node.js 20.9+ required
 
 The declared minimum Node.js version is now `>=20.9.0`. This only makes the requirement of `sharp`

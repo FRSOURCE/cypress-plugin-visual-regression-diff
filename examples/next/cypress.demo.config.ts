@@ -7,8 +7,5 @@ export default defineConfig({
       initPlugin(on, config);
     },
     baseUrl: "http://localhost:3000",
-    env: {
-      pluginVisualRegressionBatchReviewMode: true,
-    },
   },
 });

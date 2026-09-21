@@ -256,11 +256,11 @@ For more ways of setting expose variables [take a look here](https://on.cypress.
 
 ## Batch Review Mode
 
-Batch Review Mode lets you run a full test suite without stopping on the first visual diff failure. Instead, all failing snapshots are collected and presented in an interactive review UI after the tests complete — so you can approve or skip changes in bulk.
+Batch Review Mode is **enabled by default**. It lets you run a full test suite without stopping on the first visual diff failure. Instead, all failing snapshots are collected and presented in an interactive review UI after the tests complete — so you can approve or skip changes in bulk.
 
 ### Additions in headed mode (non-CI environments)
 
-When enabled, a floating action button (FAB) appears in the bottom-right corner of the Cypress test runner. As tests run:
+A floating action button (FAB) appears in the bottom-right corner of the Cypress test runner. As tests run:
 
 - Whenever a `matchImage()` call exceeds the diff threshold, the counter badge on the FAB increments instead of immediately throwing an error.
 - Once all tests finish, an error is thrown with the total count of failures.
@@ -268,17 +268,17 @@ When enabled, a floating action button (FAB) appears in the bottom-right corner 
 
 ![Batch Review Mode demo](https://raw.githubusercontent.com/FRSOURCE/cypress-plugin-visual-regression-diff/main/assets/batch-review-mode.gif)
 
-> Note: Batch mode will be a new default in version 5 of `@frsource/cypress-plugin-visual-regression-diff`. To keep an old behaviour, make sure to set configuration property to `false` (see below for more details).
+> Note: Before version 5 of `@frsource/cypress-plugin-visual-regression-diff` Batch Review Mode was opt-in. See the [migration guide](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/packages/cypress-plugin-visual-regression-diff/MIGRATION.md#4x---5x) if you upgrade from 4.x.
 
-### How to enable
+### How to disable
 
-Batch Review Mode is a global option (it cannot be passed to `matchImage` directly). Enable it with the `pluginVisualRegressionBatchReviewMode` key:
+Batch Review Mode is a global option (it cannot be passed to `matchImage` directly). To go back to failing `matchImage()` immediately on the first mismatch, set the `pluginVisualRegressionBatchReviewMode` key to `false`:
 
 ```bash
 # Cypress 15.10+
-npx cypress open --expose "pluginVisualRegressionBatchReviewMode=true"
+npx cypress open --expose "pluginVisualRegressionBatchReviewMode=false"
 # Cypress <15.10 (deprecated in 15.10, removed in 16)
-npx cypress open --env "pluginVisualRegressionBatchReviewMode=true"
+npx cypress open --env "pluginVisualRegressionBatchReviewMode=false"
 ```
 
 ```ts
@@ -287,7 +287,7 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   expose: {
-    pluginVisualRegressionBatchReviewMode: true,
+    pluginVisualRegressionBatchReviewMode: false,
   },
 });
 ```
@@ -298,7 +298,7 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   env: {
-    pluginVisualRegressionBatchReviewMode: true,
+    pluginVisualRegressionBatchReviewMode: false,
   },
 });
 ```
@@ -311,9 +311,9 @@ The checkbox is unchecked by default. Use the `pluginVisualRegressionBatchReview
 
 ```bash
 # Cypress 15.10+
-npx cypress open --expose "pluginVisualRegressionBatchReviewMode=true" --expose "pluginVisualRegressionBatchReviewModeShowPassingImages=true"
+npx cypress open --expose "pluginVisualRegressionBatchReviewModeShowPassingImages=true"
 # Cypress <15.10 (deprecated in 15.10, removed in 16)
-npx cypress open --env "pluginVisualRegressionBatchReviewMode=true,pluginVisualRegressionBatchReviewModeShowPassingImages=true"
+npx cypress open --env "pluginVisualRegressionBatchReviewModeShowPassingImages=true"
 ```
 
 ```ts
@@ -322,7 +322,6 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   expose: {
-    pluginVisualRegressionBatchReviewMode: true,
     pluginVisualRegressionBatchReviewModeShowPassingImages: true,
   },
 });
