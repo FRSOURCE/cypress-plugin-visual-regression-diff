@@ -289,9 +289,6 @@ importers:
       pixelmatch:
         specifier: 7.2.0
         version: 7.2.0
-      pngjs:
-        specifier: 7.0.0
-        version: 7.0.0
       sharp:
         specifier: 0.35.4
         version: 0.35.4
@@ -302,15 +299,6 @@ importers:
       '@types/glob':
         specifier: 9.0.0
         version: 9.0.0
-      '@types/pixelmatch':
-        specifier: 7.1.0
-        version: 7.1.0
-      '@types/pngjs':
-        specifier: 6.0.5
-        version: 6.0.5
-      '@types/sharp':
-        specifier: 0.32.0
-        version: 0.32.0
       '@types/tmp':
         specifier: 0.2.6
         version: 0.2.6
@@ -1720,13 +1708,6 @@ packages:
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
-  '@types/pixelmatch@7.1.0':
-    resolution: {integrity: sha512-0QezS/yQirZ++KVOHu3a49ZB3zeRxGh3PRd9z9+FUNO+14N3oL0vibN3ADEaIvSeY8hsdChi09U6fjTcTcqowQ==}
-    deprecated: This is a stub types definition. pixelmatch provides its own type definitions, so you do not need this installed.
-
-  '@types/pngjs@6.0.5':
-    resolution: {integrity: sha512-0k5eKfrA83JOZPppLtS2C7OUtyNAl2wKNxfyYl9Q5g9lPkgBl/9hNyAu6HuEH2J4XmIv2znEpkDd0SaZVxW6iQ==}
-
   '@types/prop-types@15.7.15':
     resolution: {integrity: sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==}
 
@@ -1762,10 +1743,6 @@ packages:
 
   '@types/serve-static@1.15.10':
     resolution: {integrity: sha512-tRs1dB+g8Itk72rlSI2ZrW6vZg0YrLI81iQSTkMmOqnqCaNr/8Ek4VwWcN5vZgCYWbg/JJSGBlUaYGAOP73qBw==}
-
-  '@types/sharp@0.32.0':
-    resolution: {integrity: sha512-OOi3kL+FZDnPhVzsfD37J88FNeZh6gQsGcLc95NbeURRGvmSjeXiDcyWzF2o3yh/gQAUn2uhh/e+CPCa5nwAxw==}
-    deprecated: This is a stub types definition. sharp provides its own type definitions, so you do not need this installed.
 
   '@types/sinonjs__fake-timers@8.1.1':
     resolution: {integrity: sha512-0kSuKjAS0TrGLJ0M/+8MaFkGsQhZpB6pxOmvS3K8FYI72K//YmdfoW9X2qPsAKh1mkwxGD5zib9s1FIFed6E8g==}
@@ -7334,14 +7311,6 @@ snapshots:
 
   '@types/parse-json@4.0.2': {}
 
-  '@types/pixelmatch@7.1.0':
-    dependencies:
-      pixelmatch: 7.2.0
-
-  '@types/pngjs@6.0.5':
-    dependencies:
-      '@types/node': 18.0.6
-
   '@types/prop-types@15.7.15': {}
 
   '@types/qs@6.15.1': {}
@@ -7384,12 +7353,6 @@ snapshots:
       '@types/http-errors': 2.0.5
       '@types/node': 18.0.6
       '@types/send': 0.17.6
-
-  '@types/sharp@0.32.0':
-    dependencies:
-      sharp: 0.35.4
-    transitivePeerDependencies:
-      - '@types/node'
 
   '@types/sinonjs__fake-timers@8.1.1': {}
 

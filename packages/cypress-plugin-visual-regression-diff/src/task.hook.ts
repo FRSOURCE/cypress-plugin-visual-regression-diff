@@ -1,5 +1,4 @@
 import fs from 'fs';
-import { PNG } from 'pngjs';
 import pixelmatch from 'pixelmatch';
 
 type PixelmatchOptions = NonNullable<Parameters<typeof pixelmatch>[5]>;
@@ -9,7 +8,9 @@ import { FILE_SUFFIX, TASK } from './constants';
 import { getPluginConfig } from './version.utils';
 import {
   cleanupUnused,
-  alignImagesToSameSize,
+  decodePNG,
+  encodePNG,
+  padImageToSize,
   scaleImageAndWrite,
   isImageCurrentVersion,
   addPNGMetadata,
@@ -38,6 +39,10 @@ const round = (n: number) => Math.ceil(n * 1000) / 1000;
 
 const unlinkSyncSafe = (path: string) =>
   fs.existsSync(path) && fs.unlinkSync(path);
+
+// view over the same memory, no copy
+const asUint8Array = (buf: Buffer) =>
+  new Uint8Array(buf.buffer, buf.byteOffset, buf.length);
 
 export const getScreenshotPathInfoTask = (cfg: {
   titleFromOptions: string;
@@ -100,25 +105,35 @@ export const compareImagesTask = async (
   let error = false;
 
   if (fs.existsSync(cfg.imgOld) && cfg.updateImages !== true) {
-    const rawImgNew = PNG.sync.read(rawImgNewBuffer);
     const rawImgOldBuffer = fs.readFileSync(cfg.imgOld);
-    const rawImgOld = PNG.sync.read(rawImgOldBuffer);
+    const [rawImgNew, rawImgOld] = await Promise.all([
+      decodePNG(rawImgNewBuffer),
+      decodePNG(rawImgOldBuffer),
+    ]);
     const isImgSizeDifferent =
-      rawImgNew.height !== rawImgOld.height ||
-      rawImgNew.width !== rawImgOld.width;
+      rawImgNew.info.height !== rawImgOld.info.height ||
+      rawImgNew.info.width !== rawImgOld.info.width;
+
+    const size = {
+      width: Math.max(rawImgNew.info.width, rawImgOld.info.width),
+      height: Math.max(rawImgNew.info.height, rawImgOld.info.height),
+    };
+    const { width, height } = size;
 
     const [imgNew, imgOld] = isImgSizeDifferent
-      ? alignImagesToSameSize(rawImgNew, rawImgOld)
-      : [rawImgNew, rawImgOld];
+      ? await Promise.all([
+          padImageToSize(rawImgNewBuffer, rawImgNew.info, size),
+          padImageToSize(rawImgOldBuffer, rawImgOld.info, size),
+        ])
+      : [rawImgNew.data, rawImgOld.data];
 
-    const { width, height } = imgNew;
-    const diff = new PNG({ width, height });
+    const diff = Buffer.alloc(width * height * 4);
     const diffConfig = Object.assign({ includeAA: true }, cfg.diffConfig);
 
     const diffPixels = pixelmatch(
-      new Uint8Array(imgNew.data),
-      new Uint8Array(imgOld.data),
-      diff.data as unknown as Uint8Array,
+      asUint8Array(imgNew),
+      asUint8Array(imgOld),
+      asUint8Array(diff),
       width,
       height,
       diffConfig,
@@ -127,7 +142,7 @@ export const compareImagesTask = async (
 
     if (isImgSizeDifferent) {
       messages.push(
-        `Warning: Images size mismatch - new screenshot is ${rawImgNew.width}px by ${rawImgNew.height}px while old one is ${rawImgOld.width}px by ${rawImgOld.height} (width x height).`,
+        `Warning: Images size mismatch - new screenshot is ${rawImgNew.info.width}px by ${rawImgNew.info.height}px while old one is ${rawImgOld.info.width}px by ${rawImgOld.info.height} (width x height).`,
       );
     }
 
@@ -140,10 +155,15 @@ export const compareImagesTask = async (
       error = true;
     }
 
-    const diffBuffer = PNG.sync.write(diff);
-    imgNewBase64 = PNG.sync.write(imgNew).toString('base64');
+    const diffBuffer = await encodePNG(diff, size);
+    // the images only need re-encoding when they were padded - otherwise the
+    // PNG bytes already in hand are exactly the compared image
+    const [imgNewPNG, imgOldPNG] = isImgSizeDifferent
+      ? await Promise.all([encodePNG(imgNew, size), encodePNG(imgOld, size)])
+      : [rawImgNewBuffer, rawImgOldBuffer];
+    imgNewBase64 = imgNewPNG.toString('base64');
     imgDiffBase64 = diffBuffer.toString('base64');
-    imgOldBase64 = PNG.sync.write(imgOld).toString('base64');
+    imgOldBase64 = imgOldPNG.toString('base64');
 
     if (error && cfg.updateImages === 'failures-only') {
       await moveFile(cfg.imgNew, cfg.imgOld);
@@ -159,7 +179,7 @@ export const compareImagesTask = async (
         diffBuffer,
       );
     } else {
-      if (rawImgOld && !isImageCurrentVersion(rawImgOldBuffer)) {
+      if (!isImageCurrentVersion(rawImgOldBuffer)) {
         await moveFile(cfg.imgNew, cfg.imgOld);
       } else {
         // don't overwrite file if it's the same (imgDiff < cfg.maxDiffThreshold && !isImgSizeDifferent)

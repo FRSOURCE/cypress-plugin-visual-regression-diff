@@ -1,5 +1,28 @@
 # Migration Guide
 
+## 4.x -> 5.x
+
+### Node.js 20.9+ required
+
+The declared minimum Node.js version is now `>=20.9.0`. This only makes the requirement of `sharp`
+(a dependency since v4) explicit - older Node.js versions could not install the plugin before either.
+
+### PNG files are now written by sharp (libvips)
+
+Decoding, padding and encoding of screenshots during comparison moved from `pngjs` (pure JavaScript)
+to `sharp`, which is many times faster and produces smaller files. Consequences:
+
+- **No action is needed.** Baseline images created by 4.x are still read and compared exactly as
+  before; the comparison algorithm (`pixelmatch`) and the plugin metadata stored in the images are unchanged.
+- PNG files written by the plugin (baselines, `.actual.png`, `.diff.png`) now have different bytes
+  than 4.x would have produced, while the pixels are identical. Expect existing baselines to show up
+  as modified in git the next time they get updated by the plugin.
+- When compared screenshots have different sizes, the smaller one is padded with translucent black
+  (`rgba(0, 0, 0, 64)`) as before; the padding now also covers the very first padded row and column,
+  which 4.x left transparent.
+- `pngjs` is no longer a dependency of the plugin. If your project used `pngjs` without declaring it
+  (relying on hoisting), add it to your own `package.json`.
+
 ## 4.0.x -> 4.1.x
 
 ### Migrating to Cypress 16 (`Cypress.expose` API)

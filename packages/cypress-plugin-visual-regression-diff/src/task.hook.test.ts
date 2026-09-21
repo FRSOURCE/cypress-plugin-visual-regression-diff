@@ -1,7 +1,7 @@
 import { it, expect, describe, beforeEach, afterEach } from 'vitest';
 import path from 'path';
 import { promises as fs, existsSync, readFileSync } from 'fs';
-import { PNG } from 'pngjs';
+import sharp from 'sharp';
 import { dir, file, setGracefulCleanup, withFile } from 'tmp-promise';
 import {
   approveImageTask,
@@ -36,9 +36,15 @@ const generateConfig = async (cfg: Partial<CompareImagesCfg>) => ({
   diffConfig: {},
   ...cfg,
 });
-// pngjs drops tEXt chunks on re-encode, which yields a PNG without the plugin
-// metadata - exactly what Cypress (or sharp) hands over as the .actual.png file
-const stripMetadata = (png: Buffer) => PNG.sync.write(PNG.sync.read(png));
+// sharp drops tEXt chunks on re-encode, which yields a PNG without the plugin
+// metadata - exactly what Cypress hands over as the .actual.png file
+const stripMetadata = (png: Buffer) => sharp(png).png().toBuffer();
+const pngSize = async (base64: string) => {
+  const { width, height } = await sharp(
+    Buffer.from(base64, 'base64'),
+  ).metadata();
+  return { width, height };
+};
 const writeUnstampedFixture = async (
   pathToWriteTo: string,
   fixtureName: string,
@@ -46,7 +52,9 @@ const writeUnstampedFixture = async (
   await fs.mkdir(path.dirname(pathToWriteTo), { recursive: true });
   await fs.writeFile(
     pathToWriteTo,
-    stripMetadata(await fs.readFile(path.join(fixturesPath, fixtureName))),
+    await stripMetadata(
+      await fs.readFile(path.join(fixturesPath, fixtureName)),
+    ),
   );
   return pathToWriteTo;
 };
@@ -414,23 +422,68 @@ describe('compareImagesTask', () => {
 
     describe('when old screenshot exists', () => {
       describe('when new image has different resolution', () => {
-        it('resolves with an error message', async () => {
+        it('resolves with an error message and images padded to the same size', async () => {
           const cfg = await generateConfig({ updateImages: false });
 
-          await expect(
-            compareImagesTask({ testingType: 'e2e' }, cfg),
-          ).resolves.toMatchSnapshot();
+          const result = await compareImagesTask({ testingType: 'e2e' }, cfg);
+
+          expect(result).toMatchObject({
+            error: true,
+            imgDiff: expect.closeTo(0.7104309392265193, 10),
+            message:
+              'Image diff factor (71.044%) is bigger than maximum threshold option 50%.\nWarning: Images size mismatch - new screenshot is 250px by 181px while old one is 125px by 125 (width x height).',
+            maxDiffThreshold: 0.5,
+          });
+          const paddedSize = { width: 250, height: 181 };
+          const {
+            imgNewBase64 = '',
+            imgOldBase64 = '',
+            imgDiffBase64 = '',
+          } = result ?? {};
+          expect(await pngSize(imgNewBase64)).toEqual(paddedSize);
+          expect(await pngSize(imgOldBase64)).toEqual(paddedSize);
+          expect(await pngSize(imgDiffBase64)).toEqual(paddedSize);
+          // diff image is written next to the kept .actual.png
+          expect(
+            existsSync(cfg.imgNew.replace('.actual.png', '.diff.png')),
+          ).toBe(true);
         });
       });
 
       describe('when new image is exactly the same as old one', () => {
-        it('resolves with a success message', async () => {
+        it('resolves with a success message and the original images', async () => {
           const cfg = await generateConfig({ updateImages: false });
           await writeTmpFixture(cfg.imgNew, oldImgFixture);
+          const imgOldBytes = readFileSync(cfg.imgOld);
 
-          await expect(
-            compareImagesTask({ testingType: 'e2e' }, cfg),
-          ).resolves.toMatchSnapshot();
+          const result = await compareImagesTask({ testingType: 'e2e' }, cfg);
+
+          expect(result).toMatchObject({
+            error: false,
+            imgDiff: 0,
+            message:
+              'Image diff factor (0%) is within boundaries of maximum threshold option 50%.',
+            maxDiffThreshold: 0.5,
+          });
+          const {
+            imgNewBase64 = '',
+            imgOldBase64 = '',
+            imgDiffBase64 = '',
+          } = result ?? {};
+          // same-size images are passed through as-is, without re-encoding:
+          // the baseline bytes verbatim, the new image as stamped on disk
+          expect(imgOldBase64).toBe(imgOldBytes.toString('base64'));
+          const imgNewPNG = Buffer.from(imgNewBase64, 'base64');
+          expect(isImageGeneratedByPlugin(imgNewPNG)).toBe(true);
+          expect(await pngSize(imgNewBase64)).toEqual({
+            width: 125,
+            height: 125,
+          });
+          expect(await pngSize(imgDiffBase64)).toEqual({
+            width: 125,
+            height: 125,
+          });
+          expect(existsSync(cfg.imgNew)).toBe(false);
         });
       });
     });

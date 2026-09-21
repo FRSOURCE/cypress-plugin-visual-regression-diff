@@ -58,7 +58,7 @@
 
 ### Installation
 
-You can install this library using your favorite package manager:
+The plugin requires Node.js 20.9 or newer. You can install this library using your favorite package manager:
 
 ```bash
 # npm
