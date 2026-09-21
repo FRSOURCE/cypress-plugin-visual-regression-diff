@@ -69,6 +69,7 @@ describe('getScreenshotPathInfoTask', () => {
         imagesPath: 'nested/images/dir',
         specPath,
         currentRetryNumber: 0,
+        testId: 'r1',
       }),
     ).toEqual({
       screenshotPath:
@@ -84,6 +85,7 @@ describe('getScreenshotPathInfoTask', () => {
         imagesPath: '{spec_path}/images/dir',
         specPath,
         currentRetryNumber: 0,
+        testId: 'r1',
       }),
     ).toEqual({
       screenshotPath:
@@ -99,6 +101,7 @@ describe('getScreenshotPathInfoTask', () => {
         imagesPath: '/images/dir',
         specPath,
         currentRetryNumber: 0,
+        testId: 'r1',
       }),
     ).toEqual({
       screenshotPath:
@@ -112,6 +115,7 @@ describe('getScreenshotPathInfoTask', () => {
         imagesPath: 'C:/images/dir',
         specPath,
         currentRetryNumber: 0,
+        testId: 'r1',
       }),
     ).toEqual({
       screenshotPath:
@@ -129,6 +133,7 @@ describe('cleanupImagesTask', () => {
         imagesPath: 'images',
         specPath: 'some/spec/path',
         currentRetryNumber: 0,
+        testId: 'r1',
       });
       return path.join(
         projectRoot,

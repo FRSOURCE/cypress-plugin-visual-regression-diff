@@ -129,13 +129,16 @@ Cypress.Commands.add(
       matchAgainstPath,
     } = getConfig(options);
 
-    const currentRetryNumber = (
+    const test = (
       cy as unknown as {
-        state: (s: string) => { currentRetry: () => number };
+        state: (s: string) => { id?: string; currentRetry: () => number };
       }
-    )
-      .state('test')
-      .currentRetry();
+    ).state('test');
+    const currentRetryNumber = test.currentRetry();
+    // lets the plugin tell a retry of this test apart from the next test
+    const testId =
+      test.id ??
+      [Cypress.spec.relative, ...Cypress.currentTest.titlePath].join(' ');
 
     return cy
       .then(() =>
@@ -147,6 +150,7 @@ Cypress.Commands.add(
             imagesPath,
             specPath: Cypress.spec.relative,
             currentRetryNumber,
+            testId,
           },
           { log: false },
         ),
