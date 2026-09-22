@@ -57,11 +57,24 @@ const round = (n: number) => Math.ceil(n * 1000) / 1000;
 const unlinkSyncSafe = (path: string) =>
   fs.existsSync(path) && fs.unlinkSync(path);
 
+// `.diff.png` sibling of an `.actual.png`; null when the name has no `.actual`
+// suffix (only happens with hand-picked paths), so nothing else gets deleted
+const diffPathFor = (actualPath: string) => {
+  const diffPath = actualPath.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff);
+  return diffPath === actualPath ? null : diffPath;
+};
+
+const removeStaleDiff = (actualPath: string) => {
+  const diffPath = diffPathFor(actualPath);
+  if (diffPath) unlinkSyncSafe(diffPath);
+};
+
 export const getScreenshotPathInfoTask = (cfg: {
   titleFromOptions: string;
   imagesPath: string;
   specPath: string;
   currentRetryNumber: number;
+  testId: string;
 }) => {
   const screenshotPath = generateScreenshotPath(cfg);
 
@@ -187,6 +200,8 @@ export const compareImagesTask = async (
 
     if (error && cfg.updateImages === 'failures-only') {
       await moveFile(cfg.imgNew, cfg.imgOld);
+      // a diff image left by an earlier failed attempt is stale now
+      removeStaleDiff(cfg.imgNew);
       error = false;
       status = 'updated';
       baselineWritten = true;
@@ -202,6 +217,7 @@ export const compareImagesTask = async (
       status = 'failed';
     } else {
       status = 'passed';
+      removeStaleDiff(cfg.imgNew);
       if (!isImageCurrentVersion(rawImgOldBuffer)) {
         await moveFile(cfg.imgNew, cfg.imgOld);
         baselineWritten = true;
@@ -219,6 +235,7 @@ export const compareImagesTask = async (
     const baselineExisted = fs.existsSync(cfg.imgOld);
     if (cfg.createMissingImages) {
       await moveFile(cfg.imgNew, cfg.imgOld);
+      removeStaleDiff(cfg.imgNew);
       baselineWritten = true;
       status = baselineExisted ? 'updated' : 'created';
     } else {
