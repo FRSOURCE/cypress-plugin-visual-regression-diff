@@ -1,0 +1,24 @@
+# GitHub App manifest used by Probot's one-click registration flow:
+# start the app without APP_ID and open http://localhost:3100/probot
+# https://probot.github.io/docs/development/#manually-configuring-a-github-app
+name: cypress-plugin-visual-regression-diff
+description: Reports visual regression results from CI artifacts on the pull request and lets reviewers approve baselines with a click or a comment.
+url: https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/tree/main/packages/github-app
+public: true
+
+default_events:
+  - workflow_run
+  - check_run
+  - issue_comment
+  - pull_request
+
+default_permissions:
+  # list and download workflow artifacts
+  actions: read
+  # check runs with action buttons
+  checks: write
+  # commit approved baselines to the PR branch, read baselines
+  contents: write
+  # report comment, reactions
+  pull_requests: write
+  metadata: read
