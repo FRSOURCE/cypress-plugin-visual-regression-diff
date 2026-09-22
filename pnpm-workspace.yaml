@@ -4,6 +4,7 @@ packages:
 allowBuilds:
   cypress: true
   ffmpeg-static: true
+  esbuild: true
 minimumReleaseAgeExclude:
   - prettier@3.9.0
 overrides:
