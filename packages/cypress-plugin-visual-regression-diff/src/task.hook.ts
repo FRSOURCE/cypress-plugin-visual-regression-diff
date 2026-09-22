@@ -29,6 +29,7 @@ import {
 import type {
   CompareImagesTaskReturn,
   ManifestEntry,
+  ManifestEntryOptions,
   ManifestStatus,
   PendingDiffRecord,
 } from './types';
@@ -48,8 +49,9 @@ export type CompareImagesCfg = {
   specPath?: string;
   testTitlePath?: string[];
   currentRetryNumber?: number;
-  browser?: ManifestEntry['browser'];
+  platform?: ManifestEntry['platform'];
   viewport?: ManifestEntry['viewport'];
+  options?: ManifestEntryOptions;
 };
 
 const round = (n: number) => Math.ceil(n * 1000) / 1000;
@@ -262,8 +264,9 @@ export const compareImagesTask = async (
     specPath: cfg.specPath,
     testTitlePath: cfg.testTitlePath,
     currentRetryNumber: cfg.currentRetryNumber,
-    browser: cfg.browser,
+    platform: cfg.platform,
     viewport: cfg.viewport,
+    options: cfg.options,
     status,
     imgDiff,
     maxDiffThreshold: cfg.maxDiffThreshold,

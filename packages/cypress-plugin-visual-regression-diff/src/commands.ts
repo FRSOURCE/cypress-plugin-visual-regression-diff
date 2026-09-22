@@ -2,7 +2,11 @@ import { FAB_BADGE_CLASS, FILE_SUFFIX, LINK_PREFIX, TASK } from './constants';
 import { getBatchReviewMode, getExposedOption } from './config.utils';
 import type pixelmatch from 'pixelmatch';
 import * as Base64 from '@frsource/base64';
-import type { CompareImagesTaskReturn, PendingDiffRecord } from './types';
+import type {
+  CompareImagesTaskReturn,
+  ManifestEntryOptions,
+  PendingDiffRecord,
+} from './types';
 
 declare global {
   interface Window {
@@ -104,6 +108,31 @@ export const getConfig = (options: Cypress.MatchImageOptions) => ({
   matchAgainstPath: options.matchAgainstPath || undefined,
 });
 
+// `cy.task` payloads are JSON-serialised, so callbacks such as
+// `onAfterScreenshot` would silently vanish; drop them explicitly instead
+const withoutFunctions = (obj: Record<string, unknown>) =>
+  Object.fromEntries(
+    Object.entries(obj).filter(([, value]) => typeof value !== 'function'),
+  );
+
+/** The resolved `matchImage` options as recorded in the run manifest. */
+export const toManifestOptions = (
+  config: ReturnType<typeof getConfig>,
+  options: Cypress.MatchImageOptions,
+): ManifestEntryOptions => ({
+  imagesPath: config.imagesPath,
+  title: options.title,
+  maxDiffThreshold: config.maxDiffThreshold,
+  diffConfig: config.diffConfig as Record<string, unknown>,
+  createMissingImages: config.createMissingImages,
+  updateImages: config.updateImages,
+  forceDeviceScaleFactor: config.scaleFactor === 1,
+  matchAgainstPath: config.matchAgainstPath,
+  screenshotConfig: withoutFunctions(
+    config.screenshotConfig as Record<string, unknown>,
+  ),
+});
+
 Cypress.Commands.add(
   'matchImage',
   { prevSubject: 'optional' },
@@ -113,6 +142,7 @@ Cypress.Commands.add(
     /* c8 ignore next */
     let pendingPassingRecord: PendingDiffRecord | null = null;
 
+    const config = getConfig(options);
     const {
       scaleFactor,
       createMissingImages,
@@ -122,7 +152,7 @@ Cypress.Commands.add(
       diffConfig,
       screenshotConfig,
       matchAgainstPath,
-    } = getConfig(options);
+    } = config;
 
     const test = (
       cy as unknown as {
@@ -192,10 +222,17 @@ Cypress.Commands.add(
               specPath: Cypress.spec.relative,
               testTitlePath: Cypress.currentTest.titlePath,
               currentRetryNumber,
-              browser: {
-                name: Cypress.browser.name,
-                version: Cypress.browser.version,
+              platform: {
+                os: Cypress.platform,
+                arch: Cypress.arch,
+                browser: {
+                  name: Cypress.browser.name,
+                  version: Cypress.browser.version,
+                  family: Cypress.browser.family,
+                  headless: Cypress.browser.isHeadless,
+                },
               },
+              options: toManifestOptions(config, options),
               viewport: {
                 width: Cypress.config('viewportWidth'),
                 height: Cypress.config('viewportHeight'),

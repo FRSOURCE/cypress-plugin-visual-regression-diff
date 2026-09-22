@@ -36,6 +36,10 @@ every `matchImage` comparison meant for CI tooling. See [Run manifest](./README.
 for the format.
 
 - `cypress/screenshots` is usually gitignored already, so no action is needed in most projects.
+- Besides the comparison results, the file records run metadata read from the Cypress config and
+  from `process.env`: the CI provider, repository, commit, pull request and run id (`ci`), the browser,
+  spec list and config file (`runner`), and every `pluginVisualRegression*` option (`options`).
+  No other environment variables are copied.
 - To write it elsewhere or turn it off, set `pluginVisualRegressionManifestPath` (a path, or `false`):
 
 ```bash

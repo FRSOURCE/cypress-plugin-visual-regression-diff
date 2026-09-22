@@ -1,13 +1,24 @@
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import {
   FILE_SUFFIX,
   MANIFEST_VERSION,
   getManifestFileName,
 } from './constants';
+import { detectCi, type EnvLike } from './ci.utils';
 import type { ImageInfo } from './image.utils';
-import { getPluginConfig } from './version.utils';
-import type { Manifest, ManifestEntry, ManifestStatus } from './types';
+import { getPluginConfig, supportsExpose } from './version.utils';
+import type {
+  Manifest,
+  ManifestBrowser,
+  ManifestCi,
+  ManifestEntry,
+  ManifestEntryOptions,
+  ManifestPlatform,
+  ManifestRunner,
+  ManifestStatus,
+} from './types';
 
 /** The subset of the Cypress plugin config the manifest needs; everything is optional so unit tests can pass `{}`. */
 export type ManifestConfig = Partial<
@@ -19,8 +30,37 @@ export type ManifestConfig = Partial<
     | 'version'
     | 'expose'
     | 'env'
+    | 'platform'
+    | 'arch'
+    | 'configFile'
+    | 'isTextTerminal'
+    | 'isInteractive'
+    | 'baseUrl'
+    | 'specPattern'
+    | 'viewportWidth'
+    | 'viewportHeight'
+    | 'retries'
   >
 >;
+
+/** What `before:run` hands over; typed loosely so unit tests can pass a subset. */
+export type ManifestRunDetails = Partial<
+  Pick<
+    Cypress.BeforeRunDetails,
+    | 'browser'
+    | 'specs'
+    | 'specPattern'
+    | 'system'
+    | 'runUrl'
+    | 'group'
+    | 'tag'
+    | 'parallel'
+    | 'cypressVersion'
+  >
+>;
+
+export type ManifestBrowserInput = Pick<Cypress.Browser, 'name' | 'version'> &
+  Partial<Pick<Cypress.Browser, 'family' | 'isHeadless'>>;
 
 export type ManifestRecordInput = {
   imgNew: string;
@@ -28,8 +68,9 @@ export type ManifestRecordInput = {
   specPath?: string;
   testTitlePath?: string[];
   currentRetryNumber?: number;
-  browser?: ManifestEntry['browser'];
+  platform?: ManifestEntry['platform'];
   viewport?: ManifestEntry['viewport'];
+  options?: ManifestEntryOptions;
   status: ManifestStatus;
   imgDiff: number;
   maxDiffThreshold: number;
@@ -39,10 +80,22 @@ export type ManifestRecordInput = {
   message: string;
 };
 
+type RunInfo = {
+  createdAt: string;
+  platform: ManifestPlatform;
+  ci: ManifestCi | null;
+  options: Record<string, unknown>;
+  runner: ManifestRunner;
+};
+
 // keyed by the normalized absolute path of the .actual.png, unique per run
 const entries = new Map<string, ManifestEntry>();
+let run: RunInfo | null = null;
 
 const OPTION_KEY = 'pluginVisualRegressionManifestPath';
+const OPTION_PREFIX = 'pluginVisualRegression';
+
+const now = () => new Date().toISOString();
 
 /**
  * Resolves where the manifest is written, or `null` when it is disabled
@@ -97,15 +150,110 @@ const sameTitlePath = (a: string[], b: string[]) =>
 const compareEntries = (a: ManifestEntry, b: ManifestEntry) =>
   a.test.file.localeCompare(b.test.file) || a.name.localeCompare(b.name);
 
+/**
+ * Global plugin options as configured, with the `pluginVisualRegression`
+ * prefix stripped (`pluginVisualRegressionUpdateImages` -> `updateImages`).
+ * Values are kept verbatim, so CLI-provided ones stay strings.
+ */
+export const getPluginOptions = (
+  config: ManifestConfig,
+): Record<string, unknown> => {
+  const source =
+    (supportsExpose(config.version ?? '') ? config.expose : config.env) ?? {};
+  const options: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(source)) {
+    if (key.startsWith(OPTION_PREFIX) && key.length > OPTION_PREFIX.length) {
+      const rest = key.slice(OPTION_PREFIX.length);
+      options[rest.charAt(0).toLowerCase() + rest.slice(1)] = value;
+    }
+  }
+  return options;
+};
+
+const toManifestBrowser = (browser: ManifestBrowserInput): ManifestBrowser => ({
+  name: browser.name,
+  version: browser.version,
+  ...(browser.family !== undefined && { family: browser.family }),
+  ...(browser.isHeadless !== undefined && { headless: browser.isHeadless }),
+});
+
+const projectRelativeOrUndefined = (
+  projectRoot: string | undefined,
+  p: string | undefined,
+) =>
+  p && projectRoot
+    ? toProjectRelative(projectRoot, path.resolve(p))
+    : undefined;
+
+/**
+ * Seeds the run-level manifest data from the Cypress config, the process and
+ * the environment. `details` (from `before:run`) adds what is only known in
+ * run mode: the spec list, the OS version, Cypress Cloud fields.
+ */
+export const initManifestRun = (
+  config: ManifestConfig,
+  details?: ManifestRunDetails,
+  env: EnvLike = process.env,
+): RunInfo => {
+  const mode: ManifestRunner['mode'] =
+    config.isTextTerminal === true ||
+    (config.isTextTerminal === undefined && config.isInteractive === false)
+      ? 'run'
+      : 'open';
+  const runner: ManifestRunner = {
+    name: 'cypress',
+    version: details?.cypressVersion ?? config.version,
+    testingType: config.testingType,
+    mode,
+    configFile: projectRelativeOrUndefined(
+      config.projectRoot,
+      config.configFile,
+    ),
+    browser: details?.browser ? toManifestBrowser(details.browser) : undefined,
+    specs: details?.specs?.map((spec) => toPosix(spec.relative)),
+    specPattern: details?.specPattern ?? config.specPattern,
+    baseUrl: config.baseUrl,
+    viewport:
+      config.viewportWidth && config.viewportHeight
+        ? { width: config.viewportWidth, height: config.viewportHeight }
+        : undefined,
+    retries: config.retries,
+    cloud: details?.runUrl
+      ? {
+          runUrl: details.runUrl,
+          group: details.group,
+          tag: details.tag,
+          parallel: details.parallel,
+        }
+      : undefined,
+  };
+  run = {
+    createdAt: now(),
+    platform: {
+      os: config.platform ?? process.platform,
+      arch: config.arch ?? process.arch,
+      osVersion: details?.system?.osVersion ?? os.release(),
+    },
+    ci: detectCi(env),
+    options: getPluginOptions(config),
+    runner,
+  };
+  return run;
+};
+
+const ensureRun = (config: ManifestConfig) => run ?? initManifestRun(config);
+
 const writeManifest = (config: ManifestConfig, manifestPath: string) => {
+  const info = ensureRun(config);
   const manifest: Manifest = {
     version: MANIFEST_VERSION,
-    runner: {
-      name: 'cypress',
-      version: config.version,
-      testingType: config.testingType,
-    },
+    createdAt: info.createdAt,
+    updatedAt: now(),
     projectRoot: config.projectRoot as string,
+    platform: info.platform,
+    ci: info.ci,
+    options: info.options,
+    runner: info.runner,
     entries: [...entries.values()].sort(compareEntries),
   };
   fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
@@ -113,6 +261,21 @@ const writeManifest = (config: ManifestConfig, manifestPath: string) => {
   const tmpPath = `${manifestPath}.tmp`;
   fs.writeFileSync(tmpPath, JSON.stringify(manifest, null, 2));
   fs.renameSync(tmpPath, manifestPath);
+};
+
+/**
+ * Records the browser Cypress launched (`before:browser:launch`, fires in
+ * both `run` and `open` mode). The file is only rewritten when it exists
+ * already, i.e. when something was recorded.
+ */
+export const setManifestBrowser = (
+  config: ManifestConfig,
+  browser: ManifestBrowserInput,
+) => {
+  const manifestPath = getManifestPath(config);
+  if (!manifestPath) return;
+  ensureRun(config).runner.browser = toManifestBrowser(browser);
+  if (entries.size > 0) writeManifest(config, manifestPath);
 };
 
 /** Records the outcome of one comparison and rewrites the manifest file. */
@@ -166,8 +329,10 @@ export const recordManifestEntry = (
       diff: { path: existingDiffPathOrNull(projectRoot, actualAbs) },
     },
     baselineWritten: input.baselineWritten,
-    browser: input.browser,
+    recordedAt: now(),
+    platform: input.platform,
     viewport: input.viewport,
+    options: input.options,
     message: input.message,
   };
   entries.set(actualAbs, entry);
@@ -212,8 +377,10 @@ export const markManifestEntryApproved = (
       diff: { path: null },
     },
     baselineWritten: true,
-    browser: existing?.browser,
+    recordedAt: now(),
+    platform: existing?.platform,
     viewport: existing?.viewport,
+    options: existing?.options,
     message: 'Baseline image was replaced with the approved screenshot.',
   };
   entries.set(actualAbs, entry);
@@ -240,9 +407,17 @@ export const dropSpecEntries = (config: ManifestConfig, specPath: string) => {
   if (changed) writeManifest(config, manifestPath);
 };
 
-/** Forgets every entry and removes a manifest left over from a previous run. */
-export const resetManifest = (config: ManifestConfig) => {
+/**
+ * Forgets every entry, removes a manifest left over from a previous run and
+ * re-seeds the run-level data (with the `before:run` details when given).
+ */
+export const resetManifest = (
+  config: ManifestConfig,
+  details?: ManifestRunDetails,
+  env?: EnvLike,
+) => {
   entries.clear();
+  initManifestRun(config, details, env);
   const manifestPath = getManifestPath(config);
   if (manifestPath && fs.existsSync(manifestPath)) fs.unlinkSync(manifestPath);
 };

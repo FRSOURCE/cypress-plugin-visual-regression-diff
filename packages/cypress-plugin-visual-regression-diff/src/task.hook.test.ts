@@ -662,6 +662,15 @@ describe('run manifest', () => {
         readFileSync(getManifestPath(config) as string, 'utf8'),
       ) as Manifest
     ).entries;
+  const entryOptions = {
+    imagesPath: '{spec_path}/shots',
+    maxDiffThreshold: 0.5,
+    diffConfig: {},
+    createMissingImages: true,
+    updateImages: false as const,
+    forceDeviceScaleFactor: true,
+    screenshotConfig: {},
+  };
   // real-looking names, so `.diff.png` siblings are derived like in production
   const shotConfig = async (
     config: Cypress.PluginConfigOptions,
@@ -680,13 +689,18 @@ describe('run manifest', () => {
       specPath: 'cypress/e2e/home.cy.ts',
       testTitlePath: ['home', 'renders'],
       currentRetryNumber: 0,
-      browser: { name: 'electron', version: '130' },
+      platform: {
+        os: 'linux',
+        arch: 'x64',
+        browser: { name: 'electron', version: '130' },
+      },
       viewport: { width: 1000, height: 660 },
+      options: entryOptions,
       ...overrides,
     });
   };
 
-  beforeEach(() => resetManifest({}));
+  beforeEach(() => resetManifest({}, undefined, {}));
 
   it('does not write anything when the config has no projectRoot', async () => {
     const cfg = await generateConfig({});
@@ -819,8 +833,14 @@ describe('run manifest', () => {
           diff: { path: expected.diffPath },
         },
         baselineWritten: expected.baselineWritten,
-        browser: { name: 'electron', version: '130' },
+        recordedAt: expect.any(String),
+        platform: {
+          os: 'linux',
+          arch: 'x64',
+          browser: { name: 'electron', version: '130' },
+        },
         viewport: { width: 1000, height: 660 },
+        options: entryOptions,
         message: result?.message,
       });
       // the manifest mirrors the disk
@@ -868,6 +888,9 @@ describe('run manifest', () => {
         actual: { path: null, width: 250, height: 181 },
         diff: { path: null },
       },
+      platform: { os: 'linux', browser: { name: 'electron' } },
+      viewport: { width: 1000, height: 660 },
+      options: entryOptions,
     });
     expect(existsSync(cfg.imgNew)).toBe(false);
   });

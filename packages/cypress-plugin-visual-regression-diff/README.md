@@ -169,15 +169,55 @@ npx cypress run --env "pluginVisualRegressionCleanupUnusedImages=true"
 
 ## Run manifest (CI integration)
 
-Every run writes a JSON manifest listing each `matchImage` comparison: which test it came from, whether it passed, failed, created or updated its baseline, the diff ratio, and the project-relative paths of the baseline, `.actual.png` and `.diff.png` files. It is meant for CI tooling (PR comments, review dashboards, approval bots) that runs after Cypress is done.
+Every run writes a JSON manifest listing each `matchImage` comparison: which test it came from, whether it passed, failed, created or updated its baseline, the diff ratio, and the project-relative paths of the baseline, `.actual.png` and `.diff.png` files. Next to the entries it records where the run happened (CI provider, repository, commit, pull request, run id) and what it ran with (browser, specs, config file, plugin options), so a tool reading the file can report on the right PR, download the right artifact, or re-run the same comparisons. It is meant for CI tooling (PR comments, review dashboards, approval bots) that runs after Cypress is done.
 
 By default the file lands next to your other Cypress artifacts, at `<screenshotsFolder>/cp-visual-regression-diff-manifest.<testingType>.json` (e.g. `cypress/screenshots/cp-visual-regression-diff-manifest.e2e.json`). Upload it together with your snapshots directory as a CI artifact.
 
 ```jsonc
 {
   "version": 1,
-  "runner": { "name": "cypress", "version": "16.1.0", "testingType": "e2e" },
-  "projectRoot": "/home/runner/work/app",
+  "createdAt": "2026-09-22T10:00:00.000Z",
+  "updatedAt": "2026-09-22T10:03:12.481Z",
+  "projectRoot": "/home/runner/work/app/app",
+  "platform": { "os": "linux", "arch": "x64", "osVersion": "6.8.0-1021-azure" },
+  "ci": {
+    "provider": "github",
+    "repository": "acme/app",
+    "sha": "0f1e2d…", // on pull_request events: the merge commit
+    "ref": "refs/pull/42/merge",
+    "branch": "feat/new-header",
+    "pullRequest": {
+      "number": 42,
+      "headSha": "9a8b7c…",
+      "headRef": "feat/new-header",
+      "baseRef": "main",
+    },
+    "event": "pull_request",
+    "runId": "1234567890",
+    "runAttempt": "1",
+    "workflow": "CI",
+    "job": "e2e",
+    "url": "https://github.com/acme/app/actions/runs/1234567890/attempts/1",
+    "workspace": "/home/runner/work/app/app",
+  },
+  "options": { "updateImages": "failures-only" }, // global pluginVisualRegression* options, prefix stripped
+  "runner": {
+    "name": "cypress",
+    "version": "16.1.0",
+    "testingType": "e2e",
+    "mode": "run",
+    "configFile": "cypress.config.ts",
+    "browser": {
+      "name": "chrome",
+      "version": "130.0.0.0",
+      "family": "chromium",
+      "headless": true,
+    },
+    "specs": ["cypress/e2e/home.cy.ts"],
+    "specPattern": "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
+    "baseUrl": "http://localhost:3000",
+    "viewport": { "width": 1280, "height": 720 },
+  },
   "entries": [
     {
       "name": "home page renders_#0",
@@ -204,8 +244,27 @@ By default the file lands next to your other Cypress artifacts, at `<screenshots
         },
       },
       "baselineWritten": false,
-      "browser": { "name": "chrome", "version": "130.0.0.0" },
+      "recordedAt": "2026-09-22T10:03:12.480Z",
+      "platform": {
+        "os": "linux",
+        "arch": "x64",
+        "browser": {
+          "name": "chrome",
+          "version": "130.0.0.0",
+          "family": "chromium",
+          "headless": true,
+        },
+      },
       "viewport": { "width": 1280, "height": 720 },
+      "options": {
+        "imagesPath": "{spec_path}/__image_snapshots__",
+        "maxDiffThreshold": 0.01,
+        "diffConfig": {},
+        "createMissingImages": true,
+        "updateImages": false,
+        "forceDeviceScaleFactor": true,
+        "screenshotConfig": {},
+      },
       "message": "Image diff factor (2.31%) is bigger than maximum threshold option 1%.",
     },
   ],
@@ -221,11 +280,24 @@ By default the file lands next to your other Cypress artifacts, at `<screenshots
 | `updated`          | baseline overwritten (`updateImages: true` or `'failures-only'`) | `null`               | `null`             |
 | `approved`         | baseline replaced from the headed review UI ("Replace image")    | `null`               | `null`             |
 
+Run-level fields:
+
+| field                    | meaning                                                                                                                                                                                                                                             |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createdAt`, `updatedAt` | when the run started and when the file was last rewritten (ISO 8601)                                                                                                                                                                                |
+| `platform`               | `os` (`linux`, `darwin`, `win32`), `arch` and, when known, the OS version of the machine that ran the tests                                                                                                                                         |
+| `ci`                     | detected from environment variables on GitHub Actions and GitLab CI; `{ "provider": null }` on other CI systems (only `CI` is set), `null` when not on CI. Only the listed keys are ever copied from the environment                                |
+| `options`                | every `pluginVisualRegression*` option from `expose`/`env`, prefix stripped, values as configured (CLI values stay strings)                                                                                                                         |
+| `runner`                 | what ran the tests. `mode` is `run` or `open`; `browser` is the launched browser; `specs` is only known in run mode; `configFile` and `specs` are relative to `projectRoot`. Cypress Cloud runs also get `cloud.runUrl`, `group`, `tag`, `parallel` |
+
 Notes for consumers:
 
-- All paths are relative to `projectRoot` and use `/` separators; they may point outside the project (`../…`) when `imagesPath` is absolute.
+- All paths are relative to `projectRoot` and use `/` separators; they may point outside the project (`../…`) when `imagesPath` is absolute. `projectRoot` is the Cypress project, not necessarily the repository root: `ci.workspace` is the checkout directory, so `relative(ci.workspace, projectRoot)` gives the path prefix inside the repository.
 - `failed` and `missing-baseline` are the entries that need a human: copying `images.actual.path` over `images.baseline.path` approves them.
 - `baselineWritten` tells whether the working tree changed for that screenshot, regardless of `status`.
+- Every entry carries its own `platform` and `viewport`, so entries from a matrix of machines can be told apart after concatenating several manifests. `options` on an entry is the exact `matchImage` input (`imagesPath` keeps its tokens unexpanded); `comparison` is the result.
+- Mapping to a pull request: use `ci.repository` and `ci.pullRequest.number`. On GitHub `pull_request` events `ci.sha` is the temporary merge commit, so anything that pushes to the PR branch must use `ci.pullRequest.headSha` / `headRef`. The workflow artifact is found via `ci.runId` and `ci.runAttempt`.
+- Reproducing a run: `npx cypress run --<runner.testingType> --browser <runner.browser.name> --config-file <runner.configFile> --spec <runner.specs joined with ,>`, plus one `--expose "pluginVisualRegression<Key>=<value>"` per entry of `options`. The manifest stores these as parts rather than a command string, so shell quoting and the package manager stay your choice.
 - The file is rewritten after every comparison, so it is complete even when the run is aborted. When specs run in parallel on several machines, each machine writes its own manifest; glob and concatenate the `entries` arrays.
 - Only the `runner` block is Cypress-specific; the rest of the format is shared with future runners. `version` is bumped on breaking changes to the format only.
 

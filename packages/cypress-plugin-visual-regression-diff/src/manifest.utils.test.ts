@@ -6,14 +6,17 @@ import {
   dropSpecEntries,
   getManifestEntries,
   getManifestPath,
+  getPluginOptions,
+  initManifestRun,
   markManifestEntryApproved,
   recordManifestEntry,
   resetManifest,
+  setManifestBrowser,
   toPosix,
   type ManifestConfig,
   type ManifestRecordInput,
 } from './manifest.utils';
-import type { Manifest } from './types';
+import type { Manifest, ManifestEntryOptions } from './types';
 
 setGracefulCleanup();
 
@@ -30,8 +33,31 @@ const config = async (
     version: '16.1.0',
     expose: {},
     env: {},
+    configFile: path.join(projectRoot, 'cypress.config.ts'),
+    isTextTerminal: true,
+    baseUrl: 'http://localhost:3000',
+    viewportWidth: 1000,
+    viewportHeight: 660,
     ...overrides,
   } as ManifestConfig;
+};
+
+// run-level data of `cfg`, detached from the machine's environment
+const startRun = (cfg: ManifestConfig) => initManifestRun(cfg, undefined, {});
+
+const platform = {
+  os: 'linux',
+  arch: 'x64',
+  browser: { name: 'chrome', version: '130' },
+};
+const options: ManifestEntryOptions = {
+  imagesPath: '{spec_path}/__image_snapshots__',
+  maxDiffThreshold: 0.01,
+  diffConfig: {},
+  createMissingImages: true,
+  updateImages: false,
+  forceDeviceScaleFactor: true,
+  screenshotConfig: {},
 };
 
 const readManifest = (cfg: ManifestConfig): Manifest =>
@@ -60,7 +86,7 @@ const input = (
   ...overrides,
 });
 
-beforeEach(() => resetManifest({}));
+beforeEach(() => resetManifest({}, undefined, {}));
 
 describe('getManifestPath', () => {
   it('defaults to a per-testing-type file inside screenshotsFolder', async () => {
@@ -140,6 +166,7 @@ describe('recordManifestEntry', () => {
     const actual = await writeFixture(input(cfg).imgNew);
     await writeFixture(actual.replace('.actual.png', '.diff.png'));
 
+    startRun(cfg);
     const entry = recordManifestEntry(
       cfg,
       input(cfg, {
@@ -147,8 +174,9 @@ describe('recordManifestEntry', () => {
         imgDiff: 0.25,
         imgNewSize: { width: 250, height: 181 },
         imgOldSize: { width: 125, height: 125 },
-        browser: { name: 'chrome', version: '130' },
+        platform,
         viewport: { width: 1280, height: 720 },
+        options,
         message: 'differs',
       }),
     );
@@ -168,14 +196,33 @@ describe('recordManifestEntry', () => {
         diff: { path: 'shots/home_#0.diff.png' },
       },
       baselineWritten: false,
-      browser: { name: 'chrome', version: '130' },
+      recordedAt: expect.any(String),
+      platform,
       viewport: { width: 1280, height: 720 },
+      options,
       message: 'differs',
     });
     expect(readManifest(cfg)).toEqual({
       version: 1,
-      runner: { name: 'cypress', version: '16.1.0', testingType: 'e2e' },
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String),
       projectRoot: cfg.projectRoot,
+      platform: {
+        os: process.platform,
+        arch: process.arch,
+        osVersion: expect.any(String),
+      },
+      ci: null,
+      options: {},
+      runner: {
+        name: 'cypress',
+        version: '16.1.0',
+        testingType: 'e2e',
+        mode: 'run',
+        configFile: 'cypress.config.ts',
+        baseUrl: 'http://localhost:3000',
+        viewport: { width: 1000, height: 660 },
+      },
       entries: [entry],
     });
     expect(existsSync(`${getManifestPath(cfg)}.tmp`)).toBe(false);
@@ -304,7 +351,9 @@ describe('markManifestEntryApproved', () => {
         status: 'failed',
         imgDiff: 0.3,
         imgNewSize: { width: 10, height: 10 },
-        browser: { name: 'chrome', version: '1' },
+        platform,
+        viewport: { width: 1280, height: 720 },
+        options,
       }),
     );
 
@@ -324,7 +373,10 @@ describe('markManifestEntryApproved', () => {
         diff: { path: null },
       },
       baselineWritten: true,
-      browser: { name: 'chrome', version: '1' },
+      recordedAt: expect.any(String),
+      platform,
+      viewport: { width: 1280, height: 720 },
+      options,
     });
     expect(readManifest(cfg).entries).toEqual([entry]);
   });
@@ -348,8 +400,10 @@ describe('markManifestEntryApproved', () => {
         diff: { path: null },
       },
       baselineWritten: true,
-      browser: undefined,
+      recordedAt: expect.any(String),
+      platform: undefined,
       viewport: undefined,
+      options: undefined,
       message: 'Baseline image was replaced with the approved screenshot.',
     });
   });
@@ -408,7 +462,7 @@ describe('resetManifest', () => {
     const manifestPath = getManifestPath(cfg) as string;
     expect(existsSync(manifestPath)).toBe(true);
 
-    resetManifest(cfg);
+    resetManifest(cfg, undefined, {});
 
     expect(getManifestEntries()).toHaveLength(0);
     expect(existsSync(manifestPath)).toBe(false);
@@ -417,5 +471,188 @@ describe('resetManifest', () => {
   it('tolerates a missing file', async () => {
     const cfg = await config();
     expect(() => resetManifest(cfg)).not.toThrow();
+  });
+});
+
+describe('getPluginOptions', () => {
+  it('strips the plugin prefix and keeps values verbatim', () => {
+    expect(
+      getPluginOptions({
+        version: '16.1.0',
+        expose: {
+          pluginVisualRegressionUpdateImages: 'true',
+          pluginVisualRegressionDiffConfig: { threshold: 0.1 },
+          pluginVisualRegression: 'ignored, nothing after the prefix',
+          somethingElse: 1,
+        },
+        env: { pluginVisualRegressionMaxDiffThreshold: 0 },
+      }),
+    ).toEqual({ updateImages: 'true', diffConfig: { threshold: 0.1 } });
+  });
+
+  it('reads env on Cypress <15.10', () => {
+    expect(
+      getPluginOptions({
+        version: '13.17.0',
+        expose: { pluginVisualRegressionUpdateImages: true },
+        env: { pluginVisualRegressionMaxDiffThreshold: 0 },
+      }),
+    ).toEqual({ maxDiffThreshold: 0 });
+  });
+
+  it('copes with a config without expose/env', () => {
+    expect(getPluginOptions({ version: '16.1.0' })).toEqual({});
+    expect(getPluginOptions({})).toEqual({});
+  });
+});
+
+describe('run-level data', () => {
+  it('records the mode, options and CI block detected from the given environment', async () => {
+    const cfg = await config({
+      isTextTerminal: false,
+      expose: { pluginVisualRegressionUpdateImages: true },
+      specPattern: 'cypress/e2e/**/*.cy.ts',
+      retries: { runMode: 2, openMode: 0 },
+    });
+    initManifestRun(cfg, undefined, {
+      GITHUB_ACTIONS: 'true',
+      GITHUB_REPOSITORY: 'o/r',
+      GITHUB_REF: 'refs/heads/main',
+    });
+    recordManifestEntry(cfg, input(cfg));
+
+    expect(readManifest(cfg)).toMatchObject({
+      ci: { provider: 'github', repository: 'o/r' },
+      options: { updateImages: true },
+      runner: {
+        mode: 'open',
+        specPattern: 'cypress/e2e/**/*.cy.ts',
+        retries: { runMode: 2, openMode: 0 },
+      },
+    });
+    expect(readManifest(cfg).runner).not.toHaveProperty('specs');
+  });
+
+  it('treats a non-interactive config without isTextTerminal as run mode', async () => {
+    const cfg = await config({
+      isTextTerminal: undefined,
+      isInteractive: false,
+    });
+    expect(startRun(cfg).runner.mode).toBe('run');
+    expect(
+      initManifestRun(
+        { ...cfg, isTextTerminal: undefined, isInteractive: undefined },
+        undefined,
+        {},
+      ).runner.mode,
+    ).toBe('open');
+  });
+
+  it('merges the before:run details and refreshes createdAt on reset', async () => {
+    const cfg = await config({ specPattern: 'from-config' });
+    startRun(cfg);
+    recordManifestEntry(cfg, input(cfg));
+    const first = readManifest(cfg);
+
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    resetManifest(
+      cfg,
+      {
+        cypressVersion: '16.2.0',
+        browser: {
+          name: 'chrome',
+          family: 'chromium',
+          version: '130.0',
+          isHeadless: true,
+        } as Cypress.Browser,
+        specs: [
+          { relative: path.join('cypress', 'e2e', 'a.cy.ts') },
+          { relative: path.join('cypress', 'e2e', 'b.cy.ts') },
+        ] as Cypress.Spec[],
+        specPattern: 'from-details',
+        system: { osName: 'linux', osVersion: 'Ubuntu - 24.04' },
+        runUrl: 'https://cloud.cypress.io/runs/1',
+        group: 'g',
+        tag: 't',
+        parallel: true,
+      },
+      {},
+    );
+    expect(getManifestEntries()).toHaveLength(0);
+    recordManifestEntry(cfg, input(cfg));
+
+    const manifest = readManifest(cfg);
+    expect(manifest.createdAt > first.createdAt).toBe(true);
+    expect(manifest.platform.osVersion).toBe('Ubuntu - 24.04');
+    expect(manifest.runner).toEqual({
+      name: 'cypress',
+      version: '16.2.0',
+      testingType: 'e2e',
+      mode: 'run',
+      configFile: 'cypress.config.ts',
+      browser: {
+        name: 'chrome',
+        version: '130.0',
+        family: 'chromium',
+        headless: true,
+      },
+      specs: ['cypress/e2e/a.cy.ts', 'cypress/e2e/b.cy.ts'],
+      specPattern: 'from-details',
+      baseUrl: 'http://localhost:3000',
+      viewport: { width: 1000, height: 660 },
+      cloud: {
+        runUrl: 'https://cloud.cypress.io/runs/1',
+        group: 'g',
+        tag: 't',
+        parallel: true,
+      },
+    });
+  });
+
+  it('seeds the run lazily when nothing initialised it', async () => {
+    const cfg = await config();
+    resetManifest({}, undefined, {});
+    // simulate a process where only the entry gets recorded
+    recordManifestEntry(cfg, input(cfg));
+    expect(readManifest(cfg).runner.name).toBe('cypress');
+  });
+});
+
+describe('setManifestBrowser', () => {
+  it('stores the launched browser and only rewrites the file once entries exist', async () => {
+    const cfg = await config();
+    startRun(cfg);
+    const manifestPath = getManifestPath(cfg) as string;
+
+    setManifestBrowser(cfg, { name: 'electron', version: '130' });
+    expect(existsSync(manifestPath)).toBe(false);
+
+    recordManifestEntry(cfg, input(cfg));
+    expect(readManifest(cfg).runner.browser).toEqual({
+      name: 'electron',
+      version: '130',
+    });
+
+    setManifestBrowser(cfg, {
+      name: 'firefox',
+      version: '131',
+      family: 'firefox',
+      isHeadless: false,
+    });
+    expect(readManifest(cfg).runner.browser).toEqual({
+      name: 'firefox',
+      version: '131',
+      family: 'firefox',
+      headless: false,
+    });
+  });
+
+  it('is a no-op when disabled', async () => {
+    const cfg = await config({
+      expose: { pluginVisualRegressionManifestPath: false },
+    });
+    expect(() =>
+      setManifestBrowser(cfg, { name: 'chrome', version: '1' }),
+    ).not.toThrow();
   });
 });
