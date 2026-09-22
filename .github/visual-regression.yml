@@ -1,0 +1,5 @@
+# Settings for the visual regression GitHub App (packages/github-app), used to
+# dogfood it on this repository's own pull requests. The CI `test` job uploads
+# the `test` artifact with examples/next's screenshots and manifest.
+artifacts: ['test']
+projectRoot: examples/next
