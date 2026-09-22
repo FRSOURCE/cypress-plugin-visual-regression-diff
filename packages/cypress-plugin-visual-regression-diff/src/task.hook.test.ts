@@ -427,6 +427,23 @@ describe('compareImagesTask', () => {
 
     describe('when old screenshot exists', () => {
       describe('when new image has different resolution', () => {
+        it('counts anti-aliased pixels as well with includeAA: true (the 4.x default)', async () => {
+          const cfg = await generateConfig({
+            updateImages: false,
+            diffConfig: { includeAA: true },
+          });
+
+          await expect(
+            compareImagesTask({ testingType: 'e2e' }, cfg),
+          ).resolves.toMatchObject({
+            error: true,
+            imgDiff: expect.closeTo(0.7104309392265193, 10),
+            message: expect.stringContaining(
+              'Image diff factor (71.044%) is bigger than maximum threshold option 50%.',
+            ),
+          });
+        });
+
         it('resolves with an error message and images padded to the same size', async () => {
           const cfg = await generateConfig({ updateImages: false });
 
@@ -434,9 +451,10 @@ describe('compareImagesTask', () => {
 
           expect(result).toMatchObject({
             error: true,
-            imgDiff: expect.closeTo(0.7104309392265193, 10),
+            // lower than with includeAA: true (0.7104…): anti-aliased edges are skipped
+            imgDiff: expect.closeTo(0.6858121546961325, 10),
             message:
-              'Image diff factor (71.044%) is bigger than maximum threshold option 50%.\nWarning: Images size mismatch - new screenshot is 250px by 181px while old one is 125px by 125 (width x height).',
+              'Image diff factor (68.582%) is bigger than maximum threshold option 50%.\nWarning: Images size mismatch - new screenshot is 250px by 181px while old one is 125px by 125 (width x height).',
             maxDiffThreshold: 0.5,
           });
           const paddedSize = { width: 250, height: 181 };
