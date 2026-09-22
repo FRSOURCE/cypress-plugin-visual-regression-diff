@@ -328,6 +328,10 @@ npx cypress run --env "pluginVisualRegressionManifestPath=false"
 
 When you run both e2e and component tests with a custom path, include the testing type in it yourself; the runs would otherwise overwrite each other's file.
 
+### GitHub App
+
+If you don't want to build your own tooling on top of the manifest, there is a GitHub App in this repository ([`packages/github-app`](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/tree/main/packages/github-app)) that consumes it. Once installed, and once your workflow uploads the manifest together with the snapshot directories as an artifact (`if: always()`), every run gets a `Visual regression` check run and one PR comment with old / diff / new thumbnails. Reviewers approve a screenshot with the **Approve** button on its check run, all of them with **Approve all**, or by commenting `/approve-visuals [names…]`; the app then commits the run's `.actual.png` files over the baselines on the PR branch. It works with the default plugin settings, and `.github/visual-regression.yml` tunes artifact names, the command name, text-only reports and more. See the package README for setup, permissions and privacy notes.
+
 ## Configuration
 
 Configure the plugin:
