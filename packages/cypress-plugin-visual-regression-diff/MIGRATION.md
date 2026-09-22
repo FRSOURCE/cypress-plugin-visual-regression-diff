@@ -28,6 +28,64 @@ export default defineConfig({
 });
 ```
 
+### Baselines are stored per platform by default
+
+The default `imagesPath` changed from `{spec_path}/__image_snapshots__` to
+`{spec_path}/__image_snapshots__/{platform}`. `{platform}` expands to `<os>-<browser>`
+(`linux-chrome`, `darwin-electron`, `win32-firefox`, ...), so every OS/browser combination keeps its
+own baselines and a local run on macOS no longer fights with the Linux images your CI produced.
+`{os}` and `{browser}` are available as separate tokens too. See
+[Per-platform baselines](./README.md#per-platform-baselines) for the reasoning and for a `.gitignore`
+recipe that commits only the CI platform.
+
+On the first run after upgrading, the plugin finds no baselines in the new folder and creates them
+(`createMissingImages` defaults to `true`). You have three options:
+
+- **Keep the 4.x layout** (a single set of baselines, no platform folders):
+
+  ```bash
+  # Cypress 15.10+
+  npx cypress run --expose "pluginVisualRegressionImagesPath={spec_path}/__image_snapshots__"
+  # Cypress <15.10
+  npx cypress run --env "pluginVisualRegressionImagesPath={spec_path}/__image_snapshots__"
+  ```
+
+  ```ts
+  // cypress.config.ts (Cypress 15.10+; use `env` instead of `expose` on Cypress <15.10)
+  export default defineConfig({
+    expose: {
+      pluginVisualRegressionImagesPath: '{spec_path}/__image_snapshots__',
+    },
+  });
+  ```
+
+  A per-call `imagesPath` without tokens has the same effect for that call.
+
+- **Move the existing baselines** into the folder of the platform that produced them (replace
+  `linux-electron` with your CI's `<os>-<browser>`), then commit:
+
+  ```bash
+  # bash/zsh, from the project root
+  git ls-files -z '**/__image_snapshots__/*.png' | while IFS= read -r -d '' f; do
+    mkdir -p "$(dirname "$f")/linux-electron" && git mv "$f" "$(dirname "$f")/linux-electron/"
+  done
+  ```
+
+  ```powershell
+  # PowerShell, from the project root
+  git ls-files '**/__image_snapshots__/*.png' | ForEach-Object {
+    $dir = Join-Path (Split-Path $_) 'linux-electron'
+    New-Item -ItemType Directory -Force $dir | Out-Null
+    git mv $_ $dir
+  }
+  ```
+
+- **Regenerate**: run once on the target platform with `pluginVisualRegressionUpdateImages=true`
+  and delete the old files.
+
+If you use `pluginVisualRegressionCleanupUnusedImages`, enable it only on the platform whose baselines
+you commit; it removes the other platforms' folders as unused.
+
 ### A run manifest is written to `screenshotsFolder`
 
 Every run now writes `<screenshotsFolder>/cp-visual-regression-diff-manifest.<testingType>.json`

@@ -230,17 +230,17 @@ By default the file lands next to your other Cypress artifacts, at `<screenshots
       "comparison": { "diffRatio": 0.0231, "threshold": 0.01 },
       "images": {
         "baseline": {
-          "path": "cypress/e2e/__image_snapshots__/home page renders_#0.png",
+          "path": "cypress/e2e/__image_snapshots__/linux-chrome/home page renders_#0.png",
           "width": 1280,
           "height": 720,
         },
         "actual": {
-          "path": "cypress/e2e/__image_snapshots__/home page renders_#0.actual.png",
+          "path": "cypress/e2e/__image_snapshots__/linux-chrome/home page renders_#0.actual.png",
           "width": 1280,
           "height": 720,
         },
         "diff": {
-          "path": "cypress/e2e/__image_snapshots__/home page renders_#0.diff.png",
+          "path": "cypress/e2e/__image_snapshots__/linux-chrome/home page renders_#0.diff.png",
         },
       },
       "baselineWritten": false,
@@ -257,7 +257,7 @@ By default the file lands next to your other Cypress artifacts, at `<screenshots
       },
       "viewport": { "width": 1280, "height": 720 },
       "options": {
-        "imagesPath": "{spec_path}/__image_snapshots__",
+        "imagesPath": "{spec_path}/__image_snapshots__/{platform}",
         "maxDiffThreshold": 0.01,
         "diffConfig": {},
         "createMissingImages": true,
@@ -344,9 +344,14 @@ cy.matchImage({
   // relative path are resolved against project root
   // absolute paths (both on unix and windows OS) supported
   // path separators will be normalised by the plugin depending on OS, you should always use / as path separator, e.g.: C:/my-directory/nested for windows-like drive notation
-  // There are one special variable available to be used in the path:
-  // - {spec_path} - relative path leading from project root to the current spec file directory (e.g. `/src/components/my-tested-component`)
-  // default: '{spec_path}/__image_snapshots__'
+  // These variables can be used in the path:
+  // - {spec_path} - relative path leading from project root to the current spec file directory (e.g. `/src/components/my-tested-component`); has to be a whole path segment
+  // - {platform} - `{os}-{browser}`, e.g. `linux-chrome`, `darwin-electron`, `win32-firefox`
+  // - {os} - Cypress.platform: `linux`, `darwin` or `win32`
+  // - {browser} - Cypress.browser.name: `chrome`, `electron`, `firefox`, `edge`, ...
+  // {platform}, {os} and {browser} can also be part of a segment (`shots-{platform}`); `matchAgainstPath` is never expanded
+  // Baselines are kept per platform by default because fonts and anti-aliasing differ between OSes and browsers, see "Per-platform baselines" below
+  // default: '{spec_path}/__image_snapshots__/{platform}'
   imagesPath: 'this-might-be-your-custom/maybe-nested-directory',
   // maximum threshold above which the test should fail
   // default: 0.01
@@ -399,6 +404,36 @@ export default defineConfig({
 ```
 
 For more ways of setting expose variables [take a look here](https://on.cypress.io/expose).
+
+## Per-platform baselines
+
+Chrome hands text rasterization to the operating system, so the same page never renders byte-for-byte identically on macOS, Linux and Windows, and browsers differ from each other on top of that. Instead of fighting that, the plugin keeps a separate set of baselines per platform: the default `imagesPath` ends with `{platform}`, which expands to `<os>-<browser>` (`linux-chrome`, `darwin-electron`, ...). Local runs compare against local baselines, CI compares against CI baselines, and neither ever overwrites the other.
+
+```
+cypress/e2e/__image_snapshots__/
+├── darwin-electron/   # what `cypress open` writes on a Mac
+│   └── home page renders_#0.png
+└── linux-chrome/      # what your CI job writes
+    └── home page renders_#0.png
+```
+
+A few things to decide for your project:
+
+- **Which baselines to commit.** Most teams commit only the CI platform and keep local ones out of git, so every developer gets their own set without polluting the repository:
+
+  ```gitignore
+  # ignore every platform folder except the one CI produces
+  **/__image_snapshots__/*/
+  !**/__image_snapshots__/linux-chrome/
+  ```
+
+  New CI baselines then need to be produced on CI and committed from there (or approved from a PR, see [Run manifest](#run-manifest-ci-integration)).
+
+- **Keeping a single set.** Set `imagesPath` to a path without `{platform}` (e.g. `{spec_path}/__image_snapshots__`) to get the pre-5.0 layout back. This works fine when everyone, including CI, runs the same OS and browser, for instance inside a container.
+
+- **Splitting only by browser or only by OS.** Use the `{browser}` or `{os}` tokens on their own, e.g. `{spec_path}/__image_snapshots__/{browser}`.
+
+Because the folders are separate, `pluginVisualRegressionCleanupUnusedImages` will happily delete the other platforms' baselines (they are unused during the current run). Only enable the cleanup on the platform whose baselines you commit, typically CI.
 
 ## Batch Review Mode
 
@@ -618,18 +653,22 @@ Cypress.Commands.overwrite('matchImage', (originalFn, subject, options = {}) =>
 
 <details><summary>How to include the browser name in image filenames (for cross-browser testing)?</summary>
 
-Different browsers may render fonts and elements slightly differently. To keep separate baseline images per browser, override `matchImage` in your support file (`cypress/support/commands.ts`) to set a browser-specific `imagesPath`:
+The default `imagesPath` already ends with `{platform}`, so baselines land in a folder per OS and browser (`__image_snapshots__/linux-chrome/`, `__image_snapshots__/linux-firefox/`). To split by browser only, use the `{browser}` token:
 
 ```ts
-Cypress.Commands.overwrite('matchImage', (originalFn, subject, options = {}) =>
-  originalFn(subject, {
-    imagesPath: `{spec_path}/__image_snapshots__/${Cypress.browser.name}`,
-    ...options,
-  }),
-);
+cy.matchImage({ imagesPath: '{spec_path}/__image_snapshots__/{browser}' });
 ```
 
-This creates separate image directories per browser (e.g. `__image_snapshots__/chrome/`, `__image_snapshots__/firefox/`).
+Or globally:
+
+```bash
+# Cypress 15.10+
+npx cypress run --expose "pluginVisualRegressionImagesPath={spec_path}/__image_snapshots__/{browser}"
+# Cypress <15.10 (deprecated in 15.10, removed in 16)
+npx cypress run --env "pluginVisualRegressionImagesPath={spec_path}/__image_snapshots__/{browser}"
+```
+
+See [Per-platform baselines](#per-platform-baselines) for the `{platform}` and `{os}` tokens and for which folders to commit.
 
 </details>
 

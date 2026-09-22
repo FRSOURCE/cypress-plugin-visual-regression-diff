@@ -1,4 +1,10 @@
-import { FAB_BADGE_CLASS, FILE_SUFFIX, LINK_PREFIX, TASK } from './constants';
+import {
+  FAB_BADGE_CLASS,
+  FILE_SUFFIX,
+  LINK_PREFIX,
+  TASK,
+  type PathVariables,
+} from './constants';
 import { getBatchReviewMode, getExposedOption } from './config.utils';
 import type pixelmatch from 'pixelmatch';
 import * as Base64 from '@frsource/base64';
@@ -90,7 +96,17 @@ const optionWithDefaults = <K extends keyof Cypress.MatchImageOptions>(
 ) => options[key] ?? getPluginEnv(key) ?? defaultValue;
 
 const getImagesPath = (options: Cypress.MatchImageOptions) =>
-  optionWithDefaults(options, 'imagesPath', '{spec_path}/__image_snapshots__');
+  optionWithDefaults(
+    options,
+    'imagesPath',
+    '{spec_path}/__image_snapshots__/{platform}',
+  );
+
+// what the `{platform}`, `{os}` and `{browser}` tokens of `imagesPath` mean here
+const getPathVariables = (): PathVariables => ({
+  os: Cypress.platform,
+  browser: Cypress.browser.name,
+});
 
 export const getConfig = (options: Cypress.MatchImageOptions) => ({
   scaleFactor: booleanOption(
@@ -174,6 +190,7 @@ Cypress.Commands.add(
               options.title || Cypress.currentTest.titlePath.join(' '),
             imagesPath,
             specPath: Cypress.spec.relative,
+            pathVariables: getPathVariables(),
             currentRetryNumber,
             testId,
           },

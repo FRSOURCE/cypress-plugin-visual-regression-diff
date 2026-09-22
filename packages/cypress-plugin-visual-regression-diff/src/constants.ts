@@ -25,9 +25,18 @@ export const TASK = {
 
 export const PATH_VARIABLES = {
   specPath: '{spec_path}',
+  /** `{os}-{browser}`, e.g. `linux-chrome` */
+  platform: '{platform}',
+  /** `Cypress.platform`: `linux`, `darwin` or `win32` */
+  os: '{os}',
+  /** `Cypress.browser.name`: `chrome`, `electron`, `firefox`, ... */
+  browser: '{browser}',
   unixSystemRootPath: '{unix_system_root_path}',
   winSystemRootPath: '{win_system_root_path}',
 } as const;
+
+/** Values the `{platform}`, `{os}` and `{browser}` path tokens expand to; known only on the browser side. */
+export type PathVariables = { os: string; browser: string };
 
 export const WINDOWS_LIKE_DRIVE_REGEX = /^[A-Z]:$/;
 
