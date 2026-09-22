@@ -21,7 +21,7 @@
     "record-demo": "node scripts/record-batch-demo.mjs"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=20.9.0"
   },
   "packageManager": "pnpm@12.5.1",
   "peerDependencies": {
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@frsource/eslint-config": "1.85.12",
+    "cypress": "16.1.0",
     "eslint": "10.11.0",
     "eslint-plugin-cypress": "^7.0.0",
     "ffmpeg-static": "^5.2.0",
