@@ -1,0 +1,21 @@
+# Build context for packages/github-app/Dockerfile (context = repository root)
+.git
+.github
+.claude
+.devcontainer
+node_modules
+**/node_modules
+**/dist
+**/coverage
+**/.turbo
+examples
+assets
+scripts
+*.tgz
+*.md
+!packages/github-app/README.md
+packages/cypress-plugin-visual-regression-diff/__tests__
+packages/cypress-plugin-visual-regression-diff/src/**/*.test.ts
+packages/github-app/src/**/*.test.ts
+packages/github-app/test
+packages/github-app/.env*

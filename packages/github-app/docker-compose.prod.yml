@@ -1,0 +1,19 @@
+# Server overlay: joins the shared nginx-proxy network, which terminates TLS
+# (ZeroSSL via acme-companion) and routes by VIRTUAL_HOST. No ports are published.
+services:
+  app:
+    container_name: cpvrd-github-app-${ENV_SUFFIX}
+    restart: always
+    networks:
+      - nginx-proxy
+    environment:
+      VIRTUAL_HOST: ${APP_HOST}
+      VIRTUAL_PORT: ${PORT}
+      VIRTUAL_PATH: /
+      VIRTUAL_DEST: /
+      LETSENCRYPT_HOST: ${APP_HOST}
+      LETSENCRYPT_EMAIL: letsencrypt+cpvrd-github-app@frsource.org
+
+networks:
+  nginx-proxy:
+    external: true

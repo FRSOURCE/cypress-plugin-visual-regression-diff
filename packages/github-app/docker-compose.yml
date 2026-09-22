@@ -1,0 +1,28 @@
+# Base definition. Pair with:
+#   docker-compose.override.yml  (picked up automatically for local runs, publishes the port)
+#   docker-compose.prod.yml      (server: nginx-proxy network, TLS, restart policy)
+services:
+  app:
+    image: ghcr.io/frsource/cpvrd-github-app:${VERSION_TAG:-local}
+    build:
+      context: ../..
+      dockerfile: packages/github-app/Dockerfile
+    environment:
+      PORT: ${PORT}
+      APP_ID: ${APP_ID}
+      PRIVATE_KEY: ${PRIVATE_KEY}
+      WEBHOOK_SECRET: ${WEBHOOK_SECRET}
+      IMAGE_URL_SECRET: ${IMAGE_URL_SECRET}
+      PUBLIC_URL: https://${APP_HOST}
+      CACHE_DIR: /data/cache
+      CACHE_TTL_HOURS: ${CACHE_TTL_HOURS}
+      CACHE_MAX_BYTES: ${CACHE_MAX_BYTES}
+      IMAGE_URL_TTL_HOURS: ${IMAGE_URL_TTL_HOURS}
+      LOG_FORMAT: json
+      LOG_LEVEL: ${LOG_LEVEL}
+    volumes:
+      - cache:/data
+
+volumes:
+  cache:
+    name: cpvrd-github-app-${ENV_SUFFIX:-local}-cache

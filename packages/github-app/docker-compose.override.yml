@@ -1,0 +1,8 @@
+# Local only: publish the port. Not passed on the server (the deploy workflow
+# names its compose files explicitly, so this file is skipped there).
+services:
+  app:
+    ports:
+      - '${PORT:-3100}:${PORT:-3100}'
+    environment:
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:3100}

@@ -1,0 +1,67 @@
+name: Deploy GitHub App
+
+# Manual only. Builds packages/github-app on the runner, pushes the image to
+# GHCR, then runs docker compose on the VPS over an SSH docker context.
+on:
+  workflow_dispatch:
+
+concurrency: deploy-github-app
+
+env:
+  COMPOSE: docker compose -p cpvrd-github-app-prod -f docker-compose.yml -f docker-compose.prod.yml --env-file .env.production
+  VERSION_TAG: main-${{ github.sha }}
+  APP_HOST: ${{ vars.APP_HOST }}
+  PORT: ${{ vars.PORT || '3100' }}
+  APP_ID: ${{ secrets.APP_ID }}
+  PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+  WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
+  IMAGE_URL_SECRET: ${{ secrets.IMAGE_URL_SECRET }}
+
+jobs:
+  build-and-push:
+    name: build image and push to ghcr.io
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    defaults:
+      run:
+        working-directory: packages/github-app
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - run: ${{ env.COMPOSE }} build --push
+
+  deploy:
+    name: pull and restart on the VPS
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [build-and-push]
+    permissions:
+      contents: read
+      packages: read
+    defaults:
+      run:
+        working-directory: packages/github-app
+    steps:
+      - uses: actions/checkout@v7
+      - uses: FRSOURCE/nginx-proxy/.github/actions/setup-ssh@main
+        with:
+          HOST: ${{ secrets.FRSCHOOL_SSH_HOST }}
+          PRIVATE_KEY: ${{ secrets.FRSCHOOL_SSH_PRIVATE_KEY }}
+      - uses: FRSOURCE/nginx-proxy/.github/actions/setup-ssh-docker-context@main
+        with:
+          HOST: ${{ secrets.FRSCHOOL_SSH_HOST }}
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - run: ${{ env.COMPOSE }} pull
+      - run: ${{ env.COMPOSE }} up -d --pull never
+      - run: docker image prune -a --force --filter "until=48h"
