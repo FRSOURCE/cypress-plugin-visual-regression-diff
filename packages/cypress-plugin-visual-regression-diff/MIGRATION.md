@@ -28,6 +28,72 @@ export default defineConfig({
 });
 ```
 
+### Anti-aliased pixels no longer count as differences
+
+The comparison used to run `pixelmatch` with `includeAA: true`, so every anti-aliased edge pixel that
+rendered slightly differently counted towards the diff ratio. This is the main reason the same page
+"failed" between macOS and Linux. The plugin now uses pixelmatch's own default, `includeAA: false`:
+anti-aliased pixels are detected and ignored.
+
+- Diff ratios get smaller, so some comparisons that failed before now pass. Nothing else changes:
+  baseline images are neither affected nor regenerated.
+- To keep the 4.x behaviour, set `includeAA` explicitly, globally or per call:
+
+```bash
+# Cypress 15.10+
+npx cypress run --expose "pluginVisualRegressionDiffConfig={\"includeAA\":true}"
+# Cypress <15.10
+npx cypress run --env "pluginVisualRegressionDiffConfig={\"includeAA\":true}"
+```
+
+```ts
+// cypress.config.ts (Cypress 15.10+; use `env` instead of `expose` on Cypress <15.10)
+export default defineConfig({
+  expose: {
+    pluginVisualRegressionDiffConfig: { includeAA: true },
+  },
+});
+```
+
+```ts
+cy.matchImage({ diffConfig: { includeAA: true } });
+```
+
+### Deterministic rendering preset is enabled
+
+The plugin now launches Chrome, Chromium and Edge with switches that make text rendering independent
+of the operating system (`--font-render-hinting=none`, `--disable-font-subpixel-positioning`,
+`--disable-lcd-text`, `--force-color-profile=srgb`, `--disable-gpu`, plus `--hide-scrollbars` in
+headless mode), sets `gfx.webrender.software` for Firefox, and injects a stylesheet into the tested
+page for the duration of every screenshot (hidden caret, no transitions/animations, no scrollbars).
+See [Reducing cross-OS rendering noise](./README.md#reducing-cross-os-rendering-noise).
+
+- Expect small differences against baselines created with 4.x on the first run, because text is now
+  rasterised without hinting. Run once with `pluginVisualRegressionUpdateImages=true` (or
+  `'failures-only'`), or approve the changes in Batch Review Mode, and commit the result.
+- Edge now also receives the `forceDeviceScaleFactor` switches; 4.x only handled `chrome` and
+  `chromium`. Electron is unchanged (Cypress does not let plugins pass switches to it) - use
+  `ELECTRON_EXTRA_LAUNCH_ARGS` as described in the README.
+- `pluginVisualRegressionForceDeviceScaleFactor=false` passed on the CLI (the string `'false'`) now
+  disables the preset like the boolean does.
+- To turn the preset off:
+
+```bash
+# Cypress 15.10+
+npx cypress run --expose "pluginVisualRegressionDeterministicRendering=false"
+# Cypress <15.10
+npx cypress run --env "pluginVisualRegressionDeterministicRendering=false"
+```
+
+```ts
+// cypress.config.ts (Cypress 15.10+; use `env` instead of `expose` on Cypress <15.10)
+export default defineConfig({
+  expose: {
+    pluginVisualRegressionDeterministicRendering: false,
+  },
+});
+```
+
 ### Node.js 20.9+ required
 
 The declared minimum Node.js version is now `>=20.9.0`. This only makes the requirement of `sharp`
