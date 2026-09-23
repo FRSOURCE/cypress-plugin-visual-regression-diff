@@ -73,6 +73,35 @@ export type ManifestEntryOptions = {
   screenshotConfig: Record<string, unknown>;
 };
 
+/** Which kind of renderer produced the compared pixels. */
+export type ManifestRendererBackend = 'native' | 'docker' | 'cloud';
+
+/**
+ * Where the pixels of a screenshot came from, as opposed to `platform`, which
+ * is where the test ran. Under `native` (a screenshot taken by the test
+ * runner's own browser) `browser` repeats `platform.browser.name`; a Docker
+ * or cloud renderer additionally reports its own version and image digest,
+ * which together identify the renderer that produced a baseline.
+ */
+export type ManifestRenderer = {
+  backend: ManifestRendererBackend;
+  browser: string;
+  browserVersion?: string;
+  /** Version of the renderer image; absent under `native`. */
+  rendererVersion?: string;
+  /** Content digest of the renderer image; absent under `native`. */
+  imageDigest?: string;
+  /** `true` when an `auto` renderer degraded to `native`, so CI consumers can flag the run. */
+  fallback?: boolean;
+};
+
+/** sha256 (hex) of the image files as they are on disk, for dedupe and cross-referencing. */
+export type ManifestHashes = {
+  baseline?: string;
+  actual?: string;
+  diff?: string;
+};
+
 export type ManifestEntry = {
   /** Screenshot name, equal to the baseline file stem. Unique within a run. */
   name: string;
@@ -102,8 +131,19 @@ export type ManifestEntry = {
   viewport?: { width: number; height: number };
   /** Absent on entries created by the review UI without a preceding comparison. */
   options?: ManifestEntryOptions;
+  /** Where the pixels came from; absent only on entries created by the review UI without a preceding comparison. */
+  renderer?: ManifestRenderer;
+  /** Hashes of the files listed in `images`; a key is present only when the file exists. */
+  hashes?: ManifestHashes;
   /** Human-readable summary, informational only. */
   message: string;
+};
+
+/** Where the images and snapshots of a run were uploaded to, when an upload service was used. */
+export type ManifestUpload = {
+  buildId: string;
+  url: string;
+  level: 'images' | 'images+snapshot';
 };
 
 /**
@@ -180,5 +220,7 @@ export type Manifest = {
   /** Global plugin options as configured (`pluginVisualRegression` prefix stripped, values verbatim). */
   options: Record<string, unknown>;
   runner: ManifestRunner;
+  /** Reserved for the upload service integration; never written by the plugin today. */
+  upload?: ManifestUpload;
   entries: ManifestEntry[];
 };

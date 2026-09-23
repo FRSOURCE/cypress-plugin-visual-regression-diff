@@ -859,6 +859,17 @@ describe('run manifest', () => {
         },
         viewport: { width: 1000, height: 660 },
         options: entryOptions,
+        renderer: {
+          backend: 'native',
+          browser: 'electron',
+          browserVersion: '130',
+        },
+        // hashed exactly when the file is on disk after the comparison
+        hashes: {
+          ...(existsSync(cfg.imgOld) && { baseline: expect.any(String) }),
+          ...(expected.actualPath && { actual: expect.any(String) }),
+          ...(expected.diffPath && { diff: expect.any(String) }),
+        },
         message: result?.message,
       });
       // the manifest mirrors the disk
