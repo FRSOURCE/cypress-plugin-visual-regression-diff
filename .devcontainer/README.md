@@ -64,21 +64,30 @@ Without step 2 the dev container narrows the drift (same OS family, same rasteri
 
 ## Pairing with per-platform baselines
 
-Baselines produced in this container are Linux baselines and should not be mixed with the ones your teammates produce natively on macOS or Windows. Two options:
+Baselines produced in this container are Linux baselines and should not be mixed with the ones your teammates produce natively on macOS or Windows. The plugin's `imagesPath` accepts `{platform}`, `{os}` and `{browser}` tokens for exactly this (opt-in, the default layout stays flat): with
 
-- With the upcoming `{platform}` token in `imagesPath` (v5 default `{spec_path}/__image_snapshots__/{platform}`), screenshots taken in the container land in `linux-electron/` or `linux-chrome/`, the same folders CI writes to, while a native macOS run writes to `darwin-*` and never collides.
-- Until that lands, the [README recipe](../packages/cypress-plugin-visual-regression-diff/README.md#faq) that overrides `matchImage` with a browser-specific `imagesPath` gives the same effect when you extend it with the OS:
+```ts
+// cypress.config.ts (Cypress 15.10+; use `env` instead of `expose` on Cypress <15.10)
+export default defineConfig({
+  expose: {
+    pluginVisualRegressionImagesPath: '{spec_path}/__image_snapshots__/{platform}',
+  },
+});
+```
 
-  ```ts
-  Cypress.Commands.overwrite(
-    'matchImage',
-    (originalFn, subject, options = {}) =>
-      originalFn(subject, {
-        imagesPath: `{spec_path}/__image_snapshots__/${Cypress.platform}-${Cypress.browser.name}`,
-        ...options,
-      }),
-  );
-  ```
+screenshots taken in the container land in `linux-electron/` or `linux-chrome/`, the same folders a Linux CI job writes to, while a native macOS run writes to `darwin-*` and never collides. See "Per-platform baselines" in the plugin README for the `.gitignore` recipe that commits only the CI folder. On a plugin version without the tokens, the README's `Commands.overwrite` recipe gives the same effect when you extend it with `Cypress.platform`.
+
+## Where this is heading
+
+This container is the "run the whole runner inside Linux" answer to drift, and it has one property nothing else has: full fidelity. The browser that runs the test takes the picture, so canvas, WebGL, video frames and cross-origin iframes come for free. What it costs is the headed experience (a desktop over noVNC instead of a native window), slow bind mounts on macOS and Windows, and a 1.5 GB image.
+
+The plan for [#212](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/212) keeps both options and adds a third:
+
+- A **renderer sidecar**: Cypress stays native and headed, `matchImage` serialises the page's DOM and a small pinned Docker container renders it, so local and CI pixels are identical by construction and the review carousel keeps working in your normal Cypress window. This is the intended default for Cypress; it trades fidelity (canvas, WebGL, video, cross-origin frames) for a native runner.
+- A **`run-cypress` helper** in the same CLI that wraps `docker run` with the right mounts, a Linux `node_modules` volume, environment pass-through and `baseUrl` rewriting. That is the scripted version of what this folder does by hand, for canvas- or WebGL-heavy suites and for people who never use the headed GUI.
+- This dev container stays as the documentation-only version of the helper, and as the way to _review_ Linux renders headed when you want the full-fidelity path.
+
+The run manifest records where each screenshot was rendered (`renderer`) separately from where the test ran (`platform`), so CI tooling can tell the three apart.
 
 ## Docker alternatives on macOS
 
