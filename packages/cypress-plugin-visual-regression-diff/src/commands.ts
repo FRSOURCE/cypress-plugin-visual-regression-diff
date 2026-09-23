@@ -6,6 +6,10 @@ import {
   type PathVariables,
 } from './constants';
 import { getBatchReviewMode, getExposedOption } from './config.utils';
+import {
+  injectDeterministicStyle,
+  removeDeterministicStyle,
+} from './dom.utils';
 import type pixelmatch from 'pixelmatch';
 import * as Base64 from '@frsource/base64';
 import type {
@@ -30,6 +34,12 @@ declare global {
       imagesPath?: string;
       maxDiffThreshold?: number;
       forceDeviceScaleFactor?: boolean;
+      /**
+       * Per call this only controls the CSS injected into the page for the
+       * screenshot (caret, animations, scrollbars); the browser switches are
+       * process-wide and follow the global `pluginVisualRegressionDeterministicRendering`.
+       */
+      deterministicRendering?: boolean;
       title?: string;
       matchAgainstPath?: string;
       showPassingImages?: boolean;
@@ -108,7 +118,13 @@ const getPathVariables = (): PathVariables => ({
   browser: Cypress.browser.name,
 });
 
+// `--expose key=false` on the CLI arrives as the string 'false'
+const isEnabled = (value: unknown) => value !== false && value !== 'false';
+
 export const getConfig = (options: Cypress.MatchImageOptions) => ({
+  deterministicRendering: isEnabled(
+    optionWithDefaults(options, 'deterministicRendering', true),
+  ),
   scaleFactor: booleanOption(
     options,
     'forceDeviceScaleFactor',
@@ -160,6 +176,7 @@ Cypress.Commands.add(
 
     const config = getConfig(options);
     const {
+      deterministicRendering,
       scaleFactor,
       createMissingImages,
       updateImages,
@@ -169,6 +186,18 @@ Cypress.Commands.add(
       screenshotConfig,
       matchAgainstPath,
     } = config;
+
+    // the document of the tested page (AUT), undefined before the first visit
+    const autDocument = () =>
+      (
+        cy as unknown as { state: (s: 'document') => Document | undefined }
+      ).state('document');
+    const removeStyle = () => {
+      const doc = autDocument();
+      if (doc) removeDeterministicStyle(doc);
+    };
+    // a style left behind by an aborted screenshot must never stack up
+    removeStyle();
 
     const test = (
       cy as unknown as {
@@ -203,14 +232,26 @@ Cypress.Commands.add(
         return (($el ? cy.wrap($el) : cy) as Cypress.Chainable<unknown>)
           .screenshot(screenshotPath, {
             ...screenshotConfig,
+            onBeforeScreenshot(el) {
+              // same phase in which Cypress paints its blackout boxes
+              const doc = autDocument();
+              if (doc) {
+                removeDeterministicStyle(doc);
+                if (deterministicRendering) injectDeterministicStyle(doc);
+              }
+              screenshotConfig.onBeforeScreenshot?.(el);
+            },
             onAfterScreenshot(el, props) {
+              removeStyle();
               imgPath = props.path;
               screenshotConfig.onAfterScreenshot?.(el, props);
             },
             log: false,
           })
-          .then(() =>
-            cy
+          .then(() => {
+            // belt and braces: covers a user hook throwing before ours ran
+            removeStyle();
+            return cy
               .task<string>(
                 TASK.processImgPath,
                 { path: imgPath },
@@ -219,8 +260,8 @@ Cypress.Commands.add(
               .then((newImgPath) => {
                 imgPath = newImgPath;
                 return imgPath;
-              }),
-          );
+              });
+          });
       })
       .then((imgPath) =>
         cy

@@ -1,18 +1,24 @@
-import { it, expect, describe, vi } from 'vitest';
+import { it, expect, describe, vi, beforeEach } from 'vitest';
 import { initTaskHook } from './task.hook';
 import { initAfterScreenshotHook } from './afterScreenshot.hook';
-import { initPlugin } from './plugins';
+import { initBrowserLaunchHook } from './browserLaunch.utils';
 import {
   initManifestRun,
   resetManifest,
   setManifestBrowser,
 } from './manifest.utils';
+import { initPlugin } from './plugins';
+
+const launchHook = vi.fn();
 
 vi.mock('./task.hook.ts', () => ({
   initTaskHook: vi.fn().mockReturnValue('task'),
 }));
 vi.mock('./afterScreenshot.hook.ts', () => ({
   initAfterScreenshotHook: vi.fn().mockReturnValue('after:screenshot'),
+}));
+vi.mock('./browserLaunch.utils.ts', () => ({
+  initBrowserLaunchHook: vi.fn(() => launchHook),
 }));
 vi.mock('./manifest.utils.ts', () => ({
   initManifestRun: vi.fn(),
@@ -32,74 +38,78 @@ const browserLaunchHandler = (onMock: ReturnType<typeof vi.fn>) =>
     ) => Cypress.BeforeBrowserLaunchOptions
   >(onMock, 'before:browser:launch');
 
-describe('initPlugin', () => {
-  it('inits hooks (Cypress <15.10, env API)', () => {
-    const onMock = vi.fn();
-    initPlugin(onMock, {
-      version: '13.17.0',
-      env: { pluginVisualRegressionForceDeviceScaleFactor: false },
-    } as unknown as Cypress.PluginConfigOptions);
+const pluginConfig = (config: Record<string, unknown>) =>
+  config as unknown as Cypress.PluginConfigOptions;
 
-    expect(onMock).toBeCalledWith('task', 'task');
-    expect(onMock).toBeCalledWith('after:screenshot', 'after:screenshot');
-    expect(onMock).toBeCalledWith('before:run', expect.any(Function));
-    expect(onMock).toBeCalledWith(
+beforeEach(() => vi.clearAllMocks());
+
+describe('initPlugin', () => {
+  it.each([
+    {
+      api: 'env (Cypress <15.10)',
+      config: {
+        version: '13.17.0',
+        env: { pluginVisualRegressionForceDeviceScaleFactor: false },
+      },
+    },
+    {
+      api: 'expose (Cypress 15.10+)',
+      config: {
+        version: '15.10.0',
+        expose: { pluginVisualRegressionForceDeviceScaleFactor: false },
+        env: {},
+      },
+    },
+  ])('registers every hook exactly once with the $api config', ({ config }) => {
+    const onMock = vi.fn();
+    const cfg = pluginConfig(config);
+
+    initPlugin(onMock, cfg);
+
+    expect(onMock).toHaveBeenCalledTimes(4);
+    expect(onMock).toHaveBeenCalledWith(
       'before:browser:launch',
       expect.any(Function),
     );
-    expect(initTaskHook).toBeCalledTimes(1);
-    expect(initAfterScreenshotHook).toBeCalledTimes(1);
-  });
-
-  it('inits hooks (Cypress 15.10+, expose API)', () => {
-    const onMock = vi.fn();
-    initPlugin(onMock, {
-      version: '15.10.0',
-      expose: { pluginVisualRegressionForceDeviceScaleFactor: false },
-      env: {},
-    } as unknown as Cypress.PluginConfigOptions);
-
-    expect(onMock).toBeCalledWith('task', 'task');
-    expect(onMock).toBeCalledWith('after:screenshot', 'after:screenshot');
-    expect(onMock).toBeCalledWith('before:run', expect.any(Function));
-    expect(initTaskHook).toBeCalledTimes(2);
-    expect(initAfterScreenshotHook).toBeCalledTimes(2);
+    expect(onMock).toHaveBeenCalledWith('task', 'task');
+    expect(onMock).toHaveBeenCalledWith('after:screenshot', 'after:screenshot');
+    expect(onMock).toHaveBeenCalledWith('before:run', expect.any(Function));
+    expect(initBrowserLaunchHook).toHaveBeenCalledWith(cfg);
+    expect(initTaskHook).toHaveBeenCalledWith(cfg);
+    expect(initAfterScreenshotHook).toHaveBeenCalledWith(cfg);
   });
 
   it('seeds the run manifest on init and resets it with the details on before:run', () => {
     const onMock = vi.fn();
-    const config = {
-      version: '16.1.0',
-      expose: {},
-      env: {},
-    } as unknown as Cypress.PluginConfigOptions;
-    initPlugin(onMock, config);
+    const cfg = pluginConfig({ version: '16.1.0', expose: {}, env: {} });
+    initPlugin(onMock, cfg);
 
-    expect(initManifestRun).toBeCalledWith(config);
-    expect(resetManifest).not.toBeCalled();
+    expect(initManifestRun).toHaveBeenCalledWith(cfg);
+    expect(resetManifest).not.toHaveBeenCalled();
     const details = { specs: [] };
     beforeRunHandler(onMock)?.(details);
-    expect(resetManifest).toBeCalledWith(config, details);
+    expect(resetManifest).toHaveBeenCalledWith(cfg, details);
   });
 
-  it('records the launched browser in the manifest on before:browser:launch', () => {
+  it('records the launched browser in the manifest, then applies the launch presets', () => {
     const onMock = vi.fn();
-    const config = {
-      version: '16.1.0',
-      expose: { pluginVisualRegressionForceDeviceScaleFactor: false },
-      env: {},
-    } as unknown as Cypress.PluginConfigOptions;
-    initPlugin(onMock, config);
+    const cfg = pluginConfig({ version: '16.1.0', expose: {}, env: {} });
+    initPlugin(onMock, cfg);
 
     const browser = { name: 'firefox', version: '131' } as Cypress.Browser;
     const launchOptions = {
       args: [],
     } as unknown as Cypress.BeforeBrowserLaunchOptions;
+    const fromPresets = { args: ['--from-presets'] };
+    launchHook.mockReturnValueOnce(fromPresets);
+
     expect(browserLaunchHandler(onMock)?.(browser, launchOptions)).toBe(
-      launchOptions,
+      fromPresets,
     );
-    expect(setManifestBrowser).toBeCalledWith(config, browser);
-    // the scale-factor flags are off for this config, so the args stay untouched
-    expect(launchOptions.args).toEqual([]);
+    expect(setManifestBrowser).toHaveBeenCalledWith(cfg, browser);
+    expect(launchHook).toHaveBeenCalledWith(browser, launchOptions);
+    expect(setManifestBrowser.mock.invocationCallOrder[0]).toBeLessThan(
+      launchHook.mock.invocationCallOrder[0],
+    );
   });
 });

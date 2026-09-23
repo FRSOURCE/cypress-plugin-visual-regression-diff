@@ -164,7 +164,9 @@ export const compareImagesTask = async (
     ]);
 
     const diff = Buffer.alloc(width * height * 4);
-    const diffConfig = Object.assign({ includeAA: true }, cfg.diffConfig);
+    // pixelmatch's own default: anti-aliased edge pixels are detected and not
+    // counted, which removes most of the cross-OS text rendering noise
+    const diffConfig = Object.assign({ includeAA: false }, cfg.diffConfig);
 
     const diffPixels = pixelmatch(
       imgNew,

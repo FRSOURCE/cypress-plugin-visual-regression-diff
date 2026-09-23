@@ -1,6 +1,6 @@
 import { initTaskHook } from './task.hook';
 import { initAfterScreenshotHook } from './afterScreenshot.hook';
-import { getPluginConfig } from './version.utils';
+import { initBrowserLaunchHook } from './browserLaunch.utils';
 import {
   initManifestRun,
   resetManifest,
@@ -19,40 +19,17 @@ export type {
   ManifestStatus,
 } from './types';
 
-/* c8 ignore start */
-const applyForceDeviceScaleFactor = (
-  browser: Cypress.Browser,
-  launchOptions: Cypress.BeforeBrowserLaunchOptions,
-) => {
-  // based on https://github.com/cypress-io/cypress/issues/2102#issuecomment-521299946
-  if (browser.name === 'chrome' || browser.name === 'chromium') {
-    launchOptions.args.push('--force-device-scale-factor=1');
-    launchOptions.args.push('--high-dpi-support=1');
-  } else if (browser.name === 'electron' && browser.isHeaded) {
-    // eslint-disable-next-line no-console
-    console.log(
-      "There isn't currently a way of setting the device scale factor in Cypress when running headed electron so we disable the image regression commands.",
-    );
-  }
-};
-/* c8 ignore stop */
-
 export const initPlugin = (
   on: Cypress.PluginEvents,
   config: Cypress.PluginConfigOptions,
 ) => {
-  const forceDeviceScaleFactor =
-    getPluginConfig(config, 'pluginVisualRegressionForceDeviceScaleFactor') !==
-    false;
-
-  // Cypress calls a single handler per event, so everything the plugin needs
-  // from the browser launch lives here
+  // Cypress keeps a single listener per event, so the launch presets
+  // (forceDeviceScaleFactor, deterministicRendering) and the manifest's
+  // record of the launched browser have to share one handler
+  const launchHook = initBrowserLaunchHook(config);
   on('before:browser:launch', (browser, launchOptions) => {
     setManifestBrowser(config, browser);
-    /* c8 ignore next */
-    if (forceDeviceScaleFactor)
-      applyForceDeviceScaleFactor(browser, launchOptions);
-    return launchOptions;
+    return launchHook(browser, launchOptions);
   });
   on('task', initTaskHook(config));
   on('after:screenshot', initAfterScreenshotHook(config));
