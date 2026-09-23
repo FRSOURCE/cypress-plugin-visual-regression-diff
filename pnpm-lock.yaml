@@ -199,7 +199,7 @@ importers:
     dependencies:
       next:
         specifier: 14.2.35
-        version: 14.2.35(@babel/core@7.29.7(supports-color@8.1.1))(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 14.2.35(@babel/core@7.29.7(supports-color@8.1.1))(@playwright/test@1.63.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -408,6 +408,52 @@ importers:
       vitest:
         specifier: 4.1.11
         version: 4.1.11(@types/node@24.13.6)(@vitest/coverage-v8@4.1.11)(vite@8.1.0(@types/node@24.13.6)(esbuild@0.28.2)(terser@5.48.0)(tsx@4.23.15)(yaml@2.9.1))
+
+  packages/playwright-visual-regression-diff:
+    dependencies:
+      meta-png:
+        specifier: 1.0.6
+        version: 1.0.6
+      pixelmatch:
+        specifier: 7.2.0
+        version: 7.2.0
+      sanitize-filename:
+        specifier: 1.6.4
+        version: 1.6.4
+      sharp:
+        specifier: 0.35.4
+        version: 0.35.4(@types/node@20.19.43)
+    devDependencies:
+      '@frsource/prettier-config':
+        specifier: ^1.11.0
+        version: 1.47.11(prettier@3.9.8)
+      '@playwright/test':
+        specifier: 1.63.0
+        version: 1.63.0
+      '@types/node':
+        specifier: 20.19.43
+        version: 20.19.43
+      '@types/tmp':
+        specifier: 0.2.6
+        version: 0.2.6
+      '@vitest/coverage-v8':
+        specifier: 4.1.11
+        version: 4.1.11(vitest@4.1.11)
+      del-cli:
+        specifier: 7.0.0
+        version: 7.0.0
+      prettier:
+        specifier: 3.9.8
+        version: 3.9.8
+      tmp-promise:
+        specifier: 3.0.3
+        version: 3.0.3
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: 4.1.11
+        version: 4.1.11(@types/node@20.19.43)(@vitest/coverage-v8@4.1.11)(vite@8.1.0(@types/node@20.19.43)(esbuild@0.28.2)(terser@5.48.0)(tsx@4.23.15)(yaml@2.9.1))
 
   packages/visual-regression-manifest:
     devDependencies:
@@ -1856,6 +1902,11 @@ packages:
 
   '@pinojs/redact@0.4.0':
     resolution: {integrity: sha512-k2ENnmBugE/rzQfEcdWHcCY+/FM3VLzH9cYEsbdsoqrvzAKRhUZeRNhAZvB8OitQJ1TBed3yqWtdjzS6wJKBwg==}
+
+  '@playwright/test@1.63.0':
+    resolution: {integrity: sha512-oxMK4vllB9RK5NQ2l1pq1IfOf2AvnEuj/vYGDj0H2nMtmtZpKtCwt/l00GEO6xjGfpBNAvjovvYdCm50dRQkpQ==}
+    engines: {node: '>=20'}
+    hasBin: true
 
   '@probot/get-private-key@2.1.1':
     resolution: {integrity: sha512-i20LJE0751wWDCiTQmyS6UM65vNWOZMim/DAxIFQWfoPJSBPdFPgNffG1XbTiMfl4et8JCBZWab9ldxDtzhcWw==}
@@ -7952,6 +8003,10 @@ snapshots:
 
   '@pinojs/redact@0.4.0': {}
 
+  '@playwright/test@1.63.0':
+    dependencies:
+      playwright: 1.63.0
+
   '@probot/get-private-key@2.1.1': {}
 
   '@probot/octokit-plugin-config@4.1.0(@octokit/core@7.0.8)':
@@ -11075,7 +11130,7 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  next@14.2.35(@babel/core@7.29.7(supports-color@8.1.1))(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  next@14.2.35(@babel/core@7.29.7(supports-color@8.1.1))(@playwright/test@1.63.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       '@next/env': 14.2.35
       '@swc/helpers': 0.5.5
@@ -11096,6 +11151,7 @@ snapshots:
       '@next/swc-win32-arm64-msvc': 14.2.33
       '@next/swc-win32-ia32-msvc': 14.2.33
       '@next/swc-win32-x64-msvc': 14.2.33
+      '@playwright/test': 1.63.0
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
