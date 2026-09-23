@@ -16,9 +16,12 @@ ENV CYPRESS_INSTALL_BINARY=0
 RUN pnpm install --frozen-lockfile --filter @frsource/cpvrd-github-app...
 COPY packages/cypress-plugin-visual-regression-diff ./packages/cypress-plugin-visual-regression-diff
 COPY packages/github-app ./packages/github-app
+# `deploy` installs only this package's dependencies, so the plugin's patch
+# (rollup-plugin-typescript2) is unused there and must not fail the build
 RUN pnpm --filter @frsource/cypress-plugin-visual-regression-diff build \
   && pnpm --filter @frsource/cpvrd-github-app build \
-  && pnpm --filter @frsource/cpvrd-github-app deploy --prod --legacy /out
+  && pnpm --filter @frsource/cpvrd-github-app deploy --prod --legacy \
+       --config.allow-unused-patches=true /out
 
 FROM node:24-alpine AS runtime
 ENV NODE_ENV=production \
