@@ -93,7 +93,7 @@ describe('getScreenshotPathInfoTask', () => {
     });
   });
 
-  it('supports the default-like {spec_path}/.../{platform} layout', () => {
+  it('supports the {spec_path}/.../{platform} layout', () => {
     expect(
       getScreenshotPathInfoTask({
         titleFromOptions: 'some-title',

@@ -106,13 +106,11 @@ const optionWithDefaults = <K extends keyof Cypress.MatchImageOptions>(
 ) => options[key] ?? getPluginEnv(key) ?? defaultValue;
 
 const getImagesPath = (options: Cypress.MatchImageOptions) =>
-  optionWithDefaults(
-    options,
-    'imagesPath',
-    '{spec_path}/__image_snapshots__/{platform}',
-  );
+  optionWithDefaults(options, 'imagesPath', '{spec_path}/__image_snapshots__');
 
-// what the `{platform}`, `{os}` and `{browser}` tokens of `imagesPath` mean here
+// what the `{platform}`, `{os}` and `{browser}` tokens of `imagesPath` expand
+// to; `cy.screenshot` renders in the browser Cypress drives, so that is the
+// browser (a renderer other than the local browser would name its own here)
 const getPathVariables = (): PathVariables => ({
   os: Cypress.platform,
   browser: Cypress.browser.name,
