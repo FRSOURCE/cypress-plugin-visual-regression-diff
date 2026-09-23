@@ -265,6 +265,16 @@ By default the file lands next to your other Cypress artifacts, at `<screenshots
         "forceDeviceScaleFactor": true,
         "screenshotConfig": {},
       },
+      "renderer": {
+        "backend": "native",
+        "browser": "chrome",
+        "browserVersion": "130.0.0.0",
+      },
+      "hashes": {
+        "baseline": "3b7e…", // sha256 of the files listed in `images`, only for files that exist
+        "actual": "9d21…",
+        "diff": "c0ff…",
+      },
       "message": "Image diff factor (2.31%) is bigger than maximum threshold option 1%.",
     },
   ],
@@ -296,6 +306,8 @@ Notes for consumers:
 - `failed` and `missing-baseline` are the entries that need a human: copying `images.actual.path` over `images.baseline.path` approves them.
 - `baselineWritten` tells whether the working tree changed for that screenshot, regardless of `status`.
 - Every entry carries its own `platform` and `viewport`, so entries from a matrix of machines can be told apart after concatenating several manifests. `options` on an entry is the exact `matchImage` input (`imagesPath` keeps its tokens unexpanded); `comparison` is the result.
+- `platform` is where the test ran, `renderer` is where the pixels came from. Today every screenshot is taken by the browser Cypress drives, so `renderer.backend` is `native` and `renderer.browser` repeats `platform.browser.name`. The field exists so that a renderer other than the local browser (a pinned Docker image, a hosted renderer) can identify itself with `rendererVersion` and `imageDigest`, and so that a run that had to fall back to the local browser can be flagged with `renderer.fallback: true`. Treat entries with different renderers as different baselines.
+- `hashes` holds the sha256 of each file in `images` that exists on disk. Use it to skip re-uploading unchanged baselines, to check that an artifact matches the manifest, or to spot two entries that produced identical pixels.
 - Mapping to a pull request: use `ci.repository` and `ci.pullRequest.number`. On GitHub `pull_request` events `ci.sha` is the temporary merge commit, so anything that pushes to the PR branch must use `ci.pullRequest.headSha` / `headRef`. The workflow artifact is found via `ci.runId` and `ci.runAttempt`.
 - Reproducing a run: `npx cypress run --<runner.testingType> --browser <runner.browser.name> --config-file <runner.configFile> --spec <runner.specs joined with ,>`, plus one `--expose "pluginVisualRegression<Key>=<value>"` per entry of `options`. The manifest stores these as parts rather than a command string, so shell quoting and the package manager stay your choice.
 - The file is rewritten after every comparison, so it is complete even when the run is aborted. When specs run in parallel on several machines, each machine writes its own manifest; glob and concatenate the `entries` arrays.

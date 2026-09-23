@@ -295,6 +295,13 @@ Cypress.Commands.add(
                 width: Cypress.config('viewportWidth'),
                 height: Cypress.config('viewportHeight'),
               },
+              // `cy.screenshot` renders in the browser Cypress drives, so the
+              // renderer is that browser
+              renderer: {
+                backend: 'native',
+                browser: Cypress.browser.name,
+                browserVersion: Cypress.browser.version,
+              },
             },
             { log: false },
           )

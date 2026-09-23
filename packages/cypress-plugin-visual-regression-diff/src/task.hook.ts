@@ -30,6 +30,7 @@ import type {
   CompareImagesTaskReturn,
   ManifestEntry,
   ManifestEntryOptions,
+  ManifestRenderer,
   ManifestStatus,
   PendingDiffRecord,
 } from './types';
@@ -52,6 +53,8 @@ export type CompareImagesCfg = {
   platform?: ManifestEntry['platform'];
   viewport?: ManifestEntry['viewport'];
   options?: ManifestEntryOptions;
+  /** Where the pixels of `imgNew` came from; a `native` renderer is derived from `platform` when omitted. */
+  renderer?: ManifestRenderer;
 };
 
 const round = (n: number) => Math.ceil(n * 1000) / 1000;
@@ -270,6 +273,7 @@ export const compareImagesTask = async (
     platform: cfg.platform,
     viewport: cfg.viewport,
     options: cfg.options,
+    renderer: cfg.renderer,
     status,
     imgDiff,
     maxDiffThreshold: cfg.maxDiffThreshold,

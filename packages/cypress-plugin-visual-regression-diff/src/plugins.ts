@@ -13,10 +13,14 @@ export type {
   ManifestCi,
   ManifestEntry,
   ManifestEntryOptions,
+  ManifestHashes,
   ManifestImage,
   ManifestPlatform,
+  ManifestRenderer,
+  ManifestRendererBackend,
   ManifestRunner,
   ManifestStatus,
+  ManifestUpload,
 } from './types';
 
 export const initPlugin = (

@@ -1,5 +1,6 @@
 import { it, expect, describe, beforeEach } from 'vitest';
 import path from 'path';
+import { createHash } from 'crypto';
 import { existsSync, promises as fs, readFileSync } from 'fs';
 import { dir, setGracefulCleanup } from 'tmp-promise';
 import {
@@ -68,6 +69,9 @@ const writeFixture = async (target: string) => {
   await fs.copyFile(path.join(fixturesPath, 'screenshot.png'), target);
   return target;
 };
+const fixtureHash = createHash('sha256')
+  .update(readFileSync(path.join(fixturesPath, 'screenshot.png')))
+  .digest('hex');
 
 const input = (
   cfg: ManifestConfig,
@@ -200,6 +204,9 @@ describe('recordManifestEntry', () => {
       platform,
       viewport: { width: 1280, height: 720 },
       options,
+      renderer: { backend: 'native', browser: 'chrome', browserVersion: '130' },
+      // the baseline does not exist on disk, so it has no hash
+      hashes: { actual: fixtureHash, diff: fixtureHash },
       message: 'differs',
     });
     expect(readManifest(cfg)).toEqual({
@@ -239,6 +246,31 @@ describe('recordManifestEntry', () => {
       diff: { path: null },
     });
     expect(entry).not.toHaveProperty('images.baseline.width');
+    expect(entry?.hashes).toEqual({});
+  });
+
+  it('keeps the renderer it is given and derives a native one otherwise', async () => {
+    const cfg = await config();
+    const renderer = {
+      backend: 'docker' as const,
+      browser: 'chromium',
+      browserVersion: '131.0.6778.33',
+      rendererVersion: '1.2.0',
+      imageDigest: 'sha256:abc',
+    };
+
+    expect(
+      recordManifestEntry(cfg, input(cfg, { platform, renderer }))?.renderer,
+    ).toEqual(renderer);
+    expect(
+      recordManifestEntry(
+        cfg,
+        input(cfg, {
+          platform: { os: 'linux', browser: { name: 'electron', version: '' } },
+        }),
+      )?.renderer,
+    ).toEqual({ backend: 'native', browser: 'electron' });
+    expect(recordManifestEntry(cfg, input(cfg))?.renderer).toBeUndefined();
   });
 
   it('resolves relative and unnormalized paths against projectRoot and dedupes by actual path', async () => {
@@ -356,6 +388,8 @@ describe('markManifestEntryApproved', () => {
         options,
       }),
     );
+    // approveImageTask moved the `.actual.png` over the baseline by now
+    await writeFixture(input(cfg).imgOld);
 
     const entry = markManifestEntryApproved(cfg, {
       img: input(cfg).imgNew,
@@ -377,6 +411,8 @@ describe('markManifestEntryApproved', () => {
       platform,
       viewport: { width: 1280, height: 720 },
       options,
+      renderer: { backend: 'native', browser: 'chrome', browserVersion: '130' },
+      hashes: { baseline: fixtureHash },
     });
     expect(readManifest(cfg).entries).toEqual([entry]);
   });
@@ -404,6 +440,8 @@ describe('markManifestEntryApproved', () => {
       platform: undefined,
       viewport: undefined,
       options: undefined,
+      renderer: undefined,
+      hashes: {},
       message: 'Baseline image was replaced with the approved screenshot.',
     });
   });

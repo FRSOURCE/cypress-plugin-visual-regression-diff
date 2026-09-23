@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -15,7 +16,9 @@ import type {
   ManifestCi,
   ManifestEntry,
   ManifestEntryOptions,
+  ManifestHashes,
   ManifestPlatform,
+  ManifestRenderer,
   ManifestRunner,
   ManifestStatus,
 } from './types';
@@ -71,6 +74,8 @@ export type ManifestRecordInput = {
   platform?: ManifestEntry['platform'];
   viewport?: ManifestEntry['viewport'];
   options?: ManifestEntryOptions;
+  /** Defaults to a `native` renderer derived from `platform.browser`. */
+  renderer?: ManifestRenderer;
   status: ManifestStatus;
   imgDiff: number;
   maxDiffThreshold: number;
@@ -138,11 +143,44 @@ const existingPathOrNull = (projectRoot: string, absolute: string) =>
 
 // the `.diff.png` sibling, or null when the name has no `.actual` suffix
 const existingDiffPathOrNull = (projectRoot: string, actualPath: string) => {
-  const diffPath = actualPath.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff);
-  return diffPath === actualPath
-    ? null
-    : existingPathOrNull(projectRoot, diffPath);
+  const diffPath = diffPathFor(actualPath);
+  return diffPath === null ? null : existingPathOrNull(projectRoot, diffPath);
 };
+
+const sha256 = (file: string) =>
+  createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+
+// hashes of the files that exist; a key is present only when the file is
+const hashesFor = (files: {
+  baseline: string;
+  actual: string;
+  diff: string | null;
+}): ManifestHashes => {
+  const hashes: ManifestHashes = {};
+  for (const key of ['baseline', 'actual', 'diff'] as const) {
+    const file = files[key];
+    if (file && fs.existsSync(file)) hashes[key] = sha256(file);
+  }
+  return hashes;
+};
+
+// the `.diff.png` sibling path, or null when the name has no `.actual` suffix
+const diffPathFor = (actualPath: string) => {
+  const diffPath = actualPath.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff);
+  return diffPath === actualPath ? null : diffPath;
+};
+
+// a screenshot taken by the runner's own browser: the renderer is that browser
+const nativeRenderer = (
+  platform: ManifestEntry['platform'],
+): ManifestRenderer | undefined =>
+  platform && {
+    backend: 'native',
+    browser: platform.browser.name,
+    ...(platform.browser.version && {
+      browserVersion: platform.browser.version,
+    }),
+  };
 
 const sameTitlePath = (a: string[], b: string[]) =>
   a.length === b.length && a.every((part, i) => part === b[i]);
@@ -333,6 +371,12 @@ export const recordManifestEntry = (
     platform: input.platform,
     viewport: input.viewport,
     options: input.options,
+    renderer: input.renderer ?? nativeRenderer(input.platform),
+    hashes: hashesFor({
+      baseline: baselineAbs,
+      actual: actualAbs,
+      diff: diffPathFor(actualAbs),
+    }),
     message: input.message,
   };
   entries.set(actualAbs, entry);
@@ -381,6 +425,9 @@ export const markManifestEntryApproved = (
     platform: existing?.platform,
     viewport: existing?.viewport,
     options: existing?.options,
+    renderer: existing?.renderer,
+    // the approved `.actual.png` is the baseline now, so only that file exists
+    hashes: hashesFor({ baseline: baselineAbs, actual: actualAbs, diff: null }),
     message: 'Baseline image was replaced with the approved screenshot.',
   };
   entries.set(actualAbs, entry);
