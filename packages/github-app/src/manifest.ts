@@ -115,12 +115,25 @@ export type MergedRun = {
   needsHuman: MergedEntry[];
 };
 
+/**
+ * `platform` is where the test ran; `renderer` is where the pixels came from.
+ * A native renderer is the test browser itself and adds nothing; any other
+ * renderer (a pinned Docker image, a hosted renderer) is part of the identity
+ * of a baseline, so one capture rendered in several browsers stays apart.
+ */
+export const rendererLabel = (entry: ManifestEntry) => {
+  const renderer = entry.renderer;
+  if (!renderer || renderer.backend === 'native') return '';
+  return `${renderer.backend} ${renderer.browser}`;
+};
+
 export const entryKey = (entry: ManifestEntry) =>
   [
     entry.name,
     entry.test.file,
     entry.platform?.os ?? '',
     entry.platform?.browser?.name ?? '',
+    rendererLabel(entry),
   ].join('\u0000');
 
 export const keyHash = (key: string) =>
@@ -129,7 +142,10 @@ export const keyHash = (key: string) =>
 export const platformLabel = (entry: ManifestEntry) => {
   const os = entry.platform?.os;
   const browser = entry.platform?.browser?.name;
-  return [os, browser].filter(Boolean).join(' / ') || '';
+  const platform = [os, browser].filter(Boolean).join(' / ');
+  const renderer = rendererLabel(entry);
+  if (!renderer) return platform;
+  return platform ? `${platform} (${renderer})` : renderer;
 };
 
 const toPosix = (p: string) => p.replace(/\\/g, '/');
@@ -237,6 +253,15 @@ export const mergeManifests = (
       );
     }
     const runAttempt = Number.parseInt(String(ci?.runAttempt ?? '1'), 10) || 1;
+
+    // the plugin's `auto` renderer degraded to the local browser: those pixels
+    // did not come from the pinned renderer the baselines were made with
+    const fallbacks = manifest.entries.filter((e) => e.renderer?.fallback);
+    if (fallbacks.length > 0) {
+      warnings.push(
+        `${where}: ${fallbacks.length} screenshot${fallbacks.length === 1 ? ' was' : 's were'} rendered by the local browser because the configured renderer was unavailable (\`renderer.fallback\`); expect drift against baselines made with the renderer`,
+      );
+    }
 
     for (const entry of manifest.entries) {
       const key = entryKey(entry);

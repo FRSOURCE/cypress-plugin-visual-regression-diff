@@ -111,6 +111,26 @@ describe('entryKey', () => {
     expect(platformLabel(a)).toBe('linux / electron');
     expect(platformLabel(entry({ platform: undefined }))).toBe('');
   });
+
+  it('tells renderers apart, except the native one which is the test browser', () => {
+    const native = entry({
+      renderer: { backend: 'native', browser: 'electron' },
+    });
+    const docker = entry({
+      renderer: { backend: 'docker', browser: 'chromium' },
+    });
+    const dockerFirefox = entry({
+      renderer: { backend: 'docker', browser: 'firefox' },
+    });
+    expect(entryKey(native)).toBe(entryKey(entry()));
+    expect(entryKey(docker)).not.toBe(entryKey(native));
+    expect(entryKey(docker)).not.toBe(entryKey(dockerFirefox));
+    expect(platformLabel(native)).toBe('linux / electron');
+    expect(platformLabel(docker)).toBe('linux / electron (docker chromium)');
+    expect(
+      platformLabel(entry({ platform: undefined, renderer: docker.renderer })),
+    ).toBe('docker chromium');
+  });
 });
 
 describe('mergeManifests', () => {
@@ -168,6 +188,24 @@ describe('mergeManifests', () => {
     });
     expect(warnings).toHaveLength(3);
     expect(warnings[0]).toMatch(/written for commit bbbbbbb/);
+  });
+
+  it('warns when screenshots fell back to the local browser', () => {
+    const m = manifest([
+      entry({
+        renderer: { backend: 'native', browser: 'electron', fallback: true },
+      }),
+      entry({
+        name: 'about_#0',
+        renderer: { backend: 'native', browser: 'electron' },
+      }),
+    ]);
+    const { warnings } = mergeManifests([source(m)]);
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toMatch(
+      /1 screenshot was rendered by the local browser .*renderer\.fallback/,
+    );
+    expect(mergeManifests([source(manifest())]).warnings).toEqual([]);
   });
 
   it('marks entries that cannot be approved from CI', () => {

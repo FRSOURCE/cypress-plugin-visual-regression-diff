@@ -44,7 +44,8 @@ The app is runner-agnostic: it only reads the manifest format, so a future Playw
 ### Approving
 
 - Buttons: the summary check run `Visual regression` has **Approve all** and **Refresh report**; each failed screenshot (up to `perImageChecks`) has its own `Visual regression: <name>` check run with **Approve**.
-- Comments: `/approve-visuals` approves everything that needs a look, `` /approve-visuals `home page renders_#0` `` approves the named ones (backticks or quotes keep spaces together; when several platforms share a name, use `` `name (linux / chrome)` ``).
+- Comments: `/approve-visuals` approves everything that needs a look, `` /approve-visuals `home page renders_#0` `` approves the named ones (backticks or quotes keep spaces together; when several platforms share a name, use `` `name (linux / chrome)` ``; a screenshot rendered by something other than the test browser carries that renderer too, e.g. `` `name (linux / electron (docker chromium))` ``).
+- The manifest's `renderer` block is honoured: entries of the same screenshot rendered by different renderers are reported and approved separately, and a run in which the plugin fell back to the local browser (`renderer.fallback: true`) gets a note in the report, because those pixels will drift against baselines made with the pinned renderer.
 - Only users with write access can approve. The app reacts with 👀 when it starts, 🚀 when it committed, 😕 when it could not, and replies with the reason.
 - The report belongs to a commit. Once the branch moves on, the app refuses to approve from the old report and waits for the new run.
 - Pull requests from forks get the report, but the app cannot push to a fork; the comment says so.
