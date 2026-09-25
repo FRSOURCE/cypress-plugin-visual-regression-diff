@@ -498,6 +498,14 @@ For CI or sharable HTML reports, integrate with a reporter such as [`cypress-moc
 
 </details>
 
+## Commercial support
+
+The plugin is free and MIT-licensed, and it will stay that way. That said, I maintain it mostly in my spare time, so if your team needs more than best-effort answers on the issue tracker, I offer paid support and consulting: priority support with a guaranteed response, help getting the plugin set up in your project, or tracking down why screenshots render differently in CI than they do locally.
+
+Get in touch on the [discussions board](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/discussions) or by email at [jakub@frsource.org](mailto:jakub@frsource.org).
+
+Don't need that but still want to help? Sponsoring through the Sponsor button on this repo (GitHub Sponsors, Patreon or Buy Me a Coffee) is what keeps the project maintained.
+
 ## Questions
 
 Don’t hesitate to ask a question directly on the [discussions board](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/discussions)!
