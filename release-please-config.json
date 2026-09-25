@@ -9,6 +9,13 @@
     "packages/cypress-plugin-visual-regression-diff": {
       "path": "packages/cypress-plugin-visual-regression-diff",
       "component": "@frsource/cypress-plugin-visual-regression-diff"
+    },
+    "packages/visual-regression-manifest": {
+      "path": "packages/visual-regression-manifest",
+      "component": "@frsource/visual-regression-manifest",
+      "versioning": "prerelease",
+      "prerelease": true,
+      "release-as": "1.0.0-beta.1"
     }
   }
 }
