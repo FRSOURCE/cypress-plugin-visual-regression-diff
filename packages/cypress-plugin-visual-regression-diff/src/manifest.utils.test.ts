@@ -98,7 +98,7 @@ describe('getManifestPath', () => {
     expect(getManifestPath(cfg)).toBe(
       path.join(
         cfg.screenshotsFolder as string,
-        'cp-visual-regression-diff-manifest.e2e.json',
+        'visual-regression-manifest.e2e.json',
       ),
     );
   });
@@ -113,7 +113,7 @@ describe('getManifestPath', () => {
         cfg.projectRoot as string,
         'cypress',
         'screenshots',
-        'cp-visual-regression-diff-manifest.json',
+        'visual-regression-manifest.json',
       ),
     );
   });

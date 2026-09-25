@@ -1,6 +1,6 @@
 {
   "name": "@frsource/cypress-plugin-visual-regression-diff",
-  "description": "Perform visual regression test with a nice GUI as help. 💅 Only for Cypress!",
+  "description": "Perform visual regression test with a nice GUI as help. \ud83d\udc85 Only for Cypress!",
   "version": "4.2.0",
   "author": "Jakub Freisler <jakub.freisler@frsource.org>",
   "homepage": "https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff",
@@ -95,6 +95,7 @@
   ],
   "dependencies": {
     "@frsource/base64": "1.0.237",
+    "@frsource/visual-regression-manifest": "workspace:*",
     "glob": "13.0.6",
     "meta-png": "1.0.6",
     "move-file": "4.1.0",

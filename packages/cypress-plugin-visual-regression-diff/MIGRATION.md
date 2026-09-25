@@ -96,10 +96,11 @@ export default defineConfig({
 
 ### A run manifest is written to `screenshotsFolder`
 
-Every run now writes `<screenshotsFolder>/cp-visual-regression-diff-manifest.<testingType>.json`
-(by default `cypress/screenshots/cp-visual-regression-diff-manifest.e2e.json`), a JSON summary of
+Every run now writes `<screenshotsFolder>/visual-regression-manifest.<testingType>.json`
+(by default `cypress/screenshots/visual-regression-manifest.e2e.json`), a JSON summary of
 every `matchImage` comparison meant for CI tooling. See [Run manifest](./README.md#run-manifest-ci-integration)
-for the format.
+for the format, which is the standard shipped by `@frsource/visual-regression-manifest` (JSON Schema, types,
+reader, merger). That package is a new dependency of the plugin.
 
 - `cypress/screenshots` is usually gitignored already, so no action is needed in most projects.
 - Besides the comparison results, the file records run metadata read from the Cypress config and

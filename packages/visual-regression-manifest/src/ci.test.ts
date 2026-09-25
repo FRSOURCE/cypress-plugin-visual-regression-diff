@@ -1,5 +1,5 @@
 import { it, expect, describe } from 'vitest';
-import { detectCi } from './ci.utils';
+import { detectCi } from './ci';
 
 const github = {
   GITHUB_ACTIONS: 'true',

@@ -21,7 +21,7 @@ export type {
   ManifestRunner,
   ManifestStatus,
   ManifestUpload,
-} from './types';
+} from '@frsource/visual-regression-manifest';
 
 export const initPlugin = (
   on: Cypress.PluginEvents,

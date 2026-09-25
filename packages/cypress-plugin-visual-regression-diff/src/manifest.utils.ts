@@ -1,27 +1,35 @@
-import { createHash } from 'crypto';
-import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import {
-  FILE_SUFFIX,
-  MANIFEST_VERSION,
+  ManifestBuilder,
   getManifestFileName,
-} from './constants';
-import { detectCi, type EnvLike } from './ci.utils';
+  toPosix,
+  writeManifestFile,
+  type EnvLike,
+  type ManifestEntryPlatform,
+  type ManifestHeader,
+  type ManifestViewport,
+} from '@frsource/visual-regression-manifest';
+import fs from 'fs';
+import { FILE_SUFFIX } from './constants';
 import type { ImageInfo } from './image.utils';
 import { getPluginConfig, supportsExpose } from './version.utils';
 import type {
-  Manifest,
   ManifestBrowser,
-  ManifestCi,
   ManifestEntry,
   ManifestEntryOptions,
-  ManifestHashes,
-  ManifestPlatform,
   ManifestRenderer,
   ManifestRunner,
   ManifestStatus,
 } from './types';
+
+export { toPosix };
+
+/**
+ * The plugin's side of the run manifest: maps the Cypress config and events
+ * onto `ManifestBuilder` from `@frsource/visual-regression-manifest`, which
+ * owns the format, and writes the file where the config says.
+ */
 
 /** The subset of the Cypress plugin config the manifest needs; everything is optional so unit tests can pass `{}`. */
 export type ManifestConfig = Partial<
@@ -71,8 +79,8 @@ export type ManifestRecordInput = {
   specPath?: string;
   testTitlePath?: string[];
   currentRetryNumber?: number;
-  platform?: ManifestEntry['platform'];
-  viewport?: ManifestEntry['viewport'];
+  platform?: ManifestEntryPlatform;
+  viewport?: ManifestViewport;
   options?: ManifestEntryOptions;
   /** Defaults to a `native` renderer derived from `platform.browser`. */
   renderer?: ManifestRenderer;
@@ -85,22 +93,11 @@ export type ManifestRecordInput = {
   message: string;
 };
 
-type RunInfo = {
-  createdAt: string;
-  platform: ManifestPlatform;
-  ci: ManifestCi | null;
-  options: Record<string, unknown>;
-  runner: ManifestRunner;
-};
-
-// keyed by the normalized absolute path of the .actual.png, unique per run
-const entries = new Map<string, ManifestEntry>();
-let run: RunInfo | null = null;
+// one manifest per process: Cypress runs the plugin file once per run
+let builder: ManifestBuilder | null = null;
 
 const OPTION_KEY = 'pluginVisualRegressionManifestPath';
 const OPTION_PREFIX = 'pluginVisualRegression';
-
-const now = () => new Date().toISOString();
 
 /**
  * Resolves where the manifest is written, or `null` when it is disabled
@@ -121,72 +118,6 @@ export const getManifestPath = (config: ManifestConfig): string | null => {
     path.join(config.projectRoot, 'cypress', 'screenshots');
   return path.join(dir, getManifestFileName(config.testingType));
 };
-
-export const toPosix = (p: string, sep: string = path.sep) =>
-  sep === '/' ? p : p.split(sep).join('/');
-
-const toKey = (projectRoot: string, p: string) =>
-  path.normalize(path.resolve(projectRoot, p));
-
-const toProjectRelative = (projectRoot: string, absolute: string) =>
-  toPosix(path.relative(projectRoot, absolute));
-
-const nameFromActualPath = (actualPath: string) => {
-  const stem = path.basename(actualPath, path.extname(actualPath));
-  return stem.endsWith(FILE_SUFFIX.actual)
-    ? stem.slice(0, -FILE_SUFFIX.actual.length)
-    : stem;
-};
-
-const existingPathOrNull = (projectRoot: string, absolute: string) =>
-  fs.existsSync(absolute) ? toProjectRelative(projectRoot, absolute) : null;
-
-// the `.diff.png` sibling, or null when the name has no `.actual` suffix
-const existingDiffPathOrNull = (projectRoot: string, actualPath: string) => {
-  const diffPath = diffPathFor(actualPath);
-  return diffPath === null ? null : existingPathOrNull(projectRoot, diffPath);
-};
-
-const sha256 = (file: string) =>
-  createHash('sha256').update(fs.readFileSync(file)).digest('hex');
-
-// hashes of the files that exist; a key is present only when the file is
-const hashesFor = (files: {
-  baseline: string;
-  actual: string;
-  diff: string | null;
-}): ManifestHashes => {
-  const hashes: ManifestHashes = {};
-  for (const key of ['baseline', 'actual', 'diff'] as const) {
-    const file = files[key];
-    if (file && fs.existsSync(file)) hashes[key] = sha256(file);
-  }
-  return hashes;
-};
-
-// the `.diff.png` sibling path, or null when the name has no `.actual` suffix
-const diffPathFor = (actualPath: string) => {
-  const diffPath = actualPath.replace(FILE_SUFFIX.actual, FILE_SUFFIX.diff);
-  return diffPath === actualPath ? null : diffPath;
-};
-
-// a screenshot taken by the runner's own browser: the renderer is that browser
-const nativeRenderer = (
-  platform: ManifestEntry['platform'],
-): ManifestRenderer | undefined =>
-  platform && {
-    backend: 'native',
-    browser: platform.browser.name,
-    ...(platform.browser.version && {
-      browserVersion: platform.browser.version,
-    }),
-  };
-
-const sameTitlePath = (a: string[], b: string[]) =>
-  a.length === b.length && a.every((part, i) => part === b[i]);
-
-const compareEntries = (a: ManifestEntry, b: ManifestEntry) =>
-  a.test.file.localeCompare(b.test.file) || a.name.localeCompare(b.name);
 
 /**
  * Global plugin options as configured, with the `pluginVisualRegression`
@@ -220,7 +151,7 @@ const projectRelativeOrUndefined = (
   p: string | undefined,
 ) =>
   p && projectRoot
-    ? toProjectRelative(projectRoot, path.resolve(p))
+    ? toPosix(path.relative(projectRoot, path.resolve(p)))
     : undefined;
 
 /**
@@ -232,7 +163,7 @@ export const initManifestRun = (
   config: ManifestConfig,
   details?: ManifestRunDetails,
   env: EnvLike = process.env,
-): RunInfo => {
+): ManifestHeader => {
   const mode: ManifestRunner['mode'] =
     config.isTextTerminal === true ||
     (config.isTextTerminal === undefined && config.isInteractive === false)
@@ -265,41 +196,32 @@ export const initManifestRun = (
         }
       : undefined,
   };
-  run = {
-    createdAt: now(),
+  builder = new ManifestBuilder({
+    projectRoot: config.projectRoot as string,
     platform: {
       os: config.platform ?? process.platform,
       arch: config.arch ?? process.arch,
       osVersion: details?.system?.osVersion ?? os.release(),
     },
-    ci: detectCi(env),
+    env,
     options: getPluginOptions(config),
     runner,
-  };
-  return run;
+  });
+  return builder.header;
 };
 
-const ensureRun = (config: ManifestConfig) => run ?? initManifestRun(config);
-
-const writeManifest = (config: ManifestConfig, manifestPath: string) => {
-  const info = ensureRun(config);
-  const manifest: Manifest = {
-    version: MANIFEST_VERSION,
-    createdAt: info.createdAt,
-    updatedAt: now(),
-    projectRoot: config.projectRoot as string,
-    platform: info.platform,
-    ci: info.ci,
-    options: info.options,
-    runner: info.runner,
-    entries: [...entries.values()].sort(compareEntries),
-  };
-  fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
-  // write-then-rename so a consumer never reads a half-written file
-  const tmpPath = `${manifestPath}.tmp`;
-  fs.writeFileSync(tmpPath, JSON.stringify(manifest, null, 2));
-  fs.renameSync(tmpPath, manifestPath);
+// `before:run` does not fire in `cypress open`; seed from the config then
+const ensureBuilder = (config: ManifestConfig) => {
+  if (!builder) initManifestRun(config);
+  return builder as ManifestBuilder;
 };
+
+const clearBuilder = () => {
+  builder = null;
+};
+
+const write = (config: ManifestConfig, manifestPath: string) =>
+  writeManifestFile(manifestPath, ensureBuilder(config).toJSON());
 
 /**
  * Records the browser Cypress launched (`before:browser:launch`, fires in
@@ -312,8 +234,9 @@ export const setManifestBrowser = (
 ) => {
   const manifestPath = getManifestPath(config);
   if (!manifestPath) return;
-  ensureRun(config).runner.browser = toManifestBrowser(browser);
-  if (entries.size > 0) writeManifest(config, manifestPath);
+  const current = ensureBuilder(config);
+  current.header.runner.browser = toManifestBrowser(browser);
+  if (current.size > 0) write(config, manifestPath);
 };
 
 /** Records the outcome of one comparison and rewrites the manifest file. */
@@ -323,64 +246,25 @@ export const recordManifestEntry = (
 ): ManifestEntry | null => {
   const manifestPath = getManifestPath(config);
   if (!manifestPath) return null;
-  const projectRoot = config.projectRoot as string;
-
-  const actualAbs = toKey(projectRoot, input.imgNew);
-  const baselineAbs = toKey(projectRoot, input.imgOld);
-  const test = {
-    file: toPosix(input.specPath ?? ''),
-    titlePath: input.testTitlePath ?? [],
-    retry: input.currentRetryNumber ?? 0,
-  };
-
-  // a retried test regenerates its screenshot paths from scratch, so entries
-  // left by an earlier attempt of the same test are stale
-  if (test.retry > 0) {
-    for (const [key, entry] of entries) {
-      if (
-        entry.test.retry < test.retry &&
-        entry.test.file === test.file &&
-        sameTitlePath(entry.test.titlePath, test.titlePath)
-      ) {
-        entries.delete(key);
-      }
-    }
-  }
-
-  const entry: ManifestEntry = {
-    name: nameFromActualPath(actualAbs),
-    test,
+  const entry = ensureBuilder(config).record({
+    actualPath: input.imgNew,
+    baselinePath: input.imgOld,
+    testFile: input.specPath,
+    titlePath: input.testTitlePath,
+    retry: input.currentRetryNumber,
     status: input.status,
-    comparison: {
-      diffRatio: input.imgDiff,
-      threshold: input.maxDiffThreshold,
-    },
-    images: {
-      baseline: {
-        path: toProjectRelative(projectRoot, baselineAbs),
-        ...input.imgOldSize,
-      },
-      actual: {
-        path: existingPathOrNull(projectRoot, actualAbs),
-        ...input.imgNewSize,
-      },
-      diff: { path: existingDiffPathOrNull(projectRoot, actualAbs) },
-    },
+    diffRatio: input.imgDiff,
+    threshold: input.maxDiffThreshold,
     baselineWritten: input.baselineWritten,
-    recordedAt: now(),
+    actualSize: input.imgNewSize,
+    baselineSize: input.imgOldSize,
     platform: input.platform,
     viewport: input.viewport,
     options: input.options,
-    renderer: input.renderer ?? nativeRenderer(input.platform),
-    hashes: hashesFor({
-      baseline: baselineAbs,
-      actual: actualAbs,
-      diff: diffPathFor(actualAbs),
-    }),
+    renderer: input.renderer,
     message: input.message,
-  };
-  entries.set(actualAbs, entry);
-  writeManifest(config, manifestPath);
+  });
+  write(config, manifestPath);
   return entry;
 };
 
@@ -395,43 +279,12 @@ export const markManifestEntryApproved = (
 ): ManifestEntry | null => {
   const manifestPath = getManifestPath(config);
   if (!manifestPath) return null;
-  const projectRoot = config.projectRoot as string;
-
-  const actualAbs = toKey(projectRoot, img);
-  const baselineAbs = toKey(
-    projectRoot,
-    imgOld ?? img.replace(FILE_SUFFIX.actual, ''),
-  );
-  const existing = entries.get(actualAbs);
-  const entry: ManifestEntry = {
-    name: existing?.name ?? nameFromActualPath(actualAbs),
-    test: existing?.test ?? {
-      file: toPosix(specPath ?? ''),
-      titlePath: [],
-      retry: 0,
-    },
-    status: 'approved',
-    comparison: existing?.comparison ?? { diffRatio: 0, threshold: 0 },
-    images: {
-      baseline: {
-        ...existing?.images.baseline,
-        path: toProjectRelative(projectRoot, baselineAbs),
-      },
-      actual: { ...existing?.images.actual, path: null },
-      diff: { path: null },
-    },
-    baselineWritten: true,
-    recordedAt: now(),
-    platform: existing?.platform,
-    viewport: existing?.viewport,
-    options: existing?.options,
-    renderer: existing?.renderer,
-    // the approved `.actual.png` is the baseline now, so only that file exists
-    hashes: hashesFor({ baseline: baselineAbs, actual: actualAbs, diff: null }),
-    message: 'Baseline image was replaced with the approved screenshot.',
-  };
-  entries.set(actualAbs, entry);
-  writeManifest(config, manifestPath);
+  const entry = ensureBuilder(config).approve({
+    actualPath: img,
+    baselinePath: imgOld ?? img.replace(FILE_SUFFIX.actual, ''),
+    testFile: specPath,
+  });
+  write(config, manifestPath);
   return entry;
 };
 
@@ -443,15 +296,7 @@ export const markManifestEntryApproved = (
 export const dropSpecEntries = (config: ManifestConfig, specPath: string) => {
   const manifestPath = getManifestPath(config);
   if (!manifestPath) return;
-  const file = toPosix(specPath);
-  let changed = false;
-  for (const [key, entry] of entries) {
-    if (entry.test.file === file) {
-      entries.delete(key);
-      changed = true;
-    }
-  }
-  if (changed) writeManifest(config, manifestPath);
+  if (ensureBuilder(config).dropTestFile(specPath)) write(config, manifestPath);
 };
 
 /**
@@ -463,12 +308,14 @@ export const resetManifest = (
   details?: ManifestRunDetails,
   env?: EnvLike,
 ) => {
-  entries.clear();
-  initManifestRun(config, details, env);
+  // a config without a project root (unit tests) cannot seed a run; the next
+  // recording call brings a complete config and seeds it lazily
+  clearBuilder();
+  if (config.projectRoot) initManifestRun(config, details, env);
   const manifestPath = getManifestPath(config);
   if (manifestPath && fs.existsSync(manifestPath)) fs.unlinkSync(manifestPath);
 };
 
 /** Current in-memory entries, sorted the way they are written. Intended for tests. */
 export const getManifestEntries = (): ManifestEntry[] =>
-  [...entries.values()].sort(compareEntries);
+  builder?.entries() ?? [];

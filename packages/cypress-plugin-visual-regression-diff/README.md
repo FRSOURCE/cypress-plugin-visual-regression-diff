@@ -171,7 +171,9 @@ npx cypress run --env "pluginVisualRegressionCleanupUnusedImages=true"
 
 Every run writes a JSON manifest listing each `matchImage` comparison: which test it came from, whether it passed, failed, created or updated its baseline, the diff ratio, and the project-relative paths of the baseline, `.actual.png` and `.diff.png` files. Next to the entries it records where the run happened (CI provider, repository, commit, pull request, run id) and what it ran with (browser, specs, config file, plugin options), so a tool reading the file can report on the right PR, download the right artifact, or re-run the same comparisons. It is meant for CI tooling (PR comments, review dashboards, approval bots) that runs after Cypress is done.
 
-By default the file lands next to your other Cypress artifacts, at `<screenshotsFolder>/cp-visual-regression-diff-manifest.<testingType>.json` (e.g. `cypress/screenshots/cp-visual-regression-diff-manifest.e2e.json`). Upload it together with your snapshots directory as a CI artifact.
+The format is a runner-agnostic standard maintained in [`@frsource/visual-regression-manifest`](https://www.npmjs.com/package/@frsource/visual-regression-manifest), which ships the JSON Schema, the TypeScript types, a validating reader, a merger for the manifests of a whole run and converters for tools that write no manifest of their own (Playwright's `toHaveScreenshot`, plain image files). Build your tooling on that package rather than on this plugin.
+
+By default the file lands next to your other Cypress artifacts, at `<screenshotsFolder>/visual-regression-manifest.<testingType>.json` (e.g. `cypress/screenshots/visual-regression-manifest.e2e.json`). Upload it together with your snapshots directory as a CI artifact.
 
 ```jsonc
 {
@@ -310,8 +312,9 @@ Notes for consumers:
 - `hashes` holds the sha256 of each file in `images` that exists on disk. Use it to skip re-uploading unchanged baselines, to check that an artifact matches the manifest, or to spot two entries that produced identical pixels.
 - Mapping to a pull request: use `ci.repository` and `ci.pullRequest.number`. On GitHub `pull_request` events `ci.sha` is the temporary merge commit, so anything that pushes to the PR branch must use `ci.pullRequest.headSha` / `headRef`. The workflow artifact is found via `ci.runId` and `ci.runAttempt`.
 - Reproducing a run: `npx cypress run --<runner.testingType> --browser <runner.browser.name> --config-file <runner.configFile> --spec <runner.specs joined with ,>`, plus one `--expose "pluginVisualRegression<Key>=<value>"` per entry of `options`. The manifest stores these as parts rather than a command string, so shell quoting and the package manager stay your choice.
-- The file is rewritten after every comparison, so it is complete even when the run is aborted. When specs run in parallel on several machines, each machine writes its own manifest; glob and concatenate the `entries` arrays.
-- Only the `runner` block is Cypress-specific; the rest of the format is shared with future runners. `version` is bumped on breaking changes to the format only.
+- The file is rewritten after every comparison, so it is complete even when the run is aborted. When specs run in parallel on several machines, each machine writes its own manifest; `**/*visual-regression-manifest*.json` finds all of them in an artifact, and `readManifestFiles` + `mergeManifests` from `@frsource/visual-regression-manifest` turn them into one list with a later CI attempt winning over an earlier one.
+- Only the `runner` block is Cypress-specific; the rest of the format is shared with every other writer. `version` is bumped on breaking changes to the format only; consumers ignore keys they do not know.
+- The `Manifest*` types are re-exported from `@frsource/cypress-plugin-visual-regression-diff/plugins` for convenience; they are the ones from `@frsource/visual-regression-manifest`.
 
 To write the manifest somewhere else (paths are resolved against the project root) or to turn it off, use the `pluginVisualRegressionManifestPath` key:
 
