@@ -21,7 +21,7 @@
     "record-demo": "node scripts/record-batch-demo.mjs"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=20.9.0"
   },
   "packageManager": "pnpm@12.5.1",
   "peerDependencies": {
