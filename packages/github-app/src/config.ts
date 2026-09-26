@@ -1,3 +1,4 @@
+import { MANIFEST_FILE_GLOB } from '@frsource/visual-regression-manifest';
 import { z } from 'zod';
 
 /** Name of the per-repository config file, read from `.github/` on the default branch. */
@@ -6,11 +7,13 @@ export const CONFIG_FILE = 'visual-regression.yml';
 export const configSchema = z.strictObject({
   /** Artifact-name globs (picomatch) to look for manifests in. */
   artifacts: z.array(z.string().min(1)).min(1).default(['**']),
-  /** Glob (picomatch) matched against file paths inside the artifact zip. */
-  manifestGlob: z
-    .string()
-    .min(1)
-    .default('**/*cp-visual-regression-diff-manifest*.json'),
+  /**
+   * Glob (picomatch) matched against file paths inside the artifact zip. The
+   * default finds every file named by the manifest standard
+   * (`visual-regression-manifest[.<label>].json`), which is what
+   * `@frsource/cypress-plugin-visual-regression-diff` 4.3+ writes.
+   */
+  manifestGlob: z.string().min(1).default(MANIFEST_FILE_GLOB),
   /**
    * Directory of the Cypress project inside the repository, for manifests that
    * do not carry `ci.workspace` (monorepos). Empty string = repository root.

@@ -14,8 +14,10 @@ scripts
 *.tgz
 *.md
 !packages/github-app/README.md
-packages/cypress-plugin-visual-regression-diff/__tests__
-packages/cypress-plugin-visual-regression-diff/src/**/*.test.ts
+!packages/visual-regression-manifest/README.md
+packages/visual-regression-manifest/__tests__
+packages/visual-regression-manifest/src/**/*.test.ts
 packages/github-app/src/**/*.test.ts
+packages/github-app/src/__fixtures__
 packages/github-app/test
 packages/github-app/.env*

@@ -1,18 +1,30 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import {
+  getManifestFileName,
+  isManifestFileName,
+  ManifestWriter,
+} from '@frsource/visual-regression-manifest';
 import { describe, expect, it } from 'vitest';
 import {
-  entryKey,
-  isSafeRelativePath,
-  keyHash,
   ManifestParseError,
   mergeManifests,
   parseManifest,
-  platformLabel,
-  projectDirInRepo,
+  parseManifestJson,
   selectEntries,
-  toRepoPath,
+  sourceLabel,
   type ManifestSource,
 } from './manifest.js';
-import { entry, HEAD_SHA, manifest, must, OTHER_SHA } from './test-utils.js';
+import {
+  entry,
+  HEAD_SHA,
+  manifest,
+  MANIFEST_ZIP_PATH,
+  must,
+  OTHER_SHA,
+  tmpDir,
+} from './test-utils.js';
 
 const source = (
   m = manifest(),
@@ -20,13 +32,23 @@ const source = (
 ): ManifestSource => ({
   artifactId: 9,
   artifactName: 'test',
-  zipPath: 'cypress/screenshots/cp-visual-regression-diff-manifest.e2e.json',
+  zipPath: MANIFEST_ZIP_PATH,
   manifest: m,
   ...overrides,
 });
 
+/** Verbatim output of `@frsource/cypress-plugin-visual-regression-diff` 4.3 for an e2e run on GitHub Actions. */
+const pluginManifestJson = readFileSync(
+  path.join(
+    path.dirname(fileURLToPath(import.meta.url)),
+    '__fixtures__',
+    getManifestFileName('e2e'),
+  ),
+  'utf8',
+);
+
 describe('parseManifest', () => {
-  it('accepts a plugin manifest and keeps unknown fields', () => {
+  it('accepts a standard manifest and keeps unknown fields', () => {
     const parsed = parseManifest(
       { ...manifest(), extra: { future: true } },
       'test:m.json',
@@ -45,91 +67,99 @@ describe('parseManifest', () => {
       parseManifest(manifest([{ ...entry(), status: 'weird' } as never]), 'x'),
     ).toThrow(/status/);
     expect(() => parseManifest('nope', 'x')).toThrow(/Invalid manifest x/);
+    expect(() => parseManifestJson('not json', 'x')).toThrow(
+      /Invalid manifest x: .*not valid JSON/,
+    );
   });
 });
 
-describe('paths', () => {
-  it('isSafeRelativePath', () => {
-    expect(isSafeRelativePath('a/b.png')).toBe(true);
-    expect(isSafeRelativePath('a/../b.png')).toBe(false);
-    expect(isSafeRelativePath('/a.png')).toBe(false);
-    expect(isSafeRelativePath('C:/a.png')).toBe(false);
-    expect(isSafeRelativePath('a\\b.png')).toBe(false);
-    expect(isSafeRelativePath('a//b.png')).toBe(false);
-    expect(isSafeRelativePath('./a.png')).toBe(false);
-    expect(isSafeRelativePath('')).toBe(false);
-    expect(isSafeRelativePath('a\u0000.png')).toBe(false);
-  });
-
-  it('projectDirInRepo uses ci.workspace when present, else the hint', () => {
-    expect(projectDirInRepo(manifest())).toBe('');
-    expect(
-      projectDirInRepo(
-        manifest([], { projectRoot: '/home/runner/work/r/r/examples/next/' }),
-      ),
-    ).toBe('examples/next');
-    expect(
-      projectDirInRepo(
-        manifest([], {
-          projectRoot: 'D:\\a\\r\\r\\apps\\web',
-          ci: { provider: 'github', workspace: 'D:\\a\\r\\r' },
-        }),
-      ),
-    ).toBe('apps/web');
-    expect(
-      projectDirInRepo(manifest([], { projectRoot: '/elsewhere' })),
-    ).toBeNull();
-    expect(
-      projectDirInRepo(manifest([], { ci: null }), './examples/next/'),
-    ).toBe('examples/next');
-    expect(projectDirInRepo(manifest([], { ci: null }))).toBe('');
-  });
-
-  it('toRepoPath joins and refuses escapes', () => {
-    expect(toRepoPath('', 'a/b.png')).toBe('a/b.png');
-    expect(toRepoPath('examples/next', 'a/b.png')).toBe(
-      'examples/next/a/b.png',
+describe('a manifest written by the Cypress plugin (4.3+)', () => {
+  it('is named so that the default glob finds it', () => {
+    expect(isManifestFileName(MANIFEST_ZIP_PATH)).toBe(true);
+    expect(MANIFEST_ZIP_PATH).toBe(
+      'cypress/screenshots/visual-regression-manifest.e2e.json',
     );
-    // an absolute imagesPath one level up still lands inside the repository
-    expect(toRepoPath('examples/next', '../shared/b.png')).toBe(
-      'examples/shared/b.png',
-    );
-    expect(toRepoPath('', '../b.png')).toBeNull();
-    expect(toRepoPath('', null)).toBeNull();
-    expect(toRepoPath(null, 'a.png')).toBeNull();
-  });
-});
-
-describe('entryKey', () => {
-  it('distinguishes platforms and is stable', () => {
-    const a = entry();
-    const b = entry({
-      platform: { os: 'darwin', browser: { name: 'chrome', version: '1' } },
-    });
-    expect(entryKey(a)).not.toBe(entryKey(b));
-    expect(keyHash(entryKey(a))).toMatch(/^[0-9a-f]{12}$/);
-    expect(platformLabel(a)).toBe('linux / electron');
-    expect(platformLabel(entry({ platform: undefined }))).toBe('');
   });
 
-  it('tells renderers apart, except the native one which is the test browser', () => {
-    const native = entry({
-      renderer: { backend: 'native', browser: 'electron' },
+  it('parses and merges through the app', () => {
+    const where = sourceLabel({
+      artifactName: 'test',
+      zipPath: MANIFEST_ZIP_PATH,
     });
-    const docker = entry({
-      renderer: { backend: 'docker', browser: 'chromium' },
+    const parsed = parseManifestJson(pluginManifestJson, where);
+    expect(parsed.runner).toMatchObject({
+      name: 'cypress',
+      testingType: 'e2e',
     });
-    const dockerFirefox = entry({
-      renderer: { backend: 'docker', browser: 'firefox' },
+
+    const run = mergeManifests([source(parsed)], {
+      headSha: HEAD_SHA,
+      runId: 555,
+      repository: 'o/r',
+      projectRootHint: 'somewhere/else', // ci.workspace wins over the hint
     });
-    expect(entryKey(native)).toBe(entryKey(entry()));
-    expect(entryKey(docker)).not.toBe(entryKey(native));
-    expect(entryKey(docker)).not.toBe(entryKey(dockerFirefox));
-    expect(platformLabel(native)).toBe('linux / electron');
-    expect(platformLabel(docker)).toBe('linux / electron (docker chromium)');
+    expect(run.warnings).toEqual([]);
+    expect(run.counts).toMatchObject({ passed: 1, failed: 1 });
+    expect(run.entries.map((e) => e.entry.name)).toEqual([
+      'about_#0',
+      'home_#0',
+    ]);
+    expect(run.needsHuman.map((e) => e.entry.name)).toEqual(['home_#0']);
+    const failed = must(run.needsHuman[0]);
+    expect(failed.unapprovableReason).toBeUndefined();
+    // paths are project-relative in the manifest, repository-relative for approving
+    expect(failed.repoPaths).toEqual({
+      baseline: 'examples/next/cypress/e2e/__image_snapshots__/home_#0.png',
+      actual:
+        'examples/next/cypress/e2e/__image_snapshots__/home_#0.actual.png',
+      diff: 'examples/next/cypress/e2e/__image_snapshots__/home_#0.diff.png',
+    });
+    expect(failed.source).toMatchObject({
+      artifactId: 9,
+      artifactName: 'test',
+      zipPath: MANIFEST_ZIP_PATH,
+    });
     expect(
-      platformLabel(entry({ platform: undefined, renderer: docker.renderer })),
-    ).toBe('docker chromium');
+      selectEntries(run, { names: ['home_#0 (linux / chrome)'] }).entries,
+    ).toEqual([failed]);
+  });
+
+  it('round-trips a manifest produced with the standard writer', async () => {
+    const dir = await tmpDir();
+    const writer = new ManifestWriter(
+      path.join(dir, getManifestFileName('e2e')),
+      {
+        projectRoot: dir,
+        runner: { name: 'cypress', version: '16.1.0', testingType: 'e2e' },
+        options: {},
+        ci: null,
+        platform: { os: 'linux', arch: 'x64' },
+      },
+    );
+    writer.record({
+      actualPath: 'cypress/e2e/__image_snapshots__/home_#0.actual.png',
+      baselinePath: 'cypress/e2e/__image_snapshots__/home_#0.png',
+      testFile: 'cypress/e2e/home.cy.ts',
+      titlePath: ['home', 'renders'],
+      retry: 0,
+      status: 'failed',
+      diffRatio: 0.2,
+      threshold: 0.01,
+      baselineWritten: false,
+      platform: { os: 'linux', browser: { name: 'electron', version: '130' } },
+      message: 'differs',
+    });
+    const text = readFileSync(
+      path.join(dir, getManifestFileName('e2e')),
+      'utf8',
+    );
+    const run = mergeManifests([source(parseManifestJson(text, 'w'))], {
+      projectRootHint: '',
+    });
+    expect(run.needsHuman.map((e) => e.entry.name)).toEqual(['home_#0']);
+    expect(must(run.needsHuman[0]).repoPaths.baseline).toBe(
+      'cypress/e2e/__image_snapshots__/home_#0.png',
+    );
   });
 });
 
@@ -165,6 +195,7 @@ describe('mergeManifests', () => {
     expect(run.counts).toMatchObject({ passed: 1, failed: 1 });
     expect(run.needsHuman.map((e) => e.entry.name)).toEqual(['about_#0']);
     expect(run.warnings).toEqual([]);
+    expect(run.entries[1]?.source.artifactId).toBe(10);
     expect(run.entries[1]?.repoPaths).toEqual({
       baseline: 'cypress/e2e/__image_snapshots__/home_#0.png',
       actual: 'cypress/e2e/__image_snapshots__/home_#0.actual.png',
@@ -172,7 +203,7 @@ describe('mergeManifests', () => {
     });
   });
 
-  it('warns when the manifest does not match the run', () => {
+  it('names the artifact and the zip path in warnings', () => {
     const m = manifest([], {
       ci: {
         ...must(manifest().ci),
@@ -187,25 +218,14 @@ describe('mergeManifests', () => {
       repository: 'o/r',
     });
     expect(warnings).toHaveLength(3);
-    expect(warnings[0]).toMatch(/written for commit bbbbbbb/);
-  });
-
-  it('warns when screenshots fell back to the local browser', () => {
-    const m = manifest([
-      entry({
-        renderer: { backend: 'native', browser: 'electron', fallback: true },
-      }),
-      entry({
-        name: 'about_#0',
-        renderer: { backend: 'native', browser: 'electron' },
-      }),
-    ]);
-    const { warnings } = mergeManifests([source(m)]);
-    expect(warnings).toHaveLength(1);
     expect(warnings[0]).toMatch(
-      /1 screenshot was rendered by the local browser .*renderer\.fallback/,
+      /^test:cypress\/screenshots\/visual-regression-manifest\.e2e\.json: manifest was written for commit bbbbbbb/,
     );
-    expect(mergeManifests([source(manifest())]).warnings).toEqual([]);
+    // a label given by the caller is kept
+    expect(
+      mergeManifests([source(m, { label: 'custom' })], { headSha: HEAD_SHA })
+        .warnings[0],
+    ).toMatch(/^custom: /);
   });
 
   it('marks entries that cannot be approved from CI', () => {
@@ -218,33 +238,17 @@ describe('mergeManifests', () => {
       entry({ images: { ...entry().images, actual: { path: null } } }),
     ]);
     const badProject = manifest([entry()], { projectRoot: '/other/place' });
-    const run = mergeManifests([
-      source(outside),
-      source(noActual, { artifactId: 2 }),
-      source(badProject, { artifactId: 3 }),
-    ]);
-    // all three share the same key, the last source wins; check reasons one by one instead
     expect(
       mergeManifests([source(outside)]).needsHuman[0]?.unapprovableReason,
     ).toMatch(/outside the repository/);
     expect(
       mergeManifests([source(noActual)]).needsHuman[0]?.unapprovableReason,
     ).toMatch(/kept no/);
-    expect(run.warnings.some((w) => w.includes('outside the checkout'))).toBe(
-      true,
-    );
-  });
-
-  it('detects two platforms writing the same baseline', () => {
-    const linux = entry();
-    const mac = entry({
-      platform: { os: 'darwin', browser: { name: 'chrome', version: '1' } },
-    });
-    const run = mergeManifests([source(manifest([linux, mac]))]);
-    expect(run.needsHuman).toHaveLength(2);
-    expect(run.needsHuman[0]?.collidesWith).toEqual([
-      run.needsHuman[1]?.keyHash,
-    ]);
+    expect(
+      mergeManifests([source(badProject)]).warnings.some((w) =>
+        w.includes('outside the checkout'),
+      ),
+    ).toBe(true);
   });
 });
 
@@ -266,17 +270,11 @@ describe('selectEntries', () => {
     expect(selectEntries(run, 'all').entries).toHaveLength(3);
   });
 
-  it('selects by key hash and reports unknown hashes', () => {
+  it('selects by key hash and by name', () => {
     const hash = must(run.entries[0]).keyHash;
     expect(
       selectEntries(run, { keyHashes: [hash, 'ffffffffffff'] }),
-    ).toMatchObject({
-      entries: [run.entries[0]],
-      unknown: ['ffffffffffff'],
-    });
-  });
-
-  it('selects by name, including the platform-suffixed form', () => {
+    ).toMatchObject({ entries: [run.entries[0]], unknown: ['ffffffffffff'] });
     const byName = selectEntries(run, { names: ['about_#0', 'nope'] });
     expect(byName.entries).toHaveLength(2);
     expect(byName.unknown).toEqual(['nope']);

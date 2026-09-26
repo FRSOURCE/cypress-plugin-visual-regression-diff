@@ -3,7 +3,7 @@ import type { ProbotOctokit } from 'probot';
 import type { RepoRef } from './comment.js';
 import { renderTemplate } from './config.js';
 import {
-  NEEDS_HUMAN,
+  needsHuman,
   selectEntries,
   type MergedEntry,
   type MergedRun,
@@ -141,7 +141,7 @@ export const approve = async (
 
     for (const merged of entries) {
       const { entry } = merged;
-      if (!NEEDS_HUMAN.includes(entry.status)) {
+      if (!needsHuman(entry.status)) {
         skipped.push({
           entry: merged,
           reason: `status is \`${entry.status}\``,

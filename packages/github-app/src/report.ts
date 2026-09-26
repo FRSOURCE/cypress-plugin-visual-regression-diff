@@ -1,7 +1,7 @@
-import type { ManifestStatus } from '@frsource/cypress-plugin-visual-regression-diff/plugins';
+import type { ManifestStatus } from '@frsource/visual-regression-manifest';
 import type { Config } from './config.js';
 import {
-  NEEDS_HUMAN,
+  needsHuman,
   platformLabel,
   type MergedEntry,
   type MergedRun,
@@ -255,9 +255,7 @@ export const renderComment = (ctx: ReportContext): string => {
     );
   }
 
-  const quiet = ctx.run.entries.filter(
-    (e) => !NEEDS_HUMAN.includes(e.entry.status),
-  );
+  const quiet = ctx.run.entries.filter((e) => !needsHuman(e.entry.status));
   if (quiet.length) {
     lines.push(
       `<details><summary>${quiet.length} screenshot${quiet.length === 1 ? '' : 's'} without action needed</summary>`,

@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { MANIFEST_FILE_GLOB } from '@frsource/visual-regression-manifest';
 import nock from 'nock';
 import { ProbotOctokit } from 'probot';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
@@ -13,6 +14,7 @@ import {
   keepImagesAndManifests,
   listMatchingArtifacts,
 } from './artifacts.js';
+import { DEFAULT_CONFIG } from './config.js';
 import {
   API,
   artifactListing,
@@ -255,15 +257,28 @@ describe('findManifestFiles', () => {
     expect(
       findManifestFiles(
         [
-          'b/cp-visual-regression-diff-manifest.e2e.json',
-          'a/cp-visual-regression-diff-manifest.component.json',
+          'b/visual-regression-manifest.e2e.json',
+          'a/visual-regression-manifest.component.json',
+          'visual-regression-manifest.json',
+          'c/visual-regression-manifest.playwright.w0.json',
           'other.json',
+          'notes/visual-regression-manifest.md',
         ],
-        '**/*cp-visual-regression-diff-manifest*.json',
+        DEFAULT_CONFIG.manifestGlob,
       ),
     ).toEqual([
-      'a/cp-visual-regression-diff-manifest.component.json',
-      'b/cp-visual-regression-diff-manifest.e2e.json',
+      'a/visual-regression-manifest.component.json',
+      'b/visual-regression-manifest.e2e.json',
+      'c/visual-regression-manifest.playwright.w0.json',
+      'visual-regression-manifest.json',
     ]);
+    expect(DEFAULT_CONFIG.manifestGlob).toBe(MANIFEST_FILE_GLOB);
+    // an override narrows or moves the search, the app does not second-guess it
+    expect(
+      findManifestFiles(
+        ['reports/vr.json', 'b/visual-regression-manifest.e2e.json'],
+        'reports/*.json',
+      ),
+    ).toEqual(['reports/vr.json']);
   });
 });

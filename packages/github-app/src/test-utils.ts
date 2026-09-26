@@ -2,10 +2,11 @@ import { generateKeyPairSync } from 'node:crypto';
 import { mkdtemp } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import type {
-  Manifest,
-  ManifestEntry,
-} from '@frsource/cypress-plugin-visual-regression-diff/plugins';
+import {
+  getManifestFileName,
+  type Manifest,
+  type ManifestEntry,
+} from '@frsource/visual-regression-manifest';
 import { strToU8, zipSync } from 'fflate';
 import nock from 'nock';
 import { Probot, ProbotOctokit, type ApplicationFunction } from 'probot';
@@ -162,8 +163,8 @@ export const manifest = (
   ...overrides,
 });
 
-export const MANIFEST_ZIP_PATH =
-  'cypress/screenshots/cp-visual-regression-diff-manifest.e2e.json';
+/** Where the Cypress plugin puts the manifest of an e2e run by default. */
+export const MANIFEST_ZIP_PATH = `cypress/screenshots/${getManifestFileName('e2e')}`;
 
 /** Artifact zip with one failed screenshot and its three images. */
 export const failingArtifactZip = (m: Manifest = manifest()) =>

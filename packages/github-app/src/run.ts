@@ -22,7 +22,8 @@ import {
 } from './images.js';
 import {
   mergeManifests,
-  parseManifest,
+  parseManifestJson,
+  sourceLabel,
   type ManifestSource,
   type MergedEntry,
   type MergedRun,
@@ -185,17 +186,20 @@ export const loadRun = async (
     )) {
       const file = cached.files.get(zipPath);
       if (!file) continue;
+      const where = { artifactName: cached.artifact.name, zipPath };
       try {
-        const json: unknown = JSON.parse(await readFile(file.path, 'utf8'));
         sources.push({
           artifactId: cached.artifact.id,
-          artifactName: cached.artifact.name,
-          zipPath,
-          manifest: parseManifest(json, `${cached.artifact.name}:${zipPath}`),
+          ...where,
+          label: sourceLabel(where),
+          manifest: parseManifestJson(
+            await readFile(file.path, 'utf8'),
+            sourceLabel(where),
+          ),
         });
       } catch (error) {
         warnings.push(
-          `\`${cached.artifact.name}:${zipPath}\` could not be read: ${(error as Error).message}`,
+          `\`${sourceLabel(where)}\` could not be read: ${(error as Error).message}`,
         );
       }
     }
