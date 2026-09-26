@@ -39,9 +39,7 @@ describe('externalId', () => {
   it('keeps action fields inside GitHub limits and clips long names', () => {
     expect(ACTION_APPROVE_ALL.label.length).toBeLessThanOrEqual(20);
     expect(ACTION_APPROVE_ALL.description.length).toBeLessThanOrEqual(40);
-    expect(
-      perImageCheckName('Visual regression', 'x'.repeat(300)),
-    ).toHaveLength(255);
+    expect(perImageCheckName('Tożsame', 'x'.repeat(300))).toHaveLength(255);
   });
 });
 
@@ -66,7 +64,7 @@ describe('upsertCheck', () => {
       { owner: 'o', repo: 'r' },
       {
         headSha: HEAD_SHA,
-        name: 'Visual regression',
+        name: 'Tożsame',
         externalId: '5.1',
         output: { title: 't', summary: 's' },
         conclusion: 'failure',
@@ -105,7 +103,7 @@ describe('upsertCheck', () => {
       { owner: 'o', repo: 'r' },
       {
         headSha: HEAD_SHA,
-        name: 'Visual regression',
+        name: 'Tożsame',
         externalId: '5.1',
         output: { title: 'x'.repeat(300), summary: 's' },
         status: 'in_progress',

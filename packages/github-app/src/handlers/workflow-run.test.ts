@@ -68,7 +68,7 @@ describe('workflow_run.completed', () => {
     expect(scope.isDone()).toBe(true);
     const summary = checks.find((c) => c.external_id === '555.1');
     expect(summary).toMatchObject({
-      name: 'Visual regression',
+      name: 'Tożsame',
       head_sha: HEAD_SHA,
       conclusion: 'failure',
       details_url: 'https://github.com/o/r/actions/runs/555',
@@ -81,7 +81,7 @@ describe('workflow_run.completed', () => {
     );
     const perImage = checks.find((c) => c.external_id !== '555.1');
     expect(perImage).toMatchObject({
-      name: 'Visual regression: home_#0',
+      name: 'Tożsame: home_#0',
       conclusion: 'failure',
     });
     expect(perImage?.external_id).toMatch(/^555\.1\.[0-9a-f]{12}$/);
@@ -90,7 +90,7 @@ describe('workflow_run.completed', () => {
     ).toEqual(['approve']);
     const body = comment?.body as string;
     expect(body).toContain(
-      '<!-- cpvrd-github-app:report run=555 attempt=1 sha=' + HEAD_SHA,
+      '<!-- tozsame-github-app:report run=555 attempt=1 sha=' + HEAD_SHA,
     );
     expect(body).toContain('https://vr.example.test/img/');
     expect(body).toContain('`home_#0`');
@@ -152,7 +152,7 @@ describe('workflow_run.completed', () => {
     scope.get('/repos/o/r/pulls/7').reply(200, pull());
     // octokit-plugin-config asks for the raw file
     scope
-      .get(/\/repos\/o\/r\/contents\/.*visual-regression\.yml/)
+      .get(/\/repos\/o\/r\/contents\/.*tozsame\.yml/)
       .reply(
         200,
         'images: false\ncommentCommand: approve-shots\nperImageChecks: 0\n',

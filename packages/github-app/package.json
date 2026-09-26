@@ -1,6 +1,6 @@
 {
-  "name": "@frsource/cpvrd-github-app",
-  "description": "GitHub App that reports visual regression results from CI artifacts and approves baselines from the PR",
+  "name": "@tozsame/github-app",
+  "description": "Tożsame for GitHub: reports visual regression results from CI artifacts on the pull request and lets reviewers approve baselines from there",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -27,7 +27,7 @@
     "test:integration:ci": "CI=true vitest run --coverage"
   },
   "dependencies": {
-    "@frsource/visual-regression-manifest": "workspace:^",
+    "@tozsame/manifest": "workspace:^",
     "picomatch": "4.0.7",
     "probot": "14.3.2",
     "yauzl": "3.4.0",

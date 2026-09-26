@@ -9,7 +9,7 @@ import {
   isManifestFileName,
   ManifestWriter,
   type PlaywrightJsonReport,
-} from '@frsource/visual-regression-manifest';
+} from '@tozsame/manifest';
 import { describe, expect, it } from 'vitest';
 import {
   ManifestParseError,

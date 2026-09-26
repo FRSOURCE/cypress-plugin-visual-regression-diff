@@ -1,5 +1,5 @@
-import type { ManifestStatus } from '@frsource/visual-regression-manifest';
-import type { Config } from './config.js';
+import type { ManifestStatus } from '@tozsame/manifest';
+import { DEFAULT_CONFIG, type Config } from './config.js';
 import {
   needsHuman,
   platformLabel,
@@ -8,7 +8,7 @@ import {
 } from './manifest.js';
 import type { PrInfo } from './pr.js';
 
-export const MARKER_PREFIX = '<!-- cpvrd-github-app:report';
+export const MARKER_PREFIX = '<!-- tozsame-github-app:report';
 
 export type MarkerState = { runId: number; attempt: number; sha: string };
 
@@ -17,7 +17,7 @@ export const renderMarker = ({ runId, attempt, sha }: MarkerState) =>
 
 export const parseMarker = (body: string): MarkerState | null => {
   const match = body.match(
-    /<!-- cpvrd-github-app:report run=(\d+) attempt=(\d+) sha=([0-9a-f]{7,40}) -->/,
+    /<!-- tozsame-github-app:report run=(\d+) attempt=(\d+) sha=([0-9a-f]{7,40}) -->/,
   );
   if (!match) return null;
   return {
@@ -47,7 +47,18 @@ export type ReportContext = {
   configError?: string;
   /** Artifacts that matched but had already expired. */
   expiredArtifacts?: string[];
+  /** Commit the app was deployed from, printed in the footer so bug reports can name it. */
+  deployedCommit?: string;
 };
+
+/** The command advertised in reports: the umbrella form unless the repository configured its own. */
+const commandHint = (ctx: ReportContext) =>
+  ctx.config.commentCommand === DEFAULT_CONFIG.commentCommand
+    ? 'tozsame approve'
+    : ctx.config.commentCommand;
+
+const footer = (ctx: ReportContext) =>
+  `\n<sub>Tożsame${ctx.deployedCommit ? ` · deployed ${ctx.deployedCommit.slice(0, 7)}` : ''}</sub>`;
 
 const STATUS_LABEL: Record<ManifestStatus, string> = {
   passed: 'passed',
@@ -120,7 +131,7 @@ const notes = (ctx: ReportContext) => {
   const lines: string[] = [];
   if (ctx.configError) {
     lines.push(
-      `Config \`.github/visual-regression.yml\` is invalid, using defaults: ${ctx.configError}`,
+      `Config \`.github/tozsame.yml\` is invalid, using defaults: ${ctx.configError}`,
     );
   }
   for (const name of ctx.expiredArtifacts ?? []) {
@@ -176,9 +187,9 @@ export const renderCheckSummary = (
   const table = rows.length
     ? `| screenshot | test | status | diff / threshold | platform |\n| --- | --- | --- | --- | --- |\n${rows.join('\n')}`
     : 'Every comparison passed.';
-  const summary = `[Run](${ctx.runUrl})${runner(ctx)} · commit ${ctx.headSha.slice(0, 7)}\n\n${table}\n${notes(ctx)}`;
+  const summary = `[Run](${ctx.runUrl})${runner(ctx)} · commit ${ctx.headSha.slice(0, 7)}\n\n${table}\n${notes(ctx)}${footer(ctx)}`;
   const text = ctx.run.needsHuman.length
-    ? `Approve from the buttons on this check, or comment \`/${ctx.config.commentCommand}\` (all) or \`/${ctx.config.commentCommand} \`name\` …\` (some) on the pull request.`
+    ? `Approve from the buttons on this check, or comment \`/${commandHint(ctx)}\` (all) or \`/${commandHint(ctx)} \`name\` …\` (some) on the pull request.`
     : undefined;
   return { title, summary, text };
 };
@@ -222,7 +233,7 @@ export const renderComment = (ctx: ReportContext): string => {
   const lines: string[] = [
     marker,
     '',
-    `### Visual regression: ${headline(ctx)}`,
+    `### Tożsame: ${headline(ctx)}`,
     '',
     `[Run](${ctx.runUrl})${runner(ctx)} · commit ${ctx.headSha.slice(0, 7)}`,
     '',
@@ -272,9 +283,10 @@ export const renderComment = (ctx: ReportContext): string => {
   lines.push(notes(ctx));
   if (open.some((e) => !ctx.approved?.[e.keyHash]) && ctx.pr.canPush) {
     lines.push(
-      `Approve everything with \`/${ctx.config.commentCommand}\`, or pick some: \`/${ctx.config.commentCommand} \`${shown[0] ? displayName(shown[0], ctx.run) : 'name'}\`\`. The buttons on the "${ctx.config.checkName}" checks do the same.`,
+      `Approve everything with \`/${commandHint(ctx)}\`, or pick some: \`/${commandHint(ctx)} \`${shown[0] ? displayName(shown[0], ctx.run) : 'name'}\`\`. The buttons on the "${ctx.config.checkName}" checks do the same.`,
     );
   }
+  lines.push(footer(ctx));
   return truncate(lines.join('\n'), 65000, marker);
 };
 

@@ -3,10 +3,12 @@
 #   docker-compose.prod.yml      (server: nginx-proxy network, TLS, restart policy)
 services:
   app:
-    image: ghcr.io/frsource/cpvrd-github-app:${VERSION_TAG:-local}
+    image: ghcr.io/frsource/tozsame-github-app:${VERSION_TAG:-local}
     build:
       context: ../..
       dockerfile: packages/github-app/Dockerfile
+      args:
+        GIT_SHA: ${GIT_SHA:-}
     environment:
       PORT: ${PORT}
       APP_ID: ${APP_ID}
@@ -25,4 +27,4 @@ services:
 
 volumes:
   cache:
-    name: cpvrd-github-app-${ENV_SUFFIX:-local}-cache
+    name: tozsame-github-app-${ENV_SUFFIX:-local}-cache

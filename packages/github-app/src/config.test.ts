@@ -14,19 +14,28 @@ describe('parseConfig', () => {
       commentCommand: 'approve-visuals',
       perImageChecks: 10,
       images: true,
-      checkName: 'Visual regression',
+      checkName: 'Tożsame',
     });
   });
 
   it('accepts overrides', () => {
     expect(
-      parseConfig({ artifacts: ['visual-*'], images: false, perImageChecks: 0 })
-        .config,
+      parseConfig({
+        version: 1,
+        artifacts: ['visual-*'],
+        images: false,
+        perImageChecks: 0,
+      }).config,
     ).toMatchObject({
+      version: 1,
       artifacts: ['visual-*'],
       images: false,
       perImageChecks: 0,
     });
+  });
+
+  it('rejects a schema version it does not know', () => {
+    expect(parseConfig({ version: 2 }).error).toContain('version');
   });
 
   it('falls back to defaults with a readable error on invalid input', () => {
@@ -44,7 +53,7 @@ describe('loadConfig', () => {
   it('reads the file through the Probot context', async () => {
     const context = {
       config: async <T>(file: string) => {
-        expect(file).toBe('visual-regression.yml');
+        expect(file).toBe('tozsame.yml');
         return { commentCommand: 'approve-shots' } as unknown as T;
       },
     };

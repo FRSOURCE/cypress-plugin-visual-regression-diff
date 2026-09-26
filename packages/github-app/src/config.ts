@@ -1,10 +1,12 @@
-import { MANIFEST_FILE_GLOB } from '@frsource/visual-regression-manifest';
+import { MANIFEST_FILE_GLOB } from '@tozsame/manifest';
 import { z } from 'zod';
 
 /** Name of the per-repository config file, read from `.github/` on the default branch. */
-export const CONFIG_FILE = 'visual-regression.yml';
+export const CONFIG_FILE = 'tozsame.yml';
 
 export const configSchema = z.strictObject({
+  /** Schema version of this file; only `1` exists. Optional so existing files stay valid. */
+  version: z.literal(1).optional(),
   /** Artifact-name globs (picomatch) to look for manifests in. */
   artifacts: z.array(z.string().min(1)).min(1).default(['**']),
   /**
@@ -19,7 +21,7 @@ export const configSchema = z.strictObject({
    * do not carry `ci.workspace` (monorepos). Empty string = repository root.
    */
   projectRoot: z.string().default(''),
-  /** Slash command name, used as `/<commentCommand> [names…]`. */
+  /** Slash command name, used as `/<commentCommand> [names…]`; `/tozsame approve [names…]` always works too. */
   commentCommand: z
     .string()
     .regex(/^[a-z0-9][a-z0-9-]*$/i)
@@ -32,7 +34,7 @@ export const configSchema = z.strictObject({
   imageTtlDays: z.number().min(0).default(14),
   /** Number of failed entries rendered with thumbnails before the rest is collapsed. */
   maxCommentEntries: z.number().int().min(0).default(20),
-  checkName: z.string().min(1).max(200).default('Visual regression'),
+  checkName: z.string().min(1).max(200).default('Tożsame'),
   /** Placeholders: `{count}`, `{names}`, `{user}`, `{run}`. */
   commitMessage: z
     .string()
@@ -60,7 +62,7 @@ type ConfigReader = {
   config<T>(fileName: string, defaultConfig?: T): Promise<T | null>;
 };
 
-/** Reads `.github/visual-regression.yml` through Probot (repo, then the org's `.github` repo). */
+/** Reads `.github/tozsame.yml` through Probot (repo, then the org's `.github` repo). */
 export const loadConfig = async (
   context: ConfigReader,
 ): Promise<ConfigResult> => {

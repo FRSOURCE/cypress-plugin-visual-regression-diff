@@ -5,7 +5,7 @@ import {
   type MergeOptions,
   type MergedEntry as StandardMergedEntry,
   type MergedRun as StandardMergedRun,
-} from '@frsource/visual-regression-manifest';
+} from '@tozsame/manifest';
 
 // The manifest format, its validation, the merge and the selection logic live
 // in the standard package; this module only binds them to where the app finds
@@ -21,7 +21,7 @@ export {
   selectEntries,
   type EntrySelection,
   type MergeOptions,
-} from '@frsource/visual-regression-manifest';
+} from '@tozsame/manifest';
 
 export type ManifestSource = StandardManifestSource & {
   artifactId: number;

@@ -63,8 +63,22 @@ describe('renderComment', () => {
     expect(body).toContain('`home_#0`');
     expect(body).toContain('❌ failed');
     expect(body).toContain('<img src="https://vr.test/img/');
-    expect(body).toContain('/approve-visuals');
+    expect(body).toContain('/tozsame approve');
     expect(body).toContain('linux / electron');
+    expect(body).toContain('### Tożsame:');
+    expect(body).toContain('<sub>Tożsame</sub>');
+  });
+
+  it('advertises a custom command and prints the deployed commit', () => {
+    const body = renderComment(
+      ctxFor([entry()], {
+        config: { ...DEFAULT_CONFIG, commentCommand: 'approve-shots' },
+        deployedCommit: 'f'.repeat(40),
+      }),
+    );
+    expect(body).toContain('/approve-shots');
+    expect(body).not.toContain('/tozsame approve');
+    expect(body).toContain('<sub>Tożsame · deployed fffffff</sub>');
   });
 
   it('collapses the overflow and lists quiet entries', () => {
@@ -132,7 +146,8 @@ describe('renderCheckSummary', () => {
     expect(summary).toContain('cypress 16.1.0 electron v130');
     expect(summary).toContain('| `home_#0` |');
     expect(summary).not.toContain('`ok_#0`');
-    expect(text).toContain('/approve-visuals');
+    expect(summary).toContain('<sub>Tożsame</sub>');
+    expect(text).toContain('/tozsame approve');
   });
 
   it('says so when everything passed', () => {

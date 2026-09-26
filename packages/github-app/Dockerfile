@@ -11,22 +11,25 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY patches ./patches
 COPY packages/visual-regression-manifest/package.json ./packages/visual-regression-manifest/
 COPY packages/github-app/package.json ./packages/github-app/
-RUN pnpm install --frozen-lockfile --filter @frsource/cpvrd-github-app...
+RUN pnpm install --frozen-lockfile --filter @tozsame/github-app...
 COPY packages/visual-regression-manifest ./packages/visual-regression-manifest
 COPY packages/github-app ./packages/github-app
 # `deploy` installs only this package's dependencies, so the Cypress plugin's
 # patch (rollup-plugin-typescript2) is unused there and must not fail the build
-RUN pnpm --filter @frsource/visual-regression-manifest build \
-  && pnpm --filter @frsource/cpvrd-github-app build \
-  && pnpm --filter @frsource/cpvrd-github-app deploy --prod --legacy \
+RUN pnpm --filter @tozsame/manifest build \
+  && pnpm --filter @tozsame/github-app build \
+  && pnpm --filter @tozsame/github-app deploy --prod --legacy \
        --config.allow-unused-patches=true /out
 
 FROM node:24-alpine AS runtime
+# the commit this image was built from; printed by /healthz and in report footers
+ARG GIT_SHA=
 ENV NODE_ENV=production \
     PORT=3100 \
     HOST=0.0.0.0 \
     CACHE_DIR=/data/cache \
-    LOG_FORMAT=json
+    LOG_FORMAT=json \
+    DEPLOYED_COMMIT=${GIT_SHA}
 WORKDIR /app
 COPY --from=build /out ./
 RUN mkdir -p /data/cache && chown -R node:node /data

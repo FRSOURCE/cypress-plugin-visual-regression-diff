@@ -15,7 +15,7 @@ describe('readEnv', () => {
       cacheTtlHours: 168,
       imageUrlTtlHours: 336,
     });
-    expect(env.cacheDir).toContain('cpvrd-github-app');
+    expect(env.cacheDir).toContain('tozsame-github-app');
   });
 
   it('reads and normalises the given values', () => {

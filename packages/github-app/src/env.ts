@@ -22,6 +22,8 @@ export type Env = {
   webhookProxyUrl?: string;
   logLevel?: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
   logFormat?: 'json' | 'pretty';
+  /** Commit this build was deployed from (`DEPLOYED_COMMIT`, set by the image build); shown in `/healthz` and report footers. */
+  deployedCommit?: string;
 };
 
 const GiB = 1024 ** 3;
@@ -52,7 +54,7 @@ export const readEnv = (env: NodeJS.ProcessEnv = process.env): Env => {
       /\/+$/,
       '',
     ),
-    cacheDir: env.CACHE_DIR || path.join(os.tmpdir(), 'cpvrd-github-app'),
+    cacheDir: env.CACHE_DIR || path.join(os.tmpdir(), 'tozsame-github-app'),
     port,
     host: env.HOST || '0.0.0.0',
     cacheTtlHours: num(env.CACHE_TTL_HOURS, 24 * 7),
@@ -63,5 +65,6 @@ export const readEnv = (env: NodeJS.ProcessEnv = process.env): Env => {
     webhookProxyUrl: env.WEBHOOK_PROXY_URL || undefined,
     logLevel: env.LOG_LEVEL as Env['logLevel'],
     logFormat: env.LOG_FORMAT as Env['logFormat'],
+    deployedCommit: env.DEPLOYED_COMMIT || undefined,
   };
 };

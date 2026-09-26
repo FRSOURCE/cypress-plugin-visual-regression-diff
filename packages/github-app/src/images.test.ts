@@ -3,9 +3,10 @@ import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import path from 'node:path';
 import nock from 'nock';
-import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import {
   cacheDirFor,
+  createHealthHandler,
   createImageHandler,
   healthHandler,
   imageUrl,
@@ -148,5 +149,12 @@ describe('image handler', () => {
     const health = await fetch(`${base}/healthz`);
     expect(health.status).toBe(200);
     expect(await health.text()).toBe('ok');
+
+    const res = { writeHead: () => res, end: vi.fn() };
+    await createHealthHandler({ deployedCommit: 'abc1234def' })(
+      { url: '/healthz?x' } as never,
+      res as never,
+    );
+    expect(res.end).toHaveBeenCalledWith('ok\ncommit: abc1234def');
   });
 });

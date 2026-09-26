@@ -94,6 +94,7 @@ export const publishReport = async (input: PublishInput): Promise<void> => {
     approved: input.approved,
     configError: input.configError,
     expiredArtifacts: loaded.expiredArtifacts.map((a) => a.name),
+    deployedCommit: env.deployedCommit,
   };
   const conclusion = conclusionFor(ctx);
   const openEntries = loaded.run.needsHuman.filter(

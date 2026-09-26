@@ -6,7 +6,7 @@ import {
   getManifestFileName,
   type Manifest,
   type ManifestEntry,
-} from '@frsource/visual-regression-manifest';
+} from '@tozsame/manifest';
 import { strToU8, zipSync } from 'fflate';
 import nock from 'nock';
 import { Probot, ProbotOctokit, type ApplicationFunction } from 'probot';
@@ -24,7 +24,7 @@ export const { privateKey } = generateKeyPairSync('rsa', {
 export const HEAD_SHA = 'a'.repeat(40);
 export const OTHER_SHA = 'b'.repeat(40);
 
-export const tmpDir = () => mkdtemp(path.join(os.tmpdir(), 'cpvrd-app-'));
+export const tmpDir = () => mkdtemp(path.join(os.tmpdir(), 'tozsame-app-'));
 
 /** Unwraps an optional value in a test; fails loudly instead of a non-null assertion. */
 export const must = <T>(value: T | null | undefined): T => {
@@ -217,9 +217,9 @@ export const mockAuth = (scope: nock.Scope) =>
 
 export const mockNoConfig = (scope: nock.Scope) =>
   scope
-    .get(/\/repos\/o\/r\/contents\/.*visual-regression\.yml/)
+    .get(/\/repos\/o\/r\/contents\/.*tozsame\.yml/)
     .reply(404, { message: 'Not Found' })
-    .get(/\/repos\/o\/\.github\/contents\/.*visual-regression\.yml/)
+    .get(/\/repos\/o\/\.github\/contents\/.*tozsame\.yml/)
     .reply(404, { message: 'Not Found' });
 
 export const mockArtifact = (scope: nock.Scope, listing = artifactListing()) =>

@@ -234,12 +234,15 @@ export const createImageHandler =
     return true;
   };
 
-/** `GET /healthz` */
-export const healthHandler = async (
-  req: IncomingMessage,
-  res: ServerResponse,
-): Promise<boolean> => {
-  if ((req.url?.split('?')[0] ?? '') !== '/healthz') return false;
-  res.writeHead(200, { 'content-type': 'text/plain' }).end('ok');
-  return true;
-};
+/** `GET /healthz`: `ok`, plus the deployed commit when the build knows it, so a bug report can name the build. */
+export const createHealthHandler =
+  ({ deployedCommit }: { deployedCommit?: string } = {}) =>
+  async (req: IncomingMessage, res: ServerResponse): Promise<boolean> => {
+    if ((req.url?.split('?')[0] ?? '') !== '/healthz') return false;
+    res
+      .writeHead(200, { 'content-type': 'text/plain' })
+      .end(deployedCommit ? `ok\ncommit: ${deployedCommit}` : 'ok');
+    return true;
+  };
+
+export const healthHandler = createHealthHandler();

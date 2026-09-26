@@ -2,7 +2,7 @@
 # (ZeroSSL via acme-companion) and routes by VIRTUAL_HOST. No ports are published.
 services:
   app:
-    container_name: cpvrd-github-app-${ENV_SUFFIX}
+    container_name: tozsame-github-app-${ENV_SUFFIX}
     restart: always
     networks:
       - nginx-proxy
@@ -12,7 +12,7 @@ services:
       VIRTUAL_PATH: /
       VIRTUAL_DEST: /
       LETSENCRYPT_HOST: ${APP_HOST}
-      LETSENCRYPT_EMAIL: letsencrypt+cpvrd-github-app@frsource.org
+      LETSENCRYPT_EMAIL: letsencrypt+tozsame@frsource.org
 
 networks:
   nginx-proxy:
