@@ -1,6 +1,6 @@
 {
-  "name": "@frsource/visual-regression-manifest",
-  "description": "The visual regression run manifest as a free standard: JSON Schema, TypeScript types, reader, writer, merger and converters (Playwright JSON report, plain PNG triples) for a runner-agnostic record of screenshot comparisons.",
+  "name": "@tozsame/manifest",
+  "description": "Tożsame Manifest: the visual regression run manifest as a free standard, JSON Schema, TypeScript types, reader, writer, merger and converters (Playwright JSON report, plain PNG triples) for a runner-agnostic record of screenshot comparisons.",
   "version": "0.0.0",
   "author": "Jakub Freisler <jakub.freisler@frsource.org>",
   "homepage": "https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/tree/main/packages/visual-regression-manifest",
@@ -51,6 +51,7 @@
     "vitest": "4.1.11"
   },
   "keywords": [
+    "tozsame",
     "visual regression testing",
     "visual diff",
     "image diff",

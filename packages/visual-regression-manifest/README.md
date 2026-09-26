@@ -1,9 +1,9 @@
-<h1 align="center">@frsource/visual-regression-manifest</h1>
-<p align="center">The visual regression run manifest, as a free standard: JSON Schema, TypeScript types, reader, writer, merger and converters.</p>
+<h1 align="center">Tożsame Manifest</h1>
+<p align="center">The visual regression run manifest, as a free standard: JSON Schema, TypeScript types, reader, writer, merger and converters. Published as <code>@tozsame/manifest</code>.</p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@frsource/visual-regression-manifest">
-    <img src="https://img.shields.io/npm/v/@frsource/visual-regression-manifest.svg" alt="NPM version badge">
+  <a href="https://www.npmjs.com/package/@tozsame/manifest">
+    <img src="https://img.shields.io/npm/v/@tozsame/manifest.svg" alt="NPM version badge">
   </a>
   <a href="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/FRSOURCE/cypress-plugin-visual-regression-diff.svg" alt="license MIT badge">
@@ -25,7 +25,7 @@ This package has no runtime dependencies.
 
 ## The format
 
-The normative description is the JSON Schema (draft 2020-12), shipped as [`schema.json`](./src/schema.json) and importable as `@frsource/visual-regression-manifest/schema.json` or the `manifestSchema` export. The TypeScript types (`Manifest`, `ManifestEntry`, ...) mirror it. A trimmed example:
+The normative description is the JSON Schema (draft 2020-12), shipped as [`schema.json`](./src/schema.json) and importable as `@tozsame/manifest/schema.json` or the `manifestSchema` export. The TypeScript types (`Manifest`, `ManifestEntry`, ...) mirror it. A trimmed example:
 
 ```jsonc
 {
@@ -128,7 +128,7 @@ import {
   readManifestFile,
   parseManifest,
   ManifestParseError,
-} from '@frsource/visual-regression-manifest';
+} from '@tozsame/manifest';
 
 // every manifest below a directory (an unpacked CI artifact), sorted by path
 const found = readManifestFiles('artifacts/test');
@@ -158,10 +158,7 @@ try {
 A run usually produces several manifests. `mergeManifests` concatenates them into one list keyed by screenshot name, test file, platform and renderer, with a later CI attempt winning over an earlier one, and prepares what an approval tool needs:
 
 ```ts
-import {
-  mergeManifests,
-  selectEntries,
-} from '@frsource/visual-regression-manifest';
+import { mergeManifests, selectEntries } from '@tozsame/manifest';
 
 const run = mergeManifests(
   found.map(({ file, manifest }) => ({ manifest, label: file })),
@@ -194,10 +191,7 @@ Any object with a `manifest` property is a source; extra properties (an artifact
 Test-runner integrations use `ManifestWriter`: a builder bound to a file that rewrites it atomically on every change.
 
 ```ts
-import {
-  ManifestWriter,
-  getManifestFileName,
-} from '@frsource/visual-regression-manifest';
+import { ManifestWriter, getManifestFileName } from '@tozsame/manifest';
 
 const writer = new ManifestWriter(
   `output/${getManifestFileName('my-runner')}`,
@@ -248,10 +242,7 @@ npx playwright test --reporter=json > report.json
 
 ```ts
 import fs from 'fs';
-import {
-  fromPlaywrightReport,
-  writeManifestFile,
-} from '@frsource/visual-regression-manifest';
+import { fromPlaywrightReport, writeManifestFile } from '@tozsame/manifest';
 
 const manifest = fromPlaywrightReport(
   JSON.parse(fs.readFileSync('report.json', 'utf8')),
@@ -274,7 +265,7 @@ Only comparisons that left files behind can be recovered: `failed` (expected, ac
 For any tool that leaves a baseline and, on failure, an actual and a diff image next to it:
 
 ```ts
-import { fromImageTriples } from '@frsource/visual-regression-manifest';
+import { fromImageTriples } from '@tozsame/manifest';
 
 const manifest = fromImageTriples({
   projectRoot: process.cwd(),
