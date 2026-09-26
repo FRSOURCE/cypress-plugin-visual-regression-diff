@@ -411,6 +411,9 @@ importers:
 
   packages/playwright-visual-regression-diff:
     dependencies:
+      '@frsource/visual-regression-manifest':
+        specifier: workspace:^
+        version: link:../visual-regression-manifest
       meta-png:
         specifier: 1.0.6
         version: 1.0.6
