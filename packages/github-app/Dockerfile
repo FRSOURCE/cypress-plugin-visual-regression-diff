@@ -6,19 +6,17 @@ RUN npm install -g pnpm@12.5.1
 WORKDIR /repo
 
 FROM base AS build
-# the plugin is a workspace dependency (types only), so its manifest is needed for the install
+# the manifest standard is a workspace dependency, so its package.json is needed for the install
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY patches ./patches
-COPY packages/cypress-plugin-visual-regression-diff/package.json ./packages/cypress-plugin-visual-regression-diff/
+COPY packages/visual-regression-manifest/package.json ./packages/visual-regression-manifest/
 COPY packages/github-app/package.json ./packages/github-app/
-# the plugin's devDependencies pull in Cypress; its binary is not needed to emit types
-ENV CYPRESS_INSTALL_BINARY=0
 RUN pnpm install --frozen-lockfile --filter @frsource/cpvrd-github-app...
-COPY packages/cypress-plugin-visual-regression-diff ./packages/cypress-plugin-visual-regression-diff
+COPY packages/visual-regression-manifest ./packages/visual-regression-manifest
 COPY packages/github-app ./packages/github-app
-# `deploy` installs only this package's dependencies, so the plugin's patch
-# (rollup-plugin-typescript2) is unused there and must not fail the build
-RUN pnpm --filter @frsource/cypress-plugin-visual-regression-diff build \
+# `deploy` installs only this package's dependencies, so the Cypress plugin's
+# patch (rollup-plugin-typescript2) is unused there and must not fail the build
+RUN pnpm --filter @frsource/visual-regression-manifest build \
   && pnpm --filter @frsource/cpvrd-github-app build \
   && pnpm --filter @frsource/cpvrd-github-app deploy --prod --legacy \
        --config.allow-unused-patches=true /out

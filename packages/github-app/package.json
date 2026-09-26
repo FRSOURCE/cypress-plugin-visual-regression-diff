@@ -27,13 +27,13 @@
     "test:integration:ci": "CI=true vitest run --coverage"
   },
   "dependencies": {
+    "@frsource/visual-regression-manifest": "workspace:^",
     "picomatch": "4.0.7",
     "probot": "14.3.2",
     "yauzl": "3.4.0",
     "zod": "4.6.5"
   },
   "devDependencies": {
-    "@frsource/cypress-plugin-visual-regression-diff": "workspace:*",
     "@frsource/prettier-config": "^1.11.0",
     "@types/node": "^24.0.0",
     "@types/picomatch": "4.0.3",

@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "createdAt": "2026-09-22T10:00:00.000Z",
+  "updatedAt": "2026-09-22T10:03:12.481Z",
+  "projectRoot": "/home/runner/work/r/r/examples/next",
+  "platform": { "os": "linux", "arch": "x64", "osVersion": "6.8.0-1021-azure" },
+  "ci": {
+    "provider": "github",
+    "repository": "o/r",
+    "sha": "cccccccccccccccccccccccccccccccccccccccc",
+    "ref": "refs/pull/7/merge",
+    "branch": "feat/x",
+    "pullRequest": {
+      "number": 7,
+      "headSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "headRef": "feat/x",
+      "baseRef": "main"
+    },
+    "event": "pull_request",
+    "runId": "555",
+    "runAttempt": "1",
+    "runNumber": "1234",
+    "job": "test",
+    "workflow": "CI",
+    "serverUrl": "https://github.com",
+    "url": "https://github.com/o/r/actions/runs/555/attempts/1",
+    "workspace": "/home/runner/work/r/r"
+  },
+  "options": { "updateImages": false },
+  "runner": {
+    "name": "cypress",
+    "version": "16.1.0",
+    "testingType": "e2e",
+    "mode": "run",
+    "configFile": "cypress.config.ts",
+    "baseUrl": "http://localhost:3000",
+    "viewport": { "width": 1000, "height": 660 },
+    "browser": {
+      "name": "chrome",
+      "version": "130",
+      "family": "chromium",
+      "headless": true
+    },
+    "specs": ["cypress/e2e/home.cy.ts"]
+  },
+  "entries": [
+    {
+      "name": "about_#0",
+      "test": {
+        "file": "cypress/e2e/about.cy.ts",
+        "titlePath": ["about", "renders"],
+        "retry": 0
+      },
+      "status": "passed",
+      "comparison": { "diffRatio": 0, "threshold": 0.01 },
+      "images": {
+        "baseline": {
+          "path": "cypress/e2e/__image_snapshots__/about_#0.png",
+          "width": 125,
+          "height": 125
+        },
+        "actual": { "path": null },
+        "diff": { "path": null }
+      },
+      "baselineWritten": false,
+      "recordedAt": "2026-09-22T10:03:10.000Z",
+      "platform": {
+        "os": "linux",
+        "arch": "x64",
+        "browser": { "name": "chrome", "version": "130" }
+      },
+      "viewport": { "width": 1280, "height": 720 },
+      "options": {
+        "imagesPath": "{spec_path}/__image_snapshots__",
+        "maxDiffThreshold": 0.01,
+        "diffConfig": {},
+        "createMissingImages": true,
+        "updateImages": false,
+        "forceDeviceScaleFactor": true,
+        "screenshotConfig": {}
+      },
+      "renderer": {
+        "backend": "native",
+        "browser": "chrome",
+        "browserVersion": "130"
+      },
+      "hashes": {
+        "baseline": "b0c5e8a0b3d5b3e8b0c5e8a0b3d5b3e8b0c5e8a0b3d5b3e8b0c5e8a0b3d5b3e8"
+      },
+      "message": ""
+    },
+    {
+      "name": "home_#0",
+      "test": {
+        "file": "cypress/e2e/home.cy.ts",
+        "titlePath": ["home", "renders"],
+        "retry": 0
+      },
+      "status": "failed",
+      "comparison": { "diffRatio": 0.25, "threshold": 0.01 },
+      "images": {
+        "baseline": {
+          "path": "cypress/e2e/__image_snapshots__/home_#0.png",
+          "width": 125,
+          "height": 125
+        },
+        "actual": {
+          "path": "cypress/e2e/__image_snapshots__/home_#0.actual.png",
+          "width": 250,
+          "height": 181
+        },
+        "diff": { "path": "cypress/e2e/__image_snapshots__/home_#0.diff.png" }
+      },
+      "baselineWritten": false,
+      "recordedAt": "2026-09-22T10:03:12.480Z",
+      "platform": {
+        "os": "linux",
+        "arch": "x64",
+        "browser": { "name": "chrome", "version": "130" }
+      },
+      "viewport": { "width": 1280, "height": 720 },
+      "options": {
+        "imagesPath": "{spec_path}/__image_snapshots__",
+        "maxDiffThreshold": 0.01,
+        "diffConfig": {},
+        "createMissingImages": true,
+        "updateImages": false,
+        "forceDeviceScaleFactor": true,
+        "screenshotConfig": {}
+      },
+      "renderer": {
+        "backend": "native",
+        "browser": "chrome",
+        "browserVersion": "130"
+      },
+      "hashes": {
+        "baseline": "b0c5e8a0b3d5b3e8b0c5e8a0b3d5b3e8b0c5e8a0b3d5b3e8b0c5e8a0b3d5b3e8",
+        "actual": "1f2e3d4c5b6a79881f2e3d4c5b6a79881f2e3d4c5b6a79881f2e3d4c5b6a7988",
+        "diff": "9a8b7c6d5e4f30219a8b7c6d5e4f30219a8b7c6d5e4f30219a8b7c6d5e4f3021"
+      },
+      "message": "Image diff factor (25%) is bigger than maximum threshold option 1%."
+    }
+  ]
+}

@@ -1,12 +1,12 @@
 # Visual regression GitHub App
 
-A small [Probot](https://probot.github.io/) app that turns the [run manifest](../cypress-plugin-visual-regression-diff/README.md#run-manifest-ci-integration) written by `@frsource/cypress-plugin-visual-regression-diff` into a pull request review flow:
+A small [Probot](https://probot.github.io/) app that turns the [run manifest](../visual-regression-manifest/README.md) written by `@frsource/cypress-plugin-visual-regression-diff` (4.3 and later, see [its README](../cypress-plugin-visual-regression-diff/README.md#run-manifest-ci-integration)) into a pull request review flow:
 
 - when a workflow run finishes, it downloads the artifact with the manifest and the PNGs, and posts a **check run** (failure when any screenshot needs a look) plus **one comment** on the PR with old / diff / new thumbnails;
 - a reviewer approves a screenshot with the **Approve** button on its check run, all of them with **Approve all**, or by commenting `/approve-visuals` (optionally followed by names);
 - approving copies the run's `.actual.png` bytes over the baseline file and pushes **one commit** to the PR branch. Nothing is re-rendered; the image the reviewer saw is the image that lands in git.
 
-The app is runner-agnostic: it only reads the manifest format, so a future Playwright client works with it unchanged.
+The app is runner-agnostic: it reads the manifest through [`@frsource/visual-regression-manifest`](../visual-regression-manifest/README.md) and knows nothing about Cypress, so anything that writes that format works with it unchanged: the Playwright sibling once it ships, Playwright's own `toHaveScreenshot` output through the package's `fromPlaywrightReport` converter, and any tool that leaves baseline / actual / diff images behind through `fromImageTriples`. That last converter is also the bridge for plugin versions before 4.3, which write no manifest: a small script in the workflow can turn the `__image_snapshots__` directories into a manifest and upload it with the artifact.
 
 ## Using it in your repository
 
@@ -20,7 +20,7 @@ The app is runner-agnostic: it only reads the manifest format, so a future Playw
      with:
        name: visual-regression
        path: |
-         cypress/screenshots/cp-visual-regression-diff-manifest.*.json
+         cypress/screenshots/visual-regression-manifest.*.json
          cypress/**/__image_snapshots__/**
    ```
 
@@ -30,7 +30,7 @@ The app is runner-agnostic: it only reads the manifest format, so a future Playw
 
    ```yaml
    artifacts: ['visual-regression'] # artifact name globs, default ['**']
-   manifestGlob: '**/*cp-visual-regression-diff-manifest*.json'
+   manifestGlob: '**/*visual-regression-manifest*.json' # picomatch, matched against paths inside the artifact zip
    projectRoot: '' # Cypress project dir inside the repo, for manifests without ci.workspace (monorepos)
    commentCommand: approve-visuals # /approve-visuals [names…]; /regenerate-visuals is always accepted too
    perImageChecks: 10 # check runs with an "Approve" button per failed screenshot, 0 disables
@@ -82,7 +82,7 @@ Start the server without `APP_ID` and open `http://localhost:3100/probot`; Probo
 
 ```bash
 pnpm install
-pnpm --filter @frsource/cypress-plugin-visual-regression-diff build   # types the app imports
+pnpm --filter @frsource/visual-regression-manifest build   # the app imports the package through its dist
 cp packages/github-app/.env.example packages/github-app/.env           # fill in APP_ID, PRIVATE_KEY, WEBHOOK_SECRET, WEBHOOK_PROXY_URL
 pnpm --filter @frsource/cpvrd-github-app dev
 ```
@@ -108,6 +108,6 @@ GitHub has no API for apps to upload images, `data:` URIs are stripped from mark
 
 ## How it works
 
-1. `workflow_run.completed` (for `pull_request`, `pull_request_target` and `push` runs): resolve the PR, read the config, list artifacts matching `artifacts`, stream each zip to disk (size-capped, zip-slip guarded), keep the PNGs and JSON files, parse every file matching `manifestGlob`, merge the entries (several machines, e2e + component; a later run attempt wins), then upsert the summary check, the per-image checks and the comment. Check runs are found by `external_id` (`<runId>.<attempt>[.<key>]`), so a redelivered webhook updates rather than duplicates.
+1. `workflow_run.completed` (for `pull_request`, `pull_request_target` and `push` runs): resolve the PR, read the config, list artifacts matching `artifacts`, stream each zip to disk (size-capped, zip-slip guarded), keep the PNGs and JSON files, parse every file matching `manifestGlob` (`parseManifestJson` from the manifest package validates it against the schema), merge the entries with the package's `mergeManifests` (several machines, e2e + component; a later run attempt wins), then upsert the summary check, the per-image checks and the comment. Check runs are found by `external_id` (`<runId>.<attempt>[.<key>]`), so a redelivered webhook updates rather than duplicates.
 2. `check_run.requested_action`: permission check, then `approve()`: read the branch head (it must still be the report's commit), create one blob per approved image, one tree, one commit, and update the ref without force. Files whose baseline already has the same bytes are skipped, so a second click is a no-op. A non-fast-forward is retried once.
 3. `issue_comment.created`: parse the command, find the report comment by its hidden marker to learn the run id and commit, then the same approval path.
