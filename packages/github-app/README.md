@@ -76,7 +76,7 @@ Thumbnails are served by the app from the downloaded artifact through unguessabl
 
 ### Register the app
 
-Start the server without `APP_ID` and open `http://localhost:3100/probot`; Probot registers the app from [`app.yml`](./app.yml) and writes the credentials to `.env`. Or create it by hand with the permissions from `app.yml` and the webhook URL `https://<APP_HOST>/api/github/webhooks`.
+Create the app by hand (GitHub → Settings → Developer settings → GitHub Apps → New GitHub App) with the permissions and events from [`app.yml`](./app.yml) and the webhook URL `https://<APP_HOST>/api/github/webhooks`, generate a private key and a webhook secret, and put `APP_ID`, `PRIVATE_KEY` and `WEBHOOK_SECRET` into the environment. The server does not offer Probot's `/probot` registration page: it builds its own `Server` and refuses to start without those three (`appId option is required`).
 
 ### Local development
 
