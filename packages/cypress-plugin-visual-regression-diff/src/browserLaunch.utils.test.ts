@@ -78,14 +78,27 @@ describe('getBrowserLaunchOptions', () => {
     );
   });
 
-  it.each(['chromium', 'edge'])('treats %s like chrome', (name) => {
+  it('treats chromium like chrome', () => {
     const { launchOptions: result } = getBrowserLaunchOptions(
-      browser({ name: name as Cypress.BrowserName }),
+      browser({ name: 'chromium' }),
       launchOptions(),
       both,
     );
     expect(result.args).toContain('--force-device-scale-factor=1');
     expect(result.args).toContain('--font-render-hinting=none');
+  });
+
+  it('gives edge the rendering switches but not the scale factor (4.x keeps that to chrome and chromium)', () => {
+    const { launchOptions: result } = getBrowserLaunchOptions(
+      browser({ name: 'edge' }),
+      launchOptions(),
+      both,
+    );
+    expect(result.args).not.toContain('--force-device-scale-factor=1');
+    expect(result.args).toEqual([
+      ...DETERMINISTIC_RENDERING_CHROMIUM_ARGS,
+      '--hide-scrollbars',
+    ]);
   });
 
   it('does not duplicate switches that are already there', () => {
@@ -153,13 +166,21 @@ describe('getBrowserLaunchOptions', () => {
     expect(result.args).toEqual([]);
     expect(result.preferences).toEqual({
       existing: true,
-      'layout.css.devPixelsPerPx': '1',
       'gfx.webrender.software': true,
     });
     expect(messages).toEqual([]);
   });
 
-  it('skips the firefox scale factor preference when that preset is off', () => {
+  it('never sets a firefox scale factor preference on 4.x (5.0 does)', () => {
+    const { launchOptions: result } = getBrowserLaunchOptions(
+      browser({ name: 'firefox', family: 'firefox' }),
+      launchOptions(),
+      { forceDeviceScaleFactor: true, deterministicRendering: false },
+    );
+    expect(result.preferences).toEqual({});
+  });
+
+  it('applies only the rendering preference when the scale factor preset is off', () => {
     const { launchOptions: result } = getBrowserLaunchOptions(
       browser({ name: 'firefox', family: 'firefox' }),
       launchOptions(),

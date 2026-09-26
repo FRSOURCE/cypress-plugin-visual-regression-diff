@@ -3,7 +3,6 @@ import {
   DETERMINISTIC_RENDERING_FIREFOX_PREFERENCES,
   DETERMINISTIC_RENDERING_HEADLESS_CHROMIUM_ARGS,
   FORCE_DEVICE_SCALE_FACTOR_CHROMIUM_ARGS,
-  FORCE_DEVICE_SCALE_FACTOR_FIREFOX_PREFERENCES,
 } from './constants';
 import { getPluginConfig } from './version.utils';
 
@@ -62,10 +61,16 @@ export const getBrowserLaunchOptions = (
   const preferences = { ...launchOptions.preferences };
   const messages: string[] = [];
   const isElectron = browser.name === 'electron';
+  // 4.x: the scale factor switches go to Chrome and Chromium only, as they
+  // always did on this line. 5.0 widens them to the whole chromium family
+  // (Edge) and to Firefox; that changes HiDPI baselines there, so it waits
+  // for the major.
+  const isChromeOrChromium =
+    browser.name === 'chrome' || browser.name === 'chromium';
 
   if (browser.family === 'chromium' && !isElectron) {
     // based on https://github.com/cypress-io/cypress/issues/2102#issuecomment-521299946
-    if (presets.forceDeviceScaleFactor) {
+    if (presets.forceDeviceScaleFactor && isChromeOrChromium) {
       pushUnique(args, FORCE_DEVICE_SCALE_FACTOR_CHROMIUM_ARGS);
     }
     if (presets.deterministicRendering) {
@@ -75,9 +80,7 @@ export const getBrowserLaunchOptions = (
       }
     }
   } else if (browser.family === 'firefox') {
-    if (presets.forceDeviceScaleFactor) {
-      Object.assign(preferences, FORCE_DEVICE_SCALE_FACTOR_FIREFOX_PREFERENCES);
-    }
+    // no scale factor preference on 4.x (5.0 sets layout.css.devPixelsPerPx)
     if (presets.deterministicRendering) {
       Object.assign(preferences, DETERMINISTIC_RENDERING_FIREFOX_PREFERENCES);
     }
