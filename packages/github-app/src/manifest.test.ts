@@ -1,10 +1,14 @@
 import { readFileSync } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  fromImageTriples,
+  fromPlaywrightReport,
   getManifestFileName,
   isManifestFileName,
   ManifestWriter,
+  type PlaywrightJsonReport,
 } from '@frsource/visual-regression-manifest';
 import { describe, expect, it } from 'vitest';
 import {
@@ -160,6 +164,159 @@ describe('a manifest written by the Cypress plugin (4.3+)', () => {
     expect(must(run.needsHuman[0]).repoPaths.baseline).toBe(
       'cypress/e2e/__image_snapshots__/home_#0.png',
     );
+  });
+});
+
+describe('manifests from the package converters (tools without a manifest of their own)', () => {
+  const touch = async (dir: string, files: string[]) => {
+    for (const file of files) {
+      await mkdir(path.dirname(path.join(dir, file)), { recursive: true });
+      await writeFile(path.join(dir, file), file);
+    }
+  };
+
+  it('parses and merges what fromImageTriples produces', async () => {
+    const dir = await tmpDir();
+    await touch(dir, [
+      'shots/home.png',
+      'shots/home.actual.png',
+      'shots/home.diff.png',
+      'shots/about.png',
+    ]);
+    const converted = fromImageTriples({
+      projectRoot: dir,
+      runner: { name: 'my-tool' },
+      ci: null,
+      platform: { os: 'linux', arch: 'x64' },
+      triples: [
+        {
+          baseline: 'shots/home.png',
+          testFile: 'tests/home.test.ts',
+          titlePath: ['home'],
+          diffRatio: 0.3,
+          threshold: 0.01,
+          platform: { os: 'linux', browser: { name: 'chromium' } },
+        },
+        { baseline: 'shots/about.png' },
+      ],
+    });
+
+    const run = mergeManifests(
+      [source(parseManifestJson(JSON.stringify(converted), 'triples'))],
+      { projectRootHint: 'web' },
+    );
+    expect(run.warnings).toEqual([]);
+    // statuses are inferred from the files left behind
+    expect(run.counts).toMatchObject({ failed: 1, passed: 1 });
+    const failed = must(run.needsHuman[0]);
+    expect(failed.entry.name).toBe('home');
+    expect(failed.unapprovableReason).toBeUndefined();
+    expect(failed.repoPaths).toEqual({
+      baseline: 'web/shots/home.png',
+      actual: 'web/shots/home.actual.png',
+      diff: 'web/shots/home.diff.png',
+    });
+    expect(
+      selectEntries(run, { names: ['home (linux / chromium)'] }).entries,
+    ).toEqual([failed]);
+  });
+
+  it('parses and merges what fromPlaywrightReport produces', async () => {
+    const dir = await tmpDir();
+    const results = 'test-results/home-header-renders-chromium';
+    await touch(dir, [
+      `${results}/header-expected.png`,
+      `${results}/header-actual.png`,
+      `${results}/header-diff.png`,
+    ]);
+    const report: PlaywrightJsonReport = {
+      config: {
+        rootDir: dir,
+        version: '1.63.0',
+        projects: [
+          { id: 'chromium', name: 'chromium', testDir: `${dir}/tests` },
+        ],
+      },
+      suites: [
+        {
+          title: 'home.spec.ts',
+          file: 'tests/home.spec.ts',
+          suites: [
+            {
+              title: 'header',
+              file: 'tests/home.spec.ts',
+              specs: [
+                {
+                  title: 'renders',
+                  file: 'tests/home.spec.ts',
+                  tests: [
+                    {
+                      projectName: 'chromium',
+                      results: [
+                        {
+                          status: 'failed',
+                          retry: 0,
+                          startTime: '2026-09-25T10:00:00.000Z',
+                          errors: [
+                            {
+                              message:
+                                'Error: expect(page).toHaveScreenshot(expected) failed\n\n' +
+                                '  8 pixels (ratio 0.02 of all image pixels) are different.\n\n' +
+                                `Received: ${dir}/${results}/header-actual.png\n`,
+                            },
+                          ],
+                          attachments: [
+                            'header-expected.png',
+                            'header-actual.png',
+                            'header-diff.png',
+                          ].map((name) => ({
+                            name,
+                            contentType: 'image/png',
+                            path: `${dir}/${results}/${name}`,
+                          })),
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+    const converted = fromPlaywrightReport(report, {
+      platform: 'linux',
+      threshold: 0.01,
+      ci: null,
+    });
+
+    const run = mergeManifests(
+      [source(parseManifestJson(JSON.stringify(converted), 'playwright'))],
+      { projectRootHint: '' },
+    );
+    expect(run.warnings).toEqual([]);
+    expect(run.needsHuman.map((e) => e.entry.name)).toEqual([
+      'header-chromium-linux',
+    ]);
+    const failed = must(run.needsHuman[0]);
+    expect(failed.entry.status).toBe('failed');
+    expect(failed.entry.comparison).toEqual({
+      diffRatio: 0.02,
+      threshold: 0.01,
+    });
+    expect(failed.unapprovableReason).toBeUndefined();
+    // the baseline comes from the snapshot path template, the others from the report
+    expect(failed.repoPaths).toEqual({
+      baseline: 'tests/home.spec.ts-snapshots/header-chromium-linux.png',
+      actual: `${results}/header-actual.png`,
+      diff: `${results}/header-diff.png`,
+    });
+    expect(
+      selectEntries(run, {
+        names: ['header-chromium-linux (linux / chromium)'],
+      }).entries,
+    ).toEqual([failed]);
   });
 });
 
