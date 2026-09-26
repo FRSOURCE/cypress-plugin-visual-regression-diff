@@ -12,7 +12,7 @@
 
 A **run manifest** is one JSON file per test run that lists every screenshot comparison the run made: which test it came from, whether it passed, failed, created or updated its baseline, the diff ratio, and where the baseline, actual and diff images are. Next to the entries it records where the run happened (CI provider, repository, commit, pull request, run id) and what it ran with (runner, browser, options), so a tool that runs _after_ the tests (a PR comment bot, a review dashboard, an approval tool) reads one file instead of parsing logs or walking the snapshots directory.
 
-The format is **runner-agnostic**: the same file is written by [`@frsource/cypress-plugin-visual-regression-diff`](https://www.npmjs.com/package/@frsource/cypress-plugin-visual-regression-diff) (from 4.3 on), by its Playwright sibling, and by the converters in this package for tools that write no manifest of their own. Only the `runner` block carries runner vocabulary.
+The format is **runner-agnostic**: the same file is written by [`@frsource/cypress-plugin-visual-regression-diff`](https://www.npmjs.com/package/@frsource/cypress-plugin-visual-regression-diff) (from 4.3 on), by its Playwright sibling (in preparation), and by the converters in this package for tools that write no manifest of their own. Only the `runner` block carries runner vocabulary.
 
 This package has no runtime dependencies.
 
