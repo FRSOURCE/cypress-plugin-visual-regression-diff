@@ -1,0 +1,23 @@
+# Build context for packages/github-app/Dockerfile (context = repository root)
+.git
+.github
+.claude
+.devcontainer
+node_modules
+**/node_modules
+**/dist
+**/coverage
+**/.turbo
+examples
+assets
+scripts
+*.tgz
+*.md
+!packages/github-app/README.md
+!packages/visual-regression-manifest/README.md
+packages/visual-regression-manifest/__tests__
+packages/visual-regression-manifest/src/**/*.test.ts
+packages/github-app/src/**/*.test.ts
+packages/github-app/src/__fixtures__
+packages/github-app/test
+packages/github-app/.env*

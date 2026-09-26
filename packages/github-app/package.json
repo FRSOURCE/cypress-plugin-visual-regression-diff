@@ -1,0 +1,51 @@
+{
+  "name": "@frsource/cpvrd-github-app",
+  "description": "GitHub App that reports visual regression results from CI artifacts and approves baselines from the PR",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "author": "Jakub Freisler <jakub.freisler@frsource.org>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@12.5.1",
+  "files": [
+    "dist",
+    "app.yml"
+  ],
+  "scripts": {
+    "build": "del-cli dist && tsc -p tsconfig.build.json",
+    "start": "node dist/server.js",
+    "dev": "tsx watch --env-file=.env src/server.ts",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:ci": "prettier --check .",
+    "test:integration": "vitest run",
+    "test:integration:watch": "vitest",
+    "test:integration:coverage": "vitest run --coverage",
+    "test:integration:ci": "CI=true vitest run --coverage"
+  },
+  "dependencies": {
+    "@frsource/visual-regression-manifest": "workspace:^",
+    "picomatch": "4.0.7",
+    "probot": "14.3.2",
+    "yauzl": "3.4.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@frsource/prettier-config": "^1.11.0",
+    "@types/node": "^24.0.0",
+    "@types/picomatch": "4.0.3",
+    "@types/yauzl": "3.4.0",
+    "@vitest/coverage-v8": "4.1.11",
+    "del-cli": "7.0.0",
+    "fflate": "0.8.3",
+    "nock": "14.0.17",
+    "prettier": "3.9.8",
+    "smee-client": "5.0.0",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "vitest": "4.1.11"
+  }
+}
