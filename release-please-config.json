@@ -19,7 +19,10 @@
     },
     "packages/playwright-visual-regression-diff": {
       "path": "packages/playwright-visual-regression-diff",
-      "component": "@frsource/playwright-visual-regression-diff"
+      "component": "@frsource/playwright-visual-regression-diff",
+      "versioning": "prerelease",
+      "prerelease": true,
+      "release-as": "0.1.0-beta.1"
     }
   }
 }
