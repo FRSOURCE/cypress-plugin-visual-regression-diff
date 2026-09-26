@@ -278,7 +278,7 @@ importers:
         specifier: 1.0.237
         version: 1.0.237
       '@frsource/visual-regression-manifest':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../visual-regression-manifest
       glob:
         specifier: 13.0.6
