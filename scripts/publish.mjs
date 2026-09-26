@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 /**
  * Publishes every public workspace package whose version is not on npm yet.
+ * A package release-please has not released yet still carries the `0.0.0`
+ * placeholder version and is skipped, so releasing one package never pushes
+ * a new workspace sibling to `latest` before its own release PR merged.
  *
  * The dist-tag comes from the version, not from configuration: a prerelease
  * version (`5.0.0-beta.1`) goes to `next`, a stable one to `latest`. This is
@@ -46,9 +49,16 @@ const isPublished = (name, version) => {
 
 const distTag = (version) => (version.includes('-') ? 'next' : 'latest');
 
+// The version a brand-new package has until release-please cuts its first release.
+const UNRELEASED_VERSION = '0.0.0';
+
 let published = 0;
 for (const { name, version, path } of packages) {
   const spec = `${name}@${version}`;
+  if (version === UNRELEASED_VERSION) {
+    console.log(`skip    ${spec} (not released yet)`);
+    continue;
+  }
   if (isPublished(name, version)) {
     console.log(`skip    ${spec} (already on npm)`);
     continue;
