@@ -5,6 +5,7 @@
     "node-workspace"
   ],
   "prerelease-type": "beta",
+  "separate-pull-requests": true,
   "packages": {
     "packages/cypress-plugin-visual-regression-diff": {
       "path": "packages/cypress-plugin-visual-regression-diff",
