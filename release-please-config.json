@@ -1,11 +1,17 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "sequential-calls": true,
-  "plugins": ["node-workspace"],
+  "plugins": [
+    "node-workspace"
+  ],
+  "prerelease-type": "beta",
   "packages": {
     "packages/cypress-plugin-visual-regression-diff": {
       "path": "packages/cypress-plugin-visual-regression-diff",
-      "component": "@frsource/cypress-plugin-visual-regression-diff"
+      "component": "@frsource/cypress-plugin-visual-regression-diff",
+      "versioning": "prerelease",
+      "prerelease": true,
+      "release-as": "5.0.0-beta.1"
     }
   }
 }

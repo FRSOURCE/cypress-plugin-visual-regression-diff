@@ -1,6 +1,7 @@
 import { it, expect, describe, vi } from 'vitest';
 import { initTaskHook } from './task.hook';
 import { initAfterScreenshotHook } from './afterScreenshot.hook';
+import { initBrowserLaunchHook } from './browserLaunch.utils';
 import { initPlugin } from './plugins';
 
 vi.mock('./task.hook.ts', () => ({
@@ -9,32 +10,43 @@ vi.mock('./task.hook.ts', () => ({
 vi.mock('./afterScreenshot.hook.ts', () => ({
   initAfterScreenshotHook: vi.fn().mockReturnValue('after:screenshot'),
 }));
+vi.mock('./browserLaunch.utils.ts', () => ({
+  initBrowserLaunchHook: vi.fn().mockReturnValue('before:browser:launch'),
+}));
 
 describe('initPlugin', () => {
-  it('inits hooks (Cypress <15.10, env API)', () => {
+  it.each([
+    {
+      api: 'env (Cypress <15.10)',
+      config: {
+        version: '13.17.0',
+        env: { pluginVisualRegressionForceDeviceScaleFactor: false },
+      },
+    },
+    {
+      api: 'expose (Cypress 15.10+)',
+      config: {
+        version: '15.10.0',
+        expose: { pluginVisualRegressionForceDeviceScaleFactor: false },
+        env: {},
+      },
+    },
+  ])('registers every hook exactly once with the $api config', ({ config }) => {
+    vi.clearAllMocks();
     const onMock = vi.fn();
-    initPlugin(onMock, {
-      version: '13.17.0',
-      env: { pluginVisualRegressionForceDeviceScaleFactor: false },
-    } as unknown as Cypress.PluginConfigOptions);
+    const pluginConfig = config as unknown as Cypress.PluginConfigOptions;
 
+    initPlugin(onMock, pluginConfig);
+
+    expect(onMock).toBeCalledTimes(3);
+    expect(onMock).toBeCalledWith(
+      'before:browser:launch',
+      'before:browser:launch',
+    );
     expect(onMock).toBeCalledWith('task', 'task');
     expect(onMock).toBeCalledWith('after:screenshot', 'after:screenshot');
-    expect(initTaskHook).toBeCalledTimes(1);
-    expect(initAfterScreenshotHook).toBeCalledTimes(1);
-  });
-
-  it('inits hooks (Cypress 15.10+, expose API)', () => {
-    const onMock = vi.fn();
-    initPlugin(onMock, {
-      version: '15.10.0',
-      expose: { pluginVisualRegressionForceDeviceScaleFactor: false },
-      env: {},
-    } as unknown as Cypress.PluginConfigOptions);
-
-    expect(onMock).toBeCalledWith('task', 'task');
-    expect(onMock).toBeCalledWith('after:screenshot', 'after:screenshot');
-    expect(initTaskHook).toBeCalledTimes(2);
-    expect(initAfterScreenshotHook).toBeCalledTimes(2);
+    expect(initBrowserLaunchHook).toBeCalledWith(pluginConfig);
+    expect(initTaskHook).toBeCalledWith(pluginConfig);
+    expect(initAfterScreenshotHook).toBeCalledWith(pluginConfig);
   });
 });
