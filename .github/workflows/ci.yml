@@ -54,8 +54,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
-      # the plugin resolves @frsource/visual-regression-manifest through its dist
-      - run: pnpm --filter visual-regression-manifest build
+      # the plugin resolves @tozsame/manifest through its dist
+      - run: pnpm --filter ./packages/visual-regression-manifest build
       - name: Test integration (with coverage)
         run: pnpm test:integration:ci
       - name: Upload coverage to Qlty
