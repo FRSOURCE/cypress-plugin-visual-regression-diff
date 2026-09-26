@@ -90,6 +90,24 @@ $ pnpm lint && pnpm format:ci
 
 There are some other scripts available in the `scripts` section of the `package.json` file.
 
+### Releases and pre-releases
+
+Releases are cut by [release-please](https://github.com/googleapis/release-please) from conventional commits on `main`: it opens a release PR per package, and merging that PR tags, publishes to npm and creates the GitHub release. `scripts/publish.mjs` picks the npm dist-tag from the version: a prerelease version such as `5.0.0-beta.1` is published under `next`, everything else under `latest`. Install a pre-release with `pnpm add -D @frsource/cypress-plugin-visual-regression-diff@next`.
+
+To put a package into a beta cycle, edit its entry in `release-please-config.json`:
+
+```jsonc
+"packages/<package>": {
+  "versioning": "prerelease", // 5.0.0-beta.1 -> 5.0.0-beta.2 on every release
+  "prerelease": true, // GitHub releases are marked as pre-releases
+  "release-as": "5.0.0-beta.1" // first beta only; remove after that release PR is merged
+}
+```
+
+`release-as` is needed once because release-please's first prerelease bump would otherwise produce `5.0.0-beta` (no number) and a brand-new package would start at `1.0.0`. Remove it after the first beta release PR merges; subsequent releases bump the beta number on their own.
+
+To graduate, set `"release-as": "5.0.0"` (the default strategy keeps the `-beta.N` suffix, so the target version has to be explicit), remove `versioning` and `prerelease`, merge the resulting release PR, then remove `release-as` again.
+
 ## Credits
 
 Many thanks to all the people who have already contributed to @frsource/cypress-plugin-visual-regression-diff! ❤️
