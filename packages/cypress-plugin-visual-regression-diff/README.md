@@ -207,6 +207,8 @@ cy.matchImage({
   maxDiffThreshold: 0.1,
   // forces scale factor to be set as value "1"
   // helps with screenshots being scaled 2x on high-density screens like Mac Retina
+  // Chrome, Chromium and Edge get --force-device-scale-factor=1, Firefox gets the layout.css.devPixelsPerPx=1 preference
+  // (older 4.x releases only covered Chrome and Chromium, so Edge and Firefox baselines taken on a high-density screen need a one-off update)
   // default: true
   forceDeviceScaleFactor: false,
   // applies the deterministic rendering preset, see "Reducing cross-OS rendering noise" below
