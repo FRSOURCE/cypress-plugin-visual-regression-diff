@@ -353,7 +353,7 @@ importers:
 
   packages/playwright-visual-regression-diff:
     dependencies:
-      '@tozsame/manifest':
+      '@pixsame/manifest':
         specifier: workspace:^
         version: link:../visual-regression-manifest
       meta-png:
