@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { MANIFEST_FILE_GLOB } from '@tozsame/manifest';
+import { MANIFEST_FILE_GLOB } from '@pixsame/manifest';
 import nock from 'nock';
 import { ProbotOctokit } from 'probot';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';

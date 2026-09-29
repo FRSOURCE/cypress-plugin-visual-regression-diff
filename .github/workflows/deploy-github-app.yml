@@ -8,7 +8,7 @@ on:
 concurrency: deploy-github-app
 
 env:
-  COMPOSE: docker compose -p tozsame-github-app-prod -f docker-compose.yml -f docker-compose.prod.yml --env-file .env.production
+  COMPOSE: docker compose -p pixsame-github-app-prod -f docker-compose.yml -f docker-compose.prod.yml --env-file .env.production
   VERSION_TAG: main-${{ github.sha }}
   GIT_SHA: ${{ github.sha }}
   APP_HOST: ${{ vars.APP_HOST }}

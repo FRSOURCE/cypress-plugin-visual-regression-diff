@@ -1,12 +1,12 @@
-# Tożsame for GitHub
+# pixsame for GitHub
 
-Tożsame (toz-SAME in English, tosh-SAH-meh in Polish; both are right) is Polish for _identical_, and this is its GitHub App. A small [Probot](https://probot.github.io/) app that turns the [run manifest](../visual-regression-manifest/README.md) written by `@frsource/cypress-plugin-visual-regression-diff` (4.3 and later, see [its README](../cypress-plugin-visual-regression-diff/README.md#run-manifest-ci-integration)) into a pull request review flow:
+Pixsame is the umbrella name for the visual regression tooling in this repository, and this is its GitHub App. A small [Probot](https://probot.github.io/) app that turns the [run manifest](../visual-regression-manifest/README.md) written by `@frsource/cypress-plugin-visual-regression-diff` (4.3 and later, see [its README](../cypress-plugin-visual-regression-diff/README.md#run-manifest-ci-integration)) into a pull request review flow:
 
 - when a workflow run finishes, it downloads the artifact with the manifest and the PNGs, and posts a **check run** (failure when any screenshot needs a look) plus **one comment** on the PR with old / diff / new thumbnails;
-- a reviewer approves a screenshot with the **Approve** button on its check run, all of them with **Approve all**, or by commenting `/tozsame approve` (optionally followed by names; `/approve-visuals` works too);
+- a reviewer approves a screenshot with the **Approve** button on its check run, all of them with **Approve all**, or by commenting `/pixsame approve` (optionally followed by names; `/approve-visuals` works too);
 - approving copies the run's `.actual.png` bytes over the baseline file and pushes **one commit** to the PR branch. Nothing is re-rendered; the image the reviewer saw is the image that lands in git.
 
-The app is runner-agnostic: it reads the manifest through [`@tozsame/manifest`](../visual-regression-manifest/README.md) and knows nothing about Cypress, so anything that writes that format works with it unchanged: the Playwright sibling once it ships, Playwright's own `toHaveScreenshot` output through the package's `fromPlaywrightReport` converter, and any tool that leaves baseline / actual / diff images behind through `fromImageTriples`. That last converter is also the bridge for plugin versions before 4.3, which write no manifest: a small script in the workflow can turn the `__image_snapshots__` directories into a manifest and upload it with the artifact.
+The app is runner-agnostic: it reads the manifest through [`@pixsame/manifest`](../visual-regression-manifest/README.md) and knows nothing about Cypress, so anything that writes that format works with it unchanged: the Playwright sibling once it ships, Playwright's own `toHaveScreenshot` output through the package's `fromPlaywrightReport` converter, and any tool that leaves baseline / actual / diff images behind through `fromImageTriples`. That last converter is also the bridge for plugin versions before 4.3, which write no manifest: a small script in the workflow can turn the `__image_snapshots__` directories into a manifest and upload it with the artifact.
 
 ## Using it in your repository
 
@@ -26,26 +26,26 @@ The app is runner-agnostic: it reads the manifest through [`@tozsame/manifest`](
 
    Keep `pluginVisualRegressionUpdateImages` off in that job; the app needs the `.actual.png` and `.diff.png` files the plugin leaves behind for failed comparisons.
 
-3. Optionally add `.github/tozsame.yml` (read from the default branch):
+3. Optionally add `.github/pixsame.yml` (read from the default branch):
 
    ```yaml
    version: 1 # optional; the only schema version so far
    artifacts: ['visual-regression'] # artifact name globs, default ['**']
    manifestGlob: '**/*visual-regression-manifest*.json' # picomatch, matched against paths inside the artifact zip
    projectRoot: '' # Cypress project dir inside the repo, for manifests without ci.workspace (monorepos)
-   commentCommand: approve-visuals # /approve-visuals [names…]; /tozsame approve [names…] and /regenerate-visuals are always accepted too
+   commentCommand: approve-visuals # /approve-visuals [names…]; /pixsame approve [names…] and /regenerate-visuals are always accepted too
    perImageChecks: 10 # check runs with an "Approve" button per failed screenshot, 0 disables
    images: true # false: text-only report, no screenshots are served by the app
    imageTtlDays: 14 # lifetime of image links (the server caps it)
    maxCommentEntries: 20 # thumbnails before the rest is collapsed
-   checkName: Tożsame
+   checkName: pixsame
    commitMessage: 'test: approve visual baselines ({count} images)' # {count} {names} {user} {run}
    ```
 
 ### Approving
 
-- Buttons: the summary check run `Tożsame` has **Approve all** and **Refresh report**; each failed screenshot (up to `perImageChecks`) has its own `Tożsame: <name>` check run with **Approve**.
-- Comments: `/tozsame approve` (or `/approve-visuals`) approves everything that needs a look, `` /tozsame approve `home page renders_#0` `` approves the named ones (backticks or quotes keep spaces together; when several platforms share a name, use `` `name (linux / chrome)` ``; a screenshot rendered by something other than the test browser carries that renderer too, e.g. `` `name (linux / electron (docker chromium))` ``).
+- Buttons: the summary check run `pixsame` has **Approve all** and **Refresh report**; each failed screenshot (up to `perImageChecks`) has its own `pixsame: <name>` check run with **Approve**.
+- Comments: `/pixsame approve` (or `/approve-visuals`) approves everything that needs a look, `` /pixsame approve `home page renders_#0` `` approves the named ones (backticks or quotes keep spaces together; when several platforms share a name, use `` `name (linux / chrome)` ``; a screenshot rendered by something other than the test browser carries that renderer too, e.g. `` `name (linux / electron (docker chromium))` ``).
 - The manifest's `renderer` block is honoured: entries of the same screenshot rendered by different renderers are reported and approved separately, and a run in which the plugin fell back to the local browser (`renderer.fallback: true`) gets a note in the report, because those pixels will drift against baselines made with the pinned renderer.
 - Only users with write access can approve. The app reacts with 👀 when it starts, 🚀 when it committed, 😕 when it could not, and replies with the reason.
 - The report belongs to a commit. Once the branch moves on, the app refuses to approve from the old report and waits for the new run.
@@ -83,20 +83,20 @@ Create the app by hand (GitHub → Settings → Developer settings → GitHub Ap
 
 ```bash
 pnpm install
-pnpm --filter @tozsame/manifest build   # the app imports the package through its dist
+pnpm --filter @pixsame/manifest build   # the app imports the package through its dist
 cp packages/github-app/.env.example packages/github-app/.env           # fill in APP_ID, PRIVATE_KEY, WEBHOOK_SECRET, WEBHOOK_PROXY_URL
-pnpm --filter @tozsame/github-app dev
+pnpm --filter @pixsame/github-app dev
 ```
 
 Webhooks arrive through the smee channel; image links only work when `PUBLIC_URL` is reachable from GitHub (a tunnel), otherwise set `images: false` in the test repository's config.
 
 ```bash
-pnpm --filter @tozsame/github-app test:integration
+pnpm --filter @pixsame/github-app test:integration
 ```
 
 ### Deploying
 
-The image is a plain Node server, so any container host works. This repository deploys to the maintainer's VPS with `.github/workflows/deploy-github-app.yml`: the image is built on the runner and pushed to `ghcr.io/frsource/tozsame-github-app`, then `docker compose … up -d` runs on the server over an SSH docker context. The container joins the external `nginx-proxy` network, which terminates TLS. Required repository secrets: `APP_ID`, `PRIVATE_KEY`, `WEBHOOK_SECRET`, `IMAGE_URL_SECRET`, `FRSCHOOL_SSH_HOST`, `FRSCHOOL_SSH_PRIVATE_KEY`; variables: `APP_HOST` (and optionally `PORT`). Point the `APP_HOST` DNS record at the server before the first deploy so the certificate can be issued.
+The image is a plain Node server, so any container host works. This repository deploys to the maintainer's VPS with `.github/workflows/deploy-github-app.yml`: the image is built on the runner and pushed to `ghcr.io/frsource/pixsame-github-app`, then `docker compose … up -d` runs on the server over an SSH docker context. The container joins the external `nginx-proxy` network, which terminates TLS. Required repository secrets: `APP_ID`, `PRIVATE_KEY`, `WEBHOOK_SECRET`, `IMAGE_URL_SECRET`, `FRSCHOOL_SSH_HOST`, `FRSCHOOL_SSH_PRIVATE_KEY`; variables: `APP_HOST` (and optionally `PORT`). Point the `APP_HOST` DNS record at the server before the first deploy so the certificate can be issued.
 
 ```bash
 # from packages/github-app, local build

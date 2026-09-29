@@ -353,7 +353,7 @@ importers:
 
   packages/github-app:
     dependencies:
-      '@tozsame/manifest':
+      '@pixsame/manifest':
         specifier: workspace:^
         version: link:../visual-regression-manifest
       picomatch:

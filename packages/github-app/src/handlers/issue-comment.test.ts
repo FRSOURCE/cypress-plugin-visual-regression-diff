@@ -51,15 +51,15 @@ describe('parseCommand', () => {
     expect(parseCommand('', commands)).toBeNull();
   });
 
-  it('understands the umbrella /tozsame command', () => {
+  it('understands the umbrella /pixsame command', () => {
     const commands = ['approve-visuals'];
-    expect(parseCommand('/tozsame approve', commands)).toEqual({ names: [] });
-    expect(parseCommand('/Tozsame Approve `a b` c', commands)).toEqual({
+    expect(parseCommand('/pixsame approve', commands)).toEqual({ names: [] });
+    expect(parseCommand('/Pixsame Approve `a b` c', commands)).toEqual({
       names: ['a b', 'c'],
     });
-    expect(parseCommand('/tozsame refresh', commands)).toEqual({ names: [] });
-    expect(parseCommand('/tozsame', commands)).toBeNull();
-    expect(parseCommand('/tozsame deploy', commands)).toBeNull();
+    expect(parseCommand('/pixsame refresh', commands)).toEqual({ names: [] });
+    expect(parseCommand('/pixsame', commands)).toBeNull();
+    expect(parseCommand('/pixsame deploy', commands)).toBeNull();
     expect(tokenize(`'single quoted' plain`)).toEqual([
       'single quoted',
       'plain',

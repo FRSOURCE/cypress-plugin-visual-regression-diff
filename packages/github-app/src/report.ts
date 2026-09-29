@@ -1,4 +1,4 @@
-import type { ManifestStatus } from '@tozsame/manifest';
+import type { ManifestStatus } from '@pixsame/manifest';
 import { DEFAULT_CONFIG, type Config } from './config.js';
 import {
   needsHuman,
@@ -8,7 +8,7 @@ import {
 } from './manifest.js';
 import type { PrInfo } from './pr.js';
 
-export const MARKER_PREFIX = '<!-- tozsame-github-app:report';
+export const MARKER_PREFIX = '<!-- pixsame-github-app:report';
 
 export type MarkerState = { runId: number; attempt: number; sha: string };
 
@@ -17,7 +17,7 @@ export const renderMarker = ({ runId, attempt, sha }: MarkerState) =>
 
 export const parseMarker = (body: string): MarkerState | null => {
   const match = body.match(
-    /<!-- tozsame-github-app:report run=(\d+) attempt=(\d+) sha=([0-9a-f]{7,40}) -->/,
+    /<!-- pixsame-github-app:report run=(\d+) attempt=(\d+) sha=([0-9a-f]{7,40}) -->/,
   );
   if (!match) return null;
   return {
@@ -54,11 +54,11 @@ export type ReportContext = {
 /** The command advertised in reports: the umbrella form unless the repository configured its own. */
 const commandHint = (ctx: ReportContext) =>
   ctx.config.commentCommand === DEFAULT_CONFIG.commentCommand
-    ? 'tozsame approve'
+    ? 'pixsame approve'
     : ctx.config.commentCommand;
 
 const footer = (ctx: ReportContext) =>
-  `\n<sub>Tożsame${ctx.deployedCommit ? ` · deployed ${ctx.deployedCommit.slice(0, 7)}` : ''}</sub>`;
+  `\n<sub>pixsame${ctx.deployedCommit ? ` · deployed ${ctx.deployedCommit.slice(0, 7)}` : ''}</sub>`;
 
 const STATUS_LABEL: Record<ManifestStatus, string> = {
   passed: 'passed',
@@ -131,7 +131,7 @@ const notes = (ctx: ReportContext) => {
   const lines: string[] = [];
   if (ctx.configError) {
     lines.push(
-      `Config \`.github/tozsame.yml\` is invalid, using defaults: ${ctx.configError}`,
+      `Config \`.github/pixsame.yml\` is invalid, using defaults: ${ctx.configError}`,
     );
   }
   for (const name of ctx.expiredArtifacts ?? []) {
@@ -233,7 +233,7 @@ export const renderComment = (ctx: ReportContext): string => {
   const lines: string[] = [
     marker,
     '',
-    `### Tożsame: ${headline(ctx)}`,
+    `### pixsame: ${headline(ctx)}`,
     '',
     `[Run](${ctx.runUrl})${runner(ctx)} · commit ${ctx.headSha.slice(0, 7)}`,
     '',

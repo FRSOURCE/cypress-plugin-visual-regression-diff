@@ -63,10 +63,10 @@ describe('renderComment', () => {
     expect(body).toContain('`home_#0`');
     expect(body).toContain('❌ failed');
     expect(body).toContain('<img src="https://vr.test/img/');
-    expect(body).toContain('/tozsame approve');
+    expect(body).toContain('/pixsame approve');
     expect(body).toContain('linux / electron');
-    expect(body).toContain('### Tożsame:');
-    expect(body).toContain('<sub>Tożsame</sub>');
+    expect(body).toContain('### pixsame:');
+    expect(body).toContain('<sub>pixsame</sub>');
   });
 
   it('advertises a custom command and prints the deployed commit', () => {
@@ -77,8 +77,8 @@ describe('renderComment', () => {
       }),
     );
     expect(body).toContain('/approve-shots');
-    expect(body).not.toContain('/tozsame approve');
-    expect(body).toContain('<sub>Tożsame · deployed fffffff</sub>');
+    expect(body).not.toContain('/pixsame approve');
+    expect(body).toContain('<sub>pixsame · deployed fffffff</sub>');
   });
 
   it('collapses the overflow and lists quiet entries', () => {
@@ -146,8 +146,8 @@ describe('renderCheckSummary', () => {
     expect(summary).toContain('cypress 16.1.0 electron v130');
     expect(summary).toContain('| `home_#0` |');
     expect(summary).not.toContain('`ok_#0`');
-    expect(summary).toContain('<sub>Tożsame</sub>');
-    expect(text).toContain('/tozsame approve');
+    expect(summary).toContain('<sub>pixsame</sub>');
+    expect(text).toContain('/pixsame approve');
   });
 
   it('says so when everything passed', () => {

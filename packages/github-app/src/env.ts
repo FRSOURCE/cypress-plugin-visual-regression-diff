@@ -54,7 +54,7 @@ export const readEnv = (env: NodeJS.ProcessEnv = process.env): Env => {
       /\/+$/,
       '',
     ),
-    cacheDir: env.CACHE_DIR || path.join(os.tmpdir(), 'tozsame-github-app'),
+    cacheDir: env.CACHE_DIR || path.join(os.tmpdir(), 'pixsame-github-app'),
     port,
     host: env.HOST || '0.0.0.0',
     cacheTtlHours: num(env.CACHE_TTL_HOURS, 24 * 7),

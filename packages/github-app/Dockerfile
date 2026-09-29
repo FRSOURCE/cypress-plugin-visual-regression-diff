@@ -11,14 +11,14 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY patches ./patches
 COPY packages/visual-regression-manifest/package.json ./packages/visual-regression-manifest/
 COPY packages/github-app/package.json ./packages/github-app/
-RUN pnpm install --frozen-lockfile --filter @tozsame/github-app...
+RUN pnpm install --frozen-lockfile --filter @pixsame/github-app...
 COPY packages/visual-regression-manifest ./packages/visual-regression-manifest
 COPY packages/github-app ./packages/github-app
 # `deploy` installs only this package's dependencies, so the Cypress plugin's
 # patch (rollup-plugin-typescript2) is unused there and must not fail the build
-RUN pnpm --filter @tozsame/manifest build \
-  && pnpm --filter @tozsame/github-app build \
-  && pnpm --filter @tozsame/github-app deploy --prod --legacy \
+RUN pnpm --filter @pixsame/manifest build \
+  && pnpm --filter @pixsame/github-app build \
+  && pnpm --filter @pixsame/github-app deploy --prod --legacy \
        --config.allow-unused-patches=true /out
 
 FROM node:24-alpine AS runtime

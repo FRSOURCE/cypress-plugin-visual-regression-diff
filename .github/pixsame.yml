@@ -1,4 +1,4 @@
-# Settings for Tożsame for GitHub (packages/github-app), used to dogfood it on
+# Settings for pixsame for GitHub (packages/github-app), used to dogfood it on
 # this repository's own pull requests. The CI `test` job uploads the `test`
 # artifact with examples/next's screenshots and manifest.
 version: 1

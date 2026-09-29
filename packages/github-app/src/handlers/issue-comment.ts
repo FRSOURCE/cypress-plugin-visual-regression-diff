@@ -12,9 +12,9 @@ import { loadRun, readActualImage, type LoadRunDeps } from '../run.js';
 /** Aliases accepted next to the configured command. */
 export const BUILTIN_COMMANDS = ['approve-visuals', 'regenerate-visuals'];
 
-/** The umbrella command: `/tozsame approve [names…]`; `regenerate` and `refresh` are accepted as well. */
-export const TOZSAME_COMMAND = 'tozsame';
-const TOZSAME_SUBCOMMANDS = ['approve', 'regenerate', 'refresh'];
+/** The umbrella command: `/pixsame approve [names…]`; `regenerate` and `refresh` are accepted as well. */
+export const PIXSAME_COMMAND = 'pixsame';
+const PIXSAME_SUBCOMMANDS = ['approve', 'regenerate', 'refresh'];
 
 /** Splits `` `a name` "another" bare `` into names; quotes keep spaces together. */
 export const tokenize = (input: string): string[] => {
@@ -28,7 +28,7 @@ export const tokenize = (input: string): string[] => {
 };
 
 /**
- * `/tozsame approve [names…]`, or `/<command> [names…]` for the configured
+ * `/pixsame approve [names…]`, or `/<command> [names…]` for the configured
  * command and the built-in aliases, on the first non-empty line of a comment.
  */
 export const parseCommand = (
@@ -43,9 +43,9 @@ export const parseCommand = (
   if (!match) return null;
   const name = (match[1] as string).toLowerCase();
   let rest = match[2] ?? '';
-  if (name === TOZSAME_COMMAND) {
+  if (name === PIXSAME_COMMAND) {
     const sub = rest.match(/^(\S+)(?:\s+(.*))?$/);
-    if (!sub || !TOZSAME_SUBCOMMANDS.includes((sub[1] as string).toLowerCase()))
+    if (!sub || !PIXSAME_SUBCOMMANDS.includes((sub[1] as string).toLowerCase()))
       return null;
     rest = sub[2] ?? '';
   } else if (!commands.includes(name)) {

@@ -3,7 +3,7 @@
 #   docker-compose.prod.yml      (server: nginx-proxy network, TLS, restart policy)
 services:
   app:
-    image: ghcr.io/frsource/tozsame-github-app:${VERSION_TAG:-local}
+    image: ghcr.io/frsource/pixsame-github-app:${VERSION_TAG:-local}
     build:
       context: ../..
       dockerfile: packages/github-app/Dockerfile
@@ -27,4 +27,4 @@ services:
 
 volumes:
   cache:
-    name: tozsame-github-app-${ENV_SUFFIX:-local}-cache
+    name: pixsame-github-app-${ENV_SUFFIX:-local}-cache

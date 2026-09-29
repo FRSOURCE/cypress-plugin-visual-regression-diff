@@ -14,7 +14,7 @@ describe('parseConfig', () => {
       commentCommand: 'approve-visuals',
       perImageChecks: 10,
       images: true,
-      checkName: 'Tożsame',
+      checkName: 'pixsame',
     });
   });
 
@@ -53,7 +53,7 @@ describe('loadConfig', () => {
   it('reads the file through the Probot context', async () => {
     const context = {
       config: async <T>(file: string) => {
-        expect(file).toBe('tozsame.yml');
+        expect(file).toBe('pixsame.yml');
         return { commentCommand: 'approve-shots' } as unknown as T;
       },
     };

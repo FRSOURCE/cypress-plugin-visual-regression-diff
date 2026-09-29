@@ -9,7 +9,7 @@ import {
   isManifestFileName,
   ManifestWriter,
   type PlaywrightJsonReport,
-} from '@tozsame/manifest';
+} from '@pixsame/manifest';
 import { describe, expect, it } from 'vitest';
 import {
   ManifestParseError,

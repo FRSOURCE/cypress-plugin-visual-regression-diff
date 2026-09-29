@@ -1,6 +1,7 @@
 {
-  "name": "@tozsame/github-app",
-  "description": "Tożsame for GitHub: reports visual regression results from CI artifacts on the pull request and lets reviewers approve baselines from there",
+  "name": "@pixsame/github-app",
+  "description": "Pixsame for GitHub: reports visual regression results from CI artifacts on the pull request and lets reviewers approve baselines from there",
+  "homepage": "https://pixsame.com",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -27,7 +28,7 @@
     "test:integration:ci": "CI=true vitest run --coverage"
   },
   "dependencies": {
-    "@tozsame/manifest": "workspace:^",
+    "@pixsame/manifest": "workspace:^",
     "picomatch": "4.0.7",
     "probot": "14.3.2",
     "yauzl": "3.4.0",
