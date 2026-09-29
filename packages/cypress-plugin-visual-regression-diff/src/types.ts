@@ -20,7 +20,7 @@ export type PendingDiffRecord = {
   deferred?: boolean;
 };
 
-// the run manifest contract lives in @tozsame/manifest;
+// the run manifest contract lives in @pixsame/manifest;
 // re-exported so the plugin's own modules keep importing it from here
 export type {
   Manifest,
@@ -36,4 +36,4 @@ export type {
   ManifestRunner,
   ManifestStatus,
   ManifestUpload,
-} from '@tozsame/manifest';
+} from '@pixsame/manifest';

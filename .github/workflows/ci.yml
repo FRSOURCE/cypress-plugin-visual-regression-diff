@@ -54,7 +54,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
-      # the plugin resolves @tozsame/manifest through its dist
+      # the plugin resolves @pixsame/manifest through its dist
       - run: pnpm --filter ./packages/visual-regression-manifest build
       - name: Test integration (with coverage)
         run: pnpm test:integration:ci

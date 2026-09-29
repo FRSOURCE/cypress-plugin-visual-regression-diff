@@ -25,7 +25,7 @@ export type {
   ManifestRunner,
   ManifestStatus,
   ManifestUpload,
-} from '@tozsame/manifest';
+} from '@pixsame/manifest';
 
 export const initPlugin = (
   on: Cypress.PluginEvents,

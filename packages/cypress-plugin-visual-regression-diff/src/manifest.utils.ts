@@ -9,7 +9,7 @@ import {
   type ManifestEntryPlatform,
   type ManifestHeader,
   type ManifestViewport,
-} from '@tozsame/manifest';
+} from '@pixsame/manifest';
 import fs from 'fs';
 import { FILE_SUFFIX } from './constants';
 import type { ImageInfo } from './image.utils';
@@ -27,7 +27,7 @@ export { toPosix };
 
 /**
  * The plugin's side of the run manifest: maps the Cypress config and events
- * onto `ManifestBuilder` from `@tozsame/manifest`, which
+ * onto `ManifestBuilder` from `@pixsame/manifest`, which
  * owns the format, and writes the file where the config says.
  */
 
