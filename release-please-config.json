@@ -13,7 +13,7 @@
     },
     "packages/visual-regression-manifest": {
       "path": "packages/visual-regression-manifest",
-      "component": "@tozsame/manifest",
+      "component": "@pixsame/manifest",
       "versioning": "prerelease",
       "prerelease": true,
       "release-as": "1.0.0-beta.1"
