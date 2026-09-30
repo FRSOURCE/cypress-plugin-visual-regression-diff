@@ -94,6 +94,11 @@ There are some other scripts available in the `scripts` section of the `package.
 
 Releases are cut by [release-please](https://github.com/googleapis/release-please) from conventional commits on `main`: it opens a release PR per package, and merging that PR tags, publishes to npm and creates the GitHub release. `scripts/publish.mjs` picks the npm dist-tag from the version: a prerelease version such as `5.0.0-beta.1` is published under `next`, everything else under `latest`. Install a pre-release with `pnpm add -D @frsource/cypress-plugin-visual-regression-diff@next`.
 
+Release a package before the packages that depend on it. The plugin depends on `@pixsame/manifest` as `workspace:^`, which `pnpm publish` rewrites to a caret range on the version the manifest package has in the repository at that moment (`"@pixsame/manifest": "^1.0.0-beta.1"`). Two consequences:
+
+- A plugin release PR merged while the manifest package still carries the `0.0.0` placeholder (or a version that is not on npm yet) publishes a plugin that cannot be installed (`^0.0.0` matches nothing on the registry). Merge the manifest package's release PR first, wait for its publish, then merge the plugin's. `"separate-pull-requests": true` in `release-please-config.json` gives every package its own release PR; keep it that way, because `scripts/publish.mjs` publishes in `pnpm -r ls` order (alphabetical by directory), so a combined release would push the plugin out before the manifest package it depends on.
+- The range is a caret, so a compatible manifest package release reaches plugin users on their next install without a plugin release; only a manifest package major needs a plugin release that follows it.
+
 To put a package into a beta cycle, edit its entry in `release-please-config.json`:
 
 ```jsonc
