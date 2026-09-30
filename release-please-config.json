@@ -17,6 +17,13 @@
       "versioning": "prerelease",
       "prerelease": true,
       "release-as": "1.0.0-beta.1"
+    },
+    "packages/playwright-visual-regression-diff": {
+      "path": "packages/playwright-visual-regression-diff",
+      "component": "@pixsame/playwright",
+      "versioning": "prerelease",
+      "prerelease": true,
+      "release-as": "0.1.0-beta.1"
     }
   }
 }
