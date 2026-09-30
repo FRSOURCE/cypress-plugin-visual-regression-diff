@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/FRSOURCE/cypress-plugin-visual-regression-diff/main/packages/visual-regression-manifest/schema.json",
+  "$id": "https://raw.githubusercontent.com/pixsame/cypress-plugin-visual-regression-diff/main/packages/visual-regression-manifest/schema.json",
   "title": "Visual regression run manifest",
   "description": "A machine-readable record of every screenshot comparison made during a test run, written by a visual regression tool and read by CI tooling (PR comment bots, review dashboards, approval tools). Runner-agnostic: everything specific to the test runner lives in `runner`. Consumers must ignore keys they do not know.",
   "type": "object",

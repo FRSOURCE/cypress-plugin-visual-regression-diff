@@ -5,8 +5,8 @@
   <a href="https://www.npmjs.com/package/@pixsame/manifest">
     <img src="https://img.shields.io/npm/v/@pixsame/manifest.svg" alt="NPM version badge">
   </a>
-  <a href="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/FRSOURCE/cypress-plugin-visual-regression-diff.svg" alt="license MIT badge">
+  <a href="https://github.com/pixsame/cypress-plugin-visual-regression-diff/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/pixsame/cypress-plugin-visual-regression-diff.svg" alt="license MIT badge">
   </a>
 </p>
 
