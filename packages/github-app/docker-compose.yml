@@ -3,7 +3,7 @@
 #   docker-compose.prod.yml      (server: nginx-proxy network, TLS, restart policy)
 services:
   app:
-    image: ghcr.io/frsource/pixsame-github-app:${VERSION_TAG:-local}
+    image: ghcr.io/pixsame/github-app:${VERSION_TAG:-local}
     build:
       context: ../..
       dockerfile: packages/github-app/Dockerfile

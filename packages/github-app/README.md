@@ -96,7 +96,7 @@ pnpm --filter @pixsame/github-app test:integration
 
 ### Deploying
 
-The image is a plain Node server, so any container host works. This repository deploys to the maintainer's VPS with `.github/workflows/deploy-github-app.yml`: the image is built on the runner and pushed to `ghcr.io/frsource/pixsame-github-app`, then `docker compose … up -d` runs on the server over an SSH docker context. The container joins the external `nginx-proxy` network, which terminates TLS. Required repository secrets: `APP_ID`, `PRIVATE_KEY`, `WEBHOOK_SECRET`, `IMAGE_URL_SECRET`, `FRSCHOOL_SSH_HOST`, `FRSCHOOL_SSH_PRIVATE_KEY`; variables: `APP_HOST` (and optionally `PORT`). Point the `APP_HOST` DNS record at the server before the first deploy so the certificate can be issued.
+The image is a plain Node server, so any container host works. This repository deploys to the maintainer's VPS with `.github/workflows/deploy-github-app.yml`: the image is built on the runner and pushed to `ghcr.io/pixsame/github-app`, then `docker compose … up -d` runs on the server over an SSH docker context. The container joins the external `nginx-proxy` network, which terminates TLS. Required repository secrets: `APP_ID`, `PRIVATE_KEY`, `WEBHOOK_SECRET`, `IMAGE_URL_SECRET`, `FRSCHOOL_SSH_HOST`, `FRSCHOOL_SSH_PRIVATE_KEY`; variables: `APP_HOST` (and optionally `PORT`). Point the `APP_HOST` DNS record at the server before the first deploy so the certificate can be issued.
 
 ```bash
 # from packages/github-app, local build
