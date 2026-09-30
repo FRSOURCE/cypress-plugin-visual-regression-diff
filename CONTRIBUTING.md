@@ -100,7 +100,7 @@ Betas are published only by the manually dispatched `Beta release` workflow. Run
 $ gh workflow run beta-release.yml -f branch=feat/my-branch -f beta=1
 ```
 
-It checks out the given branch, builds it and publishes every public package as `<package.json version>-beta.<beta>` under the `next` dist-tag (`beta` defaults to `0`). Nothing is committed: the version suffix is added on the fly by `scripts/publish.mjs --beta <n>`, and `main` stays untouched. For another cut of the same branch bump `beta`, because npm rejects re-publishing an existing version. Install a beta with `pnpm add -D @frsource/cypress-plugin-visual-regression-diff@next`.
+It checks out the given branch, builds it and publishes every public package as `<package.json version>-beta.<beta>` under the `beta` dist-tag (`beta` defaults to `0`). Nothing is committed: the version suffix is added on the fly by `scripts/publish.mjs --beta <n>`, and `main` stays untouched. For another cut of the same branch bump `beta`, because npm rejects re-publishing an existing version. Install a beta with `pnpm add -D @frsource/cypress-plugin-visual-regression-diff@beta`.
 
 ## Credits
 

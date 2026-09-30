@@ -7,16 +7,16 @@
  *
  * Beta mode (`--beta <n>`, the manually dispatched "Beta release" workflow)
  * rewrites every public package's version to `X.Y.Z-beta.<n>` in the working
- * tree, without committing anything, and publishes under `next`. release-please
+ * tree, without committing anything, and publishes under `beta`. release-please
  * never produces prerelease versions; betas exist only through this flag.
  *
  * The dist-tag is derived from the version, not from configuration, so a
- * stable run can never land on `next` and a beta run can never land on
- * `latest`.
+ * stable run can never land on `beta` and a beta run can never land on
+ * `latest`. A prerelease with an unknown channel is refused.
  *
  * Usage (from the repository root, after `pnpm build`):
  *   node scripts/publish.mjs                 # stable versions -> latest
- *   node scripts/publish.mjs --beta 2        # X.Y.Z-beta.2 -> next
+ *   node scripts/publish.mjs --beta 2        # X.Y.Z-beta.2 -> beta
  *   node scripts/publish.mjs --dry-run       # only print what would be published
  */
 
@@ -82,7 +82,14 @@ const isPublished = (name, version) => {
   }
 };
 
-const distTag = (version) => (version.includes('-') ? 'next' : 'latest');
+const distTag = (version) => {
+  if (!version.includes('-')) return 'latest';
+  if (/-beta\.\d+$/.test(version)) return 'beta';
+  console.error(
+    `${version} is a prerelease of an unknown channel; only -beta.N is published (under the beta dist-tag)`,
+  );
+  process.exit(1);
+};
 
 const published = [];
 for (const { name, version, path } of packages) {
