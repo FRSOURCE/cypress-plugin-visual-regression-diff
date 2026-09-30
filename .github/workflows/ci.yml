@@ -92,7 +92,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Build packages to get cross-references working 🔧
         run: pnpm build
-      - name: Release packages (prerelease versions go to the next dist-tag)
+      - name: Release packages
         run: node scripts/publish.mjs
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
