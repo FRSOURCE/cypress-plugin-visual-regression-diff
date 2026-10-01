@@ -104,6 +104,8 @@ It checks out the given branch, builds it and publishes every public package as 
 
 Canaries need no action: every commit that lands on `main` and is not itself a release publishes every public package as `<package.json version>-canary-<YYYYMMDD>-<8 random characters>` (for example `4.2.0-canary-20260930-7cjnd4t5`) under the `canary` dist-tag. The exact version is listed in the summary of that commit's CI run. Install the newest one with `pnpm add -D @frsource/cypress-plugin-visual-regression-diff@canary`.
 
+All three channels publish through [npm trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC, no npm token in the repository secrets), so every public package needs a trusted publisher on npmjs.com for each of the two workflows: `ci.yml` (stable and canary) and `beta-release.yml` (beta).
+
 ## Credits
 
 Many thanks to all the people who have already contributed to @frsource/cypress-plugin-visual-regression-diff! ❤️

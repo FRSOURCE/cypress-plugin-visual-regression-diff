@@ -21,17 +21,13 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: read
+      id-token: write # npm trusted publishing (OIDC) + provenance
     steps:
       - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.branch }}
       - uses: ./.github/actions/setup
-        with:
-          registry-url: 'https://registry.npmjs.org'
       - name: Build packages to get cross-references working 🔧
         run: pnpm build
       - name: Publish every public package as X.Y.Z-beta.${{ inputs.beta }} under the beta dist-tag
         run: node scripts/publish.mjs --beta ${{ inputs.beta }}
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
