@@ -79,12 +79,11 @@ jobs:
           default-branch: main
           monorepo-tags: true
 
-  build-and-release:
-    name: build and release
+  release:
+    name: release (stable when release-please cut one, otherwise a canary)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: [prepare-release]
-    if: needs.prepare-release.outputs.releases_created
     permissions:
       contents: read
       id-token: write # npm trusted publishing (OIDC) + provenance
@@ -93,8 +92,15 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Build packages to get cross-references working 🔧
         run: pnpm build
-      - name: Release package
-        run: pnpm publish -r
+      - name: Release packages under latest
+        if: ${{ needs.prepare-release.outputs.releases_created == 'true' }}
+        run: node scripts/publish.mjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish a canary of this commit under the canary dist-tag
+        if: ${{ needs.prepare-release.outputs.releases_created != 'true' }}
+        run: node scripts/publish.mjs --canary
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

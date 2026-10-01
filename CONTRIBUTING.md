@@ -90,6 +90,22 @@ $ pnpm lint && pnpm format:ci
 
 There are some other scripts available in the `scripts` section of the `package.json` file.
 
+### Releases and pre-releases
+
+Stable releases are cut by [release-please](https://github.com/googleapis/release-please) from conventional commits on `main`: it opens one release PR per package, and merging that PR tags, publishes to npm under `latest` and creates the GitHub release. release-please never produces pre-release versions.
+
+Betas are published only by the manually dispatched `Beta release` workflow. Run it from the Actions tab or with:
+
+```sh
+$ gh workflow run beta-release.yml -f branch=feat/my-branch -f beta=1
+```
+
+It checks out the given branch, builds it and publishes every public package as `<package.json version>-beta.<beta>` under the `beta` dist-tag (`beta` defaults to `0`). Nothing is committed: the version suffix is added on the fly by `scripts/publish.mjs --beta <n>`, and `main` stays untouched. For another cut of the same branch bump `beta`, because npm rejects re-publishing an existing version. Install a beta with `pnpm add -D @frsource/cypress-plugin-visual-regression-diff@beta`.
+
+Canaries need no action: every commit that lands on `main` and is not itself a release publishes every public package as `<package.json version>-canary-<YYYYMMDD>-<8 random characters>` (for example `4.2.0-canary-20260930-7cjnd4t5`) under the `canary` dist-tag. The exact version is listed in the summary of that commit's CI run. Install the newest one with `pnpm add -D @frsource/cypress-plugin-visual-regression-diff@canary`.
+
+All three channels publish through [npm trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC, no npm token in the repository secrets), so every public package needs a trusted publisher on npmjs.com for each of the two workflows: `ci.yml` (stable and canary) and `beta-release.yml` (beta).
+
 ## Credits
 
 Many thanks to all the people who have already contributed to @frsource/cypress-plugin-visual-regression-diff! ❤️
