@@ -85,17 +85,16 @@ jobs:
     timeout-minutes: 15
     needs: [prepare-release]
     if: needs.prepare-release.outputs.releases_created
+    permissions:
+      contents: read
+      id-token: write # npm trusted publishing (OIDC) + provenance
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
-        with:
-          registry-url: 'https://registry.npmjs.org'
       - name: Build packages to get cross-references working 🔧
         run: pnpm build
       - name: Release package
         run: pnpm publish -r
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
