@@ -7,9 +7,13 @@ import {
 } from './constants';
 import sanitize from 'sanitize-filename';
 
+// highest `_#n` index handed out per screenshot path during the current spec
 const nameCacheCounter: Record<string, number> = {};
-const lastRetryNameCacheCounter: Record<string, number> = {};
-let lastRetryNumber = 0;
+// counters as they were before the current test attempt started, for every
+// path the attempt touched - a retry restores them so the regenerated
+// screenshots get the same names again
+const countersBeforeAttempt: Record<string, number> = {};
+let currentAttempt: { testId: string; retry: number } | undefined;
 
 const resetMap = (map: Record<string, unknown>) => {
   // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
@@ -34,44 +38,50 @@ const parsePathPartVariables = (
   return pathPart;
 };
 
+const startAttempt = (testId: string, retry: number) => {
+  const isSameTest = currentAttempt?.testId === testId;
+  if (isSameTest && currentAttempt && retry > currentAttempt.retry) {
+    for (const screenshotPath in countersBeforeAttempt) {
+      nameCacheCounter[screenshotPath] = countersBeforeAttempt[screenshotPath];
+    }
+  }
+  if (!isSameTest || (currentAttempt && retry !== currentAttempt.retry)) {
+    resetMap(countersBeforeAttempt);
+  }
+  currentAttempt = { testId, retry };
+};
+
 export const generateScreenshotPath = ({
   titleFromOptions,
   imagesPath,
   specPath,
   currentRetryNumber,
+  testId,
 }: {
   titleFromOptions: string;
   imagesPath: string;
   specPath: string;
   currentRetryNumber: number;
+  /** Stable id of the test being run; used to tell a retry from the next test. */
+  testId: string;
 }) => {
   const screenshotPath = path.join(
     ...imagesPath.split('/').map(parsePathPartVariables.bind(void 0, specPath)),
     sanitize(titleFromOptions),
   );
 
+  startAttempt(testId, currentRetryNumber);
+
   if (typeof nameCacheCounter[screenshotPath] === 'undefined') {
     nameCacheCounter[screenshotPath] = -1;
   }
-
-  // it's a retry of last test, so let's reset the counter to value before last retry
-  if (currentRetryNumber > lastRetryNumber) {
-    // +1 because we index screenshots starting at 0
-    for (const screenshotPath in lastRetryNameCacheCounter)
-      nameCacheCounter[screenshotPath] -=
-        lastRetryNameCacheCounter[screenshotPath] + 1;
+  if (!(screenshotPath in countersBeforeAttempt)) {
+    countersBeforeAttempt[screenshotPath] = nameCacheCounter[screenshotPath];
   }
-
-  resetMap(lastRetryNameCacheCounter);
-
-  lastRetryNumber = currentRetryNumber;
-  lastRetryNameCacheCounter[screenshotPath] = ++nameCacheCounter[
-    screenshotPath
-  ];
 
   return path.join(
     IMAGE_SNAPSHOT_PREFIX,
-    `${screenshotPath}_#${nameCacheCounter[screenshotPath]}${FILE_SUFFIX.actual}.png`,
+    `${screenshotPath}_#${++nameCacheCounter[screenshotPath]}${FILE_SUFFIX.actual}.png`,
   );
 };
 
@@ -91,7 +101,7 @@ export const wasScreenshotUsed = (imagePath: string) => {
 };
 
 export const resetScreenshotNameCache = () => {
-  lastRetryNumber = 0;
+  currentAttempt = undefined;
   resetMap(nameCacheCounter);
-  resetMap(lastRetryNameCacheCounter);
+  resetMap(countersBeforeAttempt);
 };

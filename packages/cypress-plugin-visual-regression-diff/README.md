@@ -498,6 +498,18 @@ For CI or sharable HTML reports, integrate with a reporter such as [`cypress-moc
 
 </details>
 
+## Commercial support
+
+The plugin is free and MIT-licensed, and it stays that way. It's also maintained by one person in his spare time, so if your team needs more than best-effort answers on the issue tracker, here's what I offer:
+
+- **Setup and migration, fixed price.** I get the plugin (or its GitHub App) running in your CI, sort out the "works on my Mac, fails on Linux" baselines, and hand over a short write-up. Usually one to two days.
+- **Priority support, monthly.** A private channel, a response within one business day, and your issues at the top of the pile. Covers the plugin, the manifest tooling and the GitHub App.
+- **Feature work and consulting, hourly.** A missing option, an adapter for your runner, or just an hour to look at why your screenshots drift.
+
+Write to [jakub@frsource.org](mailto:jakub@frsource.org) with a sentence about your setup and I'll reply with a quote. If you only want to say thanks, the Sponsor button at the top of this repository does that (GitHub Sponsors, Patreon or Buy Me a Coffee), and every sponsor is listed in the release notes.
+
+Security problems have their own path: see [SECURITY.md](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/SECURITY.md).
+
 ## Questions
 
 Don’t hesitate to ask a question directly on the [discussions board](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/discussions)!
