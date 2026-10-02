@@ -23,12 +23,12 @@
   "engines": {
     "node": ">=20.9.0"
   },
-  "packageManager": "pnpm@12.5.1",
+  "packageManager": "pnpm@12.6.0",
   "peerDependencies": {
     "cypress": ">=13.0.0"
   },
   "devDependencies": {
-    "@frsource/eslint-config": "1.85.12",
+    "@frsource/eslint-config": "1.85.13",
     "eslint": "10.11.0",
     "eslint-plugin-cypress": "^7.0.0",
     "ffmpeg-static": "^5.2.0",

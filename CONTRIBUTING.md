@@ -92,21 +92,19 @@ There are some other scripts available in the `scripts` section of the `package.
 
 ### Releases and pre-releases
 
-Releases are cut by [release-please](https://github.com/googleapis/release-please) from conventional commits on `main`: it opens a release PR per package, and merging that PR tags, publishes to npm and creates the GitHub release. `scripts/publish.mjs` picks the npm dist-tag from the version: a prerelease version such as `5.0.0-beta.1` is published under `next`, everything else under `latest`. Install a pre-release with `pnpm add -D @frsource/cypress-plugin-visual-regression-diff@next`.
+Stable releases are cut by [release-please](https://github.com/googleapis/release-please) from conventional commits on `main`: it opens one release PR per package, and merging that PR tags, publishes to npm under `latest` and creates the GitHub release. release-please never produces pre-release versions.
 
-To put a package into a beta cycle, edit its entry in `release-please-config.json`:
+Betas are published only by the manually dispatched `Beta release` workflow. Run it from the Actions tab or with:
 
-```jsonc
-"packages/<package>": {
-  "versioning": "prerelease", // 5.0.0-beta.1 -> 5.0.0-beta.2 on every release
-  "prerelease": true, // GitHub releases are marked as pre-releases
-  "release-as": "5.0.0-beta.1" // first beta only; remove after that release PR is merged
-}
+```sh
+$ gh workflow run beta-release.yml -f branch=feat/my-branch -f beta=1
 ```
 
-`release-as` is needed once because release-please's first prerelease bump would otherwise produce `5.0.0-beta` (no number) and a brand-new package would start at `1.0.0`. Remove it after the first beta release PR merges; subsequent releases bump the beta number on their own.
+It checks out the given branch, builds it and publishes every public package as `<package.json version>-beta.<beta>` under the `beta` dist-tag (`beta` defaults to `0`). Nothing is committed: the version suffix is added on the fly by `scripts/publish.mjs --beta <n>`, and `main` stays untouched. For another cut of the same branch bump `beta`, because npm rejects re-publishing an existing version. Install a beta with `pnpm add -D @frsource/cypress-plugin-visual-regression-diff@beta`.
 
-To graduate, set `"release-as": "5.0.0"` (the default strategy keeps the `-beta.N` suffix, so the target version has to be explicit), remove `versioning` and `prerelease`, merge the resulting release PR, then remove `release-as` again.
+Canaries need no action: every commit that lands on `main` and is not itself a release publishes every public package as `<package.json version>-canary-<YYYYMMDD>-<8 random characters>` (for example `4.2.0-canary-20260930-7cjnd4t5`) under the `canary` dist-tag. The exact version is listed in the summary of that commit's CI run. Install the newest one with `pnpm add -D @frsource/cypress-plugin-visual-regression-diff@canary`.
+
+All three channels publish through [npm trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC, no npm token in the repository secrets), so every public package needs a trusted publisher on npmjs.com for each of the two workflows: `ci.yml` (stable and canary) and `beta-release.yml` (beta).
 
 ## Credits
 

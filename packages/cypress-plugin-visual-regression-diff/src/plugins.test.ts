@@ -1,4 +1,4 @@
-import { it, expect, describe, vi } from 'vitest';
+import { it, expect, describe, vi, beforeEach } from 'vitest';
 import { initTaskHook } from './task.hook';
 import { initAfterScreenshotHook } from './afterScreenshot.hook';
 import { initPlugin } from './plugins';
@@ -11,6 +11,10 @@ vi.mock('./afterScreenshot.hook.ts', () => ({
 }));
 
 describe('initPlugin', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('inits hooks (Cypress <15.10, env API)', () => {
     const onMock = vi.fn();
     initPlugin(onMock, {
@@ -34,7 +38,7 @@ describe('initPlugin', () => {
 
     expect(onMock).toBeCalledWith('task', 'task');
     expect(onMock).toBeCalledWith('after:screenshot', 'after:screenshot');
-    expect(initTaskHook).toBeCalledTimes(2);
-    expect(initAfterScreenshotHook).toBeCalledTimes(2);
+    expect(initTaskHook).toBeCalledTimes(1);
+    expect(initAfterScreenshotHook).toBeCalledTimes(1);
   });
 });
