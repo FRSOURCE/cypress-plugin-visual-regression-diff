@@ -7,7 +7,9 @@
  *
  * Beta mode (`--beta <n>`, the manually dispatched "Beta release" workflow)
  * rewrites every public package's version to `X.Y.Z-beta.<n>` in the working
- * tree, without committing anything, and publishes under `beta`.
+ * tree, without committing anything, and publishes under `beta`. A package
+ * still at the `0.0.0` placeholder becomes `1.0.0-beta.<n>`; stable and
+ * canary runs skip it.
  *
  * Canary mode (`--canary`, CI on every push to `main` that is not a release)
  * does the same with `X.Y.Z-canary-<YYYYMMDD>-<8 random base36 chars>`, e.g.
@@ -77,8 +79,13 @@ let packages = JSON.parse(
   run('pnpm', ['-r', 'ls', '--json', '--depth', '-1']),
 ).filter(
   // `0.0.0` is the placeholder of a package release-please has not released
-  // yet; skipping it keeps a sibling from reaching npm before its own release.
-  (pkg) => pkg.name && pkg.version && pkg.version !== '0.0.0' && !pkg.private,
+  // yet. Stable and canary runs skip it, so a sibling cannot reach npm before
+  // its own release; only a beta run publishes it, as `1.0.0-beta.<n>`.
+  (pkg) =>
+    pkg.name &&
+    pkg.version &&
+    !pkg.private &&
+    (pkg.version !== '0.0.0' || beta !== null),
 );
 
 if (prerelease !== null) {
@@ -94,7 +101,8 @@ if (prerelease !== null) {
   // Rewrite every sibling before publishing anything: `pnpm publish` resolves
   // `workspace:` ranges from the sibling's package.json at publish time.
   packages = packages.map((pkg) => {
-    const version = `${pkg.version}-${prerelease}`;
+    const base = pkg.version === '0.0.0' ? '1.0.0' : pkg.version;
+    const version = `${base}-${prerelease}`;
     console.log(`version ${pkg.name} ${pkg.version} -> ${version}`);
     run('npm', ['pkg', 'set', `version=${version}`], { cwd: pkg.path });
     return { ...pkg, version };
