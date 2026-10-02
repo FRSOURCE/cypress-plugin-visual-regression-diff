@@ -4,13 +4,14 @@ This policy covers every package in this repository: `@frsource/cypress-plugin-v
 
 ## Supported versions
 
-| Version                            | Supported                                  |
-| ---------------------------------- | ------------------------------------------ |
-| latest 4.x minor                   | yes, security fixes ship as patch releases |
-| 5.0 pre-releases (`next` dist-tag) | yes, fixes land in the next pre-release    |
-| older 4.x minors, 3.x and below    | no, please upgrade                         |
+| Version                                        | Support                                                   |
+| ---------------------------------------------- | --------------------------------------------------------- |
+| Latest major (`latest` dist-tag)               | yes, security fixes ship as patch releases                |
+| Pre-releases (`beta` dist-tag)                 | yes, ongoing; fixes land in the next pre-release          |
+| Previous major                                 | six months after the new major ships on `latest`          |
+| Anything older than the previous major         | no, please upgrade                                        |
 
-After 5.0 ships, 4.x keeps getting security fixes for six months.
+After a new major ships on the `latest` (stable) channel, the previous major keeps getting security fixes for six months.
 
 ## Reporting a vulnerability
 

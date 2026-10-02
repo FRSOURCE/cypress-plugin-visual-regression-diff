@@ -510,10 +510,6 @@ Write to [jakub@frsource.org](mailto:jakub@frsource.org) with a sentence about y
 
 Security problems have their own path: see [SECURITY.md](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/SECURITY.md).
 
-### Enterprise
-
-Available as part of the Tidelift Subscription (now part of Sonar). The maintainer of this plugin and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. [Learn more.](https://tidelift.com/subscription/pkg/npm-@frsource/cypress-plugin-visual-regression-diff?utm_source=npm-frsource-cypress-plugin-visual-regression-diff&utm_medium=referral&utm_campaign=enterprise)
-
 ## Questions
 
 Don’t hesitate to ask a question directly on the [discussions board](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/discussions)!
