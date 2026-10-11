@@ -4,10 +4,10 @@ useSeoMeta({ title: () => t('legal.privacy.title'), description: () => t('legal.
 </script>
 
 <template>
-  <div class="px-container pt-12 pb-24">
+  <PageShell :crumbs="[{ label: t('legal.privacy.title') }]">
     <article class="px-prose">
       <h1>{{ t('legal.privacy.title') }}</h1>
       <p v-for="n in 3" :key="n">{{ t(`legal.privacy.p${n}`) }}</p>
     </article>
-  </div>
+  </PageShell>
 </template>

@@ -6,9 +6,20 @@ order: 2
 
 # Usage
 
+The plugin adds one command, `matchImage`, to every Cypress test.
+
+## Compare an element or the page
+
+```ts
+cy.get('.an-element-of-your-choice').matchImage();
+
+// or the whole document
+cy.matchImage();
+```
+
 ## Configure a comparison
 
-Pass options to `matchImage` per call:
+Pass options to `matchImage` per call. Every option is described on the [Configuration](/docs/reference/configuration) page:
 
 ```ts
 cy.matchImage({
@@ -35,4 +46,4 @@ On Cypress older than 15.10 pass the same key with `--env` instead.
 
 ## More
 
-The plugin README lists every option. Questions and ideas are welcome in [GitHub discussions](https://github.com/pixsame/pixsame/discussions).
+Every option is on the [Configuration](/docs/reference/configuration) page. Questions and ideas are welcome in [GitHub discussions](https://github.com/pixsame/pixsame/discussions).

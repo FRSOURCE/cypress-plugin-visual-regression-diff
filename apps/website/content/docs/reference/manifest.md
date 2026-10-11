@@ -1,7 +1,7 @@
 ---
 title: Manifest schema
 description: The runner-agnostic run manifest that every pixsame tool reads and writes.
-order: 3
+order: 2
 ---
 
 # Manifest schema

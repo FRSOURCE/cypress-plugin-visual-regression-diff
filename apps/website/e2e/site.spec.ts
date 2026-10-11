@@ -29,11 +29,13 @@ test('follows the system theme until the visitor chooses', async ({ page }) => {
 
 test('language switcher navigates and sets lang, hreflang and canonical', async ({ page }) => {
   await page.goto('/');
-  // the page is prerendered: selecting before hydration attaches the handler does nothing, so retry
+  // the page is prerendered: clicking before hydration attaches the handler does nothing, so retry
   await expect(async () => {
-    await page.getByLabel('Language').selectOption('de');
-    await expect(page).toHaveURL(/\/de\/?$/, { timeout: 1000 });
+    await page.getByRole('button', { name: 'Language' }).click();
+    await expect(page.getByRole('dialog', { name: 'Language' })).toBeVisible({ timeout: 1000 });
   }).toPass();
+  await page.getByRole('link', { name: 'Deutsch' }).click();
+  await expect(page).toHaveURL(/\/de\/?$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'de');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Visuelle Regression');
   const hreflangs = await page.locator('link[rel="alternate"][hreflang]').evaluateAll((els) => els.map((e) => e.getAttribute('hreflang')));
@@ -58,8 +60,11 @@ test('install command can be copied', async ({ page, context }) => {
 test('mobile menu exposes the navigation', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
-  await page.getByText('Menu', { exact: true }).click();
-  await page.getByRole('navigation', { name: 'Main' }).last().getByRole('link', { name: 'Pricing' }).click();
+  await expect(async () => {
+    await page.getByRole('button', { name: 'Menu' }).click();
+    await expect(page.getByRole('dialog', { name: 'Menu' })).toBeVisible({ timeout: 1000 });
+  }).toPass();
+  await page.getByRole('dialog').getByRole('link', { name: 'Pricing' }).click();
   await expect(page).toHaveURL(/\/pricing\/?$/);
 });
 
@@ -77,9 +82,9 @@ test('waitlist form submits to the API', async ({ page }) => {
 });
 
 test('docs in other locales are noindex, English is indexable', async ({ page }) => {
-  await page.goto('/docs/install/');
+  await page.goto('/docs/getting-started/install/');
   await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(0);
-  await page.goto('/pl/docs/install/');
+  await page.goto('/pl/docs/getting-started/install/');
   await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(1);
 });
 

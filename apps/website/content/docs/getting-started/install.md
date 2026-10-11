@@ -57,4 +57,4 @@ cy.matchImage();
 
 ## Coming from `@frsource`?
 
-The package was renamed. Run the migrate command from the plugin to move your project over, see [Usage](/docs/usage).
+The package was renamed, and moving over is a one-line job. See [Migrate from @frsource](/docs/getting-started/migrate-from-frsource).

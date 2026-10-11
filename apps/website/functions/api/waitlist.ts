@@ -7,7 +7,7 @@ interface Env {
   TURNSTILE_SECRET?: string;
 }
 
-const PRODUCTS = new Set(['github-app', 'playwright', 'platform']);
+const PRODUCTS = new Set(['github-app', 'playwright', 'vitest', 'platform']);
 const LOCALES = new Set(['en', 'pl', 'de', 'zh', 'zh-tw']);
 const json = (data: unknown, status = 200) => Response.json(data, { status });
 

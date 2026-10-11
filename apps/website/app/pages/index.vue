@@ -37,42 +37,46 @@ const runsIn = ['GitHub Actions', 'GitLab CI', 'CircleCI', 'Buildkite', 'Jenkins
 
 <template>
   <div>
-    <section class="px-container grid items-start gap-12 pt-[74px] pb-20 lg:grid-cols-12">
-      <div class="lg:col-span-7">
+    <section class="px-container grid grid-cols-1 items-start gap-12 pt-8 pb-10 md:pb-20 md:pt-14 lg:grid-cols-12 lg:pt-[74px]">
+      <div class="min-w-0 lg:col-span-6">
         <p class="px-eyebrow">{{ t('hero.eyebrow') }}</p>
         <h1 class="mt-6 text-[clamp(2.4rem,5.6vw,4rem)] leading-[1.04]">{{ t('hero.title') }}</h1>
-        <p class="mt-5 text-2xl">{{ t('hero.tagline') }}</p>
-        <p class="mt-4 max-w-[560px] text-[16.5px] leading-relaxed text-muted">{{ t('hero.body') }}</p>
+        <p class="mt-5 text-lg leading-[1.2] tracking-[-0.005em] md:text-2xl">{{ t('hero.tagline') }}</p>
+        <p class="mt-4 max-w-[560px] text-sm leading-[1.6] text-muted md:text-[16.5px]">{{ t('hero.body') }}</p>
         <div class="mt-8 flex flex-wrap items-center gap-6">
-          <div class="px-glass flex max-w-full items-center gap-3 !rounded-lg px-4 py-2.5 font-mono text-[13px]">
+          <div class="px-glass flex w-full max-w-full items-center gap-3 !rounded-lg px-4 py-3 font-mono text-[13px] sm:w-auto">
             <span class="text-faint" aria-hidden="true">$</span>
-            <code class="min-w-0 break-all">{{ install }}</code>
-            <button type="button" class="shrink-0 text-[11px] font-medium tracking-[0.1em] text-coral-text" @click="copy">
+            <code class="min-w-0 overflow-x-auto whitespace-nowrap">{{ install }}</code>
+            <button type="button" class="ml-auto shrink-0 cursor-pointer text-[11px] font-medium tracking-[0.1em] text-coral-text transition-colors hover:text-ink active:opacity-70" @click="copy">
               {{ copied ? t('hero.copied') : t('hero.copy') }}
             </button>
           </div>
-          <PxButton variant="ghost" :to="localePath('/docs/install')">{{ t('hero.docs') }} →</PxButton>
+          <PxButton variant="ghost" class="hidden md:inline-flex" :to="localePath('/docs/getting-started/install')">{{ t('hero.docs') }} →</PxButton>
+          <PxButton class="w-full justify-center md:hidden" :to="localePath('/docs/getting-started/install')">{{ t('nav.install') }}</PxButton>
         </div>
       </div>
-      <div class="lg:col-span-5"><HeroDetectionCard /></div>
+      <div class="hidden min-w-0 md:block lg:col-span-6"><HeroDetectionCard /></div>
     </section>
 
-    <section class="px-container border-y border-hairline py-6" :aria-label="t('runs.label')">
+    <section class="px-container hidden border-y border-hairline py-6 md:block" :aria-label="t('runs.label')">
       <div class="flex flex-wrap items-center gap-x-8 gap-y-3 font-mono text-[11px] tracking-[0.12em] text-faint uppercase">
         <span>{{ t('runs.label') }}</span>
         <span v-for="ci in runsIn" :key="ci" class="text-muted">{{ ci }}</span>
       </div>
     </section>
 
-    <section class="px-container py-20" aria-labelledby="features-title">
+    <section class="px-container border-t border-hairline py-8 md:border-0 md:py-20" aria-labelledby="features-title">
       <h2 id="features-title" class="sr-only">{{ t('features.title') }}</h2>
-      <ol class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <li v-for="(f, i) in features" :key="f.key" class="px-glass !rounded-lg flex flex-col p-5">
-          <span class="font-mono text-xs text-coral-text" aria-hidden="true">0{{ i + 1 }}</span>
-          <h3 class="mt-3 !font-sans text-[17px] font-semibold">{{ t(`features.${f.key}.title`) }}</h3>
+      <ol class="grid gap-2.5 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
+        <li
+v-for="(f, i) in features" :key="f.key" class="px-glass min-h-[196px] flex-col !rounded-lg p-5 max-md:!min-h-0"
+          :class="[f.key === 'approve' && '!border-coral/35 !bg-coral/15', f.key === 'manifest' || f.key === 'approve' ? 'flex' : 'hidden md:flex']"
+        >
+          <span class="font-mono text-xs text-coral-text" aria-hidden="true"><span class="md:hidden">0{{ f.key === 'approve' ? 2 : 1 }}</span><span class="hidden md:inline">0{{ i + 1 }}</span></span>
+          <h3 class="mt-3 !font-sans text-[17px] font-semibold md:mt-8">{{ t(`features.${f.key}.title`) }}</h3>
           <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">{{ t(`features.${f.key}.body`) }}</p>
           <p
-            class="mt-4 font-mono text-[10px] tracking-[0.12em] uppercase"
+            class="mt-4 hidden font-mono text-[10px] tracking-[0.12em] uppercase md:block"
             :class="f.available ? 'text-blue-text' : 'text-faint'"
           >
             {{ f.available ? t('features.available') : t('pricing.soon') }}
@@ -82,12 +86,14 @@ const runsIn = ['GitHub Actions', 'GitLab CI', 'CircleCI', 'Buildkite', 'Jenkins
     </section>
 
     <section class="px-container pb-24" aria-labelledby="pricing-title">
-      <div class="grid items-end gap-6 pb-8 lg:grid-cols-12">
-        <h2 id="pricing-title" class="text-[clamp(1.8rem,3.4vw,2rem)] leading-[1.16] lg:col-span-6">{{ t('pricing.title') }}</h2>
-        <p class="max-w-[520px] text-muted lg:col-span-6">{{ t('pricing.body') }}</p>
+      <div class="grid items-end gap-8 lg:grid-cols-12">
+        <div class="lg:col-span-4">
+          <h2 id="pricing-title" class="text-[clamp(1.8rem,3.4vw,2rem)] leading-[1.16]">{{ t('pricing.title') }}</h2>
+          <p class="mt-3 text-sm leading-relaxed text-muted">{{ t('pricing.body') }}</p>
+          <p class="mt-5"><PxButton variant="ghost" :to="localePath('/pricing')">{{ t('pricing.compare') }} →</PxButton></p>
+        </div>
+        <div class="lg:col-span-8"><PricingTiers /></div>
       </div>
-      <PricingTiers />
-      <p class="mt-6"><PxButton variant="ghost" :to="localePath('/pricing')">{{ t('pricing.compare') }} →</PxButton></p>
     </section>
   </div>
 </template>

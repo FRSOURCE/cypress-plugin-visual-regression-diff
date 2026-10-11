@@ -4,7 +4,7 @@ const { t } = useI18n();
 </script>
 
 <template>
-  <figure class="px-glass relative overflow-hidden p-5" :aria-label="t('detect.demo')">
+  <figure class="px-glass relative overflow-hidden p-5 sm:p-6" :aria-label="t('detect.demo')">
     <div class="flex items-center justify-between gap-3">
       <figcaption class="font-mono text-[11px] tracking-[0.12em] text-muted uppercase">{{ t('detect.label') }}</figcaption>
       <span class="inline-flex items-center gap-1.5 rounded-full bg-chip px-2.5 py-1 font-mono text-[10px] tracking-[0.12em] text-ink">
@@ -26,17 +26,16 @@ const { t } = useI18n();
           <div class="mt-1.5 h-1.5 w-1/3 rounded-full bg-[#e0291f]" />
         </div>
       </div>
-      <div class="h-16" />
+      <div class="h-24" />
+      <p class="absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-full bg-[#14171e]/90 px-3 py-1.5 font-mono text-[10px] tracking-[0.12em] text-white uppercase">
+        <span class="px-pulse size-1.5 rounded-full bg-[#7fa6ff]" aria-hidden="true" />{{ t('detect.analysing') }}
+      </p>
       <span class="px-scan absolute inset-x-0 h-[2px] bg-[#2e6bff] shadow-[0_0_30px_rgb(5_61_179/0.95)]" />
       <span class="px-pop-1 absolute top-[22%] left-[6%] rounded-sm border-2 border-[#e8388f] px-1.5 py-0.5 font-mono text-[9px] text-[#b01b62]">{{ t('detect.box1') }}</span>
       <span class="px-pop-2 absolute top-[62%] right-[6%] rounded-sm border-2 border-[#ffc46b] bg-white/80 px-1.5 py-0.5 font-mono text-[9px] text-[#8a5600]">{{ t('detect.box2') }}</span>
     </div>
 
-    <p class="mt-3 inline-flex items-center gap-2 rounded-full bg-[#14171e] px-3 py-1.5 font-mono text-[10px] tracking-[0.12em] text-white uppercase">
-      <span class="size-1.5 rounded-full bg-[#7fa6ff]" aria-hidden="true" />{{ t('detect.analysing') }}
-    </p>
-
-    <ul class="mt-4 space-y-3 text-[13px]">
+    <ul class="mt-4 space-y-3 text-[12px]">
       <li v-for="(row, i) in ['geometry', 'reflow', 'aa']" :key="row" class="px-row" :class="`px-row-${i + 1}`">
         <div class="flex justify-between"><span>{{ t(`detect.row.${row}`) }}</span></div>
         <div class="mt-1 h-1 rounded-full bg-chip" aria-hidden="true">

@@ -30,8 +30,16 @@ export default defineNuxtConfig({
   content: {
     // Node's built-in sqlite (22.5+): no native better-sqlite3 build needed.
     experimental: { sqliteConnector: 'native' },
-    build: { markdown: { highlight: { theme: { default: 'github-light-high-contrast', dark: 'github-dark-high-contrast' }, langs: ['bash', 'ts', 'json'] } } },
+    build: { markdown: { highlight: { theme: { default: 'github-light-high-contrast', dark: 'github-dark-high-contrast' }, langs: ['bash', 'ts', 'js', 'json', 'yaml', 'vue'] } } },
   },
-  routeRules: { '/**': { prerender: true } },
+  routeRules: {
+    '/**': { prerender: true },
+    // Old URLs from before the docs restructure and the /products rename.
+    '/product': { redirect: { to: '/products', statusCode: 301 } },
+    '/docs': { redirect: { to: '/docs/getting-started/install', statusCode: 301 } },
+    '/docs/install': { redirect: { to: '/docs/getting-started/install', statusCode: 301 } },
+    '/docs/usage': { redirect: { to: '/docs/getting-started/usage', statusCode: 301 } },
+    '/docs/manifest': { redirect: { to: '/docs/reference/manifest', statusCode: 301 } },
+  },
   nitro: { prerender: { crawlLinks: true } },
 });

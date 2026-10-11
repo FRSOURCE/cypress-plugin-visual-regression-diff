@@ -16,6 +16,7 @@
   --px-glass-border: rgb(16 20 24 / 0.13);
   --px-hairline: rgb(16 20 24 / 0.12);
   --px-chip: rgb(16 20 24 / 0.06);
+  --px-code-bg: #f1f4f3;
   --px-glass-shadow: 0 18px 44px -28px rgb(16 20 24 / 0.45);
 
   /* accents: `-fill` for backgrounds/graphics, `-text` for readable text */
@@ -41,6 +42,11 @@
   --px-scrim-b: 0.42;
   --px-grid-line: rgb(16 20 24 / 0.12);
   --px-grid-line-h: rgb(16 20 24 / 0.05);
+  --px-docs-aurora:
+    radial-gradient(860px 600px at 100% -16%, rgb(46 107 255 / 0.2), transparent 62%),
+    radial-gradient(820px 600px at 2% -14%, rgb(224 41 31 / 0.16), transparent 62%),
+    radial-gradient(980px 660px at 54% 114%, rgb(5 61 179 / 0.14), transparent 64%),
+    radial-gradient(700px 520px at 36% -20%, rgb(5 61 179 / 0.1), transparent 62%);
   --px-wash:
     radial-gradient(900px 640px at 2% -16%, rgb(224 41 31 / 0.16), transparent 62%),
     radial-gradient(860px 700px at 99% -8%, rgb(5 61 179 / 0.14), transparent 62%),
@@ -48,9 +54,9 @@
 
   /* shape */
   --px-radius-sm: 2px;
-  --px-radius-md: 6px;
-  --px-radius-lg: 14px;
-  --px-radius-xl: 26px;
+  --px-radius-md: 4px;
+  --px-radius-lg: 8px;
+  --px-radius-xl: 10px;
   --px-blur: 22px;
   --px-gutter: 56px;
 }
@@ -67,6 +73,7 @@
   --px-glass-border: rgb(255 255 255 / 0.13);
   --px-hairline: rgb(255 255 255 / 0.1);
   --px-chip: rgb(255 255 255 / 0.1);
+  --px-code-bg: #0b0e11;
   --px-glass-shadow: 0 18px 44px -28px rgb(0 0 0 / 0.7);
 
   --px-coral-fill: #ff4a3d;
@@ -88,6 +95,11 @@
   --px-scrim-b: 0.46;
   --px-grid-line: rgb(255 255 255 / 0.13);
   --px-grid-line-h: rgb(255 255 255 / 0.05);
+  --px-docs-aurora:
+    radial-gradient(860px 600px at 100% -16%, rgb(46 107 255 / 0.85), transparent 62%),
+    radial-gradient(820px 600px at 2% -14%, rgb(255 74 61 / 0.7), transparent 62%),
+    radial-gradient(980px 660px at 54% 114%, rgb(5 61 179 / 0.55), transparent 64%),
+    radial-gradient(700px 520px at 36% -20%, rgb(5 61 179 / 0.45), transparent 62%);
   --px-wash:
     radial-gradient(960px 680px at 2% -18%, rgb(255 74 61 / 0.72), transparent 60%),
     radial-gradient(860px 720px at 99% -8%, rgb(46 107 255 / 0.9), transparent 62%),

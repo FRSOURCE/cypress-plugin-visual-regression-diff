@@ -52,6 +52,9 @@
     letter-spacing: -0.012em;
     text-wrap: balance;
   }
+  /* everything clickable shows it, and has hover + pressed states */
+  button:not(:disabled), [role='button'], summary, select, label[for] { cursor: pointer; }
+  button:not(:disabled):active, [role='button']:active, a[href]:active { opacity: 0.8; }
   :focus-visible {
     outline: 2px solid var(--px-coral-text);
     outline-offset: 3px;
@@ -84,4 +87,30 @@
     text-transform: uppercase;
     color: var(--px-coral-text);
   }
+  .px-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.15s, color 0.15s, text-decoration-color 0.15s, transform 0.1s;
+  }
+  .px-btn-primary {
+    border-radius: 999px;
+    background: var(--px-coral-fill);
+    color: var(--px-on-coral);
+    padding: 0.65rem 1rem;
+  }
+  .px-btn-primary:hover { filter: brightness(1.1); }
+  .px-btn-primary:active { filter: brightness(0.92); transform: translateY(1px); }
+  .px-btn-ghost {
+    color: var(--px-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--px-hairline);
+    text-underline-offset: 6px;
+  }
+  .px-btn-ghost:hover { text-decoration-color: var(--px-coral-fill); }
+  .px-btn-ghost:active { color: var(--px-coral-text); }
 }

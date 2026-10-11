@@ -1,21 +1,15 @@
 <script setup lang="ts">
-withDefaults(
+const props = withDefaults(
   defineProps<{ to?: string; variant?: 'primary' | 'ghost' }>(),
   { variant: 'primary' },
 );
+// resolveComponent must run in script: called inside the template it renders a literal <NuxtLink> tag.
+const NuxtLink = resolveComponent('NuxtLink');
+const external = computed(() => !!props.to?.startsWith('http'));
 </script>
 
 <template>
-  <component
-    :is="to ? (to.startsWith('http') ? 'a' : resolveComponent('NuxtLink')) : 'button'"
-    v-bind="to ? (to.startsWith('http') ? { href: to } : { to }) : { type: 'button' }"
-    class="inline-flex items-center justify-center gap-2 text-[13px] font-semibold transition-colors"
-    :class="
-      variant === 'primary'
-        ? 'rounded-full bg-coral px-4 py-2.5 text-on-coral hover:brightness-110'
-        : 'text-ink underline decoration-hairline underline-offset-[6px] hover:decoration-coral'
-    "
-  >
-    <slot />
-  </component>
+  <a v-if="to && external" :href="to" class="px-btn" :class="`px-btn-${variant}`"><slot /></a>
+  <component :is="NuxtLink" v-else-if="to" :to="to" class="px-btn" :class="`px-btn-${variant}`"><slot /></component>
+  <button v-else type="button" class="px-btn" :class="`px-btn-${variant}`"><slot /></button>
 </template>

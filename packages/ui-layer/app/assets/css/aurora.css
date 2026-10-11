@@ -104,3 +104,11 @@
   0%, 100% { transform: translate(0, 0); }
   50% { transform: translate(3%, -4%); }
 }
+
+/* the mobile mockup has the aurora only, no Swiss grid */
+@media (max-width: 767px) {
+  .px-grid-v,
+  .px-grid-h {
+    display: none;
+  }
+}

@@ -19,7 +19,8 @@
   },
   "a11y": {
     "skip": "跳到主要內容",
-    "language": "語言"
+    "language": "語言",
+    "close": "關閉"
   },
   "theme": {
     "toLight": "切換至淺色模式",
@@ -70,8 +71,8 @@
       "body": "每處變化都會被歸類為幾何、文字重排或反鋸齒雜訊，而不是一團紅色色塊。"
     },
     "approve": {
-      "title": "在 PR 中核准",
-      "body": "在討論變更的 Pull Request 中檢視影像並核准新基準。"
+      "title": "核准",
+      "body": "在 Pull Request 或 pixsame 平台中審查變更，由團隊自行選擇。兩種方式核准的是同一批基線。"
     }
   },
   "pricing": {
@@ -85,19 +86,19 @@
         "name": "Core",
         "price": "$0",
         "unit": "",
-        "desc": "自行託管，不限量"
+        "desc": "Self-hosted, MIT licensed"
       },
       "team": {
         "name": "Team",
         "price": "$29",
         "unit": "/開發者/月",
-        "desc": "雲端渲染，託管歷史"
+        "desc": "Cloud renders, 30-day hosted history, support included, AI auto-evaluator on request"
       },
       "enterprise": {
         "name": "Enterprise",
         "price": "洽詢",
         "unit": "",
-        "desc": "AI 自動評估器、SSO、SLA"
+        "desc": "AI auto-evaluator, SSO, SLA, 48h on-call support"
       }
     },
     "table": {
@@ -113,29 +114,52 @@
         "cloud": {
           "label": "雲端渲染",
           "core": "—",
-          "team": "5k / 月",
-          "enterprise": "不限量"
+          "team": "5k / month",
+          "enterprise": "待定"
         },
         "evaluator": {
           "label": "AI 自動評估器",
           "core": "—",
-          "team": "—",
-          "enterprise": "包含"
+          "team": "Limited, pay per use",
+          "enterprise": "Included"
         },
         "history": {
           "label": "託管基準歷史",
           "core": "—",
-          "team": "90 天",
-          "enterprise": "不限"
+          "team": "30 days",
+          "enterprise": "待定"
+        },
+        "support": {
+          "label": "Support",
+          "core": "Community",
+          "team": "包含",
+          "enterprise": "On-call, within 48h"
         }
       }
+    },
+    "oss": {
+      "title": "Open source, free forever.",
+      "body": "Everything that runs on your machine and in your CI is MIT licensed. These are the packages you can use today or will be able to use soon, at no cost.",
+      "available": "Available",
+      "cypress": "Cypress plugin",
+      "cypressBody": "Visual regression for Cypress: matchImage, a diff viewer in the runner and baselines in your repo.",
+      "manifest": "Run manifest",
+      "manifestBody": "The open, runner-agnostic JSON standard that describes every screenshot comparison, with a schema, types, a reader and a writer.",
+      "playwright": "Playwright plugin",
+      "playwrightBody": "The same comparison engine and manifest for Playwright projects.",
+      "renderer": "Pinned renderer",
+      "rendererBody": "A locked browser, font set and GPU path, so local and CI screenshots are byte-identical.",
+      "githubApp": "GitHub App",
+      "githubAppBody": "Diffs as a check and approval of new baselines from the pull request.",
+      "vitest": "Vitest runner",
+      "vitestBody": "The same comparison engine and manifest for Vitest projects."
     }
   },
   "product": {
     "crumb": "固定渲染器",
-    "title": "每台機器上，像素都一樣。",
-    "body": "固定版本的渲染器消除了筆電與 CI 之間在字型、反鋸齒與 GPU 上的差異，無論在哪裡截圖都逐位元組一致，出現差異就一定是真實變化。",
-    "status": "渲染器：即將推出 · Cypress 外掛：已提供",
+    "title": "One ecosystem for visual regression.",
+    "body": "pixsame is a growing set of open tools that make visual regression testing trustworthy: a shared manifest, a pinned renderer, review in the pull request. The Cypress plugin is available today, and the rest is on its way.",
+    "status": "Cypress plugin: available · everything else: coming soon",
     "start": "安裝外掛",
     "stats": {
       "manifest": {
@@ -143,14 +167,60 @@
         "label": "開放的清單格式"
       },
       "runners": {
-        "value": "2",
+        "value": "3",
         "label": "執行器：現有 Cypress，Playwright 即將支援"
       },
       "license": {
         "value": "MIT",
         "label": "開源授權"
       }
-    }
+    },
+    "cypressCta": "See the Cypress plugin",
+    "soon": {
+      "title": "Coming soon",
+      "body": "Every part of the ecosystem and how the parts fit together. Hover or focus a part to see what it does, and follow the link to its page.",
+      "eyebrow": "The ecosystem"
+    },
+    "groups": {
+      "runners": "Test runners",
+      "standard": "Shared standard",
+      "review": "Review"
+    },
+    "map": {
+      "cypress": {
+        "name": "Cypress plugin",
+        "body": "matchImage for Cypress, with a diff viewer in the runner and batch review. Available today."
+      },
+      "playwright": {
+        "name": "Playwright plugin",
+        "body": "The same comparison engine and manifest, for Playwright projects. Baselines stay in your repo."
+      },
+      "manifest": {
+        "name": "Run manifest",
+        "body": "An open, runner-agnostic JSON standard describing every screenshot comparison. Available today."
+      },
+      "renderer": {
+        "name": "Pinned renderer",
+        "body": "Fonts, antialiasing and GPU differences are pinned, so local and CI screenshots are byte-identical."
+      },
+      "platform": {
+        "name": "Review platform",
+        "body": "Server-side rendering plus an online image, diff and baseline manager for the whole team."
+      },
+      "evaluator": {
+        "name": "AI auto-evaluator",
+        "body": "Classifies each change and approves the routine ones, so people only look at what matters."
+      },
+      "githubApp": {
+        "name": "GitHub App",
+        "body": "Diffs as a check in the pull request and one-click approval of new baselines."
+      },
+      "vitest": {
+        "name": "Vitest runner",
+        "body": "The same comparison engine and manifest, for Vitest browser mode. Baselines stay in your repo."
+      }
+    },
+    "available": "Available"
   },
   "soon": {
     "status": "即將推出",
@@ -173,7 +243,14 @@
       "body": "伺服器端渲染，加上線上影像與差異檢視及管理工具，讓整個團隊都能審查與管理基準。",
       "b1": "伺服器渲染器，截圖逐位元組一致",
       "b2": "線上影像、差異與基準管理器",
-      "b3": "用於日常變更的 AI 自動評估器（企業版）"
+      "b3": "AI auto-evaluator for routine changes (Enterprise, limited in Team)"
+    },
+    "vitest": {
+      "title": "適用於 Vitest 的視覺迴歸。",
+      "body": "與 Cypress 外掛相同的比較引擎與清單，用於 Vitest 專案。基準保留在你的儲存庫中。",
+      "b1": "基準保存在你的儲存庫",
+      "b2": "截圖變化時顯示差異",
+      "b3": "寫出共用的執行清單"
     }
   },
   "waitlist": {
@@ -187,11 +264,24 @@
     "consent": "我們僅使用你的電子郵件通知此次上線，不會寄送電子報。"
   },
   "docs": {
-    "englishOnly": "文件目前僅提供英文版。"
+    "englishOnly": "文件目前僅提供英文版。",
+    "groups": {
+      "getting-started": "快速開始",
+      "reference": "參考",
+      "integrations": "整合"
+    },
+    "onThisPage": "本頁內容",
+    "menu": "文件選單"
   },
   "changelog": {
-    "body": "pixsame Cypress 外掛的發行說明。",
-    "source": "Cypress 外掛版本"
+    "body": "Release notes for the pixsame Cypress plugin.",
+    "source": "Cypress plugin releases",
+    "title": "Cypress plugin changelog",
+    "crumb": "Changelog",
+    "page": "Page {n} of {total}",
+    "prev": "Newer",
+    "next": "Older",
+    "pagination": "Changelog pages"
   },
   "legal": {
     "privacy": {
@@ -221,6 +311,25 @@
     "playwright": "Playwright",
     "platform": "平台",
     "privacy": "隱私",
-    "terms": "條款"
+    "terms": "條款",
+    "vitest": "Vitest"
+  },
+  "crumb": {
+    "label": "導覽路徑",
+    "home": "首頁"
+  },
+  "cypress": {
+    "crumb": "Cypress plugin",
+    "eyebrow": "Open source · MIT · Cypress",
+    "title": "Visual regression for Cypress.",
+    "body": "Take a screenshot in any test, compare it with the baseline and see the difference right in the Cypress runner. Works with e2e and component testing.",
+    "docs": "Read the docs",
+    "changelog": "Changelog",
+    "npm": "npm",
+    "onThisPage": "On this page"
+  },
+  "changelogs": {
+    "title": "更新日誌",
+    "body": "每個 pixsame 整合的發行說明。"
   }
 }
