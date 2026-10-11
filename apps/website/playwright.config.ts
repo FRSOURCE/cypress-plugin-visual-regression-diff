@@ -9,7 +9,8 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? 'github' : 'list',
   use: { baseURL: 'http://localhost:4173' },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  // CI uses the Chrome preinstalled on ubuntu-latest: `playwright install --with-deps` took ~6.5 min
+  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'], ...(process.env.CI ? { channel: 'chrome' } : {}) } }],
   webServer: {
     command: 'node scripts/serve-static.mjs',
     url: 'http://localhost:4173',

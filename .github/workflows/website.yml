@@ -29,8 +29,6 @@ jobs:
         run: pnpm --filter @pixsame/website lint
       - name: Build (static generate)
         run: pnpm --filter @pixsame/website build
-      - name: Install Chromium
-        run: pnpm --filter @pixsame/website exec playwright install --with-deps chromium
       - name: Test (e2e + axe)
         run: pnpm --filter @pixsame/website exec playwright test
         env:
