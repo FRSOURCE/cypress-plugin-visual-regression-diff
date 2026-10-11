@@ -506,7 +506,7 @@ For CI or sharable HTML reports, integrate with a reporter such as [`cypress-moc
 
 This plugin used to be published under the `@frsource` npm scope as `@frsource/cypress-plugin-visual-regression-diff`. It now lives in the [pixsame](https://github.com/pixsame) organization and is published as `@pixsame/cypress-plugin-visual-regression-diff`. If you still have the old `@frsource/...` package installed, moving over is just a rename: `@pixsame/cypress-plugin-visual-regression-diff` 1.0.0 is the code of `@frsource/cypress-plugin-visual-regression-diff` 4.2.1 with no behavior change, so your baseline images, configuration and `cy.*` commands keep working as they are. New installs don't need any of this, see [Getting started](#getting-started).
 
-The quickest way is the built-in command, which renames the dependency in every `package.json` below the current directory, updates imports and type references in your config and support files, and reinstalls with the package manager it finds:
+The quickest way to migrate is the built-in command shipped with the last `@frsource` release. It renames the dependency in every `package.json` below the current directory, updates imports and type references in your config and support files, and reinstalls with the package manager it finds:
 
 ```bash
 npx @frsource/cypress-plugin-visual-regression-diff migrate
