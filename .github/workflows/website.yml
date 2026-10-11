@@ -16,10 +16,11 @@ on:
     paths:
       - 'apps/website/**'
       - 'packages/ui-layer/**'
+      - '.github/workflows/website.yml'
 
 jobs:
   website:
-    name: build + e2e + a11y
+    name: build + e2e + a11y + deploy
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -29,10 +30,23 @@ jobs:
         run: pnpm --filter @pixsame/website lint
       - name: Build (static generate)
         run: pnpm --filter @pixsame/website build
+        env:
+          NUXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NUXT_PUBLIC_TURNSTILE_SITE_KEY }}
+          NUXT_PUBLIC_CONTACT_ENDPOINT: ${{ vars.NUXT_PUBLIC_CONTACT_ENDPOINT }}
       - name: Test (e2e + axe)
         run: pnpm --filter @pixsame/website exec playwright test
         env:
           CI: 'true'
+      # Same job as the build, so the deployed output is exactly what was tested
+      # (no second runner, no second install: billed minutes).
+      - name: Deploy to Cloudflare Pages
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        # Run from apps/website so wrangler picks up functions/ (the waitlist endpoint).
+        working-directory: apps/website
+        run: pnpm dlx wrangler@4.40.0 pages deploy .output/public --project-name pixsame-website --branch main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       - uses: actions/upload-artifact@v7
         if: ${{ failure() }}
         with:

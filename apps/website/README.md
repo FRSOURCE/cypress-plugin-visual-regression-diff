@@ -28,9 +28,15 @@ Each non-English file has `meta.reviewed: false` until a native speaker signs it
 
 ## Deploy (Cloudflare Pages)
 
+Deployed by `.github/workflows/website.yml` on every push to `main` that touches the site (after lint, build and tests), to the
+Cloudflare Pages project `pixsame-website` via `wrangler pages deploy`. Repo settings it needs:
+
+- Variables: `NUXT_PUBLIC_TURNSTILE_SITE_KEY`, `NUXT_PUBLIC_CONTACT_ENDPOINT` (see `.env.example`; copy it to `.env` locally).
+- Secrets: `CLOUDFLARE_API_TOKEN` (Account > Cloudflare Pages > Edit), `CLOUDFLARE_ACCOUNT_ID`.
+
 Build command `pnpm --filter @pixsame/website build`, output `apps/website/.output/public`. `public/_headers` sets CSP and caching.
 The waitlist form posts to `/api/waitlist`, a Pages Function (`functions/api/waitlist.ts`). Deploy with `wrangler pages deploy` from `apps/website`
 so the `functions/` directory is picked up. Set the secrets `WAITLIST_ENDPOINT` and `WAITLIST_TOKEN` (the service on the Vultr server)
 and, to enable the spam check, `TURNSTILE_SECRET`.
 
-Optional runtime config (env `NUXT_PUBLIC_*` at build time): `APP_URL` (shows "Sign in"), `CF_ANALYTICS_TOKEN`, `TURNSTILE_SITE_KEY`.
+Optional runtime config (env `NUXT_PUBLIC_*` at build time): `APP_URL` (shows "Sign in"), `CF_ANALYTICS_TOKEN`, `TURNSTILE_SITE_KEY`, `CONTACT_ENDPOINT` (Apps Script web app behind `/contact`).
