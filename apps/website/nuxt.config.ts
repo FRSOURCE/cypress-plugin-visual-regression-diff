@@ -25,6 +25,8 @@ export default defineNuxtConfig({
       // Cloudflare Web Analytics beacon token and Turnstile site key (optional).
       cfAnalyticsToken: '',
       turnstileSiteKey: '',
+      // Google Apps Script web app that receives the contact form (NUXT_PUBLIC_CONTACT_ENDPOINT).
+      contactEndpoint: '',
     },
   },
   content: {

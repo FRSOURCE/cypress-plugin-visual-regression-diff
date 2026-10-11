@@ -312,7 +312,9 @@
     "platform": "Platforma",
     "privacy": "Prywatność",
     "terms": "Regulamin",
-    "vitest": "Vitest"
+    "vitest": "Vitest",
+    "contact": "Kontakt",
+    "by": "od"
   },
   "crumb": {
     "label": "Ścieżka nawigacji",
@@ -331,5 +333,23 @@
   "changelogs": {
     "title": "Listy zmian",
     "body": "Informacje o wydaniach każdej integracji pixsame."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "heading": "Napisz do nas",
+    "intro": "Pytania, uwagi albo pomysł na projekt? Napisz do nas.",
+    "name": "Imię",
+    "email": "Adres e-mail",
+    "message": "Wiadomość",
+    "submit": "Wyślij wiadomość",
+    "sending": "Wysyłanie…",
+    "success": "Dziękujemy! Wkrótce odpowiemy.",
+    "error": "Coś poszło nie tak. Spróbuj ponownie lub napisz do nas bezpośrednio.",
+    "required": "Uzupełnij to pole.",
+    "invalidEmail": "Podaj poprawny adres e-mail.",
+    "unavailable": "Formularz jest chwilowo niedostępny. Napisz do nas bezpośrednio.",
+    "emailLabel": "E-mail",
+    "company": "Firma",
+    "taxIds": "Dane podatkowe"
   }
 }

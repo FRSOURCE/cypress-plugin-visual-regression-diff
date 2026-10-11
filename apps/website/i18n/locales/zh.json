@@ -312,7 +312,9 @@
     "platform": "平台",
     "privacy": "隐私",
     "terms": "条款",
-    "vitest": "Vitest"
+    "vitest": "Vitest",
+    "contact": "联系我们",
+    "by": "由"
   },
   "crumb": {
     "label": "面包屑导航",
@@ -331,5 +333,23 @@
   "changelogs": {
     "title": "更新日志",
     "body": "每个 pixsame 集成的发布说明。"
+  },
+  "contact": {
+    "title": "联系我们",
+    "heading": "与我们联系",
+    "intro": "有问题、反馈或项目想法？欢迎来信。",
+    "name": "姓名",
+    "email": "电子邮箱",
+    "message": "留言",
+    "submit": "发送消息",
+    "sending": "发送中…",
+    "success": "谢谢！我们会尽快回复。",
+    "error": "出了点问题。请重试，或直接给我们发邮件。",
+    "required": "请填写此项。",
+    "invalidEmail": "请输入有效的电子邮箱。",
+    "unavailable": "联系表单暂不可用，请直接给我们发邮件。",
+    "emailLabel": "邮箱",
+    "company": "公司",
+    "taxIds": "税号"
   }
 }

@@ -20,7 +20,11 @@
 ## Status
 
 - Available: Cypress plugin (`@pixsame/cypress-plugin-visual-regression-diff`), run manifest standard (`@pixsame/manifest`)
-- Coming soon: Playwright plugin, GitHub App, hosted platform (server renderer, image and diff viewer, AI auto-evaluator)
+- Coming soon: Playwright plugin, Vitest plugin, GitHub App, hosted platform (server renderer, image and diff viewer, AI auto-evaluator)
+
+## Contact
+
+- [Contact](https://pixsame.com/contact): pixsame@frsource.org, FRS JAKUB FREISLER, Kraków
 
 ## Source
 

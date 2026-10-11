@@ -312,7 +312,9 @@
     "platform": "平台",
     "privacy": "隱私",
     "terms": "條款",
-    "vitest": "Vitest"
+    "vitest": "Vitest",
+    "contact": "聯絡我們",
+    "by": "由"
   },
   "crumb": {
     "label": "導覽路徑",
@@ -331,5 +333,23 @@
   "changelogs": {
     "title": "更新日誌",
     "body": "每個 pixsame 整合的發行說明。"
+  },
+  "contact": {
+    "title": "聯絡我們",
+    "heading": "與我們聯絡",
+    "intro": "有問題、意見或專案想法？歡迎來信。",
+    "name": "姓名",
+    "email": "電子郵件",
+    "message": "訊息",
+    "submit": "傳送訊息",
+    "sending": "傳送中…",
+    "success": "謝謝！我們會盡快回覆。",
+    "error": "發生錯誤。請重試，或直接寄信給我們。",
+    "required": "請填寫此欄位。",
+    "invalidEmail": "請輸入有效的電子郵件。",
+    "unavailable": "聯絡表單目前無法使用，請直接寄信給我們。",
+    "emailLabel": "電子郵件",
+    "company": "公司",
+    "taxIds": "稅號"
   }
 }

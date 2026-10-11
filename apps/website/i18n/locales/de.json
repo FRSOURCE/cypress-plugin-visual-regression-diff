@@ -312,7 +312,9 @@
     "platform": "Plattform",
     "privacy": "Datenschutz",
     "terms": "Nutzungsbedingungen",
-    "vitest": "Vitest"
+    "vitest": "Vitest",
+    "contact": "Kontakt",
+    "by": "von"
   },
   "crumb": {
     "label": "Brotkrumen-Navigation",
@@ -331,5 +333,23 @@
   "changelogs": {
     "title": "Changelogs",
     "body": "Versionshinweise für jede pixsame-Integration."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "heading": "Schreiben Sie uns",
+    "intro": "Fragen, Feedback oder ein Projekt im Kopf? Schreiben Sie uns.",
+    "name": "Name",
+    "email": "E-Mail-Adresse",
+    "message": "Nachricht",
+    "submit": "Nachricht senden",
+    "sending": "Wird gesendet…",
+    "success": "Danke! Wir melden uns in Kürze.",
+    "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt.",
+    "required": "Bitte füllen Sie dieses Feld aus.",
+    "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+    "unavailable": "Das Kontaktformular ist derzeit nicht verfügbar. Bitte schreiben Sie uns direkt.",
+    "emailLabel": "E-Mail",
+    "company": "Unternehmen",
+    "taxIds": "Steuernummern"
   }
 }

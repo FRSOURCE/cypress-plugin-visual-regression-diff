@@ -312,7 +312,9 @@
     "platform": "Platform",
     "privacy": "Privacy",
     "terms": "Terms",
-    "vitest": "Vitest"
+    "vitest": "Vitest",
+    "contact": "Contact",
+    "by": "by"
   },
   "crumb": {
     "label": "Breadcrumb",
@@ -331,5 +333,23 @@
   "changelogs": {
     "title": "Changelogs",
     "body": "Release notes for every pixsame integration."
+  },
+  "contact": {
+    "title": "Contact",
+    "heading": "Get in touch",
+    "intro": "Questions, feedback or a project in mind? Write to us.",
+    "name": "Name",
+    "email": "Email address",
+    "message": "Message",
+    "submit": "Send message",
+    "sending": "Sending…",
+    "success": "Thanks! We will get back to you soon.",
+    "error": "Something went wrong. Please try again or email us directly.",
+    "required": "Please fill in this field.",
+    "invalidEmail": "Enter a valid email address.",
+    "unavailable": "The contact form is not available right now. Please email us directly.",
+    "emailLabel": "Email",
+    "company": "Company",
+    "taxIds": "Tax IDs"
   }
 }

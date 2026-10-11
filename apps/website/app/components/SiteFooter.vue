@@ -3,7 +3,7 @@ const { t } = useI18n();
 const localePath = useLocalePath();
 const groups = [
   { key: 'product', links: [['/products', 'nav.product'], ['/pricing', 'nav.pricing'], ['/github-app', 'footer.githubApp'], ['/playwright', 'footer.playwright'], ['/vitest', 'footer.vitest'], ['/platform', 'footer.platform']] },
-  { key: 'resources', links: [['/docs/getting-started/install', 'nav.docs'], ['/changelog', 'nav.changelog']] },
+  { key: 'resources', links: [['/docs/getting-started/install', 'nav.docs'], ['/changelog', 'nav.changelog'], ['/contact', 'footer.contact']] },
   { key: 'legal', links: [['/privacy', 'footer.privacy'], ['/terms', 'footer.terms']] },
 ] as const;
 </script>
@@ -30,6 +30,13 @@ const groups = [
         </ul>
       </nav>
     </div>
-    <p class="px-container pb-10 font-mono text-[11px] tracking-[0.08em] text-faint">© {{ new Date().getFullYear() }} pixsame</p>
+    <div class="px-container flex flex-wrap items-center justify-between gap-x-6 gap-y-3 pb-10 font-mono text-[11px] tracking-[0.08em] text-faint">
+      <p>© {{ new Date().getFullYear() }} pixsame</p>
+      <a href="https://www.frsource.org" rel="noopener" class="inline-flex items-center gap-2 hover:text-ink">
+        {{ t('footer.by') }}
+        <img src="/frsource-logo.svg" alt="" width="20" height="18" class="h-[18px] w-auto">
+        <span class="font-semibold tracking-[0.12em]">FRSOURCE</span>
+      </a>
+    </div>
   </footer>
 </template>
