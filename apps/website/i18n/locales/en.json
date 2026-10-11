@@ -261,7 +261,8 @@
     "sending": "Sending…",
     "success": "Thanks! We will email you once, when it is ready.",
     "error": "Something went wrong. Please try again.",
-    "consent": "We use your email only to tell you about this launch. No newsletter."
+    "consent": "I agree to receive an email when this product launches and updates about it afterwards, including related changes to the pixsame ecosystem. I can withdraw my consent at any time. See {privacy}.",
+    "consentRequired": "Please tick the box to join the waitlist."
   },
   "docs": {
     "englishOnly": "Docs are available in English only.",
@@ -287,8 +288,11 @@
     "privacy": {
       "title": "Privacy",
       "p1": "This website uses no cookies and no ad tracking. We use Cloudflare Web Analytics, which counts page views without cookies or fingerprinting.",
-      "p2": "If you join a waitlist we store your email address, the product you signed up for, your language and the time of your consent. We use it only to tell you when that product launches and we do not share it.",
-      "p3": "To have your email removed, contact us through github.com/pixsame."
+      "p2": "Controller: FRS JAKUB FREISLER, al. Kijowska 48/24, 30-079 Kraków, Poland (VAT ID PL6783179514). Contact: pixsame{'@'}frsource.org.",
+      "p3": "Waitlist: if you join, we store your email address, the product you signed up for, your language and the time of your consent. The legal basis is your consent (Art. 6(1)(a) GDPR). We use these data only to email you when that product launches and about later updates to it, including changes to the pixsame ecosystem that are connected to it. We do not use them for anything else and do not share them for marketing.",
+      "p4": "Contact form: we use your name, email address and message only to answer you, and delete them when they are no longer needed for that.",
+      "p5": "Processors: the forms run on Google Apps Script and Google Sheets (Google), and spam is filtered with Cloudflare Turnstile (Cloudflare). They may process data outside the EU under standard contractual clauses.",
+      "p6": "Retention and your rights: waitlist data is kept until you withdraw your consent or the product is discontinued. At any time you can withdraw consent and ask for access, correction or erasure by writing to pixsame{'@'}frsource.org. You can also complain to your data protection authority (in Poland: UODO)."
     },
     "terms": {
       "title": "Terms",
@@ -350,6 +354,8 @@
     "unavailable": "The contact form is not available right now. Please email us directly.",
     "emailLabel": "Email",
     "company": "Company",
-    "taxIds": "Tax IDs"
+    "taxIds": "Tax IDs",
+    "consent": "I agree that my details are used to answer my message. See {privacy}.",
+    "consentRequired": "Please tick the box to send your message."
   }
 }

@@ -261,7 +261,8 @@
     "sending": "傳送中…",
     "success": "謝謝！準備好後我們只會寄一封信通知你。",
     "error": "發生錯誤，請再試一次。",
-    "consent": "我們僅使用你的電子郵件通知此次上線，不會寄送電子報。"
+    "consent": "我同意在該產品推出時以及之後收到關於它的電子郵件更新，包括與之相關的 pixsame 生態變化。我可隨時撤回同意。詳見{privacy}。",
+    "consentRequired": "請勾選此項以加入候補名單。"
   },
   "docs": {
     "englishOnly": "文件目前僅提供英文版。",
@@ -286,9 +287,12 @@
   "legal": {
     "privacy": {
       "title": "隱私",
-      "p1": "本網站不使用 Cookie，也不做廣告追蹤。我們使用 Cloudflare Web Analytics，它不依賴 Cookie 或指紋辨識來統計頁面瀏覽量。",
-      "p2": "如果你加入候補名單，我們會儲存你的電子郵件、所選產品、語言與同意時間。這些資訊僅用於在該產品上線時通知你，不會與他人分享。",
-      "p3": "如需刪除你的電子郵件，請透過 github.com/pixsame 聯絡我們。"
+      "p1": "本網站不使用 cookie 與廣告追蹤。我們使用 Cloudflare Web Analytics，它不使用 cookie 或指紋辨識來統計頁面瀏覽量。",
+      "p2": "資料控制者：FRS JAKUB FREISLER，al. Kijowska 48/24, 30-079 Kraków, Poland（加值稅號 PL6783179514）。聯絡方式：pixsame{'@'}frsource.org。",
+      "p3": "候補名單：加入後，我們會儲存您的電子郵件、所選產品、語言與同意時間。法律依據為您的同意（GDPR 第 6 條第 1 項 a 款）。我們僅用這些資料在該產品推出時以及之後的更新（包括與之相關的 pixsame 生態變化）時寄信給您，不作其他用途，也不會分享作為行銷。",
+      "p4": "聯絡表單：我們僅使用您的姓名、電子郵件與訊息來回覆您，不再需要時即刪除。",
+      "p5": "資料處理者：表單運行於 Google Apps Script 與 Google Sheets（Google），垃圾訊息由 Cloudflare Turnstile（Cloudflare）過濾。它們可能依標準契約條款在歐盟以外處理資料。",
+      "p6": "保存期限與您的權利：候補名單資料保存至您撤回同意或產品終止。您可隨時撤回同意，並要求查閱、更正或刪除資料，請寄信至 pixsame{'@'}frsource.org。您也可以向所在地的資料保護機關投訴。"
     },
     "terms": {
       "title": "條款",
@@ -350,6 +354,8 @@
     "unavailable": "聯絡表單目前無法使用，請直接寄信給我們。",
     "emailLabel": "電子郵件",
     "company": "公司",
-    "taxIds": "稅號"
+    "taxIds": "稅號",
+    "consent": "我同意使用我的資料來回覆我的訊息。詳見{privacy}。",
+    "consentRequired": "請勾選此項以傳送訊息。"
   }
 }

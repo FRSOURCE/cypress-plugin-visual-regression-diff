@@ -33,6 +33,7 @@ jobs:
         env:
           NUXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NUXT_PUBLIC_TURNSTILE_SITE_KEY }}
           NUXT_PUBLIC_CONTACT_ENDPOINT: ${{ vars.NUXT_PUBLIC_CONTACT_ENDPOINT }}
+          NUXT_PUBLIC_WAITLIST_ENDPOINT: ${{ vars.NUXT_PUBLIC_WAITLIST_ENDPOINT }}
       - name: Test (e2e + axe)
         run: pnpm --filter @pixsame/website exec playwright test
         env:
@@ -41,7 +42,6 @@ jobs:
       # (no second runner, no second install: billed minutes).
       - name: Deploy to Cloudflare Pages
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-        # Run from apps/website so wrangler picks up functions/ (the waitlist endpoint).
         working-directory: apps/website
         run: pnpm dlx wrangler@4.40.0 pages deploy .output/public --project-name pixsame-website --branch main
         env:

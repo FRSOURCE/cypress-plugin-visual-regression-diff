@@ -261,7 +261,8 @@
     "sending": "Wysyłanie…",
     "success": "Dziękujemy! Napiszemy raz, gdy będzie gotowe.",
     "error": "Coś poszło nie tak. Spróbuj ponownie.",
-    "consent": "Używamy adresu tylko, by poinformować o tym starcie. Bez newslettera."
+    "consent": "Wyrażam zgodę na e-mail o starcie tego produktu oraz na późniejsze informacje o nim, w tym o powiązanych zmianach w ekosystemie pixsame. Zgodę mogę wycofać w dowolnym momencie. Zobacz {privacy}.",
+    "consentRequired": "Zaznacz zgodę, aby zapisać się na listę."
   },
   "docs": {
     "englishOnly": "Dokumentacja jest dostępna tylko po angielsku.",
@@ -287,8 +288,11 @@
     "privacy": {
       "title": "Prywatność",
       "p1": "Ta strona nie używa plików cookie ani śledzenia reklamowego. Korzystamy z Cloudflare Web Analytics, które zlicza odsłony bez cookies i fingerprintingu.",
-      "p2": "Jeśli zapiszesz się na listę oczekujących, przechowujemy Twój adres e-mail, produkt, język i czas zgody. Używamy ich tylko, by poinformować o starcie produktu, i nie udostępniamy ich nikomu.",
-      "p3": "Aby usunąć swój adres, skontaktuj się z nami przez github.com/pixsame."
+      "p2": "Administrator danych: FRS JAKUB FREISLER, al. Kijowska 48/24, 30-079 Kraków, Polska (NIP PL6783179514). Kontakt: pixsame{'@'}frsource.org.",
+      "p3": "Lista oczekujących: po zapisie przechowujemy Twój adres e-mail, produkt, język i czas zgody. Podstawą prawną jest Twoja zgoda (art. 6 ust. 1 lit. a RODO). Używamy tych danych wyłącznie, by napisać do Ciebie o starcie produktu i jego późniejszych aktualizacjach, w tym o powiązanych zmianach w ekosystemie pixsame. Nie wykorzystujemy ich do niczego innego i nie udostępniamy do celów marketingowych.",
+      "p4": "Formularz kontaktowy: imię, adres e-mail i wiadomość wykorzystujemy wyłącznie, by Ci odpowiedzieć, i usuwamy, gdy nie są już do tego potrzebne.",
+      "p5": "Podmioty przetwarzające: formularze działają na Google Apps Script i Google Sheets (Google), a spam filtruje Cloudflare Turnstile (Cloudflare). Mogą przetwarzać dane poza UE na podstawie standardowych klauzul umownych.",
+      "p6": "Przechowywanie i Twoje prawa: dane z listy przechowujemy do wycofania zgody lub zakończenia produktu. W każdej chwili możesz wycofać zgodę oraz żądać dostępu, sprostowania lub usunięcia danych, pisząc na pixsame{'@'}frsource.org. Możesz też złożyć skargę do UODO."
     },
     "terms": {
       "title": "Regulamin",
@@ -350,6 +354,8 @@
     "unavailable": "Formularz jest chwilowo niedostępny. Napisz do nas bezpośrednio.",
     "emailLabel": "E-mail",
     "company": "Firma",
-    "taxIds": "Dane podatkowe"
+    "taxIds": "Dane podatkowe",
+    "consent": "Zgadzam się na wykorzystanie moich danych, aby odpowiedzieć na wiadomość. Zobacz {privacy}.",
+    "consentRequired": "Zaznacz zgodę, aby wysłać wiadomość."
   }
 }

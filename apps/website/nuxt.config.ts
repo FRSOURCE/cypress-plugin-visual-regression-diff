@@ -27,6 +27,8 @@ export default defineNuxtConfig({
       turnstileSiteKey: '',
       // Google Apps Script web app that receives the contact form (NUXT_PUBLIC_CONTACT_ENDPOINT).
       contactEndpoint: '',
+      // Google Apps Script web app that stores waitlist signups in a Sheet (NUXT_PUBLIC_WAITLIST_ENDPOINT).
+      waitlistEndpoint: '',
     },
   },
   content: {

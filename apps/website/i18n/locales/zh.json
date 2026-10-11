@@ -261,7 +261,8 @@
     "sending": "正在发送…",
     "success": "谢谢！准备好后我们只会发一封邮件通知你。",
     "error": "出了点问题，请重试。",
-    "consent": "我们仅使用你的邮箱通知此次发布，不会发送订阅邮件。"
+    "consent": "我同意在该产品发布时以及之后收到关于它的邮件更新，包括与之相关的 pixsame 生态变化。我可随时撤回同意。详见{privacy}。",
+    "consentRequired": "请勾选此项以加入候补名单。"
   },
   "docs": {
     "englishOnly": "文档目前仅提供英文版。",
@@ -286,9 +287,12 @@
   "legal": {
     "privacy": {
       "title": "隐私",
-      "p1": "本网站不使用 Cookie，也不做广告追踪。我们使用 Cloudflare Web Analytics，它不依赖 Cookie 或指纹识别来统计页面浏览量。",
-      "p2": "如果你加入候补名单，我们会保存你的邮箱、所选产品、语言和同意时间。这些信息仅用于在该产品发布时通知你，不会与他人共享。",
-      "p3": "如需删除你的邮箱，请通过 github.com/pixsame 联系我们。"
+      "p1": "本网站不使用 cookie 和广告跟踪。我们使用 Cloudflare Web Analytics，它不使用 cookie 或指纹识别来统计页面浏览量。",
+      "p2": "数据控制者：FRS JAKUB FREISLER，al. Kijowska 48/24, 30-079 Kraków, Poland（增值税号 PL6783179514）。联系方式：pixsame{'@'}frsource.org。",
+      "p3": "候补名单：加入后，我们会保存您的邮箱地址、所选产品、语言和同意时间。法律依据是您的同意（GDPR 第 6 条第 1 款 a 项）。我们仅用这些数据在该产品发布时以及之后的更新（包括与之相关的 pixsame 生态变化）时给您发送邮件，不用于其他用途，也不会共享用于营销。",
+      "p4": "联系表单：我们仅使用您的姓名、邮箱和留言来回复您，不再需要时即删除。",
+      "p5": "数据处理方：表单运行于 Google Apps Script 和 Google Sheets（Google），垃圾信息由 Cloudflare Turnstile（Cloudflare）过滤。它们可能依据标准合同条款在欧盟以外处理数据。",
+      "p6": "保存期限与您的权利：候补名单数据保存至您撤回同意或产品终止。您可随时撤回同意，并要求查阅、更正或删除数据，请发邮件至 pixsame{'@'}frsource.org。您也可以向所在地的数据保护机构投诉。"
     },
     "terms": {
       "title": "条款",
@@ -350,6 +354,8 @@
     "unavailable": "联系表单暂不可用，请直接给我们发邮件。",
     "emailLabel": "邮箱",
     "company": "公司",
-    "taxIds": "税号"
+    "taxIds": "税号",
+    "consent": "我同意使用我的信息来回复我的留言。详见{privacy}。",
+    "consentRequired": "请勾选此项以发送留言。"
   }
 }

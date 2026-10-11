@@ -261,7 +261,8 @@
     "sending": "Wird gesendet…",
     "success": "Danke! Wir schreiben Ihnen einmal, sobald es soweit ist.",
     "error": "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
-    "consent": "Wir verwenden Ihre E-Mail nur, um Sie über diesen Start zu informieren. Kein Newsletter."
+    "consent": "Ich möchte per E-Mail über den Start dieses Produkts und danach über Neuigkeiten dazu informiert werden, einschließlich damit verbundener Änderungen am pixsame-Ökosystem. Ich kann meine Einwilligung jederzeit widerrufen. Siehe {privacy}.",
+    "consentRequired": "Bitte setzen Sie das Häkchen, um sich einzutragen."
   },
   "docs": {
     "englishOnly": "Die Doku ist nur auf Englisch verfügbar.",
@@ -287,8 +288,11 @@
     "privacy": {
       "title": "Datenschutz",
       "p1": "Diese Website verwendet keine Cookies und kein Werbe-Tracking. Wir nutzen Cloudflare Web Analytics, das Seitenaufrufe ohne Cookies und Fingerprinting zählt.",
-      "p2": "Wenn Sie sich in eine Warteliste eintragen, speichern wir Ihre E-Mail-Adresse, das Produkt, Ihre Sprache und den Zeitpunkt der Einwilligung. Wir nutzen sie nur, um Sie über den Start zu informieren, und geben sie nicht weiter.",
-      "p3": "Um Ihre E-Mail löschen zu lassen, kontaktieren Sie uns über github.com/pixsame."
+      "p2": "Verantwortlicher: FRS JAKUB FREISLER, al. Kijowska 48/24, 30-079 Kraków, Polen (USt-IdNr. PL6783179514). Kontakt: pixsame{'@'}frsource.org.",
+      "p3": "Warteliste: Bei der Anmeldung speichern wir Ihre E-Mail-Adresse, das Produkt, Ihre Sprache und den Zeitpunkt Ihrer Einwilligung. Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Wir verwenden die Daten nur, um Ihnen den Start dieses Produkts und spätere Neuigkeiten dazu mitzuteilen, einschließlich damit verbundener Änderungen am pixsame-Ökosystem. Eine andere Nutzung oder Weitergabe zu Werbezwecken findet nicht statt.",
+      "p4": "Kontaktformular: Name, E-Mail-Adresse und Nachricht verwenden wir nur, um Ihnen zu antworten, und löschen sie, sobald sie dafür nicht mehr nötig sind.",
+      "p5": "Auftragsverarbeiter: Die Formulare laufen über Google Apps Script und Google Sheets (Google); Spam wird mit Cloudflare Turnstile (Cloudflare) gefiltert. Dabei können Daten außerhalb der EU auf Grundlage von Standardvertragsklauseln verarbeitet werden.",
+      "p6": "Speicherdauer und Ihre Rechte: Wartelistendaten bleiben bis zum Widerruf der Einwilligung oder bis zur Einstellung des Produkts gespeichert. Sie können jederzeit widerrufen sowie Auskunft, Berichtigung oder Löschung verlangen, per E-Mail an pixsame{'@'}frsource.org. Sie können sich außerdem bei Ihrer Datenschutzbehörde beschweren."
     },
     "terms": {
       "title": "Nutzungsbedingungen",
@@ -350,6 +354,8 @@
     "unavailable": "Das Kontaktformular ist derzeit nicht verfügbar. Bitte schreiben Sie uns direkt.",
     "emailLabel": "E-Mail",
     "company": "Unternehmen",
-    "taxIds": "Steuernummern"
+    "taxIds": "Steuernummern",
+    "consent": "Ich bin einverstanden, dass meine Angaben zur Beantwortung meiner Nachricht verwendet werden. Siehe {privacy}.",
+    "consentRequired": "Bitte setzen Sie das Häkchen, um die Nachricht zu senden."
   }
 }

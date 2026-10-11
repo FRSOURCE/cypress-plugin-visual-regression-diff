@@ -1,5 +1,10 @@
 import { expect, test } from '@playwright/test';
 
+// Turnstile keeps polling Cloudflare, so the page never goes network-idle. Tests never need the real captcha.
+test.beforeEach(async ({ page }) => {
+  await page.route('https://challenges.cloudflare.com/**', (route) => route.abort());
+});
+
 test('landing page renders the hero and the key sections', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Visual regression that agrees with itself.');
@@ -68,17 +73,40 @@ test('mobile menu exposes the navigation', async ({ page }) => {
   await expect(page).toHaveURL(/\/pricing\/?$/);
 });
 
-test('waitlist form submits to the API', async ({ page }) => {
-  let body: unknown;
-  await page.route('**/api/waitlist', async (route) => {
-    body = route.request().postDataJSON();
-    await route.fulfill({ json: { ok: true } });
+test('waitlist form needs consent, then posts to the Apps Script endpoint', async ({ page }) => {
+  let url = '';
+  await page.route('https://script.google.com/**', async (route) => {
+    url = route.request().url();
+    await route.fulfill({ json: { result: 'success' } });
   });
   await page.goto('/github-app/');
   await page.getByLabel('Email address').fill('dana@example.com');
   await page.getByRole('button', { name: 'Notify me' }).click();
+  await expect(page.getByRole('alert')).toContainText('tick the box');
+  expect(url).toBe('');
+  await page.getByRole('checkbox').check();
+  await page.getByRole('button', { name: 'Notify me' }).click();
   await expect(page.getByRole('status')).toContainText('Thanks');
-  expect(body).toMatchObject({ email: 'dana@example.com', product: 'github-app', locale: 'en' });
+  const params = new URL(url).searchParams;
+  expect(Object.fromEntries(params)).toMatchObject({ email: 'dana@example.com', product: 'github-app', locale: 'en', consent: 'yes', website: '' });
+});
+
+test('contact form validates, needs consent and posts', async ({ page }) => {
+  let url = '';
+  await page.route('https://script.google.com/**', async (route) => {
+    url = route.request().url();
+    await route.fulfill({ json: { result: 'success' } });
+  });
+  await page.goto('/contact/');
+  await page.getByRole('button', { name: 'Send message' }).click();
+  await expect(page.getByText('Please fill in this field.')).toHaveCount(3);
+  await page.getByLabel('Name').fill('Dana');
+  await page.getByLabel('Email address').fill('dana@example.com');
+  await page.getByRole('textbox', { name: 'Message' }).fill('Hello');
+  await page.getByRole('checkbox').check();
+  await page.getByRole('button', { name: 'Send message' }).click();
+  await expect(page.getByRole('status')).toContainText('Thanks');
+  expect(Object.fromEntries(new URL(url).searchParams)).toMatchObject({ name: 'Dana', message: 'Hello', consent: 'yes' });
 });
 
 test('docs in other locales are noindex, English is indexable', async ({ page }) => {

@@ -1,17 +1,11 @@
 <script setup lang="ts">
 const { t, locale } = useI18n();
 
-const { public: { turnstileSiteKey, contactEndpoint } } = useRuntimeConfig();
-const turnstileToken = ref('');
-// Cloudflare Turnstile is only loaded when a site key is configured.
-if (turnstileSiteKey) {
-  useHead({ script: [{ src: 'https://challenges.cloudflare.com/turnstile/v0/api.js', async: true, defer: true }] });
-  if (import.meta.client) {
-    (window as unknown as Record<string, unknown>).pxTurnstile = (token: string) => (turnstileToken.value = token);
-  }
-}
+const { public: { contactEndpoint } } = useRuntimeConfig();
+const { siteKey: turnstileSiteKey, token: turnstileToken } = useTurnstile();
 
 const form = reactive({ name: '', email: '', message: '' });
+const consent = ref(false);
 const website = ref(''); // honeypot, must stay empty
 const state = ref<'idle' | 'sending' | 'done' | 'error'>('idle');
 const touched = ref(false);
@@ -20,35 +14,9 @@ const errors = computed(() => ({
   name: form.name.trim() ? '' : t('contact.required'),
   email: !form.email.trim() ? t('contact.required') : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()) ? '' : t('contact.invalidEmail'),
   message: form.message.trim() ? '' : t('contact.required'),
+  consent: consent.value ? '' : t('contact.consentRequired'),
 }));
-const valid = computed(() => !errors.value.name && !errors.value.email && !errors.value.message);
-
-// The endpoint is a Google Apps Script web app. A text/plain POST with the data in the
-// query string is a CORS "simple request", so the browser sends no preflight.
-const send = async (attempt = 0): Promise<void> => {
-  const params = new URLSearchParams({
-    name: form.name.trim(),
-    email: form.email.trim(),
-    message: form.message.trim(),
-    locale: locale.value,
-    website: website.value,
-    token: turnstileToken.value,
-  });
-  let result: { result?: string } | undefined;
-  try {
-    const res = await fetch(`${contactEndpoint}?${params}`, {
-      method: 'POST',
-      redirect: 'follow',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    });
-    result = await res.json();
-  } catch (error) {
-    // Network failure: retry. A server answer (even an error) is final.
-    if (attempt < 2) return send(attempt + 1);
-    throw error;
-  }
-  if (result?.result !== 'success') throw new Error('contact_failed');
-};
+const valid = computed(() => !Object.values(errors.value).some(Boolean));
 
 const submit = async () => {
   touched.value = true;
@@ -59,7 +27,15 @@ const submit = async () => {
   }
   state.value = 'sending';
   try {
-    await send();
+    await postToAppsScript(contactEndpoint, {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      message: form.message.trim(),
+      locale: locale.value,
+      website: website.value,
+      consent: 'yes',
+      token: turnstileToken.value,
+    });
     state.value = 'done';
   } catch {
     state.value = 'error';
@@ -100,6 +76,7 @@ const field = 'mt-2 w-full rounded-md border border-glass-border bg-glass-strong
         />
         <p v-if="touched && errors.message" id="contact-message-error" class="mt-1 text-sm text-coral-text">{{ errors.message }}</p>
       </div>
+      <ConsentCheckbox id="contact-consent" v-model="consent" keypath="contact.consent" :error="touched ? errors.consent : ''" />
       <input v-model="website" type="text" name="website" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true" >
       <div v-if="turnstileSiteKey" class="cf-turnstile" :data-sitekey="turnstileSiteKey" data-callback="pxTurnstile" />
       <div>
