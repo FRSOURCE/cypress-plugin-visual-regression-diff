@@ -1,11 +1,24 @@
 name: CI
+# The website has its own workflow (website.yml); changes under these paths do not run the plugin suites.
 on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - 'apps/**'
+      - 'packages/ui-layer/**'
+      - '.github/workflows/website.yml'
   push:
     branches:
       - main
+    paths-ignore:
+      - 'apps/**'
+      - 'packages/ui-layer/**'
+      - '.github/workflows/website.yml'
+
+env:
+  # The plugin jobs never need the website or its Nuxt toolchain (billed minutes).
+  PLUGIN_INSTALL_FILTER: --filter '!@pixsame/website' --filter '!@pixsame/ui-layer'
 
 jobs:
   lint:
@@ -18,6 +31,7 @@ jobs:
         with:
           # the only job that saves the cache (fastest job, never on the critical path)
           save-cache: 'true'
+          install-filter: ${{ env.PLUGIN_INSTALL_FILTER }}
       - run: pnpm lint:ci
       - run: pnpm format:ci
 
@@ -28,6 +42,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
+        with:
+          install-filter: ${{ env.PLUGIN_INSTALL_FILTER }}
       - run: pnpm --filter cypress-plugin-visual-regression-diff -r build
       - name: Test e2e
         run: pnpm test:e2e:ci
@@ -51,6 +67,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
+        with:
+          install-filter: ${{ env.PLUGIN_INSTALL_FILTER }}
       - name: Test integration (with coverage)
         run: pnpm test:integration:ci
       - name: Upload coverage to Qlty
@@ -90,6 +108,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
+        with:
+          install-filter: ${{ env.PLUGIN_INSTALL_FILTER }}
       - name: Build packages to get cross-references working 🔧
         run: pnpm build
       - name: Release packages under latest

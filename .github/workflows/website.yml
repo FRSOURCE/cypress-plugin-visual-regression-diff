@@ -18,6 +18,11 @@ on:
       - 'packages/ui-layer/**'
       - '.github/workflows/website.yml'
 
+# A newer push to the same PR cancels the running check; a deploy from main is never cancelled.
+concurrency:
+  group: website-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   website:
     name: build + e2e + a11y + deploy
@@ -26,6 +31,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
+        with:
+          # only the site and its workspace dependencies (the ui-layer), not the plugin and the examples
+          install-filter: --filter @pixsame/website...
       - name: Lint (cheapest first)
         run: pnpm --filter @pixsame/website lint
       - name: Build (static generate)

@@ -3,8 +3,8 @@
   "private": true,
   "author": "Jakub Freisler <jakub.freisler@frsource.org>",
   "scripts": {
-    "build": "pnpm -r build",
-    "lint": "eslint '**/*.ts' --ignore-pattern '**/*.d.ts'",
+    "build": "pnpm -r --filter '!@pixsame/website' build",
+    "lint": "eslint '**/*.ts' --ignore-pattern '**/*.d.ts' --ignore-pattern 'apps/**' --ignore-pattern 'packages/ui-layer/**'",
     "fix": "pnpm lint --fix",
     "lint:ci": "pnpm lint --max-warnings 0",
     "format": "pnpm -r format",
