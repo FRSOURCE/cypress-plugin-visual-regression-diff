@@ -98,7 +98,7 @@ useSeoMeta({
       </article>
       <aside
         v-if="toc.length"
-        class="hidden xl:sticky xl:top-24 xl:block xl:self-start"
+        class="hidden xl:sticky xl:top-20 xl:block xl:self-start"
         :aria-label="t('cypress.onThisPage')"
       >
         <p class="px-eyebrow !text-faint">{{ t('cypress.onThisPage') }}</p>
