@@ -1,22 +1,14 @@
 name: Website
-# Separate workflow with path filters so website-only changes do not run the plugin
-# suites, and plugin-only changes do not run this one (billed minutes).
+# Always triggered so the required `website` check reports on every PR (a workflow skipped by
+# `on.paths` leaves it pending and blocks the merge). The `changes` job decides whether the site
+# is built and tested; a job skipped by `if` counts as passing. Plugin-only changes cost one tiny job.
 on:
   pull_request:
     branches:
       - main
-    paths:
-      - 'apps/website/**'
-      - 'packages/ui-layer/**'
-      - '.github/workflows/website.yml'
-      - 'pnpm-lock.yaml'
   push:
     branches:
       - main
-    paths:
-      - 'apps/website/**'
-      - 'packages/ui-layer/**'
-      - '.github/workflows/website.yml'
 
 # A newer push to the same PR cancels the running check; a deploy from main is never cancelled.
 concurrency:
@@ -24,8 +16,27 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  changes:
+    name: changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      website: ${{ steps.filter.outputs.website }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            website:
+              - 'apps/website/**'
+              - 'packages/ui-layer/**'
+              - '.github/workflows/website.yml'
+              - 'pnpm-lock.yaml'
+
   website:
-    name: build + e2e + a11y + deploy
+    name: website
+    needs: [changes]
+    if: ${{ needs.changes.outputs.website == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
