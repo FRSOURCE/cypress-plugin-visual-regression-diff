@@ -92,13 +92,13 @@
         "name": "Team",
         "price": "$29",
         "unit": "/dev/mies.",
-        "desc": "Renderowanie w chmurze, 30-day hosted history, support included, AI auto-evaluator on request"
+        "desc": "Renderowanie w chmurze, 30-dniowa historia, wsparcie, AI auto-ewaluator na żądanie"
       },
       "enterprise": {
         "name": "Enterprise",
         "price": "Porozmawiajmy",
         "unit": "",
-        "desc": "AI auto-evaluator, SSO, SLA, wsparcie on-call do 48 h"
+        "desc": "AI auto-ewaluator, SSO, SLA, wsparcie techniczne w trybie dyżuru do 48h"
       }
     },
     "table": {
@@ -143,7 +143,7 @@
       "available": "Dostępne",
       "cypress": "Wtyczka do Cypressa",
       "cypressBody": "Regresja wizualna dla Cypressa: matchImage, podgląd różnic w runnerze i wzorce w Twoim repozytorium.",
-      "manifest": "Manifest przebiegu",
+      "manifest": "Standard manifestu przebiegu testów",
       "manifestBody": "Otwarty, niezależny od runnera standard JSON opisujący każde porównanie zrzutów ekranu, ze schematem, typami, readerem i writerem.",
       "playwright": "Playwright plugin",
       "playwrightBody": "Ten sam silnik porównań i manifest dla projektów Playwright.",
@@ -158,7 +158,7 @@
   "product": {
     "crumb": "Przypięty renderer",
     "title": "Jeden ekosystem dla regresji wizualnej.",
-    "body": "pixsame to rosnący zestaw otwartych narzędzi, dzięki którym testy regresji wizualnej można traktować poważnie: wspólny manifest, przypięty renderer i przegląd w pull requeście. Wtyczka do Cypressa jest dostępna już dziś, reszta jest w drodze.",
+    "body": "pixsame to rosnący zestaw otwartych narzędzi, dzięki którym testy regresji wizualnej można traktować poważnie: wspólny standard, renderer i przegląd w pull requeście. Wtyczka do Cypressa jest dostępna już dziś, reszta jest w drodze.",
     "status": "Wtyczka do Cypressa: dostępna · wszystko inne: wkrótce",
     "start": "Zainstaluj wtyczkę",
     "stats": {
@@ -196,20 +196,20 @@
         "body": "Ten sam silnik porównań i manifest, dla projektów Playwright. Wzorce zostają w Twoim repozytorium."
       },
       "manifest": {
-        "name": "Manifest przebiegu",
+        "name": "Standard manifestu przebiegu testów",
         "body": "Otwarty, niezależny od runnera standard JSON opisujący każde porównanie zrzutów ekranu. Dostępny już dziś."
       },
       "renderer": {
-        "name": "Przypięty renderer",
-        "body": "Czcionki, antyaliasing i różnice GPU są przypięte, więc zrzuty lokalne i z CI są identyczne co do bajta."
+        "name": "Renderer",
+        "body": "Czcionki, antyaliasing i różnice GPU są automatycznie niwelowane, więc zrzuty lokalne i z CI są identyczne co do bajta."
       },
       "platform": {
-        "name": "Platforma przeglądu",
+        "name": "Platforma do przeglądania zmian",
         "body": "Renderowanie po stronie serwera oraz internetowy menedżer obrazów, różnic i wzorców dla całego zespołu."
       },
       "evaluator": {
-        "name": "AI auto-evaluator",
-        "body": "Klasyfikuje każdą zmianę i akceptuje rutynowe, więc ludzie patrzą tylko na to, co ważne."
+        "name": "AI auto-ewaluator",
+        "body": "Klasyfikuje każdą zmianę i akceptuje te rutynowe, żeby człowiek musiał patrzeć tylko na to, co ważne."
       },
       "githubApp": {
         "name": "GitHub App",
@@ -236,7 +236,7 @@
       "body": "Ten sam silnik porównań i manifest co we wtyczce Cypress, dla projektów Playwright. Wzorce zostają w Twoim repozytorium.",
       "b1": "Wzorce przechowywane w repozytorium",
       "b2": "Różnice pokazywane, gdy zrzuty się zmienią",
-      "b3": "Zapisuje wspólny manifest przebiegu"
+      "b3": "Zapisuje manifest przebiegu testów używając wspólnego standardu"
     },
     "platform": {
       "title": "Platforma pixsame.",
@@ -250,7 +250,7 @@
       "body": "Ten sam silnik porównań i manifest co we wtyczce Cypress, dla projektów Vitest. Wzorce zostają w Twoim repozytorium.",
       "b1": "Wzorce przechowywane w repozytorium",
       "b2": "Różnice pokazywane, gdy zrzuty się zmienią",
-      "b3": "Zapisuje wspólny manifest przebiegu"
+      "b3": "Zapisuje manifest przebiegu testów używając wspólnego standardu"
     }
   },
   "waitlist": {

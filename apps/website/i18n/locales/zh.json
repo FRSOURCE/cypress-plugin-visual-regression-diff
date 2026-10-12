@@ -86,19 +86,19 @@
         "name": "Core",
         "price": "$0",
         "unit": "",
-        "desc": "Self-hosted, MIT licensed"
+        "desc": "MIT 许可，可自行托管"
       },
       "team": {
         "name": "Team",
         "price": "$29",
         "unit": "/开发者/月",
-        "desc": "云端渲染、30 天托管历史、含技术支持，可按需启用 AI auto-evaluator"
+        "desc": "云端渲染、30 天托管历史、含技术支持，可按需启用 AI 自动评估器"
       },
       "enterprise": {
         "name": "Enterprise",
         "price": "联系我们",
         "unit": "",
-        "desc": "AI auto-evaluator、SSO、SLA、48 小时内随叫随到的支持"
+        "desc": "AI 自动评估器、SSO、SLA、48 小时内随叫随到的技术支持"
       }
     },
     "table": {
@@ -158,7 +158,7 @@
   "product": {
     "crumb": "固定渲染器",
     "title": "面向视觉回归的统一生态。",
-    "body": "pixsame 是一组不断壮大的开源工具，让视觉回归测试值得信赖：共享的清单、固定版本的渲染器，以及在 Pull Request 中完成审查。Cypress 插件现已可用，其余部分正在路上。",
+    "body": "pixsame 是一组不断壮大的开源工具，让视觉回归测试值得信赖：共享的标准、渲染器，以及在 Pull Request 中完成审查。Cypress 插件现已可用，其余部分正在路上。",
     "status": "Cypress 插件：已提供 · 其余：即将推出",
     "start": "安装插件",
     "stats": {
@@ -200,16 +200,16 @@
         "body": "开放的、与运行器无关的 JSON 标准，描述每一次截图比较。现已可用。"
       },
       "renderer": {
-        "name": "固定渲染器",
-        "body": "字体、抗锯齿和 GPU 差异都被固定，本地与 CI 截图因此逐字节一致。"
+        "name": "渲染器",
+        "body": "字体、抗锯齿和 GPU 差异会被自动消除，本地与 CI 截图因此逐字节一致。"
       },
       "platform": {
-        "name": "审查平台",
+        "name": "变更审查平台",
         "body": "服务器端渲染，加上面向整个团队的在线图像、差异与基线管理器。"
       },
       "evaluator": {
-        "name": "AI auto-evaluator",
-        "body": "为每处变更分类并自动批准常规改动，让人只需关注真正重要的部分。"
+        "name": "AI 自动评估器",
+        "body": "为每处变更分类并自动批准常规改动，让你只需关注真正重要的部分。"
       },
       "githubApp": {
         "name": "GitHub App",

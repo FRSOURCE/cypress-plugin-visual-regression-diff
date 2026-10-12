@@ -86,7 +86,7 @@
         "name": "Core",
         "price": "$0",
         "unit": "",
-        "desc": "Self-hosted, MIT licensed"
+        "desc": "MIT-lizenziert, Self-Hosting möglich"
       },
       "team": {
         "name": "Team",
@@ -158,7 +158,7 @@
   "product": {
     "crumb": "Fixierter Renderer",
     "title": "Ein Ökosystem für visuelle Regression.",
-    "body": "pixsame ist eine wachsende Sammlung offener Tools, die visuelle Regressionstests verlässlich machen: ein gemeinsames Manifest, ein fixierter Renderer, Review im Pull Request. Das Cypress-Plugin ist heute verfügbar, der Rest folgt.",
+    "body": "pixsame ist eine wachsende Sammlung offener Tools, die visuelle Regressionstests verlässlich machen: ein gemeinsamer Standard, ein Renderer, Review im Pull Request. Das Cypress-Plugin ist heute verfügbar, der Rest folgt.",
     "status": "Cypress-Plugin: verfügbar · alles andere: demnächst",
     "start": "Plugin installieren",
     "stats": {
@@ -200,16 +200,16 @@
         "body": "Ein offener, runnerunabhängiger JSON-Standard, der jeden Screenshot-Vergleich beschreibt. Heute verfügbar."
       },
       "renderer": {
-        "name": "Fixierter Renderer",
-        "body": "Schriften, Antialiasing und GPU-Unterschiede sind fixiert, damit lokale und CI-Screenshots byte-identisch sind."
+        "name": "Renderer",
+        "body": "Schriften, Antialiasing und GPU-Unterschiede werden automatisch ausgeglichen, damit lokale und CI-Screenshots byte-identisch sind."
       },
       "platform": {
-        "name": "Review-Plattform",
+        "name": "Plattform zur Änderungsprüfung",
         "body": "Serverseitiges Rendering plus ein Online-Manager für Bilder, Diffs und Baselines für das ganze Team."
       },
       "evaluator": {
         "name": "KI-Auto-Evaluator",
-        "body": "Ordnet jede Änderung ein und gibt Routineänderungen frei, damit Menschen nur noch auf das Wesentliche schauen."
+        "body": "Ordnet jede Änderung ein und gibt Routineänderungen frei, damit Sie nur noch auf das Wesentliche schauen müssen."
       },
       "githubApp": {
         "name": "GitHub App",
