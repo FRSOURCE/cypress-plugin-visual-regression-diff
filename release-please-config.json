@@ -13,6 +13,11 @@
       "path": "packages/visual-regression-manifest",
       "component": "@pixsame/manifest",
       "release-as": "1.0.0"
+    },
+    "packages/playwright-visual-regression-diff": {
+      "path": "packages/playwright-visual-regression-diff",
+      "component": "@pixsame/playwright",
+      "release-as": "0.1.0"
     }
   }
 }
