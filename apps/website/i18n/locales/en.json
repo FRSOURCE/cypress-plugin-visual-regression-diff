@@ -13,6 +13,7 @@
     "docs": "Docs",
     "pricing": "Pricing",
     "changelog": "Changelog",
+    "githubStars": "{count} stars on GitHub",
     "signIn": "Sign in",
     "install": "Install the plugin"
   },
