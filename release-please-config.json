@@ -6,7 +6,6 @@
   "packages": {
     "packages/cypress-plugin-visual-regression-diff": {
       "path": "packages/cypress-plugin-visual-regression-diff",
-      "release-as": "1.0.0",
       "component": "@pixsame/cypress-plugin-visual-regression-diff"
     }
   }
