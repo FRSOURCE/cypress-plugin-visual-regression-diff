@@ -107,7 +107,7 @@ useSeoMeta({
     >
       <nav
         :aria-label="t('nav.docs')"
-        class="lg:sticky lg:top-24 lg:self-start"
+        class="lg:sticky lg:top-20 lg:self-start"
       >
         <details class="group lg:hidden">
           <summary
@@ -154,7 +154,7 @@ useSeoMeta({
 
       <aside
         v-if="toc.length"
-        class="hidden xl:sticky xl:top-24 xl:block xl:self-start"
+        class="hidden xl:sticky xl:top-20 xl:block xl:self-start"
         :aria-label="t('docs.onThisPage')"
       >
         <p class="px-eyebrow !text-faint">{{ t('docs.onThisPage') }}</p>

@@ -14,6 +14,16 @@ const stars = computed(() =>
     : null,
 );
 
+const scrolled = ref(false);
+const onScroll = () => {
+  scrolled.value = window.scrollY > 8;
+};
+onMounted(() => {
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+});
+onBeforeUnmount(() => window.removeEventListener('scroll', onScroll));
+
 const nav = computed(() => [
   { to: '/products', label: t('nav.product') },
   { to: '/docs/getting-started/install', label: t('nav.docs') },
@@ -25,10 +35,12 @@ const nav = computed(() => [
 
 <template>
   <header
-    class="sticky top-0 z-30 border-b border-hairline bg-ground/85 backdrop-blur-md"
+    class="sticky top-0 z-30 border-b border-hairline transition-colors duration-200"
+    :class="scrolled ? 'bg-ground/85 backdrop-blur-md' : 'bg-transparent'"
   >
     <div
-      class="px-container flex items-center justify-between gap-x-6 py-[22px]"
+      class="px-container flex items-center justify-between gap-x-6 transition-[padding] duration-200"
+      :class="scrolled ? 'py-2.5' : 'py-[22px]'"
     >
       <div class="flex items-center gap-10">
         <NuxtLink :to="localePath('/')" :aria-label="t('nav.home')">
