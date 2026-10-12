@@ -8,7 +8,7 @@
     "fix": "pnpm lint --fix",
     "lint:ci": "pnpm lint --max-warnings 0",
     "format": "pnpm -r format",
-    "format:ci": "pnpm -r format:ci",
+    "format:ci": "pnpm -r --filter '!@pixsame/website' format:ci",
     "test": "pnpm -r test:ct:ci && pnpm -r test:e2e:ci && pnpm -r test:integration:ci",
     "test:integration": "pnpm -r test:integration",
     "test:integration:watch": "pnpm -r test:integration:watch",
