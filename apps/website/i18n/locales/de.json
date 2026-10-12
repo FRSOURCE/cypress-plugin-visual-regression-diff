@@ -1,0 +1,371 @@
+{
+  "meta": {
+    "reviewed": false
+  },
+  "seo": {
+    "title": "pixsame — visuelle Regressionstests für Cypress (Playwright bald)",
+    "description": "Ein Manifest-Standard für beide Runner, ein fixierter Renderer für byte-identische Screenshots, forensische Diff-Analyse und Baseline-Freigabe im Pull Request."
+  },
+  "nav": {
+    "menu": "Menü",
+    "home": "pixsame Startseite",
+    "product": "Produkte",
+    "docs": "Doku",
+    "pricing": "Preise",
+    "changelog": "Changelog",
+    "signIn": "Anmelden",
+    "install": "Plugin installieren"
+  },
+  "a11y": {
+    "skip": "Zum Inhalt springen",
+    "language": "Sprache",
+    "close": "Schließen"
+  },
+  "theme": {
+    "toLight": "Zum hellen Modus wechseln",
+    "toDark": "Zum dunklen Modus wechseln"
+  },
+  "hero": {
+    "eyebrow": "Open Source · MIT · Cypress heute, Playwright bald",
+    "title": "Visuelle Regression, die mit sich selbst übereinstimmt.",
+    "tagline": "same same. auf den Pixel genau.",
+    "body": "Ein Manifest-Standard für beide Runner. Ein fixierter Renderer macht lokale und CI-Screenshots byte-identisch. Forensische Diff-Analyse statt eines roten Flecks und Baseline-Freigabe direkt im Pull Request.",
+    "copy": "KOPIEREN",
+    "copied": "KOPIERT",
+    "docs": "Doku lesen",
+    "soonNote": "Heute verfügbar: das Cypress-Plugin und das Manifest. Bald: der fixierte Renderer, die forensische Diff-Analyse und die Freigabe im Pull Request."
+  },
+  "detect": {
+    "demo": "Beispielhafte Darstellung eines KI-Erkennungslaufs",
+    "label": "KI-Erkennung · PR #2841",
+    "live": "Demo",
+    "analysing": "2 Bereiche werden analysiert",
+    "box1": "Layoutverschiebung · +4px y · Δ0,42 %",
+    "box2": "Textumbruch · Preiszeile",
+    "row": {
+      "geometry": "Geometrievektor",
+      "reflow": "Textumbruch",
+      "aa": "Antialiasing-Rauschen"
+    },
+    "verdictLabel": "Urteil · Konfidenz 0,94",
+    "verdict": "Eine Geometrieänderung statt 5.812 Funde. Passt zur Absicht „Navigationsdichte erhöhen“.",
+    "approve": "Baseline freigeben",
+    "hold": "Zurückhalten"
+  },
+  "runs": {
+    "label": "Läuft in"
+  },
+  "features": {
+    "title": "Funktionen",
+    "available": "Verfügbar",
+    "manifest": {
+      "title": "Gemeinsames Manifest",
+      "body": "Ein offenes Manifest-Format für Cypress und Playwright, damit Berichte, Bots und Review-Tools mit jedem Runner funktionieren."
+    },
+    "renderer": {
+      "title": "Fixierter Renderer",
+      "body": "Schriften, Antialiasing und GPU-Unterschiede sind fixiert, damit lokale und CI-Screenshots byte-identisch sind."
+    },
+    "forensic": {
+      "title": "Forensischer Diff",
+      "body": "Jede Änderung wird als Geometrie, Textumbruch oder Antialiasing-Rauschen eingeordnet statt als ein roter Fleck."
+    },
+    "approve": {
+      "title": "Freigabe",
+      "body": "Änderungen im Pull Request oder in der pixsame-Plattform prüfen, ganz wie Ihr Team es bevorzugt. Beide Wege geben dieselben Baselines frei."
+    }
+  },
+  "pricing": {
+    "title": "Kostenlos, wo es zählt. Bezahlt, wo es skaliert.",
+    "body": "Der Kern ist Open Source und kostenlos. Teams ergänzen Cloud-Rendering und gehostete Baseline-Historie; Enterprise bringt den KI-Auto-Evaluator, SSO und ein SLA.",
+    "soon": "Demnächst",
+    "compare": "Tarife vergleichen",
+    "note": "Team und Enterprise folgen demnächst. Preise sind unverbindlich und können sich bis zum Start ändern.",
+    "tiers": {
+      "core": {
+        "name": "Core",
+        "price": "$0",
+        "unit": "",
+        "desc": "MIT-lizenziert, Self-Hosting möglich"
+      },
+      "team": {
+        "name": "Team",
+        "price": "$29",
+        "unit": "/Entw./Monat",
+        "desc": "Cloud-Rendering, 30 Tage gehostete Historie, Support inklusive, KI-Auto-Evaluator auf Anfrage"
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "price": "Auf Anfrage",
+        "unit": "",
+        "desc": "KI-Auto-Evaluator, SSO, SLA, 48-Std.-Bereitschaftssupport"
+      }
+    },
+    "table": {
+      "caption": "Funktionen nach Tarif",
+      "capability": "Funktion",
+      "rows": {
+        "renderer": {
+          "label": "Fixierter Renderer",
+          "core": "Lokal",
+          "team": "Lokal",
+          "enterprise": "Lokal"
+        },
+        "cloud": {
+          "label": "Cloud-Rendering",
+          "core": "—",
+          "team": "5.000 / Monat",
+          "enterprise": "Noch offen"
+        },
+        "evaluator": {
+          "label": "KI-Auto-Evaluator",
+          "core": "—",
+          "team": "Begrenzt, Abrechnung nach Nutzung",
+          "enterprise": "Inklusive"
+        },
+        "history": {
+          "label": "Gehostete Baseline-Historie",
+          "core": "—",
+          "team": "30 Tage",
+          "enterprise": "Noch offen"
+        },
+        "support": {
+          "label": "Support",
+          "core": "Community",
+          "team": "Inklusive",
+          "enterprise": "Bereitschaft, binnen 48 Std."
+        }
+      }
+    },
+    "oss": {
+      "title": "Open Source, für immer kostenlos.",
+      "body": "Alles, was auf Ihrem Rechner und in Ihrer CI läuft, steht unter der MIT-Lizenz. Das sind die Pakete, die Sie heute oder bald kostenlos nutzen können.",
+      "available": "Verfügbar",
+      "cypress": "Cypress-Plugin",
+      "cypressBody": "Visuelle Regression für Cypress: matchImage, ein Diff-Viewer im Runner und Baselines in Ihrem Repo.",
+      "manifest": "Run-Manifest",
+      "manifestBody": "Der offene, runnerunabhängige JSON-Standard, der jeden Screenshot-Vergleich beschreibt, mit Schema, Typen, Reader und Writer.",
+      "playwright": "Playwright plugin",
+      "playwrightBody": "Dieselbe Vergleichs-Engine und dasselbe Manifest für Playwright-Projekte.",
+      "renderer": "Fixierter Renderer",
+      "rendererBody": "Ein festgelegter Browser, Schriftsatz und GPU-Pfad, damit lokale und CI-Screenshots byte-identisch sind.",
+      "githubApp": "GitHub App",
+      "githubAppBody": "Diffs als Check und Freigabe neuer Baselines direkt im Pull Request.",
+      "vitest": "Vitest runner",
+      "vitestBody": "Dieselbe Vergleichs-Engine und dasselbe Manifest für Vitest-Projekte."
+    }
+  },
+  "product": {
+    "crumb": "Fixierter Renderer",
+    "title": "Ein Ökosystem für visuelle Regression.",
+    "body": "pixsame ist eine wachsende Sammlung offener Tools, die visuelle Regressionstests verlässlich machen: ein gemeinsamer Standard, ein Renderer, Review im Pull Request. Das Cypress-Plugin ist heute verfügbar, der Rest folgt.",
+    "status": "Cypress-Plugin: verfügbar · alles andere: demnächst",
+    "start": "Plugin installieren",
+    "stats": {
+      "manifest": {
+        "value": "v1",
+        "label": "Offenes Manifest-Format"
+      },
+      "runners": {
+        "value": "3",
+        "label": "Runner: heute Cypress, bald Playwright"
+      },
+      "license": {
+        "value": "MIT",
+        "label": "Open-Source-Lizenz"
+      }
+    },
+    "cypressCta": "Cypress-Plugin ansehen",
+    "soon": {
+      "title": "Demnächst",
+      "body": "Alle Teile des Ökosystems und wie sie zusammenspielen. Fahren Sie mit der Maus über einen Teil oder fokussieren Sie ihn, um zu sehen, was er tut, und folgen Sie dem Link zur zugehörigen Seite.",
+      "eyebrow": "Das Ökosystem"
+    },
+    "groups": {
+      "runners": "Test-Runner",
+      "standard": "Gemeinsamer Standard",
+      "review": "Review"
+    },
+    "map": {
+      "cypress": {
+        "name": "Cypress-Plugin",
+        "body": "matchImage für Cypress, mit Diff-Viewer im Runner und Batch-Review. Heute verfügbar."
+      },
+      "playwright": {
+        "name": "Playwright plugin",
+        "body": "Dieselbe Vergleichs-Engine und dasselbe Manifest für Playwright-Projekte. Baselines bleiben in Ihrem Repo."
+      },
+      "manifest": {
+        "name": "Run-Manifest",
+        "body": "Ein offener, runnerunabhängiger JSON-Standard, der jeden Screenshot-Vergleich beschreibt. Heute verfügbar."
+      },
+      "renderer": {
+        "name": "Renderer",
+        "body": "Schriften, Antialiasing und GPU-Unterschiede werden automatisch ausgeglichen, damit lokale und CI-Screenshots byte-identisch sind."
+      },
+      "platform": {
+        "name": "Plattform zur Änderungsprüfung",
+        "body": "Serverseitiges Rendering plus ein Online-Manager für Bilder, Diffs und Baselines für das ganze Team."
+      },
+      "evaluator": {
+        "name": "KI-Auto-Evaluator",
+        "body": "Ordnet jede Änderung ein und gibt Routineänderungen frei, damit Sie nur noch auf das Wesentliche schauen müssen."
+      },
+      "githubApp": {
+        "name": "GitHub App",
+        "body": "Diffs als Check im Pull Request und Freigabe neuer Baselines mit einem Klick."
+      },
+      "vitest": {
+        "name": "Vitest runner",
+        "body": "Dieselbe Vergleichs-Engine und dasselbe Manifest für den Vitest-Browser-Modus. Baselines bleiben in Ihrem Repo."
+      }
+    },
+    "available": "Verfügbar"
+  },
+  "soon": {
+    "status": "Demnächst",
+    "githubApp": {
+      "title": "Eine GitHub App für visuelles Review.",
+      "body": "Ein Check-Run und Pull-Request-Kommentare mit Bild-Diffs, und geänderte Baselines mit einem Klick im PR freigeben.",
+      "b1": "Bild-Diffs direkt in der PR-Diskussion",
+      "b2": "Baselines freigeben oder ablehnen, ohne GitHub zu verlassen",
+      "b3": "Funktioniert mit dem gemeinsamen Manifest jedes Runners"
+    },
+    "playwright": {
+      "title": "Visuelle Regression für Playwright.",
+      "body": "Dieselbe Vergleichs-Engine und dasselbe Manifest wie das Cypress-Plugin, für Playwright-Projekte. Baselines bleiben in Ihrem Repo.",
+      "b1": "Baselines im eigenen Repository",
+      "b2": "Ein Diff erscheint, wenn sich Screenshots ändern",
+      "b3": "Schreibt das gemeinsame Run-Manifest"
+    },
+    "platform": {
+      "title": "Die pixsame-Plattform.",
+      "body": "Serverseitiges Rendering sowie ein Online-Viewer und -Manager für Bilder und Diffs, damit Ihr ganzes Team Baselines prüfen und verwalten kann.",
+      "b1": "Server-Renderer für byte-identische Screenshots",
+      "b2": "Online-Manager für Bilder, Diffs und Baselines",
+      "b3": "KI-Auto-Evaluator für Routineänderungen (Enterprise, begrenzt in Team)"
+    },
+    "vitest": {
+      "title": "Visuelle Regression für Vitest.",
+      "body": "Dieselbe Vergleichs-Engine und dasselbe Manifest wie das Cypress-Plugin, für Vitest-Projekte. Baselines bleiben in Ihrem Repo.",
+      "b1": "Baselines im eigenen Repository",
+      "b2": "Ein Diff erscheint, wenn sich Screenshots ändern",
+      "b3": "Schreibt das gemeinsame Run-Manifest"
+    }
+  },
+  "waitlist": {
+    "title": "Zum Start benachrichtigt werden",
+    "emailLabel": "E-Mail-Adresse",
+    "placeholder": "du{'@'}firma.de",
+    "submit": "Benachrichtigen",
+    "sending": "Wird gesendet…",
+    "success": "Danke! Wir schreiben Ihnen einmal, sobald es soweit ist.",
+    "error": "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
+    "consent": "Ich möchte per E-Mail über den Start dieses Produkts und danach über Neuigkeiten dazu informiert werden, einschließlich damit verbundener Änderungen am pixsame-Ökosystem. Ich kann meine Einwilligung jederzeit widerrufen. Siehe {privacy}.",
+    "consentRequired": "Bitte setzen Sie das Häkchen, um sich einzutragen."
+  },
+  "docs": {
+    "groups": {
+      "getting-started": "Erste Schritte",
+      "reference": "Referenz",
+      "integrations": "Integrationen"
+    },
+    "onThisPage": "Auf dieser Seite",
+    "menu": "Doku-Menü",
+    "draft": "Diese Seite ist eine maschinelle Übersetzung, die noch nicht geprüft wurde. Die englische Fassung ist maßgeblich.",
+    "fallback": "Diese Seite ist noch nicht übersetzt; Sie lesen die englische Fassung."
+  },
+  "changelog": {
+    "body": "Versionshinweise zum pixsame-Cypress-Plugin.",
+    "source": "Releases des Cypress-Plugins",
+    "title": "Changelog des Cypress-Plugins",
+    "crumb": "Changelog",
+    "page": "Seite {n} von {total}",
+    "prev": "Newer",
+    "next": "Older",
+    "pagination": "Changelog-Seiten"
+  },
+  "legal": {
+    "privacy": {
+      "title": "Datenschutz",
+      "p1": "Diese Website verwendet keine Cookies und kein Werbe-Tracking. Wir nutzen Cloudflare Web Analytics, das Seitenaufrufe ohne Cookies und Fingerprinting zählt.",
+      "p2": "Verantwortlicher: {name}, {address1}, {address2} (USt-IdNr. {vat}). Kontakt: {email}.",
+      "p3": "Warteliste: Bei der Anmeldung speichern wir Ihre E-Mail-Adresse, das Produkt, Ihre Sprache und den Zeitpunkt Ihrer Einwilligung. Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Wir verwenden die Daten nur, um Ihnen den Start dieses Produkts und spätere Neuigkeiten dazu mitzuteilen, einschließlich damit verbundener Änderungen am pixsame-Ökosystem. Eine andere Nutzung oder Weitergabe zu Werbezwecken findet nicht statt.",
+      "p4": "Kontaktformular: Name, E-Mail-Adresse und Nachricht verwenden wir nur, um Ihnen zu antworten, und löschen sie, sobald sie dafür nicht mehr nötig sind.",
+      "p5": "Auftragsverarbeiter: Die Formulare laufen über Google Apps Script und Google Sheets (Google); Spam wird mit Cloudflare Turnstile (Cloudflare) gefiltert. Dabei können Daten außerhalb der EU auf Grundlage von Standardvertragsklauseln verarbeitet werden. Die Formulare übermitteln Ihre Eingaben als Teil der Anfrage-Adresse an Google.",
+      "p6": "Speicherdauer und Ihre Rechte: Wartelistendaten bleiben bis zum Widerruf der Einwilligung oder bis zur Einstellung des Produkts gespeichert. Sie können jederzeit widerrufen sowie Auskunft, Berichtigung oder Löschung verlangen, per E-Mail an {email}. Sie können sich außerdem bei Ihrer Datenschutzbehörde beschweren."
+    },
+    "terms": {
+      "title": "Nutzungsbedingungen",
+      "p1": "Die pixsame-Software ist Open Source unter der MIT-Lizenz. Es gelten ausschließlich die Lizenzbedingungen im Repository.",
+      "p2": "Gehostete Dienste (GitHub App und Plattform) sind noch nicht verfügbar. Ihre Nutzungsbedingungen veröffentlichen wir hier vor dem Start.",
+      "p3": "Diese Website wird wie besehen bereitgestellt. Produktseiten beschreiben Pläne, die sich ändern können."
+    }
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "body": "Diese Seite existiert nicht oder wurde verschoben.",
+    "home": "Zur Startseite"
+  },
+  "footer": {
+    "tagline": "Visuelle Regressionstests, die mit sich selbst übereinstimmen.",
+    "product": "Produkte",
+    "resources": "Ressourcen",
+    "legal": "Rechtliches",
+    "githubApp": "GitHub App",
+    "playwright": "Playwright",
+    "platform": "Plattform",
+    "privacy": "Datenschutz",
+    "terms": "Nutzungsbedingungen",
+    "vitest": "Vitest",
+    "contact": "Kontakt",
+    "by": "von"
+  },
+  "crumb": {
+    "label": "Brotkrumen-Navigation",
+    "home": "Start"
+  },
+  "cypress": {
+    "crumb": "Cypress-Plugin",
+    "eyebrow": "Open Source · MIT · Cypress",
+    "title": "Visuelle Regression für Cypress.",
+    "body": "Machen Sie in jedem Test einen Screenshot, vergleichen Sie ihn mit der Baseline und sehen Sie den Unterschied direkt im Cypress-Runner. Funktioniert mit E2E- und Komponententests.",
+    "docs": "Doku lesen",
+    "changelog": "Changelog",
+    "npm": "npm",
+    "onThisPage": "Auf dieser Seite",
+    "migrate": "Von {'@'}frsource migrieren"
+  },
+  "changelogs": {
+    "title": "Changelogs",
+    "body": "Versionshinweise für jede pixsame-Integration."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "heading": "Schreiben Sie uns",
+    "intro": "Fragen, Feedback oder ein Projekt im Kopf? Schreiben Sie uns.",
+    "name": "Name",
+    "email": "E-Mail-Adresse",
+    "message": "Nachricht",
+    "submit": "Nachricht senden",
+    "sending": "Wird gesendet…",
+    "success": "Danke! Wir melden uns in Kürze.",
+    "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt.",
+    "required": "Bitte füllen Sie dieses Feld aus.",
+    "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+    "unavailable": "Das Kontaktformular ist derzeit nicht verfügbar. Bitte schreiben Sie uns direkt.",
+    "emailLabel": "E-Mail",
+    "company": "Unternehmen",
+    "taxIds": "Steuernummern",
+    "consent": "Ich bin einverstanden, dass meine Angaben zur Beantwortung meiner Nachricht verwendet werden. Siehe {privacy}.",
+    "consentRequired": "Bitte setzen Sie das Häkchen, um die Nachricht zu senden."
+  },
+  "company": {
+    "name": "FRS JAKUB FREISLER",
+    "address1": "al. Kijowska 48/24",
+    "address2": "30-079 Kraków, Polen",
+    "vat": "PL6783179514",
+    "nip": "6783179514",
+    "email": "pixsame{'@'}frsource.org"
+  }
+}
