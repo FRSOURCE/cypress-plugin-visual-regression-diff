@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.0.0 (2026-10-07)
+
+No changes. This release is identical to the last version (`4.3.0`) of `@frsource/cypress-plugin-visual-regression-diff`.
+
+## [4.3.0](https://github.com/pixsame/pixsame/compare/@frsource/cypress-plugin-visual-regression-diff-v4.2.1...@frsource/cypress-plugin-visual-regression-diff-v4.3.0) (2026-10-07)
+
+
+### Features
+
+* add a migrate command for moving to [@pixsame](https://github.com/pixsame) ([#435](https://github.com/pixsame/pixsame/issues/435)) ([83af00c](https://github.com/pixsame/pixsame/commit/83af00c55d0138f07f88b5ca9999291f28c360fd))
+
+## [4.2.1](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/@frsource/cypress-plugin-visual-regression-diff-v4.2.0...@frsource/cypress-plugin-visual-regression-diff-v4.2.1) (2026-10-02)
+
+
+### Bug Fixes
+
+* Remove stale .diff files once the comparison no longer fails ([#426](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/426)) ([0ea0356](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/0ea0356c7ce47f5a674ee4a3d9ea8e154bb27c09))
+* restore screenshot counters correctly on test retry  ([#426](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/426)) ([0ea0356](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/0ea0356c7ce47f5a674ee4a3d9ea8e154bb27c09))
+* declare the Node engine as >=20.9 - sharp dependency has required that since 4.0.2 ([#426](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues/426)) ([0ea0356](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/commit/0ea0356c7ce47f5a674ee4a3d9ea8e154bb27c09))
+
 ## [4.2.0](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/compare/@frsource/cypress-plugin-visual-regression-diff-v4.1.1...@frsource/cypress-plugin-visual-regression-diff-v4.2.0) (2026-09-20)
 
 

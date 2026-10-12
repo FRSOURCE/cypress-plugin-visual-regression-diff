@@ -1,0 +1,33 @@
+name: Beta release
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to publish a beta from
+        required: true
+        type: string
+      beta:
+        description: Beta number (published as X.Y.Z-beta.<n> under the beta dist-tag)
+        required: false
+        default: 0
+        type: number
+
+concurrency: beta-release
+
+jobs:
+  publish:
+    name: publish ${{ inputs.branch }} as beta.${{ inputs.beta }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write # npm trusted publishing (OIDC) + provenance
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.branch }}
+      - uses: ./.github/actions/setup
+      - name: Build packages to get cross-references working 🔧
+        run: pnpm build
+      - name: Publish every public package as X.Y.Z-beta.${{ inputs.beta }} under the beta dist-tag
+        run: node scripts/publish.mjs --beta ${{ inputs.beta }}

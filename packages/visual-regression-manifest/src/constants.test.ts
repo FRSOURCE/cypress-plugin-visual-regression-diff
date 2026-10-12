@@ -12,6 +12,8 @@ describe('manifest file names', () => {
     expect(getManifestFileName('e2e')).toBe(
       'visual-regression-manifest.e2e.json',
     );
+    expect(() => getManifestFileName('a/b')).toThrow(/path separators/);
+    expect(() => getManifestFileName('a\\b')).toThrow(/path separators/);
     expect(isManifestFileName('visual-regression-manifest.json')).toBe(true);
     expect(
       isManifestFileName('/a/b/visual-regression-manifest.playwright.w1.json'),
@@ -20,7 +22,17 @@ describe('manifest file names', () => {
       false,
     );
     expect(isManifestFileName('report.json')).toBe(false);
-    expect(MANIFEST_FILE_GLOB).toBe('**/*visual-regression-manifest*.json');
+    // files that merely contain the name are not manifests
+    expect(isManifestFileName('my-visual-regression-manifest.json')).toBe(
+      false,
+    );
+    expect(isManifestFileName('visual-regression-manifest-notes.json')).toBe(
+      false,
+    );
+    expect(isManifestFileName('visual-regression-manifest.e2e.json.bak')).toBe(
+      false,
+    );
+    expect(MANIFEST_FILE_GLOB).toBe('**/visual-regression-manifest{,.*}.json');
   });
 
   it('knows which statuses need a human', () => {

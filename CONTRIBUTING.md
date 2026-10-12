@@ -1,8 +1,8 @@
-# @frsource/cypress-plugin-visual-regression-diff Contributing Guide
+# @pixsame/cypress-plugin-visual-regression-diff Contributing Guide
 
 Hey! It’s really exciting for us to see your interest in contributing to this library. Before taking off with your work, please take a moment to read through these guidelines:
 
-- [Code of Conduct](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/master/CODE_OF_CONDUCT.md)
+- [Code of Conduct](https://github.com/pixsame/pixsame/blob/master/CODE_OF_CONDUCT.md)
 - [Questions?](#questions)
 - [Reporting an issue or a feature request](#reporing-an-issue-or-a-feature-request)
 - [Pull Request Guidelines](#pull-request-guidelines)
@@ -10,15 +10,15 @@ Hey! It’s really exciting for us to see your interest in contributing to this 
 
 ## Questions?
 
-Don’t hesitate to ask a question directly on the [discussions board](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/discussions)!
+Don’t hesitate to ask a question directly on the [discussions board](https://github.com/pixsame/pixsame/discussions)!
 
 ## Reporting an issue or a feature request
 
-- Please always use GitHub Issues tracker with [appropriate template](https://github.com/login?return_to=https%3A%2F%2Fgithub.com%2FFRSOURCE%2Fcypress-plugin-visual-regression-diff%2Fissues%2Fnew%2Fchoose) to create a new issue or suggestion
+- Please always use GitHub Issues tracker with [appropriate template](https://github.com/login?return_to=https%3A%2F%2Fgithub.com%2Fpixsame%2Fcypress-plugin-visual-regression-diff%2Fissues%2Fnew%2Fchoose) to create a new issue or suggestion
 
 ## Pull Request Guidelines
 
-- Check if there isn’t a similar PR already in the [GitHub Pull requests](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/pulls) - maybe somebody already has covered this topic?
+- Check if there isn’t a similar PR already in the [GitHub Pull requests](https://github.com/pixsame/pixsame/pulls) - maybe somebody already has covered this topic?
 
 - Checkout the master branch and (after you do your work) file a PR against it
 
@@ -36,7 +36,7 @@ Don’t hesitate to ask a question directly on the [discussions board](https://g
 - When fixing bug:
   - Try to cover the scenario with tests if possible
   - If an issue for this bug already exists, please reference it via (`Refs: #XYZ` - where `XYZ` is an issue number) at the very bottom of your commit message and PR description as proposed by [conventional commits v1.0.0 style guide](https://www.conventionalcommits.org/en/v1.0.0/#commit-message-with-multi-paragraph-body-and-multiple-footers)
-  - If there is no issue connected with the bug, please provide a detailed description of the problem in the PR. Live demo preferred ([look for the codeine example project in the bug issue template](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/master/.github/ISSUE_TEMPLATE/bug_report.md))
+  - If there is no issue connected with the bug, please provide a detailed description of the problem in the PR. Live demo preferred ([look for the codeine example project in the bug issue template](https://github.com/pixsame/pixsame/blob/master/.github/ISSUE_TEMPLATE/bug_report.md))
 
 ## Development Setup
 
@@ -92,27 +92,25 @@ There are some other scripts available in the `scripts` section of the `package.
 
 ### Releases and pre-releases
 
-Releases are cut by [release-please](https://github.com/googleapis/release-please) from conventional commits on `main`: it opens a release PR per package, and merging that PR tags, publishes to npm and creates the GitHub release. `scripts/publish.mjs` picks the npm dist-tag from the version: a prerelease version such as `5.0.0-beta.1` is published under `next`, everything else under `latest`. Install a pre-release with `pnpm add -D @frsource/cypress-plugin-visual-regression-diff@next`.
+Stable releases are cut by [release-please](https://github.com/googleapis/release-please) from conventional commits on `main`: it opens one release PR per package, and merging that PR tags, publishes to npm under `latest` and creates the GitHub release. release-please never produces pre-release versions.
 
 Release a package before the packages that depend on it. The plugin and `@pixsame/playwright` depend on `@pixsame/manifest` as `workspace:^`, which `pnpm publish` rewrites to a caret range on the version the manifest package has in the repository at that moment (`"@pixsame/manifest": "^1.0.0-beta.1"`). Two consequences:
 
 - A plugin (or Playwright package) release PR merged while the manifest package still carries the `0.0.0` placeholder (or a version that is not on npm yet) publishes a package that cannot be installed (`^0.0.0` matches nothing on the registry). Merge the manifest package's release PR first, wait for its publish, then merge the dependents'. `"separate-pull-requests": true` in `release-please-config.json` gives every package its own release PR; keep it that way, because `scripts/publish.mjs` publishes in `pnpm -r ls` order (alphabetical by directory), so a combined release would push the plugin out before the manifest package it depends on.
 - The range is a caret, so a compatible manifest package release reaches plugin users on their next install without a plugin release; only a manifest package major needs a plugin release that follows it.
 
-To put a package into a beta cycle, edit its entry in `release-please-config.json`:
+Betas are published only by the manually dispatched `Beta release` workflow. Run it from the Actions tab or with:
 
-```jsonc
-"packages/<package>": {
-  "versioning": "prerelease", // 5.0.0-beta.1 -> 5.0.0-beta.2 on every release
-  "prerelease": true, // GitHub releases are marked as pre-releases
-  "release-as": "5.0.0-beta.1" // first beta only; remove after that release PR is merged
-}
+```sh
+$ gh workflow run beta-release.yml -f branch=feat/my-branch -f beta=1
 ```
 
-`release-as` is needed once because release-please's first prerelease bump would otherwise produce `5.0.0-beta` (no number) and a brand-new package would start at `1.0.0`. Remove it after the first beta release PR merges; subsequent releases bump the beta number on their own.
+It checks out the given branch, builds it and publishes every public package as `<package.json version>-beta.<beta>` under the `beta` dist-tag (`beta` defaults to `0`). Nothing is committed: the version suffix is added on the fly by `scripts/publish.mjs --beta <n>`, and `main` stays untouched. For another cut of the same branch bump `beta`, because npm rejects re-publishing an existing version. Install a beta with `pnpm add -D @pixsame/cypress-plugin-visual-regression-diff@beta`.
 
-To graduate, set `"release-as": "5.0.0"` (the default strategy keeps the `-beta.N` suffix, so the target version has to be explicit), remove `versioning` and `prerelease`, merge the resulting release PR, then remove `release-as` again.
+Canaries need no action: every commit that lands on `main` and is not itself a release publishes every public package as `<package.json version>-canary-<YYYYMMDD>-<8 random characters>` (for example `4.2.0-canary-20260930-7cjnd4t5`) under the `canary` dist-tag. The exact version is listed in the summary of that commit's CI run. Install the newest one with `pnpm add -D @pixsame/cypress-plugin-visual-regression-diff@canary`.
+
+All three channels publish through [npm trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC, no npm token in the repository secrets), so every public package needs a trusted publisher on npmjs.com for each of the two workflows: `ci.yml` (stable and canary) and `beta-release.yml` (beta).
 
 ## Credits
 
-Many thanks to all the people who have already contributed to @frsource/cypress-plugin-visual-regression-diff! ❤️
+Many thanks to all the people who have already contributed to @pixsame/cypress-plugin-visual-regression-diff! ❤️

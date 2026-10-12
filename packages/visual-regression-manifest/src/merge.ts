@@ -1,6 +1,6 @@
 import { createHash } from 'crypto';
 import { MANIFEST_STATUSES, needsHuman } from './constants';
-import { projectDirInRepo, toRepoPath } from './paths';
+import { compareText, projectDirInRepo, toRepoPath } from './paths';
 import type { Manifest, ManifestEntry, ManifestStatus } from './types';
 
 export type ManifestSource = {
@@ -59,7 +59,9 @@ export type MergeOptions = {
 export const rendererLabel = (entry: ManifestEntry) => {
   const renderer = entry.renderer;
   if (!renderer || renderer.backend === 'native') return '';
-  return `${renderer.backend} ${renderer.browser}`;
+  return [renderer.backend, renderer.name ?? renderer.browser]
+    .filter(Boolean)
+    .join(' ');
 };
 
 export const entryKey = (entry: ManifestEntry) =>
@@ -69,6 +71,7 @@ export const entryKey = (entry: ManifestEntry) =>
     entry.platform?.os ?? '',
     entry.platform?.browser?.name ?? '',
     rendererLabel(entry),
+    entry.variant ?? '',
   ].join('\u0000');
 
 export const keyHash = (key: string) =>
@@ -78,7 +81,7 @@ export const keyHash = (key: string) =>
 export const platformLabel = (entry: ManifestEntry) => {
   const os = entry.platform?.os;
   const browser = entry.platform?.browser?.name;
-  const platform = [os, browser].filter(Boolean).join(' / ');
+  const platform = [os, browser, entry.variant].filter(Boolean).join(' / ');
   const renderer = rendererLabel(entry);
   if (!renderer) return platform;
   return platform ? `${platform} (${renderer})` : renderer;
@@ -95,9 +98,17 @@ export const countByStatus = (
 };
 
 const compareMerged = (a: MergedEntry, b: MergedEntry) =>
-  a.entry.test.file.localeCompare(b.entry.test.file) ||
-  a.entry.name.localeCompare(b.entry.name) ||
-  platformLabel(a.entry).localeCompare(platformLabel(b.entry));
+  compareText(a.entry.test.file, b.entry.test.file) ||
+  compareText(a.entry.name, b.entry.name) ||
+  compareText(platformLabel(a.entry), platformLabel(b.entry));
+
+/** Whether two reports of one screenshot say the same thing (status and files), ignoring when they were recorded. */
+const sameOutcome = (a: ManifestEntry, b: ManifestEntry) =>
+  a.status === b.status &&
+  a.images.baseline.path === b.images.baseline.path &&
+  a.images.actual.path === b.images.actual.path &&
+  a.hashes?.actual === b.hashes?.actual &&
+  a.hashes?.baseline === b.hashes?.baseline;
 
 /**
  * Concatenates the entries of every manifest of a run (several machines,
@@ -111,6 +122,7 @@ export const mergeManifests = <S extends ManifestSource>(
 ): MergedRun<S> => {
   const warnings: string[] = [];
   const byKey = new Map<string, MergedEntry<S>>();
+  const whereByKey = new Map<string, string>();
 
   sources.forEach((source, index) => {
     const { manifest } = source;
@@ -190,8 +202,21 @@ export const mergeManifests = <S extends ManifestSource>(
         collidesWith: [],
       };
       const existing = byKey.get(key);
-      if (!existing || existing.runAttempt <= runAttempt)
+      // the same attempt reporting one screenshot twice with different
+      // results means the producers gave two baselines one identity
+      if (
+        existing &&
+        existing.runAttempt === runAttempt &&
+        !sameOutcome(existing.entry, entry)
+      ) {
+        warnings.push(
+          `${where}: \`${entry.name}\` (${platformLabel(entry) || 'no platform'}) was also reported by ${whereByKey.get(key)} with a different result; keeping the one from ${where}. Give entries that are not the same baseline a distinct \`variant\`.`,
+        );
+      }
+      if (!existing || existing.runAttempt <= runAttempt) {
         byKey.set(key, merged);
+        whereByKey.set(key, where);
+      }
     }
   });
 
