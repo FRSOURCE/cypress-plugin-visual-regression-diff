@@ -1,11 +1,70 @@
-import { sliceReadme } from './scripts/slice-readme.mjs';
+import { readFileSync } from 'node:fs';
+import {
+  readmeHash,
+  readmeHeadingIds,
+  sliceReadme,
+} from './scripts/slice-readme.mjs';
+
+type Node = string | [string, Record<string, unknown>, ...Node[]];
+type TocLink = { id: string; children?: TocLink[] };
+
+const pluginReadme = new URL(
+  '../../packages/cypress-plugin-visual-regression-diff/README.md',
+  import.meta.url,
+);
 
 export default defineNuxtConfig({
   extends: ['../../packages/ui-layer'],
   hooks: {
     'content:file:beforeParse'(ctx) {
-      if (ctx.collection.name === 'readme')
+      if (ctx.collection.name !== 'readme') return;
+      if (ctx.file.id.endsWith('/README.md')) {
+        // the English README: keep the part the site shows
         ctx.file.body = sliceReadme(ctx.file.body);
+        return;
+      }
+      // a translation: warn when it was made from an older English README
+      const source = ctx.file.body.match(/^source:\s*(\S+)/m)?.[1];
+      const current = readmeHash(readFileSync(pluginReadme, 'utf8'));
+      if (source !== current)
+        // eslint-disable-next-line no-console
+        console.warn(
+          `[readme] ${ctx.file.id} was translated from README slice ${source}, current is ${current}: run \`pnpm --filter @pixsame/website readme:check\``,
+        );
+    },
+    'content:file:afterParse'(ctx) {
+      // Translated READMEs keep the English heading ids, so anchors work in every locale.
+      if (
+        ctx.collection.name !== 'readme' ||
+        ctx.file.id.endsWith('/README.md')
+      )
+        return;
+      const ids = readmeHeadingIds(readFileSync(pluginReadme, 'utf8'));
+      const body = ctx.content.body as {
+        value: Node[];
+        toc?: { links?: TocLink[] };
+      };
+      const headings = body.value.filter(
+        (node): node is Exclude<Node, string> =>
+          Array.isArray(node) && /^h[23]$/.test(node[0]),
+      );
+      if (headings.length !== ids.length) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `[readme] ${ctx.file.id} has ${headings.length} headings, the English README ${ids.length}: anchors left as generated`,
+        );
+        return;
+      }
+      headings.forEach((node, i) => {
+        node[1].id = ids[i];
+      });
+      let i = 0;
+      const renumber = (links?: TocLink[]) =>
+        links?.forEach((link) => {
+          link.id = ids[i++]!;
+          renumber(link.children);
+        });
+      renumber(body.toc?.links);
     },
   },
   modules: ['@nuxtjs/i18n', '@nuxtjs/seo', '@nuxt/content', '@nuxt/eslint'],

@@ -274,8 +274,7 @@
     "onThisPage": "本页内容",
     "menu": "文档菜单",
     "draft": "本页为机器翻译，尚未经过人工审校。以英文版本为准。",
-    "fallback": "本页尚未翻译，您正在阅读英文版本。",
-    "englishSection": "本部分仅提供英文版本。"
+    "fallback": "本页尚未翻译，您正在阅读英文版本。"
   },
   "changelog": {
     "body": "Release notes for the pixsame Cypress plugin.",

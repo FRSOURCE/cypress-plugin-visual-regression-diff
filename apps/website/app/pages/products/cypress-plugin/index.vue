@@ -1,18 +1,40 @@
 <script setup lang="ts">
-// The body of this page is the package README (sliced in nuxt.config.ts), so the plugin
-// has one source of documentation. It is English in every locale.
+// The body of this page is the package README (sliced in nuxt.config.ts), so the plugin has one
+// source of documentation. Translations live next to it as docs/README-<locale>.md in the plugin
+// package; a locale without one falls back to English (noindex), an unreviewed one shows a notice.
+import { README_LOCALES } from '~~/scripts/readme-locales.mjs';
+
 const { t, locale } = useI18n();
 const localePath = useLocalePath();
 useSeoMeta({
   title: () => t('cypress.title'),
   description: () => t('cypress.body'),
 });
-const { data: page } = await useAsyncData('readme:cypress-plugin', () =>
-  queryCollection('readme').first(),
+
+const { data: page } = await useAsyncData(
+  () => `readme:${locale.value}`,
+  async () => {
+    const suffix = (README_LOCALES as Record<string, string>)[locale.value];
+    const own = suffix
+      ? await queryCollection('readme')
+          .where('id', 'LIKE', `%/README-${suffix}.md`)
+          .first()
+      : null;
+    const doc =
+      own ??
+      (await queryCollection('readme')
+        .where('id', 'LIKE', '%/README.md')
+        .first());
+    return doc ? { ...doc, fallback: !own && locale.value !== 'en' } : null;
+  },
+  { watch: [locale] },
 );
 const toc = computed(
   () => page.value?.body?.toc?.links?.filter((l) => l.depth === 2) ?? [],
 );
+useSeoMeta({
+  robots: () => (page.value?.fallback ? 'noindex, follow' : undefined),
+});
 </script>
 
 <template>
@@ -56,12 +78,21 @@ const toc = computed(
     <div
       class="mt-14 grid grid-cols-1 gap-x-12 gap-y-8 xl:grid-cols-[minmax(0,1fr)_200px]"
     >
-      <article class="px-prose min-w-0 !max-w-[88ch]" lang="en">
+      <article
+        class="px-prose min-w-0 !max-w-[88ch]"
+        :lang="page?.fallback ? 'en' : undefined"
+      >
         <p
-          v-if="locale !== 'en'"
+          v-if="page?.fallback"
           class="rounded-md border border-hairline bg-chip px-3 py-2 text-xs !text-faint"
         >
-          {{ t('docs.englishSection') }}
+          {{ t('docs.fallback') }}
+        </p>
+        <p
+          v-else-if="page?.reviewed === false"
+          class="rounded-md border border-hairline bg-chip px-3 py-2 text-xs !text-faint"
+        >
+          {{ t('docs.draft') }}
         </p>
         <ContentRenderer v-if="page" :value="page" />
       </article>

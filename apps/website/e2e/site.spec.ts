@@ -231,6 +231,15 @@ test('the Cypress plugin page renders the package README without the GitHub-only
   await expect(page.locator('body')).not.toContainText('Commercial support');
   await expect(page.locator('body')).not.toContainText('Cypress <10');
   await expect(page.locator('details')).toHaveCount(0);
+  const sections = await page.locator('article h2').count();
+  // the translated README from the plugin package: flagged as a draft, same structure, indexable
+  await page.goto('/pl/products/cypress-plugin/');
+  await expect(page.locator('body')).toContainText('tłumaczenie maszynowe');
+  await expect(page.locator('body')).not.toContainText('Getting started');
+  await expect(page.locator('article h2')).toHaveCount(sections);
+  await expect(
+    page.locator('meta[name="robots"][content*="noindex"]'),
+  ).toHaveCount(0);
 });
 
 test('unknown routes show the 404 page', async ({ page }) => {

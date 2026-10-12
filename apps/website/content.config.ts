@@ -16,10 +16,21 @@ export default defineContentConfig({
     }),
     // Code samples for marketing pages, highlighted at build time by Nuxt Content (shiki).
     snippets: defineCollection({ type: 'page', source: 'snippets/**/*.md' }),
-    // The Cypress plugin page is the package README, sliced in nuxt.config.ts (content:file:beforeParse).
+    // The Cypress plugin page is the package README (id ending in `/README.md`, sliced in nuxt.config.ts via
+    // content:file:beforeParse) and its translations (id ending in `/README-<locale>.md`, already sliced,
+    // with `reviewed` and the `source` fingerprint of the English slice they were made from).
     readme: defineCollection({
       type: 'page',
-      source: { cwd: plugin, include: 'README.md', prefix: '/readme' },
+      source: [
+        { cwd: plugin, include: 'README.md', prefix: '/readme' },
+        // `docs/*.md`, not `docs/README-*.md`: Nuxt Content cuts an include glob at its first `*` and
+        // treats everything before it as a directory, which mangles `README-pl.md` into `README-/pl.md`.
+        { cwd: plugin, include: 'docs/*.md', prefix: '/readme' },
+      ],
+      schema: z.object({
+        reviewed: z.boolean().default(true),
+        source: z.string().optional(),
+      }),
     }),
     // The release notes live next to the package; render them as-is.
     changelog: defineCollection({

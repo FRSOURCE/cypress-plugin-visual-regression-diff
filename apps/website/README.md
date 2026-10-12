@@ -15,15 +15,19 @@ Use Node >= 22.5 (`engines` in `package.json`; CI uses `.nvmrc`). The plugin pac
 
 `en` (no prefix), `pl`, `de`, `zh` (Simplified, `zh-CN`), `zh-tw` (Traditional, `zh-TW`). UI messages are in `i18n/locales/*.json`,
 docs in `content/docs/<locale>/`. A docs page without a translation falls back to the English file and is rendered `noindex`.
-The Cypress plugin page (`/products/cypress-plugin`) renders the package README and is English in every locale.
+The Cypress plugin page (`/products/cypress-plugin`) renders the package README (the "Getting started" to "FAQ" part, see
+`scripts/slice-readme.mjs`). Its translations live in the plugin package as `docs/README-<locale>.md` (`pl`, `de`, `zh-CN`,
+`zh-TW`), already sliced, with the same `reviewed` flag and a `source` fingerprint of the English slice they were made from.
+`pnpm --filter @pixsame/website readme:check` (also run in CI) fails when the English README changed and a translation was
+not redone; to redo one, translate the current slice again and set `source` to the hash the script prints.
 
-| Locale | UI messages        | Docs               |
-| ------ | ------------------ | ------------------ |
-| en     | done               | done               |
-| pl     | pending (AI draft) | pending (AI draft) |
-| de     | pending (AI draft) | pending (AI draft) |
-| zh-CN  | pending (AI draft) | pending (AI draft) |
-| zh-TW  | pending (AI draft) | pending (AI draft) |
+| Locale | UI messages        | Docs               | Plugin README      |
+| ------ | ------------------ | ------------------ | ------------------ |
+| en     | done               | done               | done               |
+| pl     | pending (AI draft) | pending (AI draft) | pending (AI draft) |
+| de     | pending (AI draft) | pending (AI draft) | pending (AI draft) |
+| zh-CN  | pending (AI draft) | pending (AI draft) | pending (AI draft) |
+| zh-TW  | pending (AI draft) | pending (AI draft) | pending (AI draft) |
 
 Every non-English file is flagged until a native speaker signs it off: `meta.reviewed: false` in the JSON, `reviewed: false` in the
 markdown frontmatter (which shows a "machine translation" notice on the page).

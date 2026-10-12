@@ -274,8 +274,7 @@
     "onThisPage": "Na tej stronie",
     "menu": "Menu dokumentacji",
     "draft": "Ta strona to tłumaczenie maszynowe, które nie zostało jeszcze zweryfikowane. Wersja angielska jest wiążąca.",
-    "fallback": "Ta strona nie ma jeszcze tłumaczenia; czytasz wersję angielską.",
-    "englishSection": "Ta sekcja jest dostępna tylko po angielsku."
+    "fallback": "Ta strona nie ma jeszcze tłumaczenia; czytasz wersję angielską."
   },
   "changelog": {
     "body": "Release notes for the pixsame Cypress plugin.",

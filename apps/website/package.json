@@ -14,6 +14,7 @@
     "lint:fix": "eslint . ../../packages/ui-layer --fix",
     "format": "prettier --write . ../../packages/ui-layer",
     "format:ci": "prettier --check . ../../packages/ui-layer",
+    "readme:check": "node scripts/readme-translations.mjs --check",
     "typecheck": "nuxt typecheck",
     "postinstall": "nuxt prepare"
   },

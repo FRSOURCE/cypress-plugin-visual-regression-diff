@@ -36,6 +36,8 @@ jobs:
           install-filter: --filter @pixsame/website...
       - name: Lint (cheapest first)
         run: pnpm --filter @pixsame/website lint
+      - name: Translated READMEs match the English README
+        run: pnpm --filter @pixsame/website readme:check
       - name: Build (static generate)
         run: pnpm --filter @pixsame/website build
         env:

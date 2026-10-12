@@ -274,8 +274,7 @@
     "onThisPage": "On this page",
     "menu": "Docs menu",
     "draft": "This page is a machine translation that has not been reviewed yet. The English version is authoritative.",
-    "fallback": "This page is not translated yet; you are reading the English version.",
-    "englishSection": "This section is available in English only."
+    "fallback": "This page is not translated yet; you are reading the English version."
   },
   "changelog": {
     "body": "Release notes for the pixsame Cypress plugin.",
