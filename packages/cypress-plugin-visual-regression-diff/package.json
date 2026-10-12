@@ -1,10 +1,14 @@
 {
-  "name": "@frsource/cypress-plugin-visual-regression-diff",
+  "name": "@pixsame/cypress-plugin-visual-regression-diff",
   "description": "Perform visual regression test with a nice GUI as help. 💅 Only for Cypress!",
-  "version": "4.2.0",
+  "version": "1.0.0",
   "author": "Jakub Freisler <jakub.freisler@frsource.org>",
-  "homepage": "https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff",
-  "repository": "https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff.git",
+  "homepage": "https://github.com/pixsame/pixsame",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pixsame/pixsame.git",
+    "directory": "packages/cypress-plugin-visual-regression-diff"
+  },
   "sideEffects": [
     "./dist/**"
   ],
@@ -59,7 +63,7 @@
   "engines": {
     "node": ">=20.9.0"
   },
-  "packageManager": "pnpm@12.5.1",
+  "packageManager": "pnpm@12.6.0",
   "peerDependencies": {
     "cypress": ">=13.0.0"
   },
@@ -67,17 +71,17 @@
     "@frsource/prettier-config": "^1.11.0",
     "@types/node": "20.19.43",
     "@types/tmp": "0.2.6",
-    "@vitest/coverage-v8": "4.1.11",
+    "@vitest/coverage-v8": "5.0.3",
     "cpy-cli": "7.0.0",
     "cypress": "16.1.0",
     "del-cli": "7.0.0",
     "microbundle": "0.15.1",
-    "prettier": "3.9.8",
+    "prettier": "3.9.9",
     "sanitize-filename": "1.6.4",
     "tmp-promise": "3.0.3",
     "typescript": "6.0.3",
     "vite-tsconfig-paths": "6.1.1",
-    "vitest": "4.1.11"
+    "vitest": "5.0.3"
   },
   "keywords": [
     "Cypress",

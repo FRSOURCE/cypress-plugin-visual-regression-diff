@@ -15,7 +15,7 @@ export type BrowserLaunchPresets = {
 export const HEADED_ELECTRON_SCALE_FACTOR_MESSAGE =
   "There isn't currently a way of setting the device scale factor in Cypress when running headed electron so we disable the image regression commands.";
 export const ELECTRON_DETERMINISTIC_RENDERING_MESSAGE =
-  '[@frsource/cypress-plugin-visual-regression-diff] Electron does not accept browser switches from plugins, so the deterministic rendering preset only injects CSS there. Pass the switches via ELECTRON_EXTRA_LAUNCH_ARGS (see "Reducing cross-OS rendering noise" in the README) or use Chrome for CI screenshots.';
+  '[@pixsame/cypress-plugin-visual-regression-diff] Electron does not accept browser switches from plugins, so the deterministic rendering preset only injects CSS there. Pass the switches via ELECTRON_EXTRA_LAUNCH_ARGS (see "Reducing cross-OS rendering noise" in the README) or use Chrome for CI screenshots.';
 
 /**
  * A boolean plugin option is disabled by `false` or by the string `'false'`

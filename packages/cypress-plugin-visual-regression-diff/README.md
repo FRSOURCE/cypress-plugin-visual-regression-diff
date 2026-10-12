@@ -1,9 +1,9 @@
 <p align="center">
-  <a href="https://www.npmjs.com/package/@frsource/cypress-plugin-visual-regression-diff">
-    <img src="https://img.shields.io/npm/v/@frsource/cypress-plugin-visual-regression-diff.svg" alt="NPM version badge">
+  <a href="https://www.npmjs.com/package/@pixsame/cypress-plugin-visual-regression-diff">
+    <img src="https://img.shields.io/npm/v/@pixsame/cypress-plugin-visual-regression-diff.svg" alt="NPM version badge">
   </a>
-  <a href="https://www.npmjs.com/package/@frsource/cypress-plugin-visual-regression-diff">
-    <img src="https://img.shields.io/npm/dt/@frsource/cypress-plugin-visual-regression-diff.svg" alt="NPM total downloads badge">
+  <a href="https://www.npmjs.com/package/@pixsame/cypress-plugin-visual-regression-diff">
+    <img src="https://img.shields.io/npm/dt/@pixsame/cypress-plugin-visual-regression-diff.svg" alt="NPM total downloads badge">
   </a>
   <a href="https://qlty.sh/gh/FRSOURCE/projects/cypress-plugin-visual-regression-diff">
     <img src="https://qlty.sh/gh/FRSOURCE/projects/cypress-plugin-visual-regression-diff/maintainability.svg" alt="Qlty maintainability badge">
@@ -14,17 +14,19 @@
   <a href="https://github.com/semantic-release/semantic-release">
     <img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="semantic-relase badge">
   </a>
-  <a href="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/FRSOURCE/cypress-plugin-visual-regression-diff.svg" alt="license MIT badge">
+  <a href="https://github.com/pixsame/pixsame/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/pixsame/pixsame.svg" alt="license MIT badge">
   </a>
 </p>
 
 <p align="center">
-  <img src="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/assets/logo.svg" alt="Cypress Plugin Visual Regression Diff logo" height="120px"/>
+  <img src="https://github.com/pixsame/pixsame/blob/main/assets/logo.svg" alt="Cypress Plugin Visual Regression Diff logo" height="120px"/>
 </p>
 
 <h1 align="center">Plugin for Cypress - Visual Regression Diff</h1>
 <p align="center">Perform visual regression test with a nice GUI as help. 💅 <i>Only&nbsp;for&nbsp;Cypress!</i> Both e2e and component-testing compatible 💪</p>
+
+> 📣 **We've just become pixsame, and our ecosystem is growing!** Read the [official announcement](https://github.com/pixsame/pixsame/issues/437) for more details.
 
 <p align="center">
   <a href="#getting-started">Getting Started</a>
@@ -33,9 +35,11 @@
   ·
   <a href="#faq">FAQ</a>
   ·
-  <a href="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/issues">File an Issue</a>
+  <a href="#migrating-from-frsourcecypress-plugin-visual-regression-diff">Migrating from @frsource</a>
   ·
-  <a href="https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/discussions">Have a question or an idea?</a>
+  <a href="https://github.com/pixsame/pixsame/issues">File an Issue</a>
+  ·
+  <a href="https://github.com/pixsame/pixsame/discussions">Have a question or an idea?</a>
   <br>
 </p>
 
@@ -62,13 +66,13 @@ The plugin requires Node.js 20.9 or newer. You can install this library using yo
 
 ```bash
 # npm
-npm install --save-dev @frsource/cypress-plugin-visual-regression-diff
+npm install --save-dev @pixsame/cypress-plugin-visual-regression-diff
 
 # yarn
-yarn add -D @frsource/cypress-plugin-visual-regression-diff
+yarn add -D @pixsame/cypress-plugin-visual-regression-diff
 
 # pnpm
-pnpm add -D @frsource/cypress-plugin-visual-regression-diff
+pnpm add -D @pixsame/cypress-plugin-visual-regression-diff
 ```
 
 Next, you need to import the library:
@@ -77,10 +81,10 @@ Next, you need to import the library:
 
 ```ts
 // typescript / ES6
-import '@frsource/cypress-plugin-visual-regression-diff';
+import '@pixsame/cypress-plugin-visual-regression-diff';
 
 // javascript
-require('@frsource/cypress-plugin-visual-regression-diff');
+require('@pixsame/cypress-plugin-visual-regression-diff');
 ```
 
 - secondly:
@@ -89,7 +93,7 @@ require('@frsource/cypress-plugin-visual-regression-diff');
 ```ts
 // typescript / ES6
 import { defineConfig } from 'cypress';
-import { initPlugin as initVisualRegressionPlugin } from '@frsource/cypress-plugin-visual-regression-diff/plugins';
+import { initPlugin as initVisualRegressionPlugin } from '@pixsame/cypress-plugin-visual-regression-diff/plugins';
 
 export default defineConfig({
   // initPlugin must be called in the section where it is used: e2e or component
@@ -110,7 +114,7 @@ export default defineConfig({
 
 ```ts
 // typescript / ES6
-import { initPlugin as initVisualRegressionPlugin } from '@frsource/cypress-plugin-visual-regression-diff/plugins';
+import { initPlugin as initVisualRegressionPlugin } from '@pixsame/cypress-plugin-visual-regression-diff/plugins';
 
 export default function (
   on: Cypress.PluginEvents,
@@ -124,7 +128,7 @@ export default function (
 // javascript
 const {
   initPlugin: initVisualRegressionPlugin,
-} = require('@frsource/cypress-plugin-visual-regression-diff/plugins');
+} = require('@pixsame/cypress-plugin-visual-regression-diff/plugins');
 
 module.exports = function (on, config) {
   initVisualRegressionPlugin(on, config);
@@ -228,10 +232,12 @@ cy.matchImage({
 
 ```bash
 # Cypress 15.10+
-npx cypress run --expose "pluginVisualRegressionUpdateImages=true" --expose "pluginVisualRegressionDiffConfig={\"threshold\":0.01}"
+npx cypress run --expose "pluginVisualRegressionUpdateImages=true,pluginVisualRegressionDiffConfig={\"threshold\":0.01}"
 # Cypress <15.10 (deprecated in 15.10, removed in 16)
 npx cypress run --env "pluginVisualRegressionUpdateImages=true,pluginVisualRegressionDiffConfig={\"threshold\":0.01}"
 ```
+
+Pass several options in one flag, separated by commas. When `--expose` (or `--env`) is repeated, Cypress keeps only the last occurrence.
 
 ```ts
 // cypress.config.ts (Cypress 15.10+)
@@ -271,9 +277,9 @@ A floating action button (FAB) appears in the bottom-right corner of the Cypress
 - Once all tests finish, an error is thrown with the total count of failures.
 - Clicking the FAB opens a carousel where you can review each failing snapshot side-by-side (new vs. old) and either **replace** the baseline or **skip** the change.
 
-![Batch Review Mode demo](https://raw.githubusercontent.com/FRSOURCE/cypress-plugin-visual-regression-diff/main/assets/batch-review-mode.gif)
+![Batch Review Mode demo](https://raw.githubusercontent.com/pixsame/pixsame/main/assets/batch-review-mode.gif)
 
-> Note: Before version 5 of `@frsource/cypress-plugin-visual-regression-diff` Batch Review Mode was opt-in. See the [migration guide](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/blob/main/packages/cypress-plugin-visual-regression-diff/MIGRATION.md#4x---5x) if you upgrade from 4.x.
+> Note: Before version 2 of `@pixsame/cypress-plugin-visual-regression-diff` Batch Review Mode was opt-in. See the [migration guide](https://github.com/pixsame/pixsame/blob/main/packages/cypress-plugin-visual-regression-diff/MIGRATION.md#4x---5x) if you upgrade from 4.x.
 
 ### How to disable
 
@@ -338,7 +344,7 @@ Toggling the checkbox in the runner is remembered in the browser's local storage
 
 Browsers hand text rasterisation to the operating system (CoreText on macOS, DirectWrite on Windows, FreeType on Linux), so the same page never renders byte-for-byte identical on a developer's laptop and a Linux CI runner. The plugin cannot make that go away entirely, but the `deterministicRendering` preset (enabled by default) removes the part of the noise that lives inside the browser:
 
-- **Chrome, Chromium, Edge** are launched with `--font-render-hinting=none --disable-font-subpixel-positioning --disable-lcd-text --force-color-profile=srgb --disable-gpu` (text without OS hinting and subpixel tricks, no colour management, CPU rasterisation), plus `--hide-scrollbars` in headless mode. The list is exported as `DETERMINISTIC_RENDERING_CHROMIUM_ARGS` from `@frsource/cypress-plugin-visual-regression-diff/constants`.
+- **Chrome, Chromium, Edge** are launched with `--font-render-hinting=none --disable-font-subpixel-positioning --disable-lcd-text --force-color-profile=srgb --disable-gpu` (text without OS hinting and subpixel tricks, no colour management, CPU rasterisation), plus `--hide-scrollbars` in headless mode. The list is exported as `DETERMINISTIC_RENDERING_CHROMIUM_ARGS` from `@pixsame/cypress-plugin-visual-regression-diff/constants`.
 - **Firefox** gets the `gfx.webrender.software` preference (CPU rendering). Firefox has no cross-platform switch for font hinting, so text may still differ between operating systems.
 - **Every browser**: for the duration of a `matchImage` screenshot a `<style>` element is injected into the tested page that hides the text caret, disables CSS transitions, animations and smooth scrolling, and hides scrollbars. It is removed right after the screenshot.
 - The comparison runs `pixelmatch` with `includeAA: false`, so anti-aliased edge pixels are detected and not counted as differences.
@@ -436,7 +442,7 @@ Cypress only supports a single handler per event. If multiple plugins register t
 
 ```ts
 import { defineConfig } from 'cypress';
-import { initPlugin as initVisualRegressionPlugin } from '@frsource/cypress-plugin-visual-regression-diff/plugins';
+import { initPlugin as initVisualRegressionPlugin } from '@pixsame/cypress-plugin-visual-regression-diff/plugins';
 import fix from 'cypress-on-fix';
 
 export default defineConfig({
@@ -549,13 +555,53 @@ For CI or sharable HTML reports, integrate with a reporter such as [`cypress-moc
 
 </details>
 
+## Migrating from `@frsource/cypress-plugin-visual-regression-diff`
+
+This plugin used to be published under the `@frsource` npm scope as `@frsource/cypress-plugin-visual-regression-diff`. It now lives in the [pixsame](https://github.com/pixsame) organization and is published as `@pixsame/cypress-plugin-visual-regression-diff`. If you still have the old `@frsource/...` package installed, moving over is just a rename: `@pixsame/cypress-plugin-visual-regression-diff` 1.0.0 is the code of `@frsource/cypress-plugin-visual-regression-diff` 4.2.1 with no behavior change, so your baseline images, configuration and `cy.*` commands keep working as they are. New installs don't need any of this, see [Getting started](#getting-started).
+
+The quickest way to migrate is the built-in command shipped with the last `@frsource` release. It renames the dependency in every `package.json` below the current directory, updates imports and type references in your config and support files, and reinstalls with the package manager it finds:
+
+```bash
+npx @frsource/cypress-plugin-visual-regression-diff migrate
+```
+
+It lists the files it would change and asks before writing anything. Pass `--dry-run` to only see the list, `--yes` to skip the question (required in CI) and `--no-install` to skip the install step.
+
+Prefer to do it by hand? Swap the package and replace the name in your imports:
+
+```bash
+npm uninstall @frsource/cypress-plugin-visual-regression-diff
+npm install --save-dev @pixsame/cypress-plugin-visual-regression-diff
+```
+
+```diff
+-import '@frsource/cypress-plugin-visual-regression-diff';
++import '@pixsame/cypress-plugin-visual-regression-diff';
+-import { initPlugin } from '@frsource/cypress-plugin-visual-regression-diff/plugins';
++import { initPlugin } from '@pixsame/cypress-plugin-visual-regression-diff/plugins';
+```
+
+If you list the package in `compilerOptions.types` of a `tsconfig.json`, rename it there too.
+
+## Commercial support
+
+The plugin is free and MIT-licensed, and it stays that way. It's also maintained by one person in his spare time, so if your team needs more than best-effort answers on the issue tracker, here's what I offer:
+
+- **Setup and migration, fixed price.** I get the plugin (or its GitHub App) running in your CI, sort out the "works on my Mac, fails on Linux" baselines, and hand over a short write-up. Usually one to two days.
+- **Priority support, monthly.** A private channel, a response within one business day, and your issues at the top of the pile. Covers the plugin, the manifest tooling and the GitHub App.
+- **Feature work and consulting, hourly.** A missing option, an adapter for your runner, or just an hour to look at why your screenshots drift.
+
+Write to [pixsame@frsource.org](mailto:pixsame@frsource.org) with a sentence about your setup and I'll reply with a quote. If you only want to say thanks, the Sponsor button at the top of this repository does that (GitHub Sponsors, Patreon or Buy Me a Coffee), and every sponsor is listed in the release notes.
+
+Security problems have their own path: see [SECURITY.md](https://github.com/pixsame/pixsame/blob/main/SECURITY.md).
+
 ## Questions
 
-Don’t hesitate to ask a question directly on the [discussions board](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/discussions)!
+Don’t hesitate to ask a question directly on the [discussions board](https://github.com/pixsame/pixsame/discussions)!
 
 ## Changelog
 
-Changes for every release are documented in the [release notes](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/releases) and [CHANGELOG files of every package](https://github.com/FRSOURCE/cypress-plugin-visual-regression-diff/tree/main/packages).
+Changes for every release are documented in the [release notes](https://github.com/pixsame/pixsame/releases) and [CHANGELOG files of every package](https://github.com/pixsame/pixsame/tree/main/packages).
 
 ## License
 
