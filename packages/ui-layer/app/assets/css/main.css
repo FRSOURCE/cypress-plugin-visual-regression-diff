@@ -141,3 +141,8 @@
     color: var(--px-coral-text);
   }
 }
+
+/* keep in-page anchors clear of the sticky site header */
+html {
+  scroll-padding-top: 5rem;
+}

@@ -105,7 +105,10 @@ useSeoMeta({
     <div
       class="grid grid-cols-1 gap-x-12 gap-y-6 lg:grid-cols-[220px_minmax(0,1fr)] xl:grid-cols-[220px_minmax(0,1fr)_200px]"
     >
-      <nav :aria-label="t('nav.docs')" class="lg:sticky lg:top-8 lg:self-start">
+      <nav
+        :aria-label="t('nav.docs')"
+        class="lg:sticky lg:top-24 lg:self-start"
+      >
         <details class="group lg:hidden">
           <summary
             class="flex cursor-pointer list-none items-center justify-between rounded-md border border-glass-border px-3 py-2.5 text-sm font-medium"
@@ -151,7 +154,7 @@ useSeoMeta({
 
       <aside
         v-if="toc.length"
-        class="hidden xl:sticky xl:top-8 xl:block xl:self-start"
+        class="hidden xl:sticky xl:top-24 xl:block xl:self-start"
         :aria-label="t('docs.onThisPage')"
       >
         <p class="px-eyebrow !text-faint">{{ t('docs.onThisPage') }}</p>

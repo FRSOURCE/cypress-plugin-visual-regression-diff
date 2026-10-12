@@ -24,7 +24,9 @@ const nav = computed(() => [
 </script>
 
 <template>
-  <header class="relative z-10 border-b border-hairline">
+  <header
+    class="sticky top-0 z-30 border-b border-hairline bg-ground/85 backdrop-blur-md"
+  >
     <div
       class="px-container flex items-center justify-between gap-x-6 py-[22px]"
     >
