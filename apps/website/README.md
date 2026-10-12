@@ -9,30 +9,32 @@ pnpm --filter @pixsame/website build    # nuxt generate -> .output/public
 pnpm --filter @pixsame/website exec playwright test   # e2e + axe a11y against the built site
 ```
 
-Use Node >= 22.21 (CI uses `.nvmrc`).
+Use Node >= 22.5 (`engines` in `package.json`; CI uses `.nvmrc`). The plugin packages still support Node 20.
 
 ## Locales
 
-`en` (no prefix), `pl`, `de`, `zh` (Simplified, `zh-CN`), `zh-tw` (Traditional, `zh-TW`). Messages are in `i18n/locales/*.json`.
-Docs (`content/docs`) are English-only; other locales show them with `noindex`.
+`en` (no prefix), `pl`, `de`, `zh` (Simplified, `zh-CN`), `zh-tw` (Traditional, `zh-TW`). UI messages are in `i18n/locales/*.json`,
+docs in `content/docs/<locale>/`. A docs page without a translation falls back to the English file and is rendered `noindex`.
+The Cypress plugin page (`/products/cypress-plugin`) renders the package README and is English in every locale.
 
-| Locale | Native review |
-| --- | --- |
-| en | done |
-| pl | pending (AI draft) |
-| de | pending (AI draft) |
-| zh-CN | pending (AI draft) |
-| zh-TW | pending (AI draft) |
+| Locale | UI messages        | Docs               |
+| ------ | ------------------ | ------------------ |
+| en     | done               | done               |
+| pl     | pending (AI draft) | pending (AI draft) |
+| de     | pending (AI draft) | pending (AI draft) |
+| zh-CN  | pending (AI draft) | pending (AI draft) |
+| zh-TW  | pending (AI draft) | pending (AI draft) |
 
-Each non-English file has `meta.reviewed: false` until a native speaker signs it off.
+Every non-English file is flagged until a native speaker signs it off: `meta.reviewed: false` in the JSON, `reviewed: false` in the
+markdown frontmatter (which shows a "machine translation" notice on the page).
 
 ## Deploy (Cloudflare Pages)
 
 Deployed by `.github/workflows/website.yml` on every push to `main` that touches the site (after lint, build and tests), to the
 Cloudflare Pages project `pixsame-website` via `wrangler pages deploy`. Repo settings it needs:
 
-- Variables: `NUXT_PUBLIC_TURNSTILE_SITE_KEY`, `NUXT_PUBLIC_CONTACT_ENDPOINT`, `NUXT_PUBLIC_WAITLIST_ENDPOINT` (see `.env.example`; copy it to `.env` locally).
-- Secrets: `CLOUDFLARE_API_TOKEN` (Account > Cloudflare Pages > Edit), `CLOUDFLARE_ACCOUNT_ID`.
+- Variables (public: they end up in the built site or in dashboard URLs): `NUXT_PUBLIC_TURNSTILE_SITE_KEY`, `NUXT_PUBLIC_CONTACT_ENDPOINT`, `NUXT_PUBLIC_WAITLIST_ENDPOINT`, `CLOUDFLARE_ACCOUNT_ID` (see `.env.example`; copy it to `.env` locally).
+- Secret: `CLOUDFLARE_API_TOKEN` (Account > Cloudflare Pages > Edit). It is the only credential.
 
 Build command `pnpm --filter @pixsame/website build`, output `apps/website/.output/public`. `public/_headers` sets CSP and caching.
 The site is fully static. The contact and waitlist forms post to Google Apps Script web apps

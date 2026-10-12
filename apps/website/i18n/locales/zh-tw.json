@@ -3,7 +3,7 @@
     "reviewed": false
   },
   "seo": {
-    "title": "pixsame — 適用於 Cypress 與 Playwright 的視覺迴歸測試",
+    "title": "pixsame — 為 Cypress 打造的視覺迴歸測試（Playwright 即將推出）",
     "description": "兩個執行器共用一套清單標準，固定版本的渲染器讓截圖逐位元組一致，鑑識式差異分析，並在 Pull Request 中完成基準審批。"
   },
   "nav": {
@@ -27,13 +27,14 @@
     "toDark": "切換至深色模式"
   },
   "hero": {
-    "eyebrow": "開源 · MIT · Cypress + Playwright",
+    "eyebrow": "開源 · MIT · Cypress 現已可用，Playwright 即將推出",
     "title": "始終與自身一致的視覺迴歸。",
     "tagline": "same same. 精確到像素。",
     "body": "兩個執行器共用一套清單標準。固定版本的渲染器讓本機與 CI 截圖逐位元組一致。以鑑識式差異分析取代一團紅色色塊，基準審批直接在 Pull Request 中完成。",
     "copy": "複製",
     "copied": "已複製",
-    "docs": "閱讀文件"
+    "docs": "閱讀文件",
+    "soonNote": "現已可用：Cypress 外掛與清單標準。即將推出：固定渲染器、鑑識式差異分析與在 Pull Request 中核准。"
   },
   "detect": {
     "demo": "AI 偵測流程示意",
@@ -265,14 +266,16 @@
     "consentRequired": "請勾選此項以加入候補名單。"
   },
   "docs": {
-    "englishOnly": "文件目前僅提供英文版。",
     "groups": {
       "getting-started": "快速開始",
       "reference": "參考",
       "integrations": "整合"
     },
     "onThisPage": "本頁內容",
-    "menu": "文件選單"
+    "menu": "文件選單",
+    "draft": "本頁為機器翻譯，尚未經過人工審閱。以英文版本為準。",
+    "fallback": "本頁尚未翻譯，您正在閱讀英文版本。",
+    "englishSection": "本節僅提供英文版本。"
   },
   "changelog": {
     "body": "Release notes for the pixsame Cypress plugin.",
@@ -288,11 +291,11 @@
     "privacy": {
       "title": "隱私",
       "p1": "本網站不使用 cookie 與廣告追蹤。我們使用 Cloudflare Web Analytics，它不使用 cookie 或指紋辨識來統計頁面瀏覽量。",
-      "p2": "資料控制者：FRS JAKUB FREISLER，al. Kijowska 48/24, 30-079 Kraków, Poland（加值稅號 PL6783179514）。聯絡方式：pixsame{'@'}frsource.org。",
+      "p2": "資料控制者：{name}，{address1}, {address2}（加值稅號 {vat}）。聯絡方式：{email}。",
       "p3": "候補名單：加入後，我們會儲存您的電子郵件、所選產品、語言與同意時間。法律依據為您的同意（GDPR 第 6 條第 1 項 a 款）。我們僅用這些資料在該產品推出時以及之後的更新（包括與之相關的 pixsame 生態變化）時寄信給您，不作其他用途，也不會分享作為行銷。",
       "p4": "聯絡表單：我們僅使用您的姓名、電子郵件與訊息來回覆您，不再需要時即刪除。",
-      "p5": "資料處理者：表單運行於 Google Apps Script 與 Google Sheets（Google），垃圾訊息由 Cloudflare Turnstile（Cloudflare）過濾。它們可能依標準契約條款在歐盟以外處理資料。",
-      "p6": "保存期限與您的權利：候補名單資料保存至您撤回同意或產品終止。您可隨時撤回同意，並要求查閱、更正或刪除資料，請寄信至 pixsame{'@'}frsource.org。您也可以向所在地的資料保護機關投訴。"
+      "p5": "資料處理者：表單運行於 Google Apps Script 與 Google Sheets（Google），垃圾訊息由 Cloudflare Turnstile（Cloudflare）過濾。它們可能依標準契約條款在歐盟以外處理資料。表單會將您填寫的內容作為請求網址的一部分傳送給 Google。",
+      "p6": "保存期限與您的權利：候補名單資料保存至您撤回同意或產品終止。您可隨時撤回同意，並要求查閱、更正或刪除資料，請寄信至 {email}。您也可以向所在地的資料保護機關投訴。"
     },
     "terms": {
       "title": "條款",
@@ -332,7 +335,8 @@
     "docs": "Read the docs",
     "changelog": "Changelog",
     "npm": "npm",
-    "onThisPage": "On this page"
+    "onThisPage": "On this page",
+    "migrate": "從 {'@'}frsource 遷移"
   },
   "changelogs": {
     "title": "更新日誌",
@@ -357,5 +361,13 @@
     "taxIds": "稅號",
     "consent": "我同意使用我的資料來回覆我的訊息。詳見{privacy}。",
     "consentRequired": "請勾選此項以傳送訊息。"
+  },
+  "company": {
+    "name": "FRS JAKUB FREISLER",
+    "address1": "al. Kijowska 48/24",
+    "address2": "30-079 Kraków, 波蘭",
+    "vat": "PL6783179514",
+    "nip": "6783179514",
+    "email": "pixsame{'@'}frsource.org"
   }
 }

@@ -24,11 +24,11 @@ npx @frsource/cypress-plugin-visual-regression-diff migrate
 
 It lists the files it would change and asks before writing anything.
 
-| Flag | What it does |
-| --- | --- |
-| `--dry-run` | Only list the files that would change |
-| `--yes` | Skip the question (required in CI) |
-| `--no-install` | Skip the install step |
+| Flag           | What it does                          |
+| -------------- | ------------------------------------- |
+| `--dry-run`    | Only list the files that would change |
+| `--yes`        | Skip the question (required in CI)    |
+| `--no-install` | Skip the install step                 |
 
 ## Prefer to do it by hand?
 

@@ -14,8 +14,17 @@ export default defineNuxtConfig({
   },
   fonts: {
     families: [
-      { name: 'Bona Nova', provider: 'google', weights: [400, 700], styles: ['normal', 'italic'] },
-      { name: 'Signika', provider: 'google', weights: [300, 400, 500, 600, 700] },
+      {
+        name: 'Bona Nova',
+        provider: 'google',
+        weights: [400, 700],
+        styles: ['normal', 'italic'],
+      },
+      {
+        name: 'Signika',
+        provider: 'google',
+        weights: [300, 400, 500, 600, 700],
+      },
       { name: 'JetBrains Mono', provider: 'google', weights: [400, 500, 700] },
     ],
   },

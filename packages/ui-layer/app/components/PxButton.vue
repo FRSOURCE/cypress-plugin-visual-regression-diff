@@ -9,7 +9,22 @@ const external = computed(() => !!props.to?.startsWith('http'));
 </script>
 
 <template>
-  <a v-if="to && external" :href="to" class="px-btn" :class="`px-btn-${variant}`"><slot /></a>
-  <component :is="NuxtLink" v-else-if="to" :to="to" class="px-btn" :class="`px-btn-${variant}`"><slot /></component>
-  <button v-else type="button" class="px-btn" :class="`px-btn-${variant}`"><slot /></button>
+  <a
+    v-if="to && external"
+    :href="to"
+    class="px-btn"
+    :class="`px-btn-${variant}`"
+    ><slot
+  /></a>
+  <component
+    :is="NuxtLink"
+    v-else-if="to"
+    :to="to"
+    class="px-btn"
+    :class="`px-btn-${variant}`"
+    ><slot
+  /></component>
+  <button v-else type="button" class="px-btn" :class="`px-btn-${variant}`">
+    <slot />
+  </button>
 </template>

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-defineProps<{ groups: { key: string; items: { path: string; title: string }[] }[] }>();
+defineProps<{
+  groups: { key: string; items: { path: string; title: string }[] }[];
+}>();
 const { t } = useI18n();
 const localePath = useLocalePath();
 </script>

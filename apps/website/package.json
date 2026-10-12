@@ -3,12 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.5.0"
+  },
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt generate",
     "preview": "nuxt preview",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint . ../../packages/ui-layer",
+    "lint:fix": "eslint . ../../packages/ui-layer --fix",
+    "format": "prettier --write . ../../packages/ui-layer",
+    "format:ci": "prettier --check . ../../packages/ui-layer",
     "typecheck": "nuxt typecheck",
     "postinstall": "nuxt prepare"
   },
@@ -24,9 +29,11 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@frsource/eslint-config": "1.85.13",
+    "@frsource/prettier-config": "^1.47.12",
     "@nuxt/eslint": "1.17.0",
     "@playwright/test": "1.60.0",
     "eslint": "10.11.0",
+    "prettier": "3.9.9",
     "sirv": "^3.0.2",
     "sirv-cli": "^3.0.1",
     "typescript": "^5.9.0",

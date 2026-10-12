@@ -3,7 +3,7 @@
     "reviewed": false
   },
   "seo": {
-    "title": "pixsame — visuelle Regressionstests für Cypress und Playwright",
+    "title": "pixsame — visuelle Regressionstests für Cypress (Playwright bald)",
     "description": "Ein Manifest-Standard für beide Runner, ein fixierter Renderer für byte-identische Screenshots, forensische Diff-Analyse und Baseline-Freigabe im Pull Request."
   },
   "nav": {
@@ -27,13 +27,14 @@
     "toDark": "Zum dunklen Modus wechseln"
   },
   "hero": {
-    "eyebrow": "Open Source · MIT · Cypress + Playwright",
+    "eyebrow": "Open Source · MIT · Cypress heute, Playwright bald",
     "title": "Visuelle Regression, die mit sich selbst übereinstimmt.",
     "tagline": "same same. auf den Pixel genau.",
     "body": "Ein Manifest-Standard für beide Runner. Ein fixierter Renderer macht lokale und CI-Screenshots byte-identisch. Forensische Diff-Analyse statt eines roten Flecks und Baseline-Freigabe direkt im Pull Request.",
     "copy": "KOPIEREN",
     "copied": "KOPIERT",
-    "docs": "Doku lesen"
+    "docs": "Doku lesen",
+    "soonNote": "Heute verfügbar: das Cypress-Plugin und das Manifest. Bald: der fixierte Renderer, die forensische Diff-Analyse und die Freigabe im Pull Request."
   },
   "detect": {
     "demo": "Beispielhafte Darstellung eines KI-Erkennungslaufs",
@@ -265,14 +266,16 @@
     "consentRequired": "Bitte setzen Sie das Häkchen, um sich einzutragen."
   },
   "docs": {
-    "englishOnly": "Die Doku ist nur auf Englisch verfügbar.",
     "groups": {
       "getting-started": "Erste Schritte",
       "reference": "Referenz",
       "integrations": "Integrationen"
     },
     "onThisPage": "Auf dieser Seite",
-    "menu": "Doku-Menü"
+    "menu": "Doku-Menü",
+    "draft": "Diese Seite ist eine maschinelle Übersetzung, die noch nicht geprüft wurde. Die englische Fassung ist maßgeblich.",
+    "fallback": "Diese Seite ist noch nicht übersetzt; Sie lesen die englische Fassung.",
+    "englishSection": "Dieser Abschnitt ist nur auf Englisch verfügbar."
   },
   "changelog": {
     "body": "Release notes for the pixsame Cypress plugin.",
@@ -288,11 +291,11 @@
     "privacy": {
       "title": "Datenschutz",
       "p1": "Diese Website verwendet keine Cookies und kein Werbe-Tracking. Wir nutzen Cloudflare Web Analytics, das Seitenaufrufe ohne Cookies und Fingerprinting zählt.",
-      "p2": "Verantwortlicher: FRS JAKUB FREISLER, al. Kijowska 48/24, 30-079 Kraków, Polen (USt-IdNr. PL6783179514). Kontakt: pixsame{'@'}frsource.org.",
+      "p2": "Verantwortlicher: {name}, {address1}, {address2} (USt-IdNr. {vat}). Kontakt: {email}.",
       "p3": "Warteliste: Bei der Anmeldung speichern wir Ihre E-Mail-Adresse, das Produkt, Ihre Sprache und den Zeitpunkt Ihrer Einwilligung. Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Wir verwenden die Daten nur, um Ihnen den Start dieses Produkts und spätere Neuigkeiten dazu mitzuteilen, einschließlich damit verbundener Änderungen am pixsame-Ökosystem. Eine andere Nutzung oder Weitergabe zu Werbezwecken findet nicht statt.",
       "p4": "Kontaktformular: Name, E-Mail-Adresse und Nachricht verwenden wir nur, um Ihnen zu antworten, und löschen sie, sobald sie dafür nicht mehr nötig sind.",
-      "p5": "Auftragsverarbeiter: Die Formulare laufen über Google Apps Script und Google Sheets (Google); Spam wird mit Cloudflare Turnstile (Cloudflare) gefiltert. Dabei können Daten außerhalb der EU auf Grundlage von Standardvertragsklauseln verarbeitet werden.",
-      "p6": "Speicherdauer und Ihre Rechte: Wartelistendaten bleiben bis zum Widerruf der Einwilligung oder bis zur Einstellung des Produkts gespeichert. Sie können jederzeit widerrufen sowie Auskunft, Berichtigung oder Löschung verlangen, per E-Mail an pixsame{'@'}frsource.org. Sie können sich außerdem bei Ihrer Datenschutzbehörde beschweren."
+      "p5": "Auftragsverarbeiter: Die Formulare laufen über Google Apps Script und Google Sheets (Google); Spam wird mit Cloudflare Turnstile (Cloudflare) gefiltert. Dabei können Daten außerhalb der EU auf Grundlage von Standardvertragsklauseln verarbeitet werden. Die Formulare übermitteln Ihre Eingaben als Teil der Anfrage-Adresse an Google.",
+      "p6": "Speicherdauer und Ihre Rechte: Wartelistendaten bleiben bis zum Widerruf der Einwilligung oder bis zur Einstellung des Produkts gespeichert. Sie können jederzeit widerrufen sowie Auskunft, Berichtigung oder Löschung verlangen, per E-Mail an {email}. Sie können sich außerdem bei Ihrer Datenschutzbehörde beschweren."
     },
     "terms": {
       "title": "Nutzungsbedingungen",
@@ -332,7 +335,8 @@
     "docs": "Read the docs",
     "changelog": "Changelog",
     "npm": "npm",
-    "onThisPage": "On this page"
+    "onThisPage": "On this page",
+    "migrate": "Von {'@'}frsource migrieren"
   },
   "changelogs": {
     "title": "Changelogs",
@@ -357,5 +361,13 @@
     "taxIds": "Steuernummern",
     "consent": "Ich bin einverstanden, dass meine Angaben zur Beantwortung meiner Nachricht verwendet werden. Siehe {privacy}.",
     "consentRequired": "Bitte setzen Sie das Häkchen, um die Nachricht zu senden."
+  },
+  "company": {
+    "name": "FRS JAKUB FREISLER",
+    "address1": "al. Kijowska 48/24",
+    "address2": "30-079 Kraków, Polen",
+    "vat": "PL6783179514",
+    "nip": "6783179514",
+    "email": "pixsame{'@'}frsource.org"
   }
 }

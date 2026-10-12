@@ -9,12 +9,21 @@ const render = (node: Node, key?: number): VNode | string => {
   if (typeof node === 'string') return node;
   const [tag, props, ...children] = node;
   const attrs: Record<string, unknown> = { ...props, key };
-  if (tag === 'a' && typeof props.href === 'string' && /^https?:/.test(props.href)) attrs.rel = 'noopener';
-  return h(tag, attrs, children.map((c, i) => render(c, i)));
+  if (
+    tag === 'a' &&
+    typeof props.href === 'string' &&
+    /^https?:/.test(props.href)
+  )
+    attrs.rel = 'noopener';
+  return h(
+    tag,
+    attrs,
+    children.map((c, i) => render(c, i)),
+  );
 };
 
 export default defineComponent({
   name: 'MinimarkRenderer',
   props: { nodes: { type: Array as PropType<Node[]>, required: true } },
-  setup: props => () => props.nodes.map((n, i) => render(n, i)),
+  setup: (props) => () => props.nodes.map((n, i) => render(n, i)),
 });

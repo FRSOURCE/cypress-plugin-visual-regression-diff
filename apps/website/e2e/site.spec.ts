@@ -2,14 +2,22 @@ import { expect, test } from '@playwright/test';
 
 // Turnstile keeps polling Cloudflare, so the page never goes network-idle. Tests never need the real captcha.
 test.beforeEach(async ({ page }) => {
-  await page.route('https://challenges.cloudflare.com/**', (route) => route.abort());
+  await page.route('https://challenges.cloudflare.com/**', (route) =>
+    route.abort(),
+  );
 });
 
 test('landing page renders the hero and the key sections', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Visual regression that agrees with itself.');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    'Visual regression that agrees with itself.',
+  );
   await expect(page).toHaveTitle(/pixsame/);
-  await expect(page.getByRole('heading', { name: 'Free where it matters. Paid where it scales.' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', {
+      name: 'Free where it matters. Paid where it scales.',
+    }),
+  ).toBeVisible();
   await expect(page.getByText('AI auto-evaluator').first()).toBeVisible();
   await expect(page.locator('body')).not.toContainText('auto-approve');
 });
@@ -23,7 +31,9 @@ test('theme toggle switches and persists without a flash', async ({ page }) => {
   await page.reload();
   // the inline color-mode script sets the class before hydration
   await expect(page.locator('html')).toHaveClass(/dark/);
-  await expect(page.getByRole('button', { name: 'Switch to light mode' })).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: 'Switch to light mode' }),
+  ).toBeVisible();
 });
 
 test('follows the system theme until the visitor chooses', async ({ page }) => {
@@ -32,19 +42,29 @@ test('follows the system theme until the visitor chooses', async ({ page }) => {
   await expect(page.locator('html')).toHaveClass(/dark/);
 });
 
-test('language switcher navigates and sets lang, hreflang and canonical', async ({ page }) => {
+test('language switcher navigates and sets lang, hreflang and canonical', async ({
+  page,
+}) => {
   await page.goto('/');
   // the page is prerendered: clicking before hydration attaches the handler does nothing, so retry
   await expect(async () => {
     await page.getByRole('button', { name: 'Language' }).click();
-    await expect(page.getByRole('dialog', { name: 'Language' })).toBeVisible({ timeout: 1000 });
+    await expect(page.getByRole('dialog', { name: 'Language' })).toBeVisible({
+      timeout: 1000,
+    });
   }).toPass();
   await page.getByRole('link', { name: 'Deutsch' }).click();
   await expect(page).toHaveURL(/\/de\/?$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'de');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Visuelle Regression');
-  const hreflangs = await page.locator('link[rel="alternate"][hreflang]').evaluateAll((els) => els.map((e) => e.getAttribute('hreflang')));
-  expect(hreflangs).toEqual(expect.arrayContaining(['en', 'pl', 'de', 'zh-CN', 'zh-TW', 'x-default']));
+  await expect(page.getByRole('heading', { level: 1 })).toContainText(
+    'Visuelle Regression',
+  );
+  const hreflangs = await page
+    .locator('link[rel="alternate"][hreflang]')
+    .evaluateAll((els) => els.map((e) => e.getAttribute('hreflang')));
+  expect(hreflangs).toEqual(
+    expect.arrayContaining(['en', 'pl', 'de', 'zh-CN', 'zh-TW', 'x-default']),
+  );
 });
 
 test('chinese locales use their own language tags', async ({ page }) => {
@@ -59,7 +79,9 @@ test('install command can be copied', async ({ page, context }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'COPY' }).click();
   await expect(page.getByRole('button', { name: 'COPIED' })).toBeVisible();
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('npm i -D @pixsame/cypress-plugin-visual-regression-diff');
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+    'npm i -D @pixsame/cypress-plugin-visual-regression-diff',
+  );
 });
 
 test('mobile menu exposes the navigation', async ({ page }) => {
@@ -67,13 +89,17 @@ test('mobile menu exposes the navigation', async ({ page }) => {
   await page.goto('/');
   await expect(async () => {
     await page.getByRole('button', { name: 'Menu' }).click();
-    await expect(page.getByRole('dialog', { name: 'Menu' })).toBeVisible({ timeout: 1000 });
+    await expect(page.getByRole('dialog', { name: 'Menu' })).toBeVisible({
+      timeout: 1000,
+    });
   }).toPass();
   await page.getByRole('dialog').getByRole('link', { name: 'Pricing' }).click();
   await expect(page).toHaveURL(/\/pricing\/?$/);
 });
 
-test('waitlist form needs consent, then posts to the Apps Script endpoint', async ({ page }) => {
+test('waitlist form needs consent, then posts to the Apps Script endpoint', async ({
+  page,
+}) => {
   let url = '';
   await page.route('https://script.google.com/**', async (route) => {
     url = route.request().url();
@@ -88,7 +114,13 @@ test('waitlist form needs consent, then posts to the Apps Script endpoint', asyn
   await page.getByRole('button', { name: 'Notify me' }).click();
   await expect(page.getByRole('status')).toContainText('Thanks');
   const params = new URL(url).searchParams;
-  expect(Object.fromEntries(params)).toMatchObject({ email: 'dana@example.com', product: 'github-app', locale: 'en', consent: 'yes', website: '' });
+  expect(Object.fromEntries(params)).toMatchObject({
+    email: 'dana@example.com',
+    product: 'github-app',
+    locale: 'en',
+    consent: 'yes',
+    website: '',
+  });
 });
 
 test('contact form validates, needs consent and posts', async ({ page }) => {
@@ -106,20 +138,107 @@ test('contact form validates, needs consent and posts', async ({ page }) => {
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Send message' }).click();
   await expect(page.getByRole('status')).toContainText('Thanks');
-  expect(Object.fromEntries(new URL(url).searchParams)).toMatchObject({ name: 'Dana', message: 'Hello', consent: 'yes' });
+  expect(Object.fromEntries(new URL(url).searchParams)).toMatchObject({
+    name: 'Dana',
+    message: 'Hello',
+    consent: 'yes',
+  });
 });
 
-test('docs in other locales are noindex, English is indexable', async ({ page }) => {
+test('turnstile renders and its token is sent after client-side navigation to the contact form', async ({
+  page,
+}) => {
+  // Stub api.js: Turnstile is rendered explicitly, so the stub only needs `render` and the onload callback.
+  await page.route(
+    'https://challenges.cloudflare.com/turnstile/v0/api.js*',
+    (route) =>
+      route.fulfill({
+        contentType: 'application/javascript',
+        body: `window.turnstile = {
+        render(el, opts) { const f = document.createElement('iframe'); f.title = 'turnstile-stub'; el.append(f); setTimeout(() => opts.callback('stub-token'), 0); return 'w'; },
+        remove() {},
+      };
+      window.pxTurnstileLoad && window.pxTurnstileLoad();`,
+      }),
+  );
+  let url = '';
+  await page.route('https://script.google.com/**', async (route) => {
+    url = route.request().url();
+    await route.fulfill({ json: { result: 'success' } });
+  });
+  await page.goto('/');
+  await page.waitForLoadState('networkidle'); // hydrated: the next click is a client-side navigation
+  await page.evaluate(() => {
+    (window as unknown as { marker: number }).marker = 1;
+  });
+  await page
+    .getByRole('navigation', { name: 'Main' })
+    .getByRole('link', { name: 'Contact' })
+    .click();
+  await expect(page).toHaveURL(/\/contact\/?$/);
+  expect(
+    await page.evaluate(
+      () => (window as unknown as { marker?: number }).marker,
+    ),
+  ).toBe(1); // no full reload
+  await expect(page.locator('form iframe[title="turnstile-stub"]')).toHaveCount(
+    1,
+  );
+  await page.getByLabel('Name').fill('Dana');
+  await page.getByLabel('Email address').fill('dana@example.com');
+  await page.getByRole('textbox', { name: 'Message' }).fill('Hello');
+  await page.getByRole('checkbox').check();
+  await page.getByRole('button', { name: 'Send message' }).click();
+  await expect(page.getByRole('status')).toContainText('Thanks');
+  expect(new URL(url).searchParams.get('token')).toBe('stub-token');
+});
+
+test('translated docs are indexable, in their language, and flagged as unreviewed drafts', async ({
+  page,
+}) => {
   await page.goto('/docs/getting-started/install/');
-  await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(0);
+  await expect(
+    page.locator('meta[name="robots"][content*="noindex"]'),
+  ).toHaveCount(0);
+  await expect(page.locator('body')).not.toContainText('machine translation');
   await page.goto('/pl/docs/getting-started/install/');
-  await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(1);
+  await expect(
+    page.locator('meta[name="robots"][content*="noindex"]'),
+  ).toHaveCount(0);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'pl');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    'Instalacja',
+  );
+  await expect(page.locator('body')).toContainText('tłumaczenie maszynowe');
+  // links inside markdown stay in the visitor's locale
+  await page
+    .getByRole('link', { name: /Migracja z @frsource/ })
+    .first()
+    .click();
+  await expect(page).toHaveURL(
+    /\/pl\/docs\/getting-started\/migrate-from-frsource\/?$/,
+  );
+});
+
+test('the Cypress plugin page renders the package README without the GitHub-only parts', async ({
+  page,
+}) => {
+  await page.goto('/products/cypress-plugin/');
+  await expect(
+    page.getByRole('heading', { name: 'Getting started' }),
+  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'FAQ' })).toBeVisible();
+  await expect(page.locator('body')).not.toContainText('Commercial support');
+  await expect(page.locator('body')).not.toContainText('Cypress <10');
+  await expect(page.locator('details')).toHaveCount(0);
 });
 
 test('unknown routes show the 404 page', async ({ page }) => {
   const res = await page.goto('/definitely-not-here/');
   expect(res?.status()).toBe(404);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page not found');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    'Page not found',
+  );
 });
 
 test('machine-readable files are published', async ({ request }) => {

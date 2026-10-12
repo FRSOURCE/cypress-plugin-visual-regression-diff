@@ -1,6 +1,9 @@
 <script setup lang="ts">
 const { t } = useI18n();
-useSeoMeta({ title: () => t('legal.terms.title'), description: () => t('legal.terms.p1') });
+useSeoMeta({
+  title: () => t('legal.terms.title'),
+  description: () => t('legal.terms.p1'),
+});
 </script>
 
 <template>

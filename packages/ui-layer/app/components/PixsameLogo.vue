@@ -17,8 +17,26 @@ withDefaults(defineProps<{ size?: number; wordmark?: boolean }>(), {
       focusable="false"
     >
       <rect x="24" y="24" width="16" height="16" fill="var(--px-coral-fill)" />
-      <rect x="6" y="6" width="34" height="34" rx="2" fill="none" stroke="var(--px-ink)" stroke-width="5" />
-      <rect x="24" y="24" width="34" height="34" rx="2" fill="none" stroke="var(--px-ink)" stroke-width="5" />
+      <rect
+        x="6"
+        y="6"
+        width="34"
+        height="34"
+        rx="2"
+        fill="none"
+        stroke="var(--px-ink)"
+        stroke-width="5"
+      />
+      <rect
+        x="24"
+        y="24"
+        width="34"
+        height="34"
+        rx="2"
+        fill="none"
+        stroke="var(--px-ink)"
+        stroke-width="5"
+      />
     </svg>
     <span
       v-if="wordmark"

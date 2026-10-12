@@ -1,6 +1,10 @@
 <script setup lang="ts">
+// The legal entity details come from the `company` i18n block, shared with the privacy page.
 const { t } = useI18n();
-useSeoMeta({ title: () => t('contact.title'), description: () => t('contact.intro') });
+useSeoMeta({
+  title: () => t('contact.title'),
+  description: () => t('contact.intro'),
+});
 </script>
 
 <template>
@@ -11,24 +15,32 @@ useSeoMeta({ title: () => t('contact.title'), description: () => t('contact.intr
         <p class="mt-4 max-w-[48ch] text-muted">{{ t('contact.intro') }}</p>
         <dl class="mt-10 grid gap-6 text-sm">
           <div>
-            <dt class="px-eyebrow !text-faint">{{ t('contact.emailLabel') }}</dt>
-            <dd class="mt-2"><a href="mailto:pixsame@frsource.org" class="text-ink hover:text-coral-text">pixsame@frsource.org</a></dd>
+            <dt class="px-eyebrow !text-faint">
+              {{ t('contact.emailLabel') }}
+            </dt>
+            <dd class="mt-2">
+              <a
+                :href="`mailto:${t('company.email')}`"
+                class="text-ink hover:text-coral-text"
+                >{{ t('company.email') }}</a
+              >
+            </dd>
           </div>
           <div>
             <dt class="px-eyebrow !text-faint">{{ t('contact.company') }}</dt>
             <dd class="mt-2 not-italic text-muted">
               <address class="not-italic">
-                FRS JAKUB FREISLER<br>
-                al. Kijowska 48/24<br>
-                30-079 Kraków, Poland
+                {{ t('company.name') }}<br />
+                {{ t('company.address1') }}<br />
+                {{ t('company.address2') }}
               </address>
             </dd>
           </div>
           <div>
             <dt class="px-eyebrow !text-faint">{{ t('contact.taxIds') }}</dt>
             <dd class="mt-2 font-mono text-muted">
-              VAT ID: PL6783179514<br>
-              NIP: 6783179514
+              VAT ID: {{ t('company.vat') }}<br />
+              NIP: {{ t('company.nip') }}
             </dd>
           </div>
         </dl>

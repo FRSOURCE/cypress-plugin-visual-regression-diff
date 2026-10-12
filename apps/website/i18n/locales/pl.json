@@ -3,7 +3,7 @@
     "reviewed": false
   },
   "seo": {
-    "title": "pixsame — testy regresji wizualnej dla Cypress i Playwright",
+    "title": "pixsame — testy regresji wizualnej dla Cypressa (wkrótce Playwright)",
     "description": "Jeden standard manifestu dla obu runnerów, przypięty renderer dla zrzutów identycznych co do bajta, szczegółowa analiza różnic i akceptacja wzorców w pull requeście."
   },
   "nav": {
@@ -27,13 +27,14 @@
     "toDark": "Przełącz na tryb ciemny"
   },
   "hero": {
-    "eyebrow": "Open source · MIT · Cypress + Playwright",
+    "eyebrow": "Open source · MIT · Cypress dziś, Playwright wkrótce",
     "title": "Regresja wizualna, która zgadza się sama ze sobą.",
     "tagline": "same same. co do piksela.",
     "body": "Jeden standard manifestu dla obu runnerów. Przypięty renderer sprawia, że zrzuty lokalne i z CI są identyczne co do bajta. Szczegółowa analiza różnic zamiast czerwonej plamy i akceptacja wzorców w pull requeście.",
     "copy": "KOPIUJ",
     "copied": "SKOPIOWANO",
-    "docs": "Czytaj dokumentację"
+    "docs": "Czytaj dokumentację",
+    "soonNote": "Dostępne dziś: wtyczka do Cypressa i manifest. Wkrótce: przypięty renderer, analiza różnic i zatwierdzanie w pull requeście."
   },
   "detect": {
     "demo": "Przykładowa ilustracja przebiegu detekcji AI",
@@ -96,7 +97,7 @@
       },
       "enterprise": {
         "name": "Enterprise",
-        "price": "Kontakt",
+        "price": "Porozmawiajmy",
         "unit": "",
         "desc": "AI auto-evaluator, SSO, SLA, 48h on-call support"
       }
@@ -265,14 +266,16 @@
     "consentRequired": "Zaznacz zgodę, aby zapisać się na listę."
   },
   "docs": {
-    "englishOnly": "Dokumentacja jest dostępna tylko po angielsku.",
     "groups": {
       "getting-started": "Pierwsze kroki",
       "reference": "Dokumentacja",
       "integrations": "Integracje"
     },
     "onThisPage": "Na tej stronie",
-    "menu": "Menu dokumentacji"
+    "menu": "Menu dokumentacji",
+    "draft": "Ta strona to tłumaczenie maszynowe, które nie zostało jeszcze zweryfikowane. Wersja angielska jest wiążąca.",
+    "fallback": "Ta strona nie ma jeszcze tłumaczenia; czytasz wersję angielską.",
+    "englishSection": "Ta sekcja jest dostępna tylko po angielsku."
   },
   "changelog": {
     "body": "Release notes for the pixsame Cypress plugin.",
@@ -288,11 +291,11 @@
     "privacy": {
       "title": "Prywatność",
       "p1": "Ta strona nie używa plików cookie ani śledzenia reklamowego. Korzystamy z Cloudflare Web Analytics, które zlicza odsłony bez cookies i fingerprintingu.",
-      "p2": "Administrator danych: FRS JAKUB FREISLER, al. Kijowska 48/24, 30-079 Kraków, Polska (NIP PL6783179514). Kontakt: pixsame{'@'}frsource.org.",
+      "p2": "Administrator danych: {name}, {address1}, {address2} (NIP {vat}). Kontakt: {email}.",
       "p3": "Lista oczekujących: po zapisie przechowujemy Twój adres e-mail, produkt, język i czas zgody. Podstawą prawną jest Twoja zgoda (art. 6 ust. 1 lit. a RODO). Używamy tych danych wyłącznie, by napisać do Ciebie o starcie produktu i jego późniejszych aktualizacjach, w tym o powiązanych zmianach w ekosystemie pixsame. Nie wykorzystujemy ich do niczego innego i nie udostępniamy do celów marketingowych.",
       "p4": "Formularz kontaktowy: imię, adres e-mail i wiadomość wykorzystujemy wyłącznie, by Ci odpowiedzieć, i usuwamy, gdy nie są już do tego potrzebne.",
-      "p5": "Podmioty przetwarzające: formularze działają na Google Apps Script i Google Sheets (Google), a spam filtruje Cloudflare Turnstile (Cloudflare). Mogą przetwarzać dane poza UE na podstawie standardowych klauzul umownych.",
-      "p6": "Przechowywanie i Twoje prawa: dane z listy przechowujemy do wycofania zgody lub zakończenia produktu. W każdej chwili możesz wycofać zgodę oraz żądać dostępu, sprostowania lub usunięcia danych, pisząc na pixsame{'@'}frsource.org. Możesz też złożyć skargę do UODO."
+      "p5": "Podmioty przetwarzające: formularze działają na Google Apps Script i Google Sheets (Google), a spam filtruje Cloudflare Turnstile (Cloudflare). Mogą przetwarzać dane poza UE na podstawie standardowych klauzul umownych. Formularze przesyłają wpisane dane do Google jako część adresu żądania.",
+      "p6": "Przechowywanie i Twoje prawa: dane z listy przechowujemy do wycofania zgody lub zakończenia produktu. W każdej chwili możesz wycofać zgodę oraz żądać dostępu, sprostowania lub usunięcia danych, pisząc na {email}. Możesz też złożyć skargę do UODO."
     },
     "terms": {
       "title": "Regulamin",
@@ -332,7 +335,8 @@
     "docs": "Read the docs",
     "changelog": "Changelog",
     "npm": "npm",
-    "onThisPage": "On this page"
+    "onThisPage": "On this page",
+    "migrate": "Migracja z {'@'}frsource"
   },
   "changelogs": {
     "title": "Listy zmian",
@@ -357,5 +361,13 @@
     "taxIds": "Dane podatkowe",
     "consent": "Zgadzam się na wykorzystanie moich danych, aby odpowiedzieć na wiadomość. Zobacz {privacy}.",
     "consentRequired": "Zaznacz zgodę, aby wysłać wiadomość."
+  },
+  "company": {
+    "name": "FRS JAKUB FREISLER",
+    "address1": "al. Kijowska 48/24",
+    "address2": "30-079 Kraków, Polska",
+    "vat": "PL6783179514",
+    "nip": "6783179514",
+    "email": "pixsame{'@'}frsource.org"
   }
 }

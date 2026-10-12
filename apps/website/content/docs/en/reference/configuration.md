@@ -109,23 +109,7 @@ npx cypress run --env "pluginVisualRegressionCleanupUnusedImages=true"
 
 ## Batch Review Mode
 
-Batch Review Mode lets you run a full test suite without stopping on the first visual diff failure. Instead, all failing snapshots are collected and presented in an interactive review UI after the tests complete — so you can approve or skip changes in bulk.
-
-### Additions in headed mode (non-CI environments)
-
-When enabled, a floating action button (FAB) appears in the bottom-right corner of the Cypress test runner. As tests run:
-
-- Whenever a `matchImage()` call exceeds the diff threshold, the counter badge on the FAB increments instead of immediately throwing an error.
-- Once all tests finish, an error is thrown with the total count of failures.
-- Clicking the FAB opens a carousel where you can review each failing snapshot side-by-side (new vs. old) and either **replace** the baseline or **skip** the change.
-
-![Batch Review Mode demo](https://raw.githubusercontent.com/pixsame/pixsame/main/assets/batch-review-mode.gif)
-
-> Note: Batch mode will become the default in the next major version. To keep an old behaviour, make sure to set configuration property to `false` (see below for more details).
-
-### How to enable
-
-Batch Review Mode is a global option (it cannot be passed to `matchImage` directly). Enable it with the `pluginVisualRegressionBatchReviewMode` key:
+Batch Review Mode runs the whole suite without stopping at the first visual diff. Failing snapshots are collected and, in headed mode, reviewed in a carousel after the run, where you replace or skip each baseline. It is a global option, enabled with the `pluginVisualRegressionBatchReviewMode` key (and `pluginVisualRegressionBatchReviewModeShowPassingImages` to also list images that passed):
 
 ```bash
 # Cypress 15.10+
@@ -134,51 +118,4 @@ npx cypress open --expose "pluginVisualRegressionBatchReviewMode=true"
 npx cypress open --env "pluginVisualRegressionBatchReviewMode=true"
 ```
 
-```ts
-// cypress.config.ts (Cypress 15.10+)
-import { defineConfig } from 'cypress';
-
-export default defineConfig({
-  expose: {
-    pluginVisualRegressionBatchReviewMode: true,
-  },
-});
-```
-
-```ts
-// cypress.config.ts (Cypress <15.10, deprecated in newer versions)
-import { defineConfig } from 'cypress';
-
-export default defineConfig({
-  env: {
-    pluginVisualRegressionBatchReviewMode: true,
-  },
-});
-```
-
-### Reviewing passing images
-
-Images that differ from the baseline but stay within `maxDiffThreshold` do not fail the test, yet they are still collected. The carousel has a **Show passing** checkbox that lets you browse them (each is marked with a `passed` badge) and replace their baseline too, e.g. to get rid of small accumulated drift.
-
-The checkbox is unchecked by default. Use the `pluginVisualRegressionBatchReviewModeShowPassingImages` key to make it checked by default:
-
-```bash
-# Cypress 15.10+
-npx cypress open --expose "pluginVisualRegressionBatchReviewMode=true" --expose "pluginVisualRegressionBatchReviewModeShowPassingImages=true"
-# Cypress <15.10 (deprecated in 15.10, removed in 16)
-npx cypress open --env "pluginVisualRegressionBatchReviewMode=true,pluginVisualRegressionBatchReviewModeShowPassingImages=true"
-```
-
-```ts
-// cypress.config.ts (Cypress 15.10+)
-import { defineConfig } from 'cypress';
-
-export default defineConfig({
-  expose: {
-    pluginVisualRegressionBatchReviewMode: true,
-    pluginVisualRegressionBatchReviewModeShowPassingImages: true,
-  },
-});
-```
-
-Toggling the checkbox in the runner is remembered in the browser's local storage and takes precedence over the configured value on subsequent runs.
+How the review UI works, with a demo, is described in the [Batch review mode section of the Cypress plugin page](/products/cypress-plugin#batch-review-mode).

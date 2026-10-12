@@ -1,6 +1,6 @@
 ---
 title: Cypress plugin
-description: "The pixsame plugin for Cypress: matchImage, a diff viewer in the runner and baselines in your repository."
+description: 'The pixsame plugin for Cypress: matchImage, a diff viewer in the runner and baselines in your repository.'
 order: 1
 ---
 

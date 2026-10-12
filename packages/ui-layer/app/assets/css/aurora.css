@@ -34,13 +34,21 @@
 .px-pool-top {
   top: -18%;
   height: 56%;
-  background: radial-gradient(60% 100% at 50% 100%, rgb(5 61 179 / var(--px-pool-top)), rgb(5 61 179 / 0) 70%);
+  background: radial-gradient(
+    60% 100% at 50% 100%,
+    rgb(5 61 179 / var(--px-pool-top)),
+    rgb(5 61 179 / 0) 70%
+  );
   filter: blur(40px);
 }
 .px-pool-bottom {
   bottom: -24%;
   height: 52%;
-  background: radial-gradient(70% 100% at 40% 0%, rgb(5 61 179 / var(--px-pool-bottom)), rgb(5 61 179 / 0) 72%);
+  background: radial-gradient(
+    70% 100% at 40% 0%,
+    rgb(5 61 179 / var(--px-pool-bottom)),
+    rgb(5 61 179 / 0) 72%
+  );
   filter: blur(48px);
 }
 
@@ -56,8 +64,20 @@
     rgb(var(--c) / calc(var(--a4) * var(--k))) var(--s4),
     rgb(var(--c) / 0) 100%
   );
-  -webkit-mask-image: linear-gradient(180deg, rgb(0 0 0 / 0) var(--m1), #000 var(--m2), rgb(0 0 0 / 0.4) var(--m3), rgb(0 0 0 / 0) var(--m4));
-  mask-image: linear-gradient(180deg, rgb(0 0 0 / 0) var(--m1), #000 var(--m2), rgb(0 0 0 / 0.4) var(--m3), rgb(0 0 0 / 0) var(--m4));
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    rgb(0 0 0 / 0) var(--m1),
+    #000 var(--m2),
+    rgb(0 0 0 / 0.4) var(--m3),
+    rgb(0 0 0 / 0) var(--m4)
+  );
+  mask-image: linear-gradient(
+    180deg,
+    rgb(0 0 0 / 0) var(--m1),
+    #000 var(--m2),
+    rgb(0 0 0 / 0.4) var(--m3),
+    rgb(0 0 0 / 0) var(--m4)
+  );
 }
 
 .px-sheen {
@@ -66,7 +86,12 @@
   right: -6%;
   top: 8%;
   height: 20%;
-  background: linear-gradient(180deg, rgb(var(--px-aurora-coral) / 0), rgb(var(--px-aurora-coral) / var(--px-sheen)), rgb(var(--px-aurora-coral) / 0));
+  background: linear-gradient(
+    180deg,
+    rgb(var(--px-aurora-coral) / 0),
+    rgb(var(--px-aurora-coral) / var(--px-sheen)),
+    rgb(var(--px-aurora-coral) / 0)
+  );
   transform: rotate(-4deg);
   filter: blur(36px);
 }
@@ -86,23 +111,38 @@
 .px-grid-v {
   position: absolute;
   inset: 0 var(--px-gutter);
-  background-image: linear-gradient(90deg, var(--px-grid-line) 0 1px, transparent 1px 100%);
+  background-image: linear-gradient(
+    90deg,
+    var(--px-grid-line) 0 1px,
+    transparent 1px 100%
+  );
   background-size: calc(100% / 12) 100%;
   border-inline: 1px solid var(--px-grid-line);
 }
 .px-grid-h {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(180deg, var(--px-grid-line-h) 0 1px, transparent 1px 100%);
+  background-image: linear-gradient(
+    180deg,
+    var(--px-grid-line-h) 0 1px,
+    transparent 1px 100%
+  );
   background-size: 100% 96px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .px-aurora-field { animation: px-drift 28s ease-in-out infinite; }
+  .px-aurora-field {
+    animation: px-drift 28s ease-in-out infinite;
+  }
 }
 @keyframes px-drift {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(3%, -4%); }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(3%, -4%);
+  }
 }
 
 /* the mobile mockup has the aurora only, no Swiss grid */

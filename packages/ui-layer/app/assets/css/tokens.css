@@ -43,14 +43,42 @@
   --px-grid-line: rgb(16 20 24 / 0.12);
   --px-grid-line-h: rgb(16 20 24 / 0.05);
   --px-docs-aurora:
-    radial-gradient(860px 600px at 100% -16%, rgb(46 107 255 / 0.2), transparent 62%),
-    radial-gradient(820px 600px at 2% -14%, rgb(224 41 31 / 0.16), transparent 62%),
-    radial-gradient(980px 660px at 54% 114%, rgb(5 61 179 / 0.14), transparent 64%),
-    radial-gradient(700px 520px at 36% -20%, rgb(5 61 179 / 0.1), transparent 62%);
+    radial-gradient(
+      860px 600px at 100% -16%,
+      rgb(46 107 255 / 0.2),
+      transparent 62%
+    ),
+    radial-gradient(
+      820px 600px at 2% -14%,
+      rgb(224 41 31 / 0.16),
+      transparent 62%
+    ),
+    radial-gradient(
+      980px 660px at 54% 114%,
+      rgb(5 61 179 / 0.14),
+      transparent 64%
+    ),
+    radial-gradient(
+      700px 520px at 36% -20%,
+      rgb(5 61 179 / 0.1),
+      transparent 62%
+    );
   --px-wash:
-    radial-gradient(900px 640px at 2% -16%, rgb(224 41 31 / 0.16), transparent 62%),
-    radial-gradient(860px 700px at 99% -8%, rgb(5 61 179 / 0.14), transparent 62%),
-    radial-gradient(760px 560px at 54% 112%, rgb(232 56 143 / 0.1), transparent 62%);
+    radial-gradient(
+      900px 640px at 2% -16%,
+      rgb(224 41 31 / 0.16),
+      transparent 62%
+    ),
+    radial-gradient(
+      860px 700px at 99% -8%,
+      rgb(5 61 179 / 0.14),
+      transparent 62%
+    ),
+    radial-gradient(
+      760px 560px at 54% 112%,
+      rgb(232 56 143 / 0.1),
+      transparent 62%
+    );
 
   /* shape */
   --px-radius-sm: 2px;
@@ -96,17 +124,57 @@
   --px-grid-line: rgb(255 255 255 / 0.13);
   --px-grid-line-h: rgb(255 255 255 / 0.05);
   --px-docs-aurora:
-    radial-gradient(860px 600px at 100% -16%, rgb(46 107 255 / 0.85), transparent 62%),
-    radial-gradient(820px 600px at 2% -14%, rgb(255 74 61 / 0.7), transparent 62%),
-    radial-gradient(980px 660px at 54% 114%, rgb(5 61 179 / 0.55), transparent 64%),
-    radial-gradient(700px 520px at 36% -20%, rgb(5 61 179 / 0.45), transparent 62%);
+    radial-gradient(
+      860px 600px at 100% -16%,
+      rgb(46 107 255 / 0.85),
+      transparent 62%
+    ),
+    radial-gradient(
+      820px 600px at 2% -14%,
+      rgb(255 74 61 / 0.7),
+      transparent 62%
+    ),
+    radial-gradient(
+      980px 660px at 54% 114%,
+      rgb(5 61 179 / 0.55),
+      transparent 64%
+    ),
+    radial-gradient(
+      700px 520px at 36% -20%,
+      rgb(5 61 179 / 0.45),
+      transparent 62%
+    );
   --px-wash:
-    radial-gradient(960px 680px at 2% -18%, rgb(255 74 61 / 0.72), transparent 60%),
-    radial-gradient(860px 720px at 99% -8%, rgb(46 107 255 / 0.9), transparent 62%),
-    radial-gradient(660px 520px at 52% -16%, rgb(5 61 179 / 0.44), transparent 62%),
-    radial-gradient(860px 620px at 10% 106%, rgb(255 74 61 / 0.34), transparent 60%),
-    radial-gradient(780px 560px at 90% 98%, rgb(46 107 255 / 0.34), transparent 62%),
-    radial-gradient(620px 480px at 64% 54%, rgb(232 56 143 / 0.13), transparent 60%);
+    radial-gradient(
+      960px 680px at 2% -18%,
+      rgb(255 74 61 / 0.72),
+      transparent 60%
+    ),
+    radial-gradient(
+      860px 720px at 99% -8%,
+      rgb(46 107 255 / 0.9),
+      transparent 62%
+    ),
+    radial-gradient(
+      660px 520px at 52% -16%,
+      rgb(5 61 179 / 0.44),
+      transparent 62%
+    ),
+    radial-gradient(
+      860px 620px at 10% 106%,
+      rgb(255 74 61 / 0.34),
+      transparent 60%
+    ),
+    radial-gradient(
+      780px 560px at 90% 98%,
+      rgb(46 107 255 / 0.34),
+      transparent 62%
+    ),
+    radial-gradient(
+      620px 480px at 64% 54%,
+      rgb(232 56 143 / 0.13),
+      transparent 60%
+    );
 }
 
 @media (max-width: 768px) {
