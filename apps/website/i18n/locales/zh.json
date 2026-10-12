@@ -13,6 +13,7 @@
     "docs": "文档",
     "pricing": "价格",
     "changelog": "更新日志",
+    "githubStars": "GitHub 上有 {count} 个星标",
     "signIn": "登录",
     "install": "安装插件"
   },

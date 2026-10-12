@@ -13,6 +13,7 @@
     "docs": "Doku",
     "pricing": "Preise",
     "changelog": "Changelog",
+    "githubStars": "{count} Sterne auf GitHub",
     "signIn": "Anmelden",
     "install": "Plugin installieren"
   },

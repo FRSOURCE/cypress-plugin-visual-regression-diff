@@ -1,9 +1,18 @@
 <script setup lang="ts">
 const { t } = useI18n();
 const {
-  public: { appUrl },
+  public: { appUrl, githubStars },
 } = useRuntimeConfig();
 const localePath = useLocalePath();
+const { locale } = useI18n();
+const stars = computed(() =>
+  typeof githubStars === 'number'
+    ? new Intl.NumberFormat(locale.value, {
+        notation: 'compact',
+        maximumFractionDigits: 1,
+      }).format(githubStars)
+    : null,
+);
 
 const nav = computed(() => [
   { to: '/products', label: t('nav.product') },
@@ -43,6 +52,26 @@ const nav = computed(() => [
             :label-to-dark="t('theme.toDark')"
           />
         </div>
+        <a
+          v-if="stars"
+          class="hidden items-center gap-1.5 text-muted hover:text-ink md:inline-flex"
+          href="https://github.com/pixsame/pixsame"
+          rel="noopener"
+          :aria-label="t('nav.githubStars', { count: stars })"
+        >
+          <svg
+            viewBox="0 0 16 16"
+            width="14"
+            height="14"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              d="M8 .25a.75.75 0 0 1 .67.42l1.88 3.8 4.2.61a.75.75 0 0 1 .42 1.28l-3.04 2.96.72 4.18a.75.75 0 0 1-1.09.79L8 12.32l-3.76 1.97a.75.75 0 0 1-1.09-.79l.72-4.18L0 6.36a.75.75 0 0 1 .42-1.28l4.2-.61L6.5.67A.75.75 0 0 1 8 .25Z"
+            />
+          </svg>
+          {{ stars }}
+        </a>
         <a
           v-if="appUrl"
           class="hidden text-muted hover:text-ink md:inline"

@@ -13,6 +13,25 @@ const pluginReadme = new URL(
   import.meta.url,
 );
 
+// Star count is read once per build (the site is static); null hides the badge.
+const githubStars = await fetch(
+  'https://api.github.com/repos/pixsame/pixsame',
+  {
+    headers: {
+      Accept: 'application/vnd.github+json',
+      ...(process.env.GITHUB_TOKEN && {
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+      }),
+    },
+    signal: AbortSignal.timeout(5000),
+  },
+)
+  .then((r) => (r.ok ? r.json() : null))
+  .then(
+    (r: { stargazers_count?: number } | null) => r?.stargazers_count ?? null,
+  )
+  .catch(() => null);
+
 export default defineNuxtConfig({
   extends: ['../../packages/ui-layer'],
   hooks: {
@@ -93,6 +112,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       // Empty until the app exists: hides "Sign in".
+      githubStars,
       appUrl: '',
       // Cloudflare Web Analytics beacon token and Turnstile site key (optional).
       cfAnalyticsToken: '',

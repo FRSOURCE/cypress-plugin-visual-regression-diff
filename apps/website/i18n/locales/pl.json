@@ -13,6 +13,7 @@
     "docs": "Dokumentacja",
     "pricing": "Cennik",
     "changelog": "Changelog",
+    "githubStars": "{count} gwiazdek na GitHubie",
     "signIn": "Zaloguj się",
     "install": "Zainstaluj wtyczkę"
   },
