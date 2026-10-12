@@ -7,7 +7,6 @@
     "description": "两个运行器共用一套清单标准，固定版本的渲染器让截图逐字节一致，取证式差异分析，并在 Pull Request 中完成基线审批。"
   },
   "nav": {
-    "label": "主导航",
     "menu": "菜单",
     "home": "pixsame 首页",
     "product": "产品",
@@ -93,13 +92,13 @@
         "name": "Team",
         "price": "$29",
         "unit": "/开发者/月",
-        "desc": "Cloud renders, 30-day hosted history, support included, AI auto-evaluator on request"
+        "desc": "云端渲染、30 天托管历史、含技术支持，可按需启用 AI auto-evaluator"
       },
       "enterprise": {
         "name": "Enterprise",
         "price": "联系我们",
         "unit": "",
-        "desc": "AI auto-evaluator, SSO, SLA, 48h on-call support"
+        "desc": "AI auto-evaluator、SSO、SLA、48 小时内随叫随到的支持"
       }
     },
     "table": {
@@ -115,52 +114,52 @@
         "cloud": {
           "label": "云端渲染",
           "core": "—",
-          "team": "5k / month",
+          "team": "每月 5000 次",
           "enterprise": "待定"
         },
         "evaluator": {
           "label": "AI 自动评估器",
           "core": "—",
-          "team": "Limited, pay per use",
-          "enterprise": "Included"
+          "team": "有限额度，按用量付费",
+          "enterprise": "包含"
         },
         "history": {
           "label": "托管基线历史",
           "core": "—",
-          "team": "30 days",
+          "team": "30 天",
           "enterprise": "待定"
         },
         "support": {
-          "label": "Support",
-          "core": "Community",
+          "label": "支持",
+          "core": "社区",
           "team": "包含",
-          "enterprise": "On-call, within 48h"
+          "enterprise": "随叫随到，48 小时内响应"
         }
       }
     },
     "oss": {
-      "title": "Open source, free forever.",
-      "body": "Everything that runs on your machine and in your CI is MIT licensed. These are the packages you can use today or will be able to use soon, at no cost.",
-      "available": "Available",
-      "cypress": "Cypress plugin",
-      "cypressBody": "Visual regression for Cypress: matchImage, a diff viewer in the runner and baselines in your repo.",
-      "manifest": "Run manifest",
-      "manifestBody": "The open, runner-agnostic JSON standard that describes every screenshot comparison, with a schema, types, a reader and a writer.",
+      "title": "开源，永久免费。",
+      "body": "所有运行在你本机和 CI 中的部分均采用 MIT 许可证。下面这些包现在就能用，或即将可用，且无需付费。",
+      "available": "已提供",
+      "cypress": "Cypress 插件",
+      "cypressBody": "面向 Cypress 的视觉回归：matchImage、运行器内的差异查看器，以及保存在你仓库中的基线。",
+      "manifest": "运行清单",
+      "manifestBody": "开放的、与运行器无关的 JSON 标准，用于描述每一次截图比较，附带 schema、类型定义、读取器和写入器。",
       "playwright": "Playwright plugin",
-      "playwrightBody": "The same comparison engine and manifest for Playwright projects.",
-      "renderer": "Pinned renderer",
-      "rendererBody": "A locked browser, font set and GPU path, so local and CI screenshots are byte-identical.",
+      "playwrightBody": "与之相同的比较引擎和清单，用于 Playwright 项目。",
+      "renderer": "固定渲染器",
+      "rendererBody": "锁定浏览器、字体集和 GPU 路径，让本地与 CI 截图逐字节一致。",
       "githubApp": "GitHub App",
-      "githubAppBody": "Diffs as a check and approval of new baselines from the pull request.",
+      "githubAppBody": "以检查形式展示差异，并直接在 Pull Request 中批准新基线。",
       "vitest": "Vitest runner",
-      "vitestBody": "The same comparison engine and manifest for Vitest projects."
+      "vitestBody": "与之相同的比较引擎和清单，用于 Vitest 项目。"
     }
   },
   "product": {
     "crumb": "固定渲染器",
-    "title": "One ecosystem for visual regression.",
-    "body": "pixsame is a growing set of open tools that make visual regression testing trustworthy: a shared manifest, a pinned renderer, review in the pull request. The Cypress plugin is available today, and the rest is on its way.",
-    "status": "Cypress plugin: available · everything else: coming soon",
+    "title": "面向视觉回归的统一生态。",
+    "body": "pixsame 是一组不断壮大的开源工具，让视觉回归测试值得信赖：共享的清单、固定版本的渲染器，以及在 Pull Request 中完成审查。Cypress 插件现已可用，其余部分正在路上。",
+    "status": "Cypress 插件：已提供 · 其余：即将推出",
     "start": "安装插件",
     "stats": {
       "manifest": {
@@ -176,52 +175,52 @@
         "label": "开源许可证"
       }
     },
-    "cypressCta": "See the Cypress plugin",
+    "cypressCta": "了解 Cypress 插件",
     "soon": {
-      "title": "Coming soon",
-      "body": "Every part of the ecosystem and how the parts fit together. Hover or focus a part to see what it does, and follow the link to its page.",
-      "eyebrow": "The ecosystem"
+      "title": "即将推出",
+      "body": "生态的每个组成部分，以及它们如何协同工作。将鼠标悬停或聚焦在某个部分上即可查看它的作用，点击链接进入其页面。",
+      "eyebrow": "生态"
     },
     "groups": {
-      "runners": "Test runners",
-      "standard": "Shared standard",
+      "runners": "测试运行器",
+      "standard": "共享标准",
       "review": "Review"
     },
     "map": {
       "cypress": {
-        "name": "Cypress plugin",
-        "body": "matchImage for Cypress, with a diff viewer in the runner and batch review. Available today."
+        "name": "Cypress 插件",
+        "body": "面向 Cypress 的 matchImage，带运行器内的差异查看器和批量审查。现已可用。"
       },
       "playwright": {
         "name": "Playwright plugin",
-        "body": "The same comparison engine and manifest, for Playwright projects. Baselines stay in your repo."
+        "body": "相同的比较引擎和清单，用于 Playwright 项目。基线保留在你的仓库中。"
       },
       "manifest": {
-        "name": "Run manifest",
-        "body": "An open, runner-agnostic JSON standard describing every screenshot comparison. Available today."
+        "name": "运行清单",
+        "body": "开放的、与运行器无关的 JSON 标准，描述每一次截图比较。现已可用。"
       },
       "renderer": {
-        "name": "Pinned renderer",
-        "body": "Fonts, antialiasing and GPU differences are pinned, so local and CI screenshots are byte-identical."
+        "name": "固定渲染器",
+        "body": "字体、抗锯齿和 GPU 差异都被固定，本地与 CI 截图因此逐字节一致。"
       },
       "platform": {
-        "name": "Review platform",
-        "body": "Server-side rendering plus an online image, diff and baseline manager for the whole team."
+        "name": "审查平台",
+        "body": "服务器端渲染，加上面向整个团队的在线图像、差异与基线管理器。"
       },
       "evaluator": {
         "name": "AI auto-evaluator",
-        "body": "Classifies each change and approves the routine ones, so people only look at what matters."
+        "body": "为每处变更分类并自动批准常规改动，让人只需关注真正重要的部分。"
       },
       "githubApp": {
         "name": "GitHub App",
-        "body": "Diffs as a check in the pull request and one-click approval of new baselines."
+        "body": "在 Pull Request 中以检查形式展示差异，并可一键批准新基线。"
       },
       "vitest": {
         "name": "Vitest runner",
-        "body": "The same comparison engine and manifest, for Vitest browser mode. Baselines stay in your repo."
+        "body": "相同的比较引擎和清单，用于 Vitest 浏览器模式。基线保留在你的仓库中。"
       }
     },
-    "available": "Available"
+    "available": "已提供"
   },
   "soon": {
     "status": "即将推出",
@@ -244,7 +243,7 @@
       "body": "服务器端渲染，加上在线图像与差异查看和管理工具，让整个团队都能审查和管理基线。",
       "b1": "服务器渲染器，截图逐字节一致",
       "b2": "在线图像、差异与基线管理器",
-      "b3": "AI auto-evaluator for routine changes (Enterprise, limited in Team)"
+      "b3": "AI auto-evaluator 自动处理常规变更（企业版提供，团队版有限额）"
     },
     "vitest": {
       "title": "面向 Vitest 的视觉回归。",
@@ -277,14 +276,14 @@
     "fallback": "本页尚未翻译，您正在阅读英文版本。"
   },
   "changelog": {
-    "body": "Release notes for the pixsame Cypress plugin.",
-    "source": "Cypress plugin releases",
-    "title": "Cypress plugin changelog",
+    "body": "pixsame Cypress 插件的发布说明。",
+    "source": "Cypress 插件发布记录",
+    "title": "Cypress 插件更新日志",
     "crumb": "Changelog",
-    "page": "Page {n} of {total}",
+    "page": "第 {n} 页，共 {total} 页",
     "prev": "Newer",
     "next": "Older",
-    "pagination": "Changelog pages"
+    "pagination": "更新日志分页"
   },
   "legal": {
     "privacy": {
@@ -327,14 +326,14 @@
     "home": "首页"
   },
   "cypress": {
-    "crumb": "Cypress plugin",
-    "eyebrow": "Open source · MIT · Cypress",
-    "title": "Visual regression for Cypress.",
-    "body": "Take a screenshot in any test, compare it with the baseline and see the difference right in the Cypress runner. Works with e2e and component testing.",
-    "docs": "Read the docs",
+    "crumb": "Cypress 插件",
+    "eyebrow": "开源 · MIT · Cypress",
+    "title": "面向 Cypress 的视觉回归。",
+    "body": "在任意测试中截图，与基线比较，并直接在 Cypress 运行器里查看差异。同时适用于 e2e 和组件测试。",
+    "docs": "阅读文档",
     "changelog": "Changelog",
     "npm": "npm",
-    "onThisPage": "On this page",
+    "onThisPage": "本页内容",
     "migrate": "从 {'@'}frsource 迁移"
   },
   "changelogs": {

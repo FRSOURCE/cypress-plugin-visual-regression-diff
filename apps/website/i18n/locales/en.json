@@ -7,7 +7,6 @@
     "description": "One manifest standard shared by both runners, a pinned renderer for byte-identical screenshots, forensic diff analysis and baseline approval in the pull request."
   },
   "nav": {
-    "label": "Main",
     "menu": "Menu",
     "home": "pixsame home",
     "product": "Products",
@@ -87,7 +86,7 @@
         "name": "Core",
         "price": "$0",
         "unit": "",
-        "desc": "Self-hosted, MIT licensed"
+        "desc": "MIT licensed, possibility to self-host"
       },
       "team": {
         "name": "Team",

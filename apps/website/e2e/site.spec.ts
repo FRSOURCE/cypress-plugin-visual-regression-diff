@@ -172,7 +172,8 @@ test('turnstile renders and its token is sent after client-side navigation to th
     (window as unknown as { marker: number }).marker = 1;
   });
   await page
-    .getByRole('navigation', { name: 'Main' })
+    .getByRole('banner')
+    .getByRole('navigation')
     .getByRole('link', { name: 'Contact' })
     .click();
   await expect(page).toHaveURL(/\/contact\/?$/);

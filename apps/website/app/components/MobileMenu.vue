@@ -34,7 +34,7 @@ const open = ref(false);
     :title="t('nav.menu')"
     :close-label="t('a11y.close')"
   >
-    <nav :aria-label="t('nav.label')" class="flex flex-col">
+    <nav class="flex flex-col">
       <NuxtLink
         v-for="item in nav"
         :key="item.to"

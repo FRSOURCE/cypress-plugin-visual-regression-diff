@@ -23,10 +23,7 @@ const nav = computed(() => [
         <NuxtLink :to="localePath('/')" :aria-label="t('nav.home')">
           <PixsameLogo />
         </NuxtLink>
-        <nav
-          :aria-label="t('nav.label')"
-          class="hidden gap-[26px] text-[13.5px] md:flex"
-        >
+        <nav class="hidden gap-[26px] text-[13.5px] md:flex">
           <NuxtLink
             v-for="item in nav"
             :key="item.to"

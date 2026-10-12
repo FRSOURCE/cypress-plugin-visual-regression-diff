@@ -7,7 +7,6 @@
     "description": "Ein Manifest-Standard für beide Runner, ein fixierter Renderer für byte-identische Screenshots, forensische Diff-Analyse und Baseline-Freigabe im Pull Request."
   },
   "nav": {
-    "label": "Hauptnavigation",
     "menu": "Menü",
     "home": "pixsame Startseite",
     "product": "Produkte",
@@ -93,13 +92,13 @@
         "name": "Team",
         "price": "$29",
         "unit": "/Entw./Monat",
-        "desc": "Cloud renders, 30-day hosted history, support included, AI auto-evaluator on request"
+        "desc": "Cloud-Rendering, 30 Tage gehostete Historie, Support inklusive, KI-Auto-Evaluator auf Anfrage"
       },
       "enterprise": {
         "name": "Enterprise",
         "price": "Auf Anfrage",
         "unit": "",
-        "desc": "AI auto-evaluator, SSO, SLA, 48h on-call support"
+        "desc": "KI-Auto-Evaluator, SSO, SLA, 48-Std.-Bereitschaftssupport"
       }
     },
     "table": {
@@ -115,52 +114,52 @@
         "cloud": {
           "label": "Cloud-Rendering",
           "core": "—",
-          "team": "5k / month",
+          "team": "5.000 / Monat",
           "enterprise": "Noch offen"
         },
         "evaluator": {
           "label": "KI-Auto-Evaluator",
           "core": "—",
-          "team": "Limited, pay per use",
-          "enterprise": "Included"
+          "team": "Begrenzt, Abrechnung nach Nutzung",
+          "enterprise": "Inklusive"
         },
         "history": {
           "label": "Gehostete Baseline-Historie",
           "core": "—",
-          "team": "30 days",
+          "team": "30 Tage",
           "enterprise": "Noch offen"
         },
         "support": {
           "label": "Support",
           "core": "Community",
           "team": "Inklusive",
-          "enterprise": "On-call, within 48h"
+          "enterprise": "Bereitschaft, binnen 48 Std."
         }
       }
     },
     "oss": {
-      "title": "Open source, free forever.",
-      "body": "Everything that runs on your machine and in your CI is MIT licensed. These are the packages you can use today or will be able to use soon, at no cost.",
-      "available": "Available",
-      "cypress": "Cypress plugin",
-      "cypressBody": "Visual regression for Cypress: matchImage, a diff viewer in the runner and baselines in your repo.",
-      "manifest": "Run manifest",
-      "manifestBody": "The open, runner-agnostic JSON standard that describes every screenshot comparison, with a schema, types, a reader and a writer.",
+      "title": "Open Source, für immer kostenlos.",
+      "body": "Alles, was auf Ihrem Rechner und in Ihrer CI läuft, steht unter der MIT-Lizenz. Das sind die Pakete, die Sie heute oder bald kostenlos nutzen können.",
+      "available": "Verfügbar",
+      "cypress": "Cypress-Plugin",
+      "cypressBody": "Visuelle Regression für Cypress: matchImage, ein Diff-Viewer im Runner und Baselines in Ihrem Repo.",
+      "manifest": "Run-Manifest",
+      "manifestBody": "Der offene, runnerunabhängige JSON-Standard, der jeden Screenshot-Vergleich beschreibt, mit Schema, Typen, Reader und Writer.",
       "playwright": "Playwright plugin",
-      "playwrightBody": "The same comparison engine and manifest for Playwright projects.",
-      "renderer": "Pinned renderer",
-      "rendererBody": "A locked browser, font set and GPU path, so local and CI screenshots are byte-identical.",
+      "playwrightBody": "Dieselbe Vergleichs-Engine und dasselbe Manifest für Playwright-Projekte.",
+      "renderer": "Fixierter Renderer",
+      "rendererBody": "Ein festgelegter Browser, Schriftsatz und GPU-Pfad, damit lokale und CI-Screenshots byte-identisch sind.",
       "githubApp": "GitHub App",
-      "githubAppBody": "Diffs as a check and approval of new baselines from the pull request.",
+      "githubAppBody": "Diffs als Check und Freigabe neuer Baselines direkt im Pull Request.",
       "vitest": "Vitest runner",
-      "vitestBody": "The same comparison engine and manifest for Vitest projects."
+      "vitestBody": "Dieselbe Vergleichs-Engine und dasselbe Manifest für Vitest-Projekte."
     }
   },
   "product": {
     "crumb": "Fixierter Renderer",
-    "title": "One ecosystem for visual regression.",
-    "body": "pixsame is a growing set of open tools that make visual regression testing trustworthy: a shared manifest, a pinned renderer, review in the pull request. The Cypress plugin is available today, and the rest is on its way.",
-    "status": "Cypress plugin: available · everything else: coming soon",
+    "title": "Ein Ökosystem für visuelle Regression.",
+    "body": "pixsame ist eine wachsende Sammlung offener Tools, die visuelle Regressionstests verlässlich machen: ein gemeinsames Manifest, ein fixierter Renderer, Review im Pull Request. Das Cypress-Plugin ist heute verfügbar, der Rest folgt.",
+    "status": "Cypress-Plugin: verfügbar · alles andere: demnächst",
     "start": "Plugin installieren",
     "stats": {
       "manifest": {
@@ -176,52 +175,52 @@
         "label": "Open-Source-Lizenz"
       }
     },
-    "cypressCta": "See the Cypress plugin",
+    "cypressCta": "Cypress-Plugin ansehen",
     "soon": {
-      "title": "Coming soon",
-      "body": "Every part of the ecosystem and how the parts fit together. Hover or focus a part to see what it does, and follow the link to its page.",
-      "eyebrow": "The ecosystem"
+      "title": "Demnächst",
+      "body": "Alle Teile des Ökosystems und wie sie zusammenspielen. Fahren Sie mit der Maus über einen Teil oder fokussieren Sie ihn, um zu sehen, was er tut, und folgen Sie dem Link zur zugehörigen Seite.",
+      "eyebrow": "Das Ökosystem"
     },
     "groups": {
-      "runners": "Test runners",
-      "standard": "Shared standard",
+      "runners": "Test-Runner",
+      "standard": "Gemeinsamer Standard",
       "review": "Review"
     },
     "map": {
       "cypress": {
-        "name": "Cypress plugin",
-        "body": "matchImage for Cypress, with a diff viewer in the runner and batch review. Available today."
+        "name": "Cypress-Plugin",
+        "body": "matchImage für Cypress, mit Diff-Viewer im Runner und Batch-Review. Heute verfügbar."
       },
       "playwright": {
         "name": "Playwright plugin",
-        "body": "The same comparison engine and manifest, for Playwright projects. Baselines stay in your repo."
+        "body": "Dieselbe Vergleichs-Engine und dasselbe Manifest für Playwright-Projekte. Baselines bleiben in Ihrem Repo."
       },
       "manifest": {
-        "name": "Run manifest",
-        "body": "An open, runner-agnostic JSON standard describing every screenshot comparison. Available today."
+        "name": "Run-Manifest",
+        "body": "Ein offener, runnerunabhängiger JSON-Standard, der jeden Screenshot-Vergleich beschreibt. Heute verfügbar."
       },
       "renderer": {
-        "name": "Pinned renderer",
-        "body": "Fonts, antialiasing and GPU differences are pinned, so local and CI screenshots are byte-identical."
+        "name": "Fixierter Renderer",
+        "body": "Schriften, Antialiasing und GPU-Unterschiede sind fixiert, damit lokale und CI-Screenshots byte-identisch sind."
       },
       "platform": {
-        "name": "Review platform",
-        "body": "Server-side rendering plus an online image, diff and baseline manager for the whole team."
+        "name": "Review-Plattform",
+        "body": "Serverseitiges Rendering plus ein Online-Manager für Bilder, Diffs und Baselines für das ganze Team."
       },
       "evaluator": {
-        "name": "AI auto-evaluator",
-        "body": "Classifies each change and approves the routine ones, so people only look at what matters."
+        "name": "KI-Auto-Evaluator",
+        "body": "Ordnet jede Änderung ein und gibt Routineänderungen frei, damit Menschen nur noch auf das Wesentliche schauen."
       },
       "githubApp": {
         "name": "GitHub App",
-        "body": "Diffs as a check in the pull request and one-click approval of new baselines."
+        "body": "Diffs als Check im Pull Request und Freigabe neuer Baselines mit einem Klick."
       },
       "vitest": {
         "name": "Vitest runner",
-        "body": "The same comparison engine and manifest, for Vitest browser mode. Baselines stay in your repo."
+        "body": "Dieselbe Vergleichs-Engine und dasselbe Manifest für den Vitest-Browser-Modus. Baselines bleiben in Ihrem Repo."
       }
     },
-    "available": "Available"
+    "available": "Verfügbar"
   },
   "soon": {
     "status": "Demnächst",
@@ -244,7 +243,7 @@
       "body": "Serverseitiges Rendering sowie ein Online-Viewer und -Manager für Bilder und Diffs, damit Ihr ganzes Team Baselines prüfen und verwalten kann.",
       "b1": "Server-Renderer für byte-identische Screenshots",
       "b2": "Online-Manager für Bilder, Diffs und Baselines",
-      "b3": "AI auto-evaluator for routine changes (Enterprise, limited in Team)"
+      "b3": "KI-Auto-Evaluator für Routineänderungen (Enterprise, begrenzt in Team)"
     },
     "vitest": {
       "title": "Visuelle Regression für Vitest.",
@@ -277,14 +276,14 @@
     "fallback": "Diese Seite ist noch nicht übersetzt; Sie lesen die englische Fassung."
   },
   "changelog": {
-    "body": "Release notes for the pixsame Cypress plugin.",
-    "source": "Cypress plugin releases",
-    "title": "Cypress plugin changelog",
+    "body": "Versionshinweise zum pixsame-Cypress-Plugin.",
+    "source": "Releases des Cypress-Plugins",
+    "title": "Changelog des Cypress-Plugins",
     "crumb": "Changelog",
-    "page": "Page {n} of {total}",
+    "page": "Seite {n} von {total}",
     "prev": "Newer",
     "next": "Older",
-    "pagination": "Changelog pages"
+    "pagination": "Changelog-Seiten"
   },
   "legal": {
     "privacy": {
@@ -327,14 +326,14 @@
     "home": "Start"
   },
   "cypress": {
-    "crumb": "Cypress plugin",
-    "eyebrow": "Open source · MIT · Cypress",
-    "title": "Visual regression for Cypress.",
-    "body": "Take a screenshot in any test, compare it with the baseline and see the difference right in the Cypress runner. Works with e2e and component testing.",
-    "docs": "Read the docs",
+    "crumb": "Cypress-Plugin",
+    "eyebrow": "Open Source · MIT · Cypress",
+    "title": "Visuelle Regression für Cypress.",
+    "body": "Machen Sie in jedem Test einen Screenshot, vergleichen Sie ihn mit der Baseline und sehen Sie den Unterschied direkt im Cypress-Runner. Funktioniert mit E2E- und Komponententests.",
+    "docs": "Doku lesen",
     "changelog": "Changelog",
     "npm": "npm",
-    "onThisPage": "On this page",
+    "onThisPage": "Auf dieser Seite",
     "migrate": "Von {'@'}frsource migrieren"
   },
   "changelogs": {
