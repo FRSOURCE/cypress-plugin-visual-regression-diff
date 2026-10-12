@@ -1,9 +1,9 @@
 <h1 align="center">pixsame manifest</h1>
-<p align="center">The visual regression run manifest, as a free standard: JSON Schema, TypeScript types, reader, writer, merger and converters. Published as <code>@pixsame/manifest</code>.</p>
+<p align="center">The visual regression run manifest, as a free standard: JSON Schema, TypeScript types, reader, writer, merger and converters. Published as <code>visual-regression-manifest</code>.</p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@pixsame/manifest">
-    <img src="https://img.shields.io/npm/v/@pixsame/manifest.svg" alt="NPM version badge">
+  <a href="https://www.npmjs.com/package/visual-regression-manifest">
+    <img src="https://img.shields.io/npm/v/visual-regression-manifest.svg" alt="NPM version badge">
   </a>
   <a href="https://github.com/pixsame/cypress-plugin-visual-regression-diff/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/pixsame/cypress-plugin-visual-regression-diff.svg" alt="license MIT badge">
@@ -25,7 +25,7 @@ This package has no runtime dependencies.
 
 ## The format
 
-The normative description is the JSON Schema (draft 2020-12), shipped as `schema.json` (in the package, and in the repository under `src/`) and importable as `@pixsame/manifest/schema.json` or the `manifestSchema` export. The TypeScript types (`Manifest`, `ManifestEntry`, ...) mirror it. A trimmed example:
+The normative description is the JSON Schema (draft 2020-12), shipped as `schema.json` (in the package, and in the repository under `src/`) and importable as `visual-regression-manifest/schema.json` or the `manifestSchema` export. The TypeScript types (`Manifest`, `ManifestEntry`, ...) mirror it. A trimmed example:
 
 ```jsonc
 {
@@ -131,7 +131,7 @@ import {
   readManifestFile,
   parseManifest,
   ManifestParseError,
-} from '@pixsame/manifest';
+} from 'visual-regression-manifest';
 
 // every manifest below a directory (an unpacked CI artifact), sorted by path
 const found = readManifestFiles('artifacts/test');
@@ -161,7 +161,7 @@ try {
 A run usually produces several manifests. `mergeManifests` concatenates them into one list keyed by screenshot name, test file, platform and renderer, with a later CI attempt winning over an earlier one, and prepares what an approval tool needs:
 
 ```ts
-import { mergeManifests, selectEntries } from '@pixsame/manifest';
+import { mergeManifests, selectEntries } from 'visual-regression-manifest';
 
 const run = mergeManifests(
   found.map(({ file, manifest }) => ({ manifest, label: file })),
@@ -194,7 +194,7 @@ Any object with a `manifest` property is a source; extra properties (an artifact
 Test-runner integrations use `ManifestWriter`: a builder bound to a file that rewrites it atomically on every change. For runs with thousands of screenshots pass `{ writeDelayMs: 200 }` as the third argument to coalesce the rewrites; pending changes are written on `flush()` and when the process exits (not if it is killed outright, which is why the default is `0`). A `passed` entry never lists `.actual` or `.diff` files, even when leftovers of an earlier run sit next to it, and test files are recorded normalised (`./a.spec.ts` and `a.spec.ts` are one file).
 
 ```ts
-import { ManifestWriter, getManifestFileName } from '@pixsame/manifest';
+import { ManifestWriter, getManifestFileName } from 'visual-regression-manifest';
 
 const writer = new ManifestWriter(
   `output/${getManifestFileName('my-runner')}`,
@@ -245,7 +245,7 @@ npx playwright test --reporter=json > report.json
 
 ```ts
 import fs from 'fs';
-import { fromPlaywrightReport, writeManifestFile } from '@pixsame/manifest';
+import { fromPlaywrightReport, writeManifestFile } from 'visual-regression-manifest';
 
 const manifest = fromPlaywrightReport(
   JSON.parse(fs.readFileSync('report.json', 'utf8')),
@@ -268,7 +268,7 @@ Only comparisons that left files behind can be recovered: `failed` (expected, ac
 For any tool that leaves a baseline and, on failure, an actual and a diff image next to it:
 
 ```ts
-import { fromImageTriples } from '@pixsame/manifest';
+import { fromImageTriples } from 'visual-regression-manifest';
 
 const manifest = fromImageTriples({
   projectRoot: process.cwd(),
