@@ -10,13 +10,21 @@ export const MANIFEST_VERSION = 1 as const;
  * one file per worker) with a single glob.
  */
 export const MANIFEST_FILE_PREFIX = 'visual-regression-manifest';
-/** Glob (picomatch/minimatch syntax) matching every manifest file inside an artifact. */
-export const MANIFEST_FILE_GLOB = `**/*${MANIFEST_FILE_PREFIX}*.json`;
-const MANIFEST_FILE_REGEX = new RegExp(`${MANIFEST_FILE_PREFIX}.*\\.json$`);
+/** Glob (picomatch/minimatch syntax) matching every manifest file inside an artifact, and nothing named merely alike. */
+export const MANIFEST_FILE_GLOB = `**/${MANIFEST_FILE_PREFIX}{,.*}.json`;
+const MANIFEST_FILE_REGEX = new RegExp(
+  `^${MANIFEST_FILE_PREFIX}(\\..+)?\\.json$`,
+);
 
 /** `visual-regression-manifest.json`, or `visual-regression-manifest.<label>.json` (e.g. `e2e`, `playwright.w0`). */
-export const getManifestFileName = (label?: string) =>
-  `${MANIFEST_FILE_PREFIX}${label ? `.${label}` : ''}.json`;
+export const getManifestFileName = (label?: string) => {
+  if (label && /[\\/]/.test(label)) {
+    throw new Error(
+      `Manifest label ${JSON.stringify(label)} must not contain path separators`,
+    );
+  }
+  return `${MANIFEST_FILE_PREFIX}${label ? `.${label}` : ''}.json`;
+};
 
 /** Whether a file name (or path) is one a manifest writer would produce. */
 export const isManifestFileName = (file: string) =>

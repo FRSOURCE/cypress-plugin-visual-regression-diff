@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { ManifestEntry } from './types';
 import {
   entry,
   HEAD_SHA,
@@ -12,6 +13,7 @@ import {
   keyHash,
   mergeManifests,
   platformLabel,
+  rendererLabel,
   selectEntries,
   type ManifestSource,
 } from './merge';
@@ -234,5 +236,86 @@ describe('selectEntries', () => {
     expect(
       selectEntries(run, { names: ['about_#0 (darwin / chrome)'] }).entries,
     ).toHaveLength(1);
+  });
+});
+
+describe('producer-chosen variant', () => {
+  const base = {
+    name: 'home',
+    test: { file: '', titlePath: [], retry: 0 },
+    status: 'passed',
+    comparison: { diffRatio: 0, threshold: 0 },
+    images: {
+      baseline: { path: 'home.png' },
+      actual: { path: null },
+      diff: { path: null },
+    },
+    baselineWritten: false,
+    recordedAt: '2026-01-01T00:00:00.000Z',
+    message: '',
+  } as const;
+
+  it('keeps entries of one screenshot on different variants apart', () => {
+    const a = { ...base, platform: { os: 'ios' }, variant: 'iphone-se' };
+    const b = { ...base, platform: { os: 'ios' }, variant: 'iphone-16' };
+    expect(entryKey(a)).not.toBe(entryKey(b));
+    expect(platformLabel(a)).toBe('ios / iphone-se');
+  });
+
+  it('falls back to os and browser without a variant, and works without a browser', () => {
+    const entry = { ...base, platform: { os: 'macos' } };
+    expect(entryKey(entry)).toBe(entryKey({ ...entry }));
+    expect(platformLabel(entry)).toBe('macos');
+    expect(
+      rendererLabel({
+        ...entry,
+        renderer: { backend: 'device', name: 'iPhone 16' },
+      }),
+    ).toBe('device iPhone 16');
+  });
+});
+
+describe('same screenshot reported twice', () => {
+  const failed = entry({ status: 'failed' });
+  const passed = entry({
+    status: 'passed',
+    images: { ...entry().images, actual: { path: null } },
+  });
+  const run = (attempt: string) =>
+    manifest([], { ci: { ...must(manifest().ci), runAttempt: attempt } });
+  const withEntries = (entries: ManifestEntry[], attempt = '1') => ({
+    manifest: { ...run(attempt), entries },
+  });
+
+  it('warns when the same attempt gives one identity two different results', () => {
+    const { warnings, entries } = mergeManifests([
+      { ...withEntries([failed]), label: 'worker 1' },
+      { ...withEntries([passed]), label: 'worker 2' },
+    ]);
+    expect(entries).toHaveLength(1);
+    expect(entries[0]?.entry.status).toBe('passed');
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toMatch(
+      /^worker 2: `home_#0`.*also reported by worker 1.*distinct `variant`/,
+    );
+  });
+
+  it('stays quiet for an identical duplicate and for a re-run attempt', () => {
+    expect(
+      mergeManifests([withEntries([failed]), withEntries([failed])]).warnings,
+    ).toEqual([]);
+    expect(
+      mergeManifests([withEntries([failed]), withEntries([passed], '2')])
+        .warnings,
+    ).toEqual([]);
+  });
+
+  it('stays quiet when a variant tells them apart', () => {
+    const { warnings, entries } = mergeManifests([
+      withEntries([{ ...failed, variant: 'a' }]),
+      withEntries([{ ...passed, variant: 'b' }]),
+    ]);
+    expect(warnings).toEqual([]);
+    expect(entries).toHaveLength(2);
   });
 });

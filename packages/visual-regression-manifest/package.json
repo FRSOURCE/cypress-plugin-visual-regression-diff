@@ -6,7 +6,7 @@
   "homepage": "https://pixsame.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pixsame/cypress-plugin-visual-regression-diff.git",
+    "url": "https://github.com/pixsame/pixsame.git",
     "directory": "packages/visual-regression-manifest"
   },
   "license": "MIT",
@@ -35,7 +35,7 @@
   "engines": {
     "node": ">=20.9.0"
   },
-  "packageManager": "pnpm@12.5.1",
+  "packageManager": "pnpm@12.6.0",
   "devDependencies": {
     "@frsource/prettier-config": "^1.11.0",
     "@types/node": "20.19.43",

@@ -1,6 +1,10 @@
 import path from 'path';
 import type { Manifest } from './types';
 
+/** Code-point order: unlike `localeCompare`, the same on every host and ICU version. */
+export const compareText = (a: string, b: string) =>
+  a < b ? -1 : a > b ? 1 : 0;
+
 /** `/`-separated form of a path; a no-op on POSIX. */
 export const toPosix = (p: string, sep: string = path.sep) =>
   sep === '/' ? p : p.split(sep).join('/');
@@ -38,7 +42,9 @@ export const projectDirInRepo = (
     stripSlashes(manifest.projectRoot),
   );
   if (rel === '') return '';
-  if (rel.startsWith('..') || path.posix.isAbsolute(rel)) return null;
+  if (rel === '..' || rel.startsWith('../') || path.posix.isAbsolute(rel)) {
+    return null;
+  }
   return rel;
 };
 
@@ -48,6 +54,8 @@ export const toRepoPath = (
   p: string | null,
 ): string | null => {
   if (p === null || projectDir === null) return null;
+  // manifest paths are project-relative; an absolute one must not be re-rooted
+  if (path.posix.isAbsolute(p) || /^[a-zA-Z]:/.test(p)) return null;
   const joined = path.posix.normalize(projectDir ? `${projectDir}/${p}` : p);
   return isSafeRelativePath(joined) ? joined : null;
 };
