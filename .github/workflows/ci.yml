@@ -1,28 +1,43 @@
 name: CI
-# The website has its own workflow (website.yml); changes under these paths do not run the plugin suites.
+# Always triggered, because the required status checks (lint, test, test-integration-coverage) must
+# report on every PR: a workflow skipped by `paths-ignore` leaves them pending and blocks the merge.
+# The `changes` job decides instead, and a job skipped by `if` counts as passing.
+# The website has its own workflow (website.yml) with the opposite path filter.
 on:
   pull_request:
     branches:
       - main
-    paths-ignore:
-      - 'apps/**'
-      - 'packages/ui-layer/**'
-      - '.github/workflows/website.yml'
   push:
     branches:
       - main
-    paths-ignore:
-      - 'apps/**'
-      - 'packages/ui-layer/**'
-      - '.github/workflows/website.yml'
 
 env:
   # The plugin jobs never need the website or its Nuxt toolchain (billed minutes).
   PLUGIN_INSTALL_FILTER: --filter '!@pixsame/website' --filter '!@pixsame/ui-layer'
 
 jobs:
+  changes:
+    name: changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      plugin: ${{ steps.filter.outputs.plugin }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          predicate-quantifier: every
+          filters: |
+            plugin:
+              - '**'
+              - '!apps/**'
+              - '!packages/ui-layer/**'
+              - '!.github/workflows/website.yml'
+
   lint:
     name: lint
+    needs: [changes]
+    if: ${{ needs.changes.outputs.plugin == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -37,6 +52,8 @@ jobs:
 
   test:
     name: test
+    needs: [changes]
+    if: ${{ needs.changes.outputs.plugin == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -59,6 +76,8 @@ jobs:
 
   test-integration-coverage:
     name: test-integration-coverage
+    needs: [changes]
+    if: ${{ needs.changes.outputs.plugin == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
