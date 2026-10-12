@@ -251,6 +251,42 @@ describe('ManifestBuilder', () => {
     ]);
   });
 
+  it('keeps entries of other images on retry when the test identity is unknown', async () => {
+    const builder = builderIn(await tmpDir());
+    builder.record({
+      actualPath: 'a.actual.png',
+      baselinePath: 'a.png',
+      status: 'failed',
+    });
+    builder.record({
+      retry: 1,
+      actualPath: 'b.actual.png',
+      baselinePath: 'b.png',
+      status: 'failed',
+    });
+    expect(builder.entries().map((e) => e.name)).toEqual(['a', 'b']);
+  });
+
+  it('sorts by code point, not by host locale', async () => {
+    const builder = builderIn(await tmpDir());
+    for (const name of ['a_b', 'aB', 'ab', 'Ab', 'a-b', 'a b']) {
+      builder.record({
+        name,
+        actualPath: `${name}.actual.png`,
+        baselinePath: `${name}.png`,
+        status: 'passed',
+      });
+    }
+    expect(builder.entries().map((e) => e.name)).toEqual([
+      'Ab',
+      'a b',
+      'a-b',
+      'aB',
+      'a_b',
+      'ab',
+    ]);
+  });
+
   it('sorts entries by test file, then name', async () => {
     const root = await tmpDir();
     const builder = builderIn(root);
@@ -355,6 +391,47 @@ describe('ManifestBuilder', () => {
     expect(builder.entries().map((e) => e.test.file)).toEqual(['b.spec.ts']);
     builder.clear();
     expect(builder.size).toBe(0);
+  });
+
+  it('ignores .actual and .diff files left over next to a passing comparison', async () => {
+    const root = await tmpDir();
+    writePng(path.join(root, 'a.actual.png'), 2, 2, 1);
+    writePng(path.join(root, 'a.diff.png'), 2, 2, 2);
+    writePng(path.join(root, 'a.png'), 2, 2, 3);
+    const builder = builderIn(root);
+
+    const passed = builder.record({
+      actualPath: 'a.actual.png',
+      baselinePath: 'a.png',
+      status: 'passed',
+      actualSize: { width: 2, height: 2 },
+    });
+    expect(passed.images.actual).toEqual({ path: null });
+    expect(passed.images.diff).toEqual({ path: null });
+    expect(Object.keys(passed.hashes ?? {})).toEqual(['baseline']);
+
+    const failed = builder.record({
+      actualPath: 'a.actual.png',
+      baselinePath: 'a.png',
+      status: 'failed',
+    });
+    expect(failed.images.actual.path).toBe('a.actual.png');
+    expect(failed.images.diff.path).toBe('a.diff.png');
+  });
+
+  it('treats ./a.spec.ts and a.spec.ts as one test file', async () => {
+    const root = await tmpDir();
+    const builder = builderIn(root);
+    const file = (testFile: string) =>
+      builder.record({
+        testFile,
+        actualPath: 'a.png',
+        baselinePath: 'a.png',
+        status: 'passed',
+      }).test.file;
+    expect(file('./e2e/a.spec.ts')).toBe('e2e/a.spec.ts');
+    expect(file('e2e//a.spec.ts')).toBe('e2e/a.spec.ts');
+    expect(builder.dropTestFile('./e2e/a.spec.ts')).toBe(true);
   });
 
   it('serialises with the header first and the entries last', async () => {
