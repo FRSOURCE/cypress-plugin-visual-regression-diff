@@ -18,10 +18,12 @@ import type {
   ManifestEntryPlatform,
   ManifestHashes,
   ManifestHeader,
+  ManifestMeta,
   ManifestPlatform,
   ManifestRenderer,
   ManifestRunner,
   ManifestStatus,
+  ManifestSubject,
   ManifestUpload,
   ManifestTarget,
   ManifestViewport,
@@ -70,6 +72,10 @@ export type ManifestEntryInput = {
   target?: ManifestTarget;
   /** Tells entries of the same screenshot name apart when manifests get merged. */
   variant?: string;
+  subject?: ManifestSubject;
+  meta?: ManifestMeta;
+  /** Provenance of the baseline image, e.g. a `design` namespace for a design-software export. */
+  baselineMeta?: ManifestMeta;
   viewport?: ManifestViewport;
   options?: ManifestEntryOptions;
   /** Defaults to a `native` renderer derived from `platform.browser`. */
@@ -262,7 +268,11 @@ export class ManifestBuilder {
         threshold: input.threshold ?? 0,
       },
       images: {
-        baseline: { path: this.relative(baselineAbs), ...input.baselineSize },
+        baseline: {
+          path: this.relative(baselineAbs),
+          ...input.baselineSize,
+          meta: input.baselineMeta,
+        },
         actual: {
           path: this.existingOrNull(keptActual),
           ...(keptActual && input.actualSize),
@@ -274,6 +284,8 @@ export class ManifestBuilder {
       platform: input.platform,
       target: input.target,
       variant: input.variant,
+      subject: input.subject,
+      meta: input.meta,
       viewport: input.viewport,
       options: input.options,
       renderer: input.renderer ?? nativeRenderer(input.platform),
@@ -317,6 +329,8 @@ export class ManifestBuilder {
       platform: existing?.platform,
       target: existing?.target,
       variant: existing?.variant,
+      subject: existing?.subject,
+      meta: existing?.meta,
       viewport: existing?.viewport,
       options: existing?.options,
       renderer: existing?.renderer,

@@ -10,7 +10,7 @@
     },
     "packages/visual-regression-manifest": {
       "path": "packages/visual-regression-manifest",
-      "component": "@pixsame/manifest",
+      "component": "visual-regression-manifest",
       "release-as": "1.0.0"
     }
   }

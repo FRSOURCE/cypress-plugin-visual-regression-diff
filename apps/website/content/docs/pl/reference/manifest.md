@@ -7,7 +7,7 @@ reviewed: false
 
 # Schemat manifestu
 
-Manifest to czytelny maszynowo zapis każdego porównania zrzutów ekranu wykonanego podczas uruchomienia testów. Zapisuje go narzędzie do regresji wizualnej, a czytają narzędzia CI: boty komentujące PR-y, dashboardy review i narzędzia do zatwierdzania. To kontrakt między runnerem testów a wszystkim, co dzieje się dalej, publikowany jako otwarty standard `@pixsame/manifest`: JSON Schema, typy, reader, writer i merger.
+Manifest to czytelny maszynowo zapis każdego porównania zrzutów ekranu wykonanego podczas uruchomienia testów. Zapisuje go narzędzie do regresji wizualnej, a czytają narzędzia CI: boty komentujące PR-y, dashboardy review i narzędzia do zatwierdzania. To kontrakt między runnerem testów a wszystkim, co dzieje się dalej, publikowany jako otwarty standard `visual-regression-manifest`: JSON Schema, typy, reader, writer i merger.
 
 Wszystko, co jest specyficzne dla runnera testów, znajduje się pod kluczem `runner`, więc ten sam plik opisuje uruchomienie w Cypress i w Playwright. Konsumenci muszą ignorować klucze, których nie znają.
 

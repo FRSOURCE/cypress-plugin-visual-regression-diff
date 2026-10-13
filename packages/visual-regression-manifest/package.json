@@ -1,5 +1,5 @@
 {
-  "name": "@pixsame/manifest",
+  "name": "visual-regression-manifest",
   "description": "Pixsame manifest: the visual regression run manifest as a free standard, JSON Schema, TypeScript types, reader, writer, merger and converters (Playwright JSON report, plain PNG triples) for a runner-agnostic record of screenshot comparisons.",
   "version": "0.0.0",
   "author": "Jakub Freisler <jakub.freisler@frsource.org>",

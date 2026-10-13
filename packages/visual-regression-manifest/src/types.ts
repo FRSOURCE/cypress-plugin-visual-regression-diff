@@ -18,11 +18,29 @@
 export type ManifestStatus =
   'passed' | 'failed' | 'missing-baseline' | 'created' | 'updated' | 'approved';
 
+/**
+ * Open metadata keyed by namespace; consumers ignore namespaces they do not
+ * know. Conventional namespaces: `design` (`tool`, `file`, `node`, `version` of
+ * a design software source) and `storybook` (`args`, `globals`). Not part of
+ * baseline identity.
+ */
+export type ManifestMeta = Record<string, Record<string, unknown>>;
+
+/** What a screenshot is a picture of, as opposed to the test that took it. */
+export type ManifestSubject = {
+  /** Producer's name for the thing, e.g. a Storybook story id. */
+  id: string;
+  /** Known values: `story`, `page`, `component`, `screen`. */
+  kind?: string;
+};
+
 export type ManifestImage = {
   /** Path relative to `Manifest.projectRoot` with `/` separators; `null` when the file no longer exists. */
   path: string | null;
   width?: number;
   height?: number;
+  /** Provenance of this image, e.g. `design` for a baseline exported from a design file. */
+  meta?: ManifestMeta;
 };
 
 export type ManifestBrowser = {
@@ -169,6 +187,8 @@ export type ManifestEntry = {
    * `platform.os` + `platform.browser.name` + renderer.
    */
   variant?: string;
+  subject?: ManifestSubject;
+  meta?: ManifestMeta;
   viewport?: ManifestViewport;
   /** Absent on entries created without a preceding comparison (e.g. by a review UI). */
   options?: ManifestEntryOptions;

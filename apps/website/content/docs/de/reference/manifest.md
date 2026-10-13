@@ -7,7 +7,7 @@ reviewed: false
 
 # Manifest-Schema
 
-Das Manifest ist eine maschinenlesbare Aufzeichnung aller Screenshot-Vergleiche eines Testlaufs. Ein Visual-Regression-Tool schreibt es, und CI-Werkzeuge wie PR-Kommentar-Bots, Review-Dashboards und Freigabe-Tools lesen es. Es ist der Vertrag zwischen einem Test-Runner und allem, was danach kommt, und wird als offener Standard `@pixsame/manifest` veröffentlicht: ein JSON Schema, Typen, ein Reader, ein Writer und ein Merger.
+Das Manifest ist eine maschinenlesbare Aufzeichnung aller Screenshot-Vergleiche eines Testlaufs. Ein Visual-Regression-Tool schreibt es, und CI-Werkzeuge wie PR-Kommentar-Bots, Review-Dashboards und Freigabe-Tools lesen es. Es ist der Vertrag zwischen einem Test-Runner und allem, was danach kommt, und wird als offener Standard `visual-regression-manifest` veröffentlicht: ein JSON Schema, Typen, ein Reader, ein Writer und ein Merger.
 
 Alles, was spezifisch für den Test-Runner ist, liegt unter `runner`, sodass dieselbe Datei einen Cypress-Lauf und einen Playwright-Lauf beschreibt. Konsumenten müssen unbekannte Schlüssel ignorieren.
 
