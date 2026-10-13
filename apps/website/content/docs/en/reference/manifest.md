@@ -6,7 +6,7 @@ order: 2
 
 # Manifest schema
 
-The manifest is a machine-readable record of every screenshot comparison made during a test run. A visual regression tool writes it, and CI tooling such as PR comment bots, review dashboards and approval tools reads it. It is the contract between a test runner and everything downstream, and it is published as the open standard `@pixsame/manifest`: a JSON Schema, types, a reader, a writer and a merger.
+The manifest is a machine-readable record of every screenshot comparison made during a test run. A visual regression tool writes it, and CI tooling such as PR comment bots, review dashboards and approval tools reads it. It is the contract between a test runner and everything downstream, and it is published as the open standard `visual-regression-manifest`: a JSON Schema, types, a reader, a writer and a merger.
 
 Everything that is specific to the test runner lives under `runner`, so the same file describes a Cypress run and a Playwright run. Consumers must ignore keys they do not know.
 
@@ -40,6 +40,8 @@ Each entry records the screenshot `name`, the `test` it belongs to, a `status`, 
 `failed` and `missing-baseline` are the entries that need a human.
 
 Optional entry fields add context: `platform`, `target`, `variant` (device, theme, locale and so on), `viewport`, `renderer`, and `hashes` with the sha256 of each image.
+
+Two optional fields stay neutral about the tool that wrote them. `subject` is `{ id, kind }` and says what the screenshot shows (a Storybook story id, a page, a screen). `meta` is an open object keyed by namespace, on an entry or on a single image: `design` (`tool`, `file`, `node`, `version`) records the design-software source of a baseline, and `storybook` holds story `args` and `globals`. Neither affects baseline identity, and readers ignore namespaces they do not know.
 
 ## Source of truth
 
