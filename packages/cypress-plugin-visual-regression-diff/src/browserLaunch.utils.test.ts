@@ -88,7 +88,7 @@ describe('getBrowserLaunchOptions', () => {
     expect(result.args).toContain('--font-render-hinting=none');
   });
 
-  it('gives edge the rendering switches but not the scale factor (4.x keeps that to chrome and chromium)', () => {
+  it('gives edge the rendering switches but not the scale factor (1.x keeps that to chrome and chromium)', () => {
     const { launchOptions: result } = getBrowserLaunchOptions(
       browser({ name: 'edge' }),
       launchOptions(),
@@ -171,7 +171,7 @@ describe('getBrowserLaunchOptions', () => {
     expect(messages).toEqual([]);
   });
 
-  it('never sets a firefox scale factor preference on 4.x (5.0 does)', () => {
+  it('never sets a firefox scale factor preference on 1.x (2.0 does)', () => {
     const { launchOptions: result } = getBrowserLaunchOptions(
       browser({ name: 'firefox', family: 'firefox' }),
       launchOptions(),
@@ -312,7 +312,7 @@ describe('isOptionEnabled', () => {
 });
 
 describe('getBrowserLaunchPresets', () => {
-  it('enables only the scale factor preset by default (deterministic rendering is opt-in on 4.x)', () => {
+  it('enables only the scale factor preset by default (deterministic rendering is opt-in on 1.x)', () => {
     expect(
       getBrowserLaunchPresets(config({ version: '16.1.0', expose: {} })),
     ).toEqual({ forceDeviceScaleFactor: true, deterministicRendering: false });

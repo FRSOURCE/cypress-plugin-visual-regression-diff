@@ -61,8 +61,8 @@ export const getBrowserLaunchOptions = (
   const preferences = { ...launchOptions.preferences };
   const messages: string[] = [];
   const isElectron = browser.name === 'electron';
-  // 4.x: the scale factor switches go to Chrome and Chromium only, as they
-  // always did on this line. 5.0 widens them to the whole chromium family
+  // 1.x: the scale factor switches go to Chrome and Chromium only, as they
+  // always did on this line. 2.0 widens them to the whole chromium family
   // (Edge) and to Firefox; that changes HiDPI baselines there, so it waits
   // for the major.
   const isChromeOrChromium =
@@ -80,7 +80,7 @@ export const getBrowserLaunchOptions = (
       }
     }
   } else if (browser.family === 'firefox') {
-    // no scale factor preference on 4.x (5.0 sets layout.css.devPixelsPerPx)
+    // no scale factor preference on 1.x (2.0 sets layout.css.devPixelsPerPx)
     if (presets.deterministicRendering) {
       Object.assign(preferences, DETERMINISTIC_RENDERING_FIREFOX_PREFERENCES);
     }
@@ -108,7 +108,7 @@ export const getBrowserLaunchPresets = (
     config,
     'pluginVisualRegressionForceDeviceScaleFactor',
   ),
-  // opt-in on 4.x; 5.0 turns it on by default
+  // opt-in on 1.x; 2.0 turns it on by default
   deterministicRendering: isOptionEnabled(
     config,
     'pluginVisualRegressionDeterministicRendering',

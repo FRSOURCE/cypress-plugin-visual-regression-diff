@@ -157,7 +157,7 @@ cy.matchImage({
     blackout: ['.element-to-be-blackouted'],
   },
   // pixelmatch options, see: https://www.npmjs.com/package/pixelmatch#pixelmatchimg1-img2-output-width-height-options
-  // default: { includeAA: true } (5.0 switches to pixelmatch's own includeAA: false, see "Reducing cross-OS rendering noise" below)
+  // default: { includeAA: true } (2.0 switches to pixelmatch's own includeAA: false, see "Reducing cross-OS rendering noise" below)
   diffConfig: {
     threshold: 0.01,
   },
@@ -183,13 +183,13 @@ cy.matchImage({
   maxDiffThreshold: 0.1,
   // forces scale factor to be set as value "1"
   // helps with screenshots being scaled 2x on high-density screens like Mac Retina
-  // applies to Chrome and Chromium (5.0 extends it to Edge and Firefox, which changes their baselines on high-density screens once)
+  // applies to Chrome and Chromium (2.0 extends it to Edge and Firefox, which changes their baselines on high-density screens once)
   // default: true
   forceDeviceScaleFactor: false,
   // applies the deterministic rendering preset, see "Reducing cross-OS rendering noise" below
   // per call it only controls the CSS injected into the page for the screenshot (caret, animations, scrollbars);
   // the browser switches are process-wide and follow the global pluginVisualRegressionDeterministicRendering option
-  // default: false (5.0 turns it on by default)
+  // default: false (2.0 turns it on by default)
   deterministicRendering: true,
   // title used for naming the image file
   // default: Cypress.currentTest.titlePath (your test title)
@@ -318,7 +318,7 @@ Toggling the checkbox in the runner is remembered in the browser's local storage
 
 Browsers hand text rasterisation to the operating system (CoreText on macOS, DirectWrite on Windows, FreeType on Linux), so the same page never renders byte-for-byte identical on a developer's laptop and a Linux CI runner. The plugin cannot make that go away entirely, but the `deterministicRendering` preset removes the part of the noise that lives inside the browser.
 
-The preset is opt-in on 4.x and off by default. 5.0 turns it on by default, so enabling it now gets you the 5.0 behaviour early without any other change.
+The preset is opt-in on 1.x and off by default. 2.0 turns it on by default, so enabling it now gets you the 2.0 behaviour early without any other change.
 
 ### How to enable
 
@@ -375,7 +375,7 @@ ELECTRON_EXTRA_LAUNCH_ARGS="--font-render-hinting=none --disable-font-subpixel-p
 
 ### Anti-aliased pixels: the `includeAA: false` companion
 
-The comparison on 4.x still runs `pixelmatch` with `includeAA: true`, so every anti-aliased edge pixel that renders slightly differently counts towards the diff ratio. That is the other half of the cross-OS noise, and the preset does not touch it. Pair it with `includeAA: false` (pixelmatch's own default, anti-aliased pixels are detected and skipped) - 5.0 makes that the default:
+The comparison on 1.x still runs `pixelmatch` with `includeAA: true`, so every anti-aliased edge pixel that renders slightly differently counts towards the diff ratio. That is the other half of the cross-OS noise, and the preset does not touch it. Pair it with `includeAA: false` (pixelmatch's own default, anti-aliased pixels are detected and skipped) - 2.0 makes that the default:
 
 ```bash
 # Cypress 15.10+

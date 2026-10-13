@@ -103,7 +103,7 @@ const optionWithDefaults = <K extends keyof Cypress.MatchImageOptions>(
 const getImagesPath = (options: Cypress.MatchImageOptions) =>
   optionWithDefaults(options, 'imagesPath', '{spec_path}/__image_snapshots__');
 
-// opt-in on 4.x (5.0 turns it on by default); `--expose key=true` on the CLI arrives as the string 'true'
+// opt-in on 1.x (2.0 turns it on by default); `--expose key=true` on the CLI arrives as the string 'true'
 const isEnabled = (value: unknown) => value === true || value === 'true';
 
 export const getConfig = (options: Cypress.MatchImageOptions) => ({
