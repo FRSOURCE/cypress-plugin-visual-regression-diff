@@ -186,6 +186,29 @@ describe('ManifestBuilder', () => {
     ).toBeNull();
   });
 
+  it('records a subject and meta, and keeps them when approved', async () => {
+    const root = await tmpDir();
+    writePng(path.join(root, 'out', 'a.png'));
+    const builder = builderIn(root);
+    const design = { design: { tool: 'figma', file: 'abc', node: '12:34' } };
+    const entry = builder.record({
+      actualPath: 'out/a.png',
+      baselinePath: 'b.png',
+      status: 'failed',
+      subject: { id: 'button--primary', kind: 'story' },
+      meta: { storybook: { globals: { theme: 'dark' } } },
+      baselineMeta: design,
+    });
+    expect(entry.subject).toEqual({ id: 'button--primary', kind: 'story' });
+    expect(entry.meta).toEqual({ storybook: { globals: { theme: 'dark' } } });
+    expect(entry.images.baseline.meta).toEqual(design);
+
+    const approved = builder.approve({ actualPath: 'out/a.png' });
+    expect(approved.subject).toEqual(entry.subject);
+    expect(approved.meta).toEqual(entry.meta);
+    expect(approved.images.baseline.meta).toEqual(design);
+  });
+
   it('dedupes by actual path and keeps paths outside the project resolvable', async () => {
     const root = await tmpDir();
     const builder = builderIn(root);

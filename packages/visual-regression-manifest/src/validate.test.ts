@@ -210,6 +210,30 @@ describe('validateAgainst (cross-checked with Ajv)', () => {
     ]);
   });
 
+  it('checks the optional subject and meta of entries and images', () => {
+    const design = { design: { tool: 'figma', file: 'abc', node: '12:34' } };
+    expect(
+      agreesWithAjv(
+        withEntry({
+          subject: { id: 'button--primary', kind: 'story' },
+          meta: { storybook: { args: { disabled: true } }, ...design },
+          images: {
+            baseline: { path: 'a.png', meta: design },
+            actual: { path: null },
+            diff: { path: null },
+          },
+        }),
+      ),
+    ).toEqual([]);
+    expect(agreesWithAjv(withEntry({ subject: { id: '' } }))).toEqual([
+      { path: 'entries.0.subject.id', message: 'must not be empty' },
+    ]);
+    expect(agreesWithAjv(withEntry({ subject: { kind: 'story' } }))).toEqual([
+      { path: 'entries.0.subject.id', message: 'is required' },
+    ]);
+    expect(agreesWithAjv(withEntry({ meta: 'figma' })).length).toBe(1);
+  });
+
   it('reports several issues at once', () => {
     const issues = agreesWithAjv({
       ...manifest(),

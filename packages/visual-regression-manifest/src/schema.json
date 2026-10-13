@@ -249,8 +249,25 @@
           "type": ["string", "null"]
         },
         "width": { "type": "integer", "minimum": 0 },
-        "height": { "type": "integer", "minimum": 0 }
+        "height": { "type": "integer", "minimum": 0 },
+        "meta": { "$ref": "#/$defs/meta" }
       }
+    },
+    "subject": {
+      "description": "What the screenshot is a picture of, as opposed to the test that took it: a component story, a page, a screen. Tool-neutral; the id is whatever the producer uses to name the thing (for example a Storybook story id), so tools can group or match entries by it.",
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": {
+          "description": "Known values: `story`, `page`, `component`, `screen`; free-form otherwise.",
+          "type": "string"
+        }
+      }
+    },
+    "meta": {
+      "description": "Open metadata keyed by namespace; every value is an object. Consumers must ignore namespaces they do not know. Conventional namespaces: `design` (a design software source: `tool`, `file`, `node`, `version`, for example the Figma file, frame and version a baseline was exported from) and `storybook` (`args`, `globals`). Nothing here takes part in baseline identity.",
+      "type": "object"
     },
     "renderer": {
       "description": "Where the pixels came from, as opposed to `platform`, which is where the test ran. Entries with different renderers are different baselines.",
@@ -400,6 +417,8 @@
           }
         },
         "target": { "$ref": "#/$defs/target" },
+        "subject": { "$ref": "#/$defs/subject" },
+        "meta": { "$ref": "#/$defs/meta" },
         "variant": {
           "description": "Producer-chosen id that tells entries of the same screenshot name apart (device, OS version, density, locale, theme, project, ...). Part of the baseline identity when merging manifests; absent, identity falls back to `platform.os` + `platform.browser.name` + renderer.",
           "type": "string"

@@ -117,6 +117,7 @@ Rules every writer and reader follows:
 - **`platform` is where the test ran, `renderer` is where the pixels came from.** Under `native` the renderer is the test browser itself. Entries with different renderers are different baselines.
 - **Browsers are optional.** Desktop and mobile tools leave `platform.browser` out and describe what they captured in the entry's `target` (device, OS version, display density and orientation, locale, theme, app, driver). The run-level `platform` is the host that ran the tests, not necessarily the device. `renderer.backend` is an open string (`native`, `docker`, `cloud`, or your own, e.g. `device`); `renderer.name` names what rendered the pixels.
 - **`variant` is the baseline identity you control.** Entries of the same screenshot name with a different `variant` (`iphone-16-ios18-dark`) never overwrite each other when manifests are merged. Without one, identity is `platform.os` + `platform.browser.name` + renderer.
+- **`subject` says what was captured, `meta` carries tool-specific detail.** `subject` is a tool-neutral `{ id, kind }` (for example a Storybook story id with kind `story`) for tools that group or match entries by the thing shown rather than by the test. `meta` is an open object keyed by namespace, on an entry or on a single image: `design` (`tool`, `file`, `node`, `version` of the design-software source a baseline was exported from) and `storybook` (`args`, `globals`) are the conventional ones. Neither takes part in baseline identity, and readers ignore namespaces they do not know.
 - **Baseline, actual and diff share one image extension** (PNG for every current writer); `.actual` and `.diff` go before it.
 - **Every entry is self-sufficient** (its own `platform`, `viewport`, `renderer`), so the entries of several manifests (a matrix of machines, one file per worker, e2e + component) can be merged.
 - **One file per writer process**, named `visual-regression-manifest[.<label>].json`, rewritten after every comparison, so it is complete even when the run is aborted. `**/visual-regression-manifest{,.*}.json` (`MANIFEST_FILE_GLOB`) finds all of them in an artifact and nothing named merely alike. Merging warns when one run reports the same screenshot identity twice with different results; give such entries a distinct `variant`.
@@ -194,7 +195,10 @@ Any object with a `manifest` property is a source; extra properties (an artifact
 Test-runner integrations use `ManifestWriter`: a builder bound to a file that rewrites it atomically on every change. For runs with thousands of screenshots pass `{ writeDelayMs: 200 }` as the third argument to coalesce the rewrites; pending changes are written on `flush()` and when the process exits (not if it is killed outright, which is why the default is `0`). A `passed` entry never lists `.actual` or `.diff` files, even when leftovers of an earlier run sit next to it, and test files are recorded normalised (`./a.spec.ts` and `a.spec.ts` are one file).
 
 ```ts
-import { ManifestWriter, getManifestFileName } from 'visual-regression-manifest';
+import {
+  ManifestWriter,
+  getManifestFileName,
+} from 'visual-regression-manifest';
 
 const writer = new ManifestWriter(
   `output/${getManifestFileName('my-runner')}`,
@@ -245,7 +249,10 @@ npx playwright test --reporter=json > report.json
 
 ```ts
 import fs from 'fs';
-import { fromPlaywrightReport, writeManifestFile } from 'visual-regression-manifest';
+import {
+  fromPlaywrightReport,
+  writeManifestFile,
+} from 'visual-regression-manifest';
 
 const manifest = fromPlaywrightReport(
   JSON.parse(fs.readFileSync('report.json', 'utf8')),

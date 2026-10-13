@@ -41,6 +41,8 @@ Each entry records the screenshot `name`, the `test` it belongs to, a `status`, 
 
 Optional entry fields add context: `platform`, `target`, `variant` (device, theme, locale and so on), `viewport`, `renderer`, and `hashes` with the sha256 of each image.
 
+Two optional fields stay neutral about the tool that wrote them. `subject` is `{ id, kind }` and says what the screenshot shows (a Storybook story id, a page, a screen). `meta` is an open object keyed by namespace, on an entry or on a single image: `design` (`tool`, `file`, `node`, `version`) records the design-software source of a baseline, and `storybook` holds story `args` and `globals`. Neither affects baseline identity, and readers ignore namespaces they do not know.
+
 ## Source of truth
 
 The full JSON Schema lives in the [pixsame repository](https://github.com/pixsame/pixsame/tree/main/packages/visual-regression-manifest). This page is a summary.

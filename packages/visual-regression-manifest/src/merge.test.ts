@@ -255,6 +255,13 @@ describe('producer-chosen variant', () => {
     message: '',
   } as const;
 
+  it('keeps subject and meta out of the baseline identity', () => {
+    const a = { ...base, subject: { id: 'button--primary' } };
+    const b = { ...base, meta: { design: { tool: 'figma' } } };
+    expect(entryKey(a)).toBe(entryKey(b));
+    expect(entryKey(a)).toBe(entryKey(base));
+  });
+
   it('keeps entries of one screenshot on different variants apart', () => {
     const a = { ...base, platform: { os: 'ios' }, variant: 'iphone-se' };
     const b = { ...base, platform: { os: 'ios' }, variant: 'iphone-16' };
