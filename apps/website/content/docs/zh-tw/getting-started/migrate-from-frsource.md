@@ -9,7 +9,7 @@ reviewed: false
 
 ## 套件為什麼搬家
 
-這個外掛過去以 `@frsource/cypress-plugin-visual-regression-diff` 的名稱發佈。現在它和 manifest 標準以及整個生態系的其他部分一起放在 [pixsame](https://github.com/pixsame) 組織底下，並以 `@pixsame/cypress-plugin-visual-regression-diff` 發佈。`@frsource` 套件不會再有新版本，若要持續取得修正與新功能，您需要切換過來。
+這個外掛過去以 `@frsource/cypress-plugin-visual-regression-diff` 的名稱發佈。現在它和開放的 manifest 格式以及整個生態系的其他部分一起放在 [pixsame](https://github.com/pixsame) 組織底下，並以 `@pixsame/cypress-plugin-visual-regression-diff` 發佈。`@frsource` 套件不會再有新版本，若要持續取得修正與新功能，您需要切換過來。
 
 ## 有多簡單
 

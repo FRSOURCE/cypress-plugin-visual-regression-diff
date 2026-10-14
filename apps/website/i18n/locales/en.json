@@ -4,7 +4,7 @@
   },
   "seo": {
     "title": "pixsame — visual regression testing for Cypress (Playwright soon)",
-    "description": "One manifest standard shared by both runners, a pinned renderer for byte-identical screenshots, forensic diff analysis and baseline approval in the pull request."
+    "description": "One open manifest format shared by both runners, a pinned renderer for byte-identical screenshots, forensic diff analysis and baseline approval in the pull request."
   },
   "nav": {
     "menu": "Menu",
@@ -30,7 +30,7 @@
     "eyebrow": "Open source · MIT · Cypress today, Playwright soon",
     "title": "Visual regression that agrees with itself.",
     "tagline": "same same. to the pixel.",
-    "body": "One manifest standard shared by both runners. A pinned renderer that makes local and CI screenshots byte-identical. Forensic diff analysis instead of a red blob, and baseline approval that happens in the pull request.",
+    "body": "One open manifest format shared by both runners. A pinned renderer that makes local and CI screenshots byte-identical. Forensic diff analysis instead of a red blob, and baseline approval that happens in the pull request.",
     "copy": "COPY",
     "copied": "COPIED",
     "docs": "Read the docs",
@@ -145,7 +145,7 @@
       "cypress": "Cypress plugin",
       "cypressBody": "Visual regression for Cypress: matchImage, a diff viewer in the runner and baselines in your repo.",
       "manifest": "Run manifest",
-      "manifestBody": "The open, runner-agnostic JSON standard that describes every screenshot comparison, with a schema, types, a reader and a writer.",
+      "manifestBody": "The open, runner-agnostic JSON format that describes every screenshot comparison, specified on visual-regression.dev.",
       "playwright": "Playwright plugin",
       "playwrightBody": "The same comparison engine and manifest for Playwright projects.",
       "renderer": "Pinned renderer",
@@ -184,7 +184,7 @@
     },
     "groups": {
       "runners": "Test runners",
-      "standard": "Shared standard",
+      "standard": "Shared format",
       "review": "Review"
     },
     "map": {
@@ -198,7 +198,7 @@
       },
       "manifest": {
         "name": "Run manifest",
-        "body": "An open, runner-agnostic JSON standard describing every screenshot comparison. Available today."
+        "body": "An open, runner-agnostic JSON format describing every screenshot comparison. Available today."
       },
       "renderer": {
         "name": "Pinned renderer",

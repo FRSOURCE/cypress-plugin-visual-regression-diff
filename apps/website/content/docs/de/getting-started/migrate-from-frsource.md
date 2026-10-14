@@ -9,7 +9,7 @@ reviewed: false
 
 ## Warum das Paket umgezogen ist
 
-Das Plugin wurde früher als `@frsource/cypress-plugin-visual-regression-diff` veröffentlicht. Es gehört jetzt zur [pixsame](https://github.com/pixsame)-Organisation, neben dem Manifest-Standard und dem restlichen Ökosystem, und wird als `@pixsame/cypress-plugin-visual-regression-diff` veröffentlicht. Das `@frsource`-Paket erhält keine neuen Releases mehr. Um weiterhin Fixes und neue Features zu bekommen, müssen Sie also wechseln.
+Das Plugin wurde früher als `@frsource/cypress-plugin-visual-regression-diff` veröffentlicht. Es gehört jetzt zur [pixsame](https://github.com/pixsame)-Organisation, neben dem offenen Manifest-Format und dem restlichen Ökosystem, und wird als `@pixsame/cypress-plugin-visual-regression-diff` veröffentlicht. Das `@frsource`-Paket erhält keine neuen Releases mehr. Um weiterhin Fixes und neue Features zu bekommen, müssen Sie also wechseln.
 
 ## Wie einfach das ist
 

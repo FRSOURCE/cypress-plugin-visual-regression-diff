@@ -4,7 +4,7 @@
   },
   "seo": {
     "title": "pixsame — visuelle Regressionstests für Cypress (Playwright bald)",
-    "description": "Ein Manifest-Standard für beide Runner, ein fixierter Renderer für byte-identische Screenshots, forensische Diff-Analyse und Baseline-Freigabe im Pull Request."
+    "description": "Ein offenes Manifest-Format für beide Runner, ein fixierter Renderer für byte-identische Screenshots, forensische Diff-Analyse und Baseline-Freigabe im Pull Request."
   },
   "nav": {
     "menu": "Menü",
@@ -30,7 +30,7 @@
     "eyebrow": "Open Source · MIT · Cypress heute, Playwright bald",
     "title": "Visuelle Regression, die mit sich selbst übereinstimmt.",
     "tagline": "same same. auf den Pixel genau.",
-    "body": "Ein Manifest-Standard für beide Runner. Ein fixierter Renderer macht lokale und CI-Screenshots byte-identisch. Forensische Diff-Analyse statt eines roten Flecks und Baseline-Freigabe direkt im Pull Request.",
+    "body": "Ein offenes Manifest-Format für beide Runner. Ein fixierter Renderer macht lokale und CI-Screenshots byte-identisch. Forensische Diff-Analyse statt eines roten Flecks und Baseline-Freigabe direkt im Pull Request.",
     "copy": "KOPIEREN",
     "copied": "KOPIERT",
     "docs": "Doku lesen",
@@ -145,7 +145,7 @@
       "cypress": "Cypress-Plugin",
       "cypressBody": "Visuelle Regression für Cypress: matchImage, ein Diff-Viewer im Runner und Baselines in Ihrem Repo.",
       "manifest": "Run-Manifest",
-      "manifestBody": "Der offene, runnerunabhängige JSON-Standard, der jeden Screenshot-Vergleich beschreibt, mit Schema, Typen, Reader und Writer.",
+      "manifestBody": "Das offene, runnerunabhängige JSON-Format, das jeden Screenshot-Vergleich beschreibt, spezifiziert auf visual-regression.dev.",
       "playwright": "Playwright plugin",
       "playwrightBody": "Dieselbe Vergleichs-Engine und dasselbe Manifest für Playwright-Projekte.",
       "renderer": "Fixierter Renderer",
@@ -159,7 +159,7 @@
   "product": {
     "crumb": "Fixierter Renderer",
     "title": "Ein Ökosystem für visuelle Regression.",
-    "body": "pixsame ist eine wachsende Sammlung offener Tools, die visuelle Regressionstests verlässlich machen: ein gemeinsamer Standard, ein Renderer, Review im Pull Request. Das Cypress-Plugin ist heute verfügbar, der Rest folgt.",
+    "body": "pixsame ist eine wachsende Sammlung offener Tools, die visuelle Regressionstests verlässlich machen: ein gemeinsames Format, ein Renderer, Review im Pull Request. Das Cypress-Plugin ist heute verfügbar, der Rest folgt.",
     "status": "Cypress-Plugin: verfügbar · alles andere: demnächst",
     "start": "Plugin installieren",
     "stats": {
@@ -184,7 +184,7 @@
     },
     "groups": {
       "runners": "Test-Runner",
-      "standard": "Gemeinsamer Standard",
+      "standard": "Gemeinsames Format",
       "review": "Review"
     },
     "map": {
@@ -198,7 +198,7 @@
       },
       "manifest": {
         "name": "Run-Manifest",
-        "body": "Ein offener, runnerunabhängiger JSON-Standard, der jeden Screenshot-Vergleich beschreibt. Heute verfügbar."
+        "body": "Ein offenes, runnerunabhängiges JSON-Format, das jeden Screenshot-Vergleich beschreibt. Heute verfügbar."
       },
       "renderer": {
         "name": "Renderer",

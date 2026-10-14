@@ -9,7 +9,7 @@ reviewed: false
 
 ## 为什么要迁移包
 
-该插件过去以 `@frsource/cypress-plugin-visual-regression-diff` 的名称发布。现在它归属于 [pixsame](https://github.com/pixsame) 组织，与清单标准及生态系统中的其他项目放在一起，并以 `@pixsame/cypress-plugin-visual-regression-diff` 的名称发布。`@frsource` 包不会再发布新版本，因此要继续获得修复和新功能，您需要切换过来。
+该插件过去以 `@frsource/cypress-plugin-visual-regression-diff` 的名称发布。现在它归属于 [pixsame](https://github.com/pixsame) 组织，与开放的清单格式及生态系统中的其他项目放在一起，并以 `@pixsame/cypress-plugin-visual-regression-diff` 的名称发布。`@frsource` 包不会再发布新版本，因此要继续获得修复和新功能，您需要切换过来。
 
 ## 迁移有多简单
 
