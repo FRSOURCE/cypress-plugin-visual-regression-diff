@@ -44,4 +44,4 @@ Optionale Felder eines Eintrags liefern Kontext: `platform`, `target`, `variant`
 
 ## Quelle der Wahrheit
 
-Das vollständige JSON Schema liegt im [pixsame-Repository](https://github.com/pixsame/pixsame/tree/main/packages/visual-regression-manifest). Diese Seite ist eine Zusammenfassung.
+Das vollständige JSON Schema liegt im [visual-regression-Repository](https://github.com/visual-regression/visual-regression). Diese Seite ist eine Zusammenfassung.

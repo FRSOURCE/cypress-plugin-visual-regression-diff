@@ -44,4 +44,4 @@ reviewed: false
 
 ## 权威来源
 
-完整的 JSON Schema 位于 [pixsame 仓库](https://github.com/pixsame/pixsame/tree/main/packages/visual-regression-manifest)。本页只是摘要。
+完整的 JSON Schema 位于 [visual-regression 仓库](https://github.com/visual-regression/visual-regression)。本页只是摘要。

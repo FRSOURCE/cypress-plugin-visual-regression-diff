@@ -44,4 +44,4 @@ Manifest 是一份機器可讀的紀錄，記載測試執行期間每一次截�
 
 ## 來源依據
 
-完整的 JSON Schema 位於 [pixsame 儲存庫](https://github.com/pixsame/pixsame/tree/main/packages/visual-regression-manifest)。本頁僅為摘要。
+完整的 JSON Schema 位於 [visual-regression 儲存庫](https://github.com/visual-regression/visual-regression)。本頁僅為摘要。

@@ -44,4 +44,4 @@ Opcjonalne pola wpisu dodają kontekst: `platform`, `target`, `variant` (urządz
 
 ## Źródło prawdy
 
-Pełny JSON Schema znajduje się w [repozytorium pixsame](https://github.com/pixsame/pixsame/tree/main/packages/visual-regression-manifest). Ta strona to tylko streszczenie.
+Pełny JSON Schema znajduje się w [repozytorium visual-regression](https://github.com/pixsame/pixsame/tree/main/packages/visual-regression-manifest). Ta strona to tylko streszczenie.

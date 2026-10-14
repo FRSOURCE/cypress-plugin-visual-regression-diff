@@ -45,4 +45,4 @@ Two optional fields stay neutral about the tool that wrote them. `subject` is `{
 
 ## Source of truth
 
-The full JSON Schema lives in the [pixsame repository](https://github.com/pixsame/pixsame/tree/main/packages/visual-regression-manifest). This page is a summary.
+The full JSON Schema lives in the [visual-regression repository](https://github.com/visual-regression/visual-regression). This page is a summary.
