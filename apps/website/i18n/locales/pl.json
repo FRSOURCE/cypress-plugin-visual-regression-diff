@@ -368,5 +368,9 @@
     "vat": "PL6783179514",
     "nip": "6783179514",
     "email": "pixsame{'@'}frsource.org"
+  },
+  "translate": {
+    "broken": "Tłumaczenie kuleje? Pomóż nam i popraw je samodzielnie.",
+    "missing": "Brak tłumaczenia? Pomóż nam i napisz je samodzielnie."
   }
 }

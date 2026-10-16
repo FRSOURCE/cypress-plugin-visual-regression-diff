@@ -368,5 +368,9 @@
     "vat": "PL6783179514",
     "nip": "6783179514",
     "email": "pixsame{'@'}frsource.org"
+  },
+  "translate": {
+    "broken": "翻译有问题？帮助我们，自己动手修改。",
+    "missing": "还没有翻译？帮助我们，自己动手翻译。"
   }
 }
