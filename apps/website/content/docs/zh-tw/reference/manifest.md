@@ -7,8 +7,8 @@ reviewed: false
 
 # Manifest 結構
 
-Manifest 是一份機器可讀的紀錄，記載測試執行期間每一次截圖比對。由視覺回歸工具負責寫入，再由 PR 留言機器人、審閱儀表板、核准工具等 CI 工具讀取。它是測試 runner 與所有下游工具之間的契約。
+Manifest 是一份 JSON 檔，記錄一次測試執行中做過的每一回截圖比對：比了什麼、對照哪個基準、結果如何。測試工具負責寫入。之後的所有東西，不管是 PR 留言機器人、審閱儀表板還是核准工具，都讀這個檔案就好，不必去理解 runner 本身。
 
-它是開放且不依賴特定 runner 的格式，並不綁定 pixsame。規格、欄位參考、其他 runner 的轉換器與檢視器都在開源儲存庫 [visual-regression](https://github.com/visual-regression/visual-regression) 中維護，並發佈於 [visual-regression.dev/manifest](https://visual-regression.dev/manifest)。JSON Schema、型別、reader、writer 與 merger 以 [`visual-regression-manifest`](https://www.npmjs.com/package/visual-regression-manifest) 的名稱發佈到 npm。
+這個格式刻意不做成 pixsame 專屬的東西。它是開放的，不綁定 pixsame，也不綁定任何 runner，放在 [visual-regression](https://github.com/visual-regression/visual-regression) 儲存庫裡的 [visual-regression.dev/manifest](https://visual-regression.dev/manifest)，連同欄位參考、其他 runner 的轉換器和一個檢視器。npm 上的 [`visual-regression-manifest`](https://www.npmjs.com/package/visual-regression-manifest) 則有 JSON Schema、型別，以及 reader、writer 與 merger。
 
-每一個 pixsame 工具都讀寫這個格式，GitHub App 與託管平台也接受來自任何 runner 的 manifest。
+每一個 pixsame 工具都讀寫它。GitHub App 與託管平台將會接受任何 runner 產出的 manifest，不管是我們的還是別人的。

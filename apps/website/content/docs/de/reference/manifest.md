@@ -7,8 +7,8 @@ reviewed: false
 
 # Manifest-Schema
 
-Das Manifest ist eine maschinenlesbare Aufzeichnung aller Screenshot-Vergleiche eines Testlaufs. Ein Visual-Regression-Tool schreibt es, und CI-Werkzeuge wie PR-Kommentar-Bots, Review-Dashboards und Freigabe-Tools lesen es. Es ist der Vertrag zwischen einem Test-Runner und allem, was danach kommt.
+Das Manifest ist eine JSON-Datei, die jeden Screenshot-Vergleich eines Testlaufs festhält: was verglichen wurde, gegen welche Baseline, und wie es ausgegangen ist. Das Testtool schreibt sie. Alles danach, ein PR-Kommentar-Bot, ein Review-Dashboard, ein Freigabe-Tool, liest die Datei, statt den Runner verstehen zu müssen.
 
-Es ist ein offenes, runner-unabhängiges Format, das nicht an pixsame gebunden ist. Die Spezifikation, die Feldreferenz, die Konverter für andere Runner und der Viewer werden auf [visual-regression.dev/manifest](https://visual-regression.dev/manifest) im Open-Source-Repository [visual-regression](https://github.com/visual-regression/visual-regression) gepflegt. JSON Schema, Typen, Reader, Writer und Merger erscheinen als [`visual-regression-manifest`](https://www.npmjs.com/package/visual-regression-manifest) auf npm.
+Das Format ist ganz bewusst keine pixsame-Sache. Es ist offen, weder an pixsame noch an einen Runner gebunden, und liegt auf [visual-regression.dev/manifest](https://visual-regression.dev/manifest) im Repository [visual-regression](https://github.com/visual-regression/visual-regression), zusammen mit der Feldreferenz, Konvertern für andere Runner und einem Viewer. Auf npm enthält [`visual-regression-manifest`](https://www.npmjs.com/package/visual-regression-manifest) das JSON Schema, die Typen sowie Reader, Writer und Merger.
 
-Jedes pixsame-Tool liest und schreibt dieses Format, und die GitHub App sowie die gehostete Plattform akzeptieren ein Manifest von jedem Runner.
+Jedes pixsame-Tool liest und schreibt es. Die GitHub App und die gehostete Plattform werden ein Manifest von jedem Runner annehmen, der eins erzeugt, unserem oder dem von jemand anderem.

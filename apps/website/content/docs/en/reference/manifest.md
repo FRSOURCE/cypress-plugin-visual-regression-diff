@@ -6,8 +6,8 @@ order: 2
 
 # Manifest schema
 
-The manifest is a machine-readable record of every screenshot comparison made during a test run. A visual regression tool writes it, and CI tooling such as PR comment bots, review dashboards and approval tools reads it. It is the contract between a test runner and everything downstream.
+The manifest is a JSON file that records every screenshot comparison a test run made: what was compared, against which baseline, and how it went. The test tool writes it. Everything after that, a PR comment bot, a review dashboard, an approval tool, reads the file instead of having to understand the runner.
 
-It is an open, runner-agnostic format that is not tied to pixsame. The specification, the field reference, the converters for other runners and the viewer are maintained at [visual-regression.dev/manifest](https://visual-regression.dev/manifest), in the open-source [visual-regression](https://github.com/visual-regression/visual-regression) repository. The JSON Schema, types, reader, writer and merger ship as [`visual-regression-manifest`](https://www.npmjs.com/package/visual-regression-manifest) on npm.
+The format is deliberately not a pixsame thing. It's open, not tied to pixsame or to any runner, and lives at [visual-regression.dev/manifest](https://visual-regression.dev/manifest) in the [visual-regression](https://github.com/visual-regression/visual-regression) repository, together with the field reference, converters for other runners and a viewer. On npm, [`visual-regression-manifest`](https://www.npmjs.com/package/visual-regression-manifest) has the JSON Schema, the types, and a reader, writer and merger.
 
-Every pixsame tool reads and writes this format, and the GitHub App and the hosted platform accept a manifest from any runner.
+Every pixsame tool reads and writes it. The GitHub App and the hosted platform will take a manifest from any runner that produces one, ours or somebody else's.

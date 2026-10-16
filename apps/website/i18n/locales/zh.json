@@ -293,7 +293,7 @@
       "p2": "数据控制者：{name}，{address1}, {address2}（增值税号 {vat}）。联系方式：{email}。",
       "p3": "候补名单：加入后，我们会保存您的邮箱地址、所选产品、语言和同意时间。法律依据是您的同意（GDPR 第 6 条第 1 款 a 项）。我们仅用这些数据在该产品发布时以及之后的更新（包括与之相关的 pixsame 生态变化）时给您发送邮件，不用于其他用途，也不会共享用于营销。",
       "p4": "联系表单：我们仅使用您的姓名、邮箱和留言来回复您，不再需要时即删除。",
-      "p5": "数据处理方：表单运行于 Google Apps Script 和 Google Sheets（Google），垃圾信息由 Cloudflare Turnstile（Cloudflare）过滤。它们可能依据标准合同条款在欧盟以外处理数据。表单会将您填写的内容作为请求地址的一部分发送给 Google。",
+      "p5": "Processors: the forms are processed and stored by Cloudflare (a serverless function and a database located in the EU), which also filters spam with Cloudflare Turnstile. Your name, email address and message are encrypted before they are stored. Cloudflare may process data outside the EU under the EU-US Data Privacy Framework or standard contractual clauses.",
       "p6": "保存期限与您的权利：候补名单数据保存至您撤回同意或产品终止。您可随时撤回同意，并要求查阅、更正或删除数据，请发邮件至 {email}。您也可以向所在地的数据保护机构投诉。"
     },
     "terms": {
