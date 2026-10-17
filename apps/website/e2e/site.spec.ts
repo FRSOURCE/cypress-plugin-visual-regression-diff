@@ -317,3 +317,26 @@ test('the brand page shows the rules and its downloads exist', async ({
     expect((await request.get(`/brand/${file}`)).ok()).toBe(true);
   }
 });
+
+test('the privacy policy and the terms are the full English texts, with a notice in other languages', async ({
+  page,
+}) => {
+  await page.goto('/privacy/');
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Privacy Policy' }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Who processes it for us' }),
+  ).toBeVisible();
+  await expect(page.getByText('Mailjet').first()).toBeVisible();
+  await expect(page.getByRole('note')).toHaveCount(0);
+  await page.goto('/terms/');
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Terms' }),
+  ).toBeVisible();
+  await page.goto('/pl/privacy/');
+  await expect(page.getByRole('note')).toContainText('po angielsku');
+  await expect(
+    page.getByRole('heading', { name: 'Who processes it for us' }),
+  ).toBeVisible();
+});

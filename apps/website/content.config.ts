@@ -14,6 +14,8 @@ export default defineContentConfig({
         reviewed: z.boolean().default(true),
       }),
     }),
+    // The privacy policy and the terms (English only; see pages/privacy.vue and pages/terms.vue).
+    legal: defineCollection({ type: 'page', source: 'legal/**/*.md' }),
     // Code samples for marketing pages, highlighted at build time by Nuxt Content (shiki).
     snippets: defineCollection({ type: 'page', source: 'snippets/**/*.md' }),
     // The Cypress plugin page is the package README (id ending in `/README.md`, sliced in nuxt.config.ts via

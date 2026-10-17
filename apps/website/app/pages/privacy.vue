@@ -1,25 +1,34 @@
 <script setup lang="ts">
-const { t } = useI18n();
-// The controller paragraph interpolates the shared `company` block, so the entity details live in one place.
-const company = computed(() => ({
-  name: t('company.name'),
-  address1: t('company.address1'),
-  address2: t('company.address2'),
-  vat: t('company.vat'),
-  email: t('company.email'),
-}));
+// The text lives in content/legal/privacy.md. Legal documents are English only: other locales show the same
+// text with a notice, so that no translation can introduce mistakes.
+const { t, locale } = useI18n();
+const { data: page } = await useAsyncData('legal:privacy', () =>
+  queryCollection('legal').path('/legal/privacy').first(),
+);
+if (!page.value)
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Page not found',
+    fatal: true,
+  });
 useSeoMeta({
-  title: () => t('legal.privacy.title'),
-  description: () => t('legal.privacy.p1'),
+  title: () => page.value?.title,
+  description: () => page.value?.description,
 });
 </script>
 
 <template>
-  <PageShell :crumbs="[{ label: t('legal.privacy.title') }]">
+  <PageShell :crumbs="[{ label: page?.title ?? '' }]">
     <article class="px-prose">
-      <h1>{{ t('legal.privacy.title') }}</h1>
-      <p>{{ t('legal.updated') }}</p>
-      <p v-for="n in 6" :key="n">{{ t(`legal.privacy.p${n}`, company) }}</p>
+      <p
+        v-if="locale !== 'en'"
+        role="note"
+        class="px-glass !rounded-lg p-4 text-sm"
+      >
+        {{ t('legal.englishNotice') }}
+      </p>
+      <h1>{{ page?.title }}</h1>
+      <ContentRenderer v-if="page" :value="page" />
     </article>
   </PageShell>
 </template>

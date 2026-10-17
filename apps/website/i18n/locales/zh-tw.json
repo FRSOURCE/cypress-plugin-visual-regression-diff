@@ -288,21 +288,7 @@
   },
   "legal": {
     "updated": "Last updated: 17 October 2026",
-    "privacy": {
-      "title": "隱私",
-      "p1": "This website uses no ad tracking and no analytics cookies. We use Cloudflare Web Analytics, which counts page views without cookies or fingerprinting. If you start filling in a form, Cloudflare Turnstile, our spam check, sets one security cookie.",
-      "p2": "資料控制者：{name} (pixsame.com)，{address1}, {address2}（加值稅號 {vat}）。聯絡方式：{email}。",
-      "p3": "Waitlist: if you join, we store your email address, the product you signed up for, your language, the time and version of your consent, and whether you confirmed it. We first send you one confirmation email, and you are on the list only after you press the button in it; the link works for 7 days, and an entry that is not confirmed is deleted within 14 days of sign-up. The legal basis is your consent (Art. 6(1)(a) GDPR). We use these data only to email you when that product launches and about later updates to it, including changes to the pixsame ecosystem that are connected to it. We do not use them for anything else and do not share them for marketing.",
-      "p4": "Contact form: your name, email address and message are sent to our mailbox, together with the time and version of your consent, and used only to answer you. We keep them for up to 12 months after the last message, unless we need them to defend a legal claim, and delete them sooner if you withdraw your consent.",
-      "p5": "Processors: Google (Google Workspace, under Google's data processing addendum) runs the forms with Google Apps Script, stores waitlist entries in Google Sheets, and receives our email, including contact messages and confirmation emails. Waitlist addresses are loaded into Mailjet (Mailjet SAS, a Sinch company) only when we send a launch email and are deleted there afterwards. Spam is filtered with Cloudflare Turnstile (Cloudflare). They may process data outside the EU under the EU-US Data Privacy Framework or standard contractual clauses. The forms send what you type to Google as part of the request address.",
-      "p6": "Retention and your rights: waitlist data is kept until you withdraw your consent, or for 24 months after the product launches, whichever comes first. At any time you can withdraw consent and ask for access, correction or erasure by writing to {email}. You can also complain to your data protection authority (in Poland: UODO)."
-    },
-    "terms": {
-      "title": "條款",
-      "p1": "pixsame 軟體以 MIT 授權開源，儲存庫中的授權文字是適用於它的唯一條款。",
-      "p2": "託管服務（GitHub 應用程式與平台）尚未上線，其服務條款將在上線前公布於此。",
-      "p3": "本網站依現況提供。產品頁面所述的計畫可能會變更。"
-    }
+    "englishNotice": "法律文件僅以英文發布。英文是這些文件的工作語言，以免翻譯引入錯誤。"
   },
   "notFound": {
     "title": "找不到頁面",
