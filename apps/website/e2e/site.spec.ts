@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 // Turnstile keeps polling Cloudflare, so the page never goes network-idle. Tests never need the real captcha.
 test.beforeEach(async ({ page }) => {
@@ -6,6 +6,28 @@ test.beforeEach(async ({ page }) => {
     route.abort(),
   );
 });
+
+// A stand-in for Turnstile's api.js. The app renders the widget lazily, so `loads` shows whether
+// anything was requested from Cloudflare; `reset` hands out a second token, like the real widget.
+const stubTurnstile = async (page: Page) => {
+  const state = { loads: 0 };
+  await page.route(
+    'https://challenges.cloudflare.com/turnstile/v0/api.js*',
+    (route) => {
+      state.loads += 1;
+      return route.fulfill({
+        contentType: 'application/javascript',
+        body: `window.turnstile = {
+        render(el, opts) { window.__tsCallback = opts.callback; const f = document.createElement('iframe'); f.title = 'turnstile-stub'; el.append(f); setTimeout(() => opts.callback('stub-token'), 0); return 'w'; },
+        reset() { setTimeout(() => window.__tsCallback('stub-token-2'), 0); },
+        remove() {},
+      };
+      window.pxTurnstileLoad && window.pxTurnstileLoad();`,
+      });
+    },
+  );
+  return state;
+};
 
 test('landing page renders the hero and the key sections', async ({ page }) => {
   await page.goto('/');
@@ -100,33 +122,35 @@ test('mobile menu exposes the navigation', async ({ page }) => {
 test('waitlist form needs consent, then posts to the Apps Script endpoint', async ({
   page,
 }) => {
-  let url = '';
+  await stubTurnstile(page);
+  let sent: Record<string, unknown> | undefined;
   await page.route('https://script.google.com/**', async (route) => {
-    url = route.request().url();
+    sent = Object.fromEntries(new URL(route.request().url()).searchParams);
     await route.fulfill({ json: { result: 'success' } });
   });
   await page.goto('/github-app/');
   await page.getByLabel('Email address').fill('dana@example.com');
   await page.getByRole('button', { name: 'Notify me' }).click();
   await expect(page.getByRole('alert')).toContainText('tick the box');
-  expect(url).toBe('');
+  expect(sent).toBeUndefined();
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Notify me' }).click();
   await expect(page.getByRole('status')).toContainText('Thanks');
-  const params = new URL(url).searchParams;
-  expect(Object.fromEntries(params)).toMatchObject({
+  expect(sent).toMatchObject({
     email: 'dana@example.com',
     product: 'github-app',
     locale: 'en',
     consent: 'yes',
     website: '',
+    token: 'stub-token',
   });
 });
 
 test('contact form validates, needs consent and posts', async ({ page }) => {
-  let url = '';
+  await stubTurnstile(page);
+  let sent: Record<string, unknown> | undefined;
   await page.route('https://script.google.com/**', async (route) => {
-    url = route.request().url();
+    sent = Object.fromEntries(new URL(route.request().url()).searchParams);
     await route.fulfill({ json: { result: 'success' } });
   });
   await page.goto('/contact/');
@@ -138,32 +162,20 @@ test('contact form validates, needs consent and posts', async ({ page }) => {
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Send message' }).click();
   await expect(page.getByRole('status')).toContainText('Thanks');
-  expect(Object.fromEntries(new URL(url).searchParams)).toMatchObject({
+  expect(sent).toMatchObject({
     name: 'Dana',
     message: 'Hello',
     consent: 'yes',
   });
 });
 
-test('turnstile renders and its token is sent after client-side navigation to the contact form', async ({
+test('turnstile loads only when a form is started, and its token is sent', async ({
   page,
 }) => {
-  // Stub api.js: Turnstile is rendered explicitly, so the stub only needs `render` and the onload callback.
-  await page.route(
-    'https://challenges.cloudflare.com/turnstile/v0/api.js*',
-    (route) =>
-      route.fulfill({
-        contentType: 'application/javascript',
-        body: `window.turnstile = {
-        render(el, opts) { const f = document.createElement('iframe'); f.title = 'turnstile-stub'; el.append(f); setTimeout(() => opts.callback('stub-token'), 0); return 'w'; },
-        remove() {},
-      };
-      window.pxTurnstileLoad && window.pxTurnstileLoad();`,
-      }),
-  );
-  let url = '';
+  const turnstile = await stubTurnstile(page);
+  let sent: Record<string, unknown> | undefined;
   await page.route('https://script.google.com/**', async (route) => {
-    url = route.request().url();
+    sent = Object.fromEntries(new URL(route.request().url()).searchParams);
     await route.fulfill({ json: { result: 'success' } });
   });
   await page.goto('/');
@@ -182,16 +194,47 @@ test('turnstile renders and its token is sent after client-side navigation to th
       () => (window as unknown as { marker?: number }).marker,
     ),
   ).toBe(1); // no full reload
+  // Only reading the page: nothing is requested from Cloudflare, no widget exists.
+  await expect(page.getByLabel('Name')).toBeVisible();
+  expect(turnstile.loads).toBe(0);
+  await expect(page.locator('form iframe[title="turnstile-stub"]')).toHaveCount(
+    0,
+  );
+  // The first interaction with the form starts the check.
+  await page.getByLabel('Name').fill('Dana');
   await expect(page.locator('form iframe[title="turnstile-stub"]')).toHaveCount(
     1,
   );
-  await page.getByLabel('Name').fill('Dana');
+  expect(turnstile.loads).toBe(1);
   await page.getByLabel('Email address').fill('dana@example.com');
   await page.getByRole('textbox', { name: 'Message' }).fill('Hello');
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Send message' }).click();
   await expect(page.getByRole('status')).toContainText('Thanks');
-  expect(new URL(url).searchParams.get('token')).toBe('stub-token');
+  expect(sent?.token).toBe('stub-token');
+});
+
+test('a failed submission gets a fresh turnstile token for the retry', async ({
+  page,
+}) => {
+  await stubTurnstile(page);
+  const tokens: unknown[] = [];
+  await page.route('https://script.google.com/**', async (route) => {
+    tokens.push(new URL(route.request().url()).searchParams.get('token'));
+    await route.fulfill({
+      json: { result: tokens.length === 1 ? 'error' : 'success' },
+    });
+  });
+  await page.goto('/contact/');
+  await page.getByLabel('Name').fill('Dana');
+  await page.getByLabel('Email address').fill('dana@example.com');
+  await page.getByRole('textbox', { name: 'Message' }).fill('Hello');
+  await page.getByRole('checkbox').check();
+  await page.getByRole('button', { name: 'Send message' }).click();
+  await expect(page.getByRole('alert')).toBeVisible();
+  await page.getByRole('button', { name: 'Send message' }).click();
+  await expect(page.getByRole('status')).toContainText('Thanks');
+  expect(tokens).toEqual(['stub-token', 'stub-token-2']); // a token works once
 });
 
 test('translated docs are indexable, in their language, and flagged as unreviewed drafts', async ({
@@ -255,4 +298,22 @@ test('machine-readable files are published', async ({ request }) => {
   expect((await request.get('/llms.txt')).ok()).toBe(true);
   expect(await (await request.get('/robots.txt')).text()).toContain('Sitemap');
   expect((await request.get('/sitemap_index.xml')).ok()).toBe(true);
+});
+
+test('the brand page shows the rules and its downloads exist', async ({
+  page,
+  request,
+}) => {
+  await page.goto('/brand/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Brand');
+  await expect(
+    page.getByRole('heading', { name: 'You may not, without a written' }),
+  ).toBeVisible();
+  for (const file of [
+    'pixsame-lockup-light.svg',
+    'pixsame-signet-dark.svg',
+    'pixsame-lockup-white.svg',
+  ]) {
+    expect((await request.get(`/brand/${file}`)).ok()).toBe(true);
+  }
 });
