@@ -10,6 +10,7 @@ useSeoMeta({
   <PageShell :crumbs="[{ label: t('legal.terms.title') }]">
     <article class="px-prose">
       <h1>{{ t('legal.terms.title') }}</h1>
+      <p>{{ t('legal.updated') }}</p>
       <p v-for="n in 3" :key="n">{{ t(`legal.terms.p${n}`) }}</p>
     </article>
   </PageShell>

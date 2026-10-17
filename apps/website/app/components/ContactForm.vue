@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// The message travels in the URL of the Apps Script request (see utils/appsScript.ts),
+// The message travels in the URL of the Apps Script request (see utils/formApi.ts),
 // so it is capped well below URL length limits.
 const MESSAGE_MAX = 1500;
 const { t } = useI18n();
@@ -16,6 +16,7 @@ const {
   submit,
   turnstileSiteKey,
   turnstile,
+  startTurnstile,
 } = useAppsScriptForm(contactEndpoint, () =>
   valid.value
     ? {
@@ -46,6 +47,7 @@ const field =
   <form
     class="px-glass !rounded-lg grid gap-5 p-6"
     novalidate
+    @focusin.once="startTurnstile"
     @submit.prevent="submit"
   >
     <p v-if="state === 'done'" role="status" class="text-blue-text">

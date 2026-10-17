@@ -260,7 +260,7 @@
     "placeholder": "you{'@'}company.com",
     "submit": "Notify me",
     "sending": "Sending…",
-    "success": "Thanks! You'll get one email from us when it's ready, and nothing before that.",
+    "success": "Thanks! We've sent you an email. Press the button in it to confirm and join the list; after that you'll hear from us once, when it's ready.",
     "error": "That didn't go through. Give it another try.",
     "consent": "I agree to receive an email when this product launches and updates about it afterwards, including related changes to the pixsame ecosystem. I can withdraw my consent at any time. See {privacy}.",
     "consentRequired": "Please tick the box to join the waitlist."
@@ -287,14 +287,15 @@
     "pagination": "Changelog pages"
   },
   "legal": {
+    "updated": "Last updated: 17 October 2026",
     "privacy": {
       "title": "Privacy",
-      "p1": "This website uses no cookies and no ad tracking. We use Cloudflare Web Analytics, which counts page views without cookies or fingerprinting.",
-      "p2": "Controller: {name}, {address1}, {address2} (VAT ID {vat}). Contact: {email}.",
-      "p3": "Waitlist: if you join, we store your email address, the product you signed up for, your language and the time of your consent. The legal basis is your consent (Art. 6(1)(a) GDPR). We use these data only to email you when that product launches and about later updates to it, including changes to the pixsame ecosystem that are connected to it. We do not use them for anything else and do not share them for marketing.",
-      "p4": "Contact form: we use your name, email address and message only to answer you, and delete them when they are no longer needed for that.",
-      "p5": "Processors: the forms run on Google Apps Script and Google Sheets (Google), and spam is filtered with Cloudflare Turnstile (Cloudflare). They may process data outside the EU under standard contractual clauses. The forms send what you type to Google as part of the request address.",
-      "p6": "Retention and your rights: waitlist data is kept until you withdraw your consent or the product is discontinued. At any time you can withdraw consent and ask for access, correction or erasure by writing to {email}. You can also complain to your data protection authority (in Poland: UODO)."
+      "p1": "This website uses no ad tracking and no analytics cookies. We use Cloudflare Web Analytics, which counts page views without cookies or fingerprinting. If you start filling in a form, Cloudflare Turnstile, our spam check, sets one security cookie.",
+      "p2": "Controller: {name} (pixsame.com), {address1}, {address2} (VAT ID {vat}). Contact: {email}.",
+      "p3": "Waitlist: if you join, we store your email address, the product you signed up for, your language, the time and version of your consent, and whether you confirmed it. We first send you one confirmation email, and you are on the list only after you press the button in it; the link works for 7 days, and an entry that is not confirmed is deleted within 14 days of sign-up. The legal basis is your consent (Art. 6(1)(a) GDPR). We use these data only to email you when that product launches and about later updates to it, including changes to the pixsame ecosystem that are connected to it. We do not use them for anything else and do not share them for marketing.",
+      "p4": "Contact form: your name, email address and message are sent to our mailbox, together with the time and version of your consent, and used only to answer you. We keep them for up to 12 months after the last message, unless we need them to defend a legal claim, and delete them sooner if you withdraw your consent.",
+      "p5": "Processors: Google (Google Workspace, under Google's data processing addendum) runs the forms with Google Apps Script, stores waitlist entries in Google Sheets, and receives our email, including contact messages and confirmation emails. Waitlist addresses are loaded into Mailjet (Mailjet SAS, a Sinch company) only when we send a launch email and are deleted there afterwards. Spam is filtered with Cloudflare Turnstile (Cloudflare). They may process data outside the EU under the EU-US Data Privacy Framework or standard contractual clauses. The forms send what you type to Google as part of the request address.",
+      "p6": "Retention and your rights: waitlist data is kept until you withdraw your consent, or for 24 months after the product launches, whichever comes first. At any time you can withdraw consent and ask for access, correction or erasure by writing to {email}. You can also complain to your data protection authority (in Poland: UODO)."
     },
     "terms": {
       "title": "Terms",
@@ -318,6 +319,7 @@
     "platform": "Platform",
     "privacy": "Privacy",
     "terms": "Terms",
+    "brand": "Brand",
     "vitest": "Vitest",
     "contact": "Contact",
     "by": "by"

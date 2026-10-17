@@ -14,6 +14,7 @@ const {
   submit,
   turnstileSiteKey,
   turnstile,
+  startTurnstile,
 } = useAppsScriptForm(waitlistEndpoint, () =>
   EMAIL_RE.test(email.value.trim())
     ? { email: email.value.trim(), product: props.product }
@@ -28,6 +29,7 @@ const consentError = computed(() =>
   <form
     class="px-glass !rounded-lg grid gap-x-12 gap-y-4 p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:items-center"
     novalidate
+    @focusin.once="startTurnstile"
     @submit.prevent="submit"
   >
     <h2 class="font-heading text-xl">{{ t('waitlist.title') }}</h2>
