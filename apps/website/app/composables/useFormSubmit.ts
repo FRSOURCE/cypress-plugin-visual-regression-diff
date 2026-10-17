@@ -1,5 +1,6 @@
 // Everything the contact and waitlist forms share: the honeypot, the consent checkbox, the
-// idle/sending/done/error state, the Turnstile token and the POST to the Apps Script endpoint.
+// idle/sending/done/error state, the Turnstile check (started on the first interaction with the form)
+// and the POST to the Apps Script endpoint.
 // `payload` returns the form-specific fields, or `undefined` when the form is not valid yet.
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -30,11 +31,12 @@ export const useAppsScriptForm = (
         locale: locale.value,
         website: website.value,
         consent: 'yes',
-        token: turnstile.token.value,
+        token: await turnstile.getToken(),
       });
       state.value = 'done';
     } catch {
       state.value = 'error';
+      turnstile.reset(); // the token was used up (or never arrived): get a fresh one for a retry
     }
   };
 
@@ -46,5 +48,6 @@ export const useAppsScriptForm = (
     submit,
     turnstileSiteKey: turnstile.siteKey,
     turnstile: turnstile.container,
+    startTurnstile: turnstile.start,
   };
 };

@@ -26,6 +26,7 @@ const groups = [
     links: [
       ['/privacy', 'footer.privacy'],
       ['/terms', 'footer.terms'],
+      ['/brand', 'footer.brand'],
     ],
   },
 ] as const;

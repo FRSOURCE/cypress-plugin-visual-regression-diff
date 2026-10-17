@@ -260,7 +260,7 @@
     "placeholder": "du{'@'}firma.de",
     "submit": "Benachrichtigen",
     "sending": "Wird gesendet…",
-    "success": "Danke! Wir schreiben Ihnen einmal, sobald es soweit ist.",
+    "success": "Danke! Wir haben Ihnen eine E-Mail geschickt. Drücken Sie darin den Knopf, um sich zu bestätigen; danach schreiben wir Ihnen einmal, sobald es soweit ist.",
     "error": "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
     "consent": "Ich möchte per E-Mail über den Start dieses Produkts und danach über Neuigkeiten dazu informiert werden, einschließlich damit verbundener Änderungen am pixsame-Ökosystem. Ich kann meine Einwilligung jederzeit widerrufen. Siehe {privacy}.",
     "consentRequired": "Bitte setzen Sie das Häkchen, um sich einzutragen."
@@ -287,21 +287,8 @@
     "pagination": "Changelog-Seiten"
   },
   "legal": {
-    "privacy": {
-      "title": "Datenschutz",
-      "p1": "Diese Website verwendet keine Cookies und kein Werbe-Tracking. Wir nutzen Cloudflare Web Analytics, das Seitenaufrufe ohne Cookies und Fingerprinting zählt.",
-      "p2": "Verantwortlicher: {name}, {address1}, {address2} (USt-IdNr. {vat}). Kontakt: {email}.",
-      "p3": "Warteliste: Bei der Anmeldung speichern wir Ihre E-Mail-Adresse, das Produkt, Ihre Sprache und den Zeitpunkt Ihrer Einwilligung. Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Wir verwenden die Daten nur, um Ihnen den Start dieses Produkts und spätere Neuigkeiten dazu mitzuteilen, einschließlich damit verbundener Änderungen am pixsame-Ökosystem. Eine andere Nutzung oder Weitergabe zu Werbezwecken findet nicht statt.",
-      "p4": "Kontaktformular: Name, E-Mail-Adresse und Nachricht verwenden wir nur, um Ihnen zu antworten, und löschen sie, sobald sie dafür nicht mehr nötig sind.",
-      "p5": "Processors: the forms are processed and stored by Cloudflare (a serverless function and a database located in the EU), which also filters spam with Cloudflare Turnstile. Your name, email address and message are encrypted before they are stored. Cloudflare may process data outside the EU under the EU-US Data Privacy Framework or standard contractual clauses.",
-      "p6": "Speicherdauer und Ihre Rechte: Wartelistendaten bleiben bis zum Widerruf der Einwilligung oder bis zur Einstellung des Produkts gespeichert. Sie können jederzeit widerrufen sowie Auskunft, Berichtigung oder Löschung verlangen, per E-Mail an {email}. Sie können sich außerdem bei Ihrer Datenschutzbehörde beschweren."
-    },
-    "terms": {
-      "title": "Nutzungsbedingungen",
-      "p1": "Die pixsame-Software ist Open Source unter der MIT-Lizenz. Es gelten ausschließlich die Lizenzbedingungen im Repository.",
-      "p2": "Gehostete Dienste (GitHub App und Plattform) sind noch nicht verfügbar. Ihre Nutzungsbedingungen veröffentlichen wir hier vor dem Start.",
-      "p3": "Diese Website wird wie besehen bereitgestellt. Produktseiten beschreiben Pläne, die sich ändern können."
-    }
+    "updated": "Last updated: 17 October 2026",
+    "englishNotice": "Rechtliche Dokumente werden nur auf Englisch veröffentlicht. Englisch ist dafür die Arbeitssprache, damit keine Übersetzung Fehler einführen kann."
   },
   "notFound": {
     "title": "Seite nicht gefunden",
@@ -318,6 +305,7 @@
     "platform": "Plattform",
     "privacy": "Datenschutz",
     "terms": "Nutzungsbedingungen",
+    "brand": "Brand",
     "vitest": "Vitest",
     "contact": "Kontakt",
     "by": "von"

@@ -260,7 +260,7 @@
     "placeholder": "ty{'@'}firma.pl",
     "submit": "Powiadom mnie",
     "sending": "Wysyłanie…",
-    "success": "Dziękujemy! Napiszemy raz, gdy będzie gotowe.",
+    "success": "Dziękujemy! Wysłaliśmy e-mail. Naciśnij w nim przycisk, aby potwierdzić zapis; potem napiszemy raz, gdy będzie gotowe.",
     "error": "Coś poszło nie tak. Spróbuj ponownie.",
     "consent": "Wyrażam zgodę na e-mail o starcie tego produktu oraz na późniejsze informacje o nim, w tym o powiązanych zmianach w ekosystemie pixsame. Zgodę mogę wycofać w dowolnym momencie. Zobacz {privacy}.",
     "consentRequired": "Zaznacz zgodę, aby zapisać się na listę."
@@ -287,21 +287,8 @@
     "pagination": "Strony changelogu"
   },
   "legal": {
-    "privacy": {
-      "title": "Prywatność",
-      "p1": "Ta strona nie używa plików cookie ani śledzenia reklamowego. Korzystamy z Cloudflare Web Analytics, które zlicza odsłony bez cookies i fingerprintingu.",
-      "p2": "Administrator danych: {name}, {address1}, {address2} (NIP {vat}). Kontakt: {email}.",
-      "p3": "Lista oczekujących: po zapisie przechowujemy Twój adres e-mail, produkt, język i czas zgody. Podstawą prawną jest Twoja zgoda (art. 6 ust. 1 lit. a RODO). Używamy tych danych wyłącznie, by napisać do Ciebie o starcie produktu i jego późniejszych aktualizacjach, w tym o powiązanych zmianach w ekosystemie pixsame. Nie wykorzystujemy ich do niczego innego i nie udostępniamy do celów marketingowych.",
-      "p4": "Formularz kontaktowy: imię, adres e-mail i wiadomość wykorzystujemy wyłącznie, by Ci odpowiedzieć, i usuwamy, gdy nie są już do tego potrzebne.",
-      "p5": "Processors: the forms are processed and stored by Cloudflare (a serverless function and a database located in the EU), which also filters spam with Cloudflare Turnstile. Your name, email address and message are encrypted before they are stored. Cloudflare may process data outside the EU under the EU-US Data Privacy Framework or standard contractual clauses.",
-      "p6": "Przechowywanie i Twoje prawa: dane z listy przechowujemy do wycofania zgody lub zakończenia produktu. W każdej chwili możesz wycofać zgodę oraz żądać dostępu, sprostowania lub usunięcia danych, pisząc na {email}. Możesz też złożyć skargę do UODO."
-    },
-    "terms": {
-      "title": "Regulamin",
-      "p1": "Oprogramowanie pixsame jest open source na licencji MIT. Jedynymi warunkami, które go dotyczą, jest treść licencji w repozytorium.",
-      "p2": "Usługi hostowane (aplikacja GitHub i platforma) nie są jeszcze dostępne. Ich regulaminy opublikujemy tutaj przed startem.",
-      "p3": "Strona jest udostępniana w stanie „tak jak jest”. Strony produktów opisują plany, które mogą się zmienić."
-    }
+    "updated": "Last updated: 17 October 2026",
+    "englishNotice": "Dokumenty prawne publikujemy wyłącznie po angielsku. Angielski jest dla nich językiem roboczym, aby tłumaczenie nie wprowadziło błędów."
   },
   "notFound": {
     "title": "Nie znaleziono strony",
@@ -318,6 +305,7 @@
     "platform": "Platforma",
     "privacy": "Prywatność",
     "terms": "Regulamin",
+    "brand": "Brand",
     "vitest": "Vitest",
     "contact": "Kontakt",
     "by": "od"
