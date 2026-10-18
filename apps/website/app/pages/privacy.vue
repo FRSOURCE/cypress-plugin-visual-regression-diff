@@ -1,4 +1,4 @@
-<script setup lang="ts">
+w<script setup lang="ts">
 // The text lives in content/legal/privacy.md. Legal documents are English only: other locales show the same
 // text with a notice, so that no translation can introduce mistakes.
 const { t, locale } = useI18n();
