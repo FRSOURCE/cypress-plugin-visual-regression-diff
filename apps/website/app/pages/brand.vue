@@ -12,10 +12,6 @@ const files = [
   ['Lockup, for dark backgrounds', 'pixsame-lockup-dark.svg'],
   ['Signet, for light backgrounds', 'pixsame-signet-light.svg'],
   ['Signet, for dark backgrounds', 'pixsame-signet-dark.svg'],
-  ['Lockup, all black', 'pixsame-lockup-black.svg'],
-  ['Lockup, all white', 'pixsame-lockup-white.svg'],
-  ['Signet, all black', 'pixsame-signet-black.svg'],
-  ['Signet, all white', 'pixsame-signet-white.svg'],
 ] as const;
 
 const readme = `<a href="https://pixsame.com">
@@ -97,11 +93,7 @@ const donts = [
         >
           <div
             class="mb-3 flex h-24 items-center justify-center rounded-md p-3"
-            :class="
-              file.includes('dark') || file.includes('white')
-                ? 'bg-[#0f1316]'
-                : 'bg-[#f5f7f8]'
-            "
+            :class="file.includes('dark') ? 'bg-[#0f1316]' : 'bg-[#f5f7f8]'"
           >
             <img
               :src="`/brand/${file}`"
@@ -117,9 +109,7 @@ const donts = [
       <h2>Colours</h2>
       <p>
         Ink <code>#101418</code> on light backgrounds, <code>#ECEFF1</code> on
-        dark ones, and the square in coral <code>#E0291F</code>. The black and
-        white versions are for one-colour printing or when the background does
-        not suit the coloured version.
+        dark ones, and the square in coral <code>#E0291F</code>.
       </p>
 
       <h2>Space and size</h2>

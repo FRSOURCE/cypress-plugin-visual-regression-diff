@@ -312,7 +312,7 @@ test('the brand page shows the rules and its downloads exist', async ({
   for (const file of [
     'pixsame-lockup-light.svg',
     'pixsame-signet-dark.svg',
-    'pixsame-lockup-white.svg',
+    'pixsame-lockup-dark.svg',
   ]) {
     expect((await request.get(`/brand/${file}`)).ok()).toBe(true);
   }
