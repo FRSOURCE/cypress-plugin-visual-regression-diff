@@ -29,6 +29,14 @@ const stubTurnstile = async (page: Page) => {
   return state;
 };
 
+// Static pages are interactive only after Vue hydrates: an earlier click is lost, or submits the form natively.
+const hydrated = (page: Page) =>
+  page.waitForFunction(() => {
+    const nuxt = (window as { useNuxtApp?: () => { isHydrating?: boolean } })
+      .useNuxtApp;
+    return nuxt !== undefined && nuxt().isHydrating === false;
+  });
+
 test('landing page renders the hero and the key sections', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
@@ -129,6 +137,7 @@ test('waitlist form needs consent, then posts to the Apps Script endpoint', asyn
     await route.fulfill({ json: { result: 'success' } });
   });
   await page.goto('/github-app/');
+  await hydrated(page);
   await page.getByLabel('Email address').fill('dana@example.com');
   await page.getByRole('button', { name: 'Notify me' }).click();
   await expect(page.getByRole('alert')).toContainText('tick the box');
@@ -154,6 +163,7 @@ test('contact form validates, needs consent and posts', async ({ page }) => {
     await route.fulfill({ json: { result: 'success' } });
   });
   await page.goto('/contact/');
+  await hydrated(page);
   await page.getByRole('button', { name: 'Send message' }).click();
   await expect(page.getByText('Please fill in this field.')).toHaveCount(3);
   await page.getByLabel('Name').fill('Dana');
@@ -226,6 +236,7 @@ test('a failed submission gets a fresh turnstile token for the retry', async ({
     });
   });
   await page.goto('/contact/');
+  await hydrated(page);
   await page.getByLabel('Name').fill('Dana');
   await page.getByLabel('Email address').fill('dana@example.com');
   await page.getByRole('textbox', { name: 'Message' }).fill('Hello');
