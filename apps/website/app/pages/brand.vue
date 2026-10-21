@@ -22,10 +22,10 @@ const readme = `<a href="https://pixsame.com">
 </a>`;
 
 const donts = [
-  ['Do not stretch or squash it', 'transform: scaleX(1.6)'],
-  ['Do not recolour it', 'filter: hue-rotate(150deg) saturate(2)'],
-  ['Do not rotate it', 'transform: rotate(-14deg)'],
-  ['Do not add shadows or effects', 'filter: drop-shadow(4px 4px 3px #888)'],
+  ['Stretched or squashed', 'transform: scaleX(1.6)'],
+  ['Recoloured', 'filter: hue-rotate(150deg) saturate(2)'],
+  ['Rotated', 'transform: rotate(-14deg)'],
+  ['With shadows or effects', 'filter: drop-shadow(4px 4px 3px #888)'],
 ] as const;
 </script>
 
@@ -35,9 +35,9 @@ const donts = [
       <h1>{{ t('footer.brand') }}</h1>
       <p>{{ t('legal.updated') }}</p>
       <p>
-        The pixsame name and logo are not covered by the MIT licence of the
-        software; these rules are. You are welcome to show them, unaltered, to
-        say that your project uses or works with pixsame.
+        The MIT licence of the software does not cover the pixsame name and
+        logo. The rules on this page do. You are welcome to show them,
+        unaltered, to say that your project uses or works with pixsame.
       </p>
 
       <h2>You may</h2>
@@ -85,7 +85,7 @@ const donts = [
         its own. Use the lockup where there is room, and the signet at small
         sizes or in a square space. All files are SVG.
       </p>
-      <ul class="not-prose grid list-none gap-4 sm:grid-cols-2">
+      <ul class="not-prose grid !list-none gap-4 !pl-0 sm:grid-cols-2">
         <li
           v-for="[label, file] in files"
           :key="file"
@@ -114,15 +114,15 @@ const donts = [
 
       <h2>Space and size</h2>
       <p>
-        Keep clear space around the logo of at least half the height of the
-        signet. Do not go below 16 px for the signet and 80 px wide for the
-        lockup. Use it on a plain background that gives enough contrast.
+        Leave clear space around the logo of at least half the height of the
+        signet. The signet should be at least 16 px tall and the lockup at least
+        80 px wide. Put it on a plain background with enough contrast.
       </p>
 
       <h2>Example: a README</h2>
       <p>
-        This shows the right logo for light and dark GitHub themes. Paste it
-        where you mention pixsame.
+        This snippet switches between the light and dark logo to match the
+        reader's GitHub theme. Paste it where you mention pixsame.
       </p>
       <div class="not-prose px-glass !rounded-lg p-5">
         <picture>
@@ -144,14 +144,13 @@ const donts = [
 
       <h2>Example: a sentence and a footer</h2>
       <p>
-        “Screenshot review runs on <strong>pixsame</strong>.” or, in a footer,
-        the signet next to the words “Works with pixsame”, linked to
-        pixsame.com. Both say that you use it, and neither suggests that we
-        endorse you.
+        In text: “Screenshot review runs on pixsame.” In a footer: the signet
+        next to the words “Works with pixsame”, linked to pixsame.com. Both only
+        say that you use it.
       </p>
 
-      <h2>Please do not</h2>
-      <ul class="not-prose grid list-none gap-4 sm:grid-cols-2">
+      <h2>Examples of altered logos</h2>
+      <ul class="not-prose grid !list-none gap-4 !pl-0 sm:grid-cols-2">
         <li
           v-for="[label, style] in donts"
           :key="label"
@@ -167,12 +166,12 @@ const donts = [
               :style="style"
             />
           </div>
-          <p class="text-sm">✕ {{ label }}</p>
+          <p class="text-sm">{{ label }}</p>
         </li>
       </ul>
       <p>
-        Also do not crop it, outline it, put it on a busy photo, or recreate it
-        in another typeface.
+        The same goes for cropping it, outlining it, placing it on a busy photo
+        or redrawing it in another typeface.
       </p>
 
       <h2>Our use of your name</h2>
